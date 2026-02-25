@@ -1,0 +1,41 @@
+
+---Downloaded files---
+The import files for: Main Home were successfully downloaded!
+Initial max execution time = 30
+Files info:
+Site URL = http://streamlab.gentechtree.com/red-demo
+Data file = /home1/gentecht/public_html/wp-themes/themes/streamlab/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/xml.xml
+Widget file = /home1/gentecht/public_html/wp-themes/themes/streamlab/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/wie.wie
+Customizer file = /home1/gentecht/public_html/wp-themes/themes/streamlab/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/dat.dat
+Redux files:
+theme_options -> /home1/gentecht/public_html/wp-themes/themes/streamlab/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/json.json 
+
+
+------
+New AJAX call!
+
+
+------
+New AJAX call!
+[ERROR] Failed to import "tinified" (Media)
+
+
+------
+New AJAX call!
+[ERROR] Failed to import "tinified" (Media)
+
+
+------
+New AJAX call!
+[ERROR] Failed to import "tinified" (Media)
+
+
+------
+New AJAX call!
+[ERROR] Failed to import "tinified" (Media)
+
+
+------
+New AJAX call!
+[ERROR] Failed to import "tinified" (Media)
+

@@ -1,0 +1,1274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ultimate Addons for Contact Form 7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-21 09:52+0000\n"
+"PO-Revision-Date: 2022-11-22 09:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.3; wp-6.1.1\n"
+"X-Domain: ultimate-addons-cf7"
+
+#: addons/styler/uacf7style.php:170
+msgid " (Do not add px or em )."
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:158
+msgid " Auto complete country using user's network IP."
+msgstr ""
+
+#: addons/multistep/multistep.php:238
+msgid " Auto scroll to top after clicking on the next button"
+msgstr ""
+
+#: addons/multistep/multistep.php:321
+msgid " Circle Font Color"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:98
+msgid " Font Size (in px)"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:8
+msgid " Mailchimp Api Settings Panel"
+msgstr ""
+
+#: addons/multistep/multistep.php:264
+#, php-format
+msgid "%1s %2s Check our step by step %3s ."
+msgstr ""
+
+#: ultimate-addons-for-contact-form-7.php:64
+#, php-format
+msgid ""
+"%s requires %s to be installed and active. You can install and activate it "
+"from %s"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:336
+msgid "( Product grid view with thumbnail )"
+msgstr ""
+
+#: addons/styler/uacf7style.php:156 addons/styler/uacf7style.php:180
+#: addons/styler/uacf7style.php:230 addons/styler/uacf7style.php:241
+#: addons/styler/uacf7style.php:251 addons/styler/uacf7style.php:269
+#: addons/styler/uacf7style.php:300 addons/styler/uacf7style.php:326
+#: addons/styler/uacf7style.php:340 addons/styler/uacf7style.php:359
+#: addons/styler/uacf7style.php:369
+msgid "(Do not add px or em )."
+msgstr ""
+
+#: addons/styler/uacf7style.php:222
+msgid "(Do not add special characters like  \"or\" ; )"
+msgstr ""
+
+#: addons/styler/uacf7style.php:160
+msgid "(Do not add special characters like '' or  ; )"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:103
+msgid "(Do not add special characters like '' or ; )"
+msgstr ""
+
+#: addons/column/column.php:155
+msgid "+Add Column"
+msgstr ""
+
+#: addons/column/column.php:92
+msgid "1 Column"
+msgstr ""
+
+#: addons/column/column.php:105
+msgid "2 Column"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"20+ Essential Addons for Contact form 7 including Conditional Fields, Multi "
+"Step Form, Thank you page Redirection, Columns Layout, WooCommerce "
+"Integration, Star Rating Fields, Range Slider and many more stunning Addons, "
+"all in one."
+msgstr ""
+
+#: addons/column/column.php:119
+msgid "3 Column"
+msgstr ""
+
+#: addons/column/column.php:134
+msgid "4 Column"
+msgstr ""
+
+#: inc/functions.php:182
+msgid "Add Button Text"
+msgstr ""
+
+#: addons/column/column.php:64
+msgid "Add column"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:168
+#: addons/conditional-field/conditional-fields.php:279
+msgid "Add Condition"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:169
+msgid "Add Field"
+msgstr ""
+
+#: inc/functions.php:76
+msgid "Add or Upload Image"
+msgstr ""
+
+#: inc/functions.php:75
+msgid "Add progressbar image for this step"
+msgstr ""
+
+#: admin/admin-menu.php:41
+msgid "Addons Settings"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:213
+msgid "Allow multiple selections "
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:243
+msgid "Auto Add to Cart & Checkout after Form Submission"
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:157
+msgid "Auto complete"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:273
+#: addons/pdf-generator/pdf-generator.php:317
+#: addons/pdf-generator/pdf-generator.php:336
+#: addons/placeholder/placeholder.php:74 addons/styler/uacf7style.php:132
+#: addons/styler/uacf7style.php:194 addons/styler/uacf7style.php:291
+msgid "Background Color"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:274
+#: addons/pdf-generator/pdf-generator.php:318
+#: addons/pdf-generator/pdf-generator.php:337
+msgid "Background color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:295
+msgid "Background Color (Hover)"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:263
+msgid "Background Image"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:160
+msgid "Booking/Appointment Form"
+msgstr ""
+
+#: addons/styler/uacf7style.php:272 addons/styler/uacf7style.php:343
+msgid "Border Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:347
+msgid "Border Color (Hover)"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:341
+msgid "Border Radius"
+msgstr ""
+
+#: addons/styler/uacf7style.php:268 addons/styler/uacf7style.php:339
+msgid "Border Radius (in px)"
+msgstr ""
+
+#: addons/styler/uacf7style.php:258 addons/styler/uacf7style.php:329
+msgid "Border Style"
+msgstr ""
+
+#: addons/styler/uacf7style.php:254 addons/styler/uacf7style.php:325
+msgid "Border Width (in px)"
+msgstr ""
+
+#: addons/styler/uacf7style.php:167 addons/styler/uacf7style.php:177
+#: addons/styler/uacf7style.php:238 addons/styler/uacf7style.php:248
+#: addons/styler/uacf7style.php:356 addons/styler/uacf7style.php:366
+msgid "Bottom"
+msgstr ""
+
+#: addons/multistep/multistep.php:370
+msgid "Button Style"
+msgstr ""
+
+#: addons/mailchimp/mailchimp.php:135
+msgid "Can't connect to the server. Please check internet connection."
+msgstr ""
+
+#: inc/functions.php:42 inc/functions.php:65
+msgid "Change next button text for this Step"
+msgstr ""
+
+#: inc/functions.php:51 inc/functions.php:60
+msgid "Change previous button text for this Step"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:255
+msgid "Change the values of star. Default value: 1,2,3,4,5"
+msgstr ""
+
+#: addons/redirection/redirect.php:156
+msgid "Choose Page"
+msgstr ""
+
+#: addons/multistep/multistep.php:317
+msgid "Circle Active Color"
+msgstr ""
+
+#: addons/multistep/multistep.php:313
+msgid "Circle Background Color"
+msgstr ""
+
+#: addons/multistep/multistep.php:326
+msgid "Circle Border Radious (px)"
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:169
+#: addons/dynamic-text/dynamic-text.php:209
+#: addons/product-dropdown/product-dropdown.php:348
+#: addons/star-rating/star-rating.php:285
+msgid "Class attribute"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:269
+#: addons/pdf-generator/pdf-generator.php:270
+#: addons/pdf-generator/pdf-generator.php:313
+#: addons/pdf-generator/pdf-generator.php:314
+#: addons/pdf-generator/pdf-generator.php:332
+#: addons/pdf-generator/pdf-generator.php:333 addons/styler/uacf7style.php:128
+#: addons/styler/uacf7style.php:190 addons/styler/uacf7style.php:283
+msgid "Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:287
+msgid "Color (hover)"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:68
+msgid "Color and Font Options"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:128
+msgid "Column or Grid"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:144
+msgid "Complete Form Styler"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:120
+msgid "Conditional Field"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:93
+msgid "Conditional Wraper"
+msgstr ""
+
+#: addons/column/column.php:80
+msgid "Contact form 7 columns / Grid Layout"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:132
+msgid "Contact form tag"
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:125
+msgid "Country Dropdown"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:267
+msgid "Country Dropdown Field"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:29
+msgid "Create Subscribe Form"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:32
+msgid "Create Unsubscribe Form"
+msgstr ""
+
+#: addons/column/column.php:150
+msgid "Custom Column Width"
+msgstr ""
+
+#: addons/styler/uacf7style.php:376
+msgid "Custom CSS Option"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:111
+msgid "Custom fields"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:350
+msgid "Customize PDF CSS"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:198
+msgid "Database"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:250
+msgid "Default Selected Star"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:259
+msgid "Default Value"
+msgstr ""
+
+#: inc/functions.php:85
+msgid "Description title"
+msgstr ""
+
+#: addons/dynamic-text/dynamic-text.php:186
+msgid "Disabled"
+msgstr ""
+
+#: inc/functions.php:245
+msgid "Dismiss this notice."
+msgstr ""
+
+#: admin/admin-menu.php:45
+msgid "Documentation"
+msgstr ""
+
+#: addons/dynamic-text/dynamic-text.php:205
+msgid "Dynamic key"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:183 addons/dynamic-text/dynamic-text.php:145
+msgid "Dynamic Text"
+msgstr ""
+
+#: addons/dynamic-text/dynamic-text.php:192
+msgid "Dynamic value"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:22
+msgid "Enable mailchimp form"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:247
+msgid "Enable PDF Generator"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:91
+msgid "Enable Pre-populate fields"
+msgstr ""
+
+#: addons/redirection/redirect.php:293
+msgid ""
+"Enable support contact form 7 fields tags to use on custom redirect URL. "
+"Such as"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:87
+msgid "Enable/Disable Pre-populate fields"
+msgstr ""
+
+#: addons/redirection/redirect.php:169
+msgid "Enter an external URL"
+msgstr ""
+
+#: addons/styler/uacf7style.php:292
+msgid "Enter Button Background Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:296
+msgid "Enter Button Background Color hover"
+msgstr ""
+
+#: addons/styler/uacf7style.php:344
+msgid "Enter Button border color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:348
+msgid "Enter Button border color hover"
+msgstr ""
+
+#: addons/styler/uacf7style.php:340
+msgid "Enter Button border radius"
+msgstr ""
+
+#: addons/styler/uacf7style.php:326
+msgid "Enter Button border width"
+msgstr ""
+
+#: addons/styler/uacf7style.php:284
+msgid "Enter Button Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:288
+msgid "Enter Button Color hover"
+msgstr ""
+
+#: addons/styler/uacf7style.php:300
+msgid "Enter Button Font Size"
+msgstr ""
+
+#: addons/styler/uacf7style.php:321
+msgid "Enter Button width"
+msgstr ""
+
+#: addons/styler/uacf7style.php:195
+msgid "Enter input Background Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:273
+msgid "Enter input border color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:269
+msgid "Enter input border radius"
+msgstr ""
+
+#: addons/styler/uacf7style.php:255
+msgid "Enter input border width"
+msgstr ""
+
+#: addons/styler/uacf7style.php:191
+msgid "Enter Input Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:222
+msgid "Enter input Font Family"
+msgstr ""
+
+#: addons/styler/uacf7style.php:218
+msgid "Enter input Font Size"
+msgstr ""
+
+#: addons/styler/uacf7style.php:226
+msgid "Enter input Height"
+msgstr ""
+
+#: addons/styler/uacf7style.php:133
+msgid "Enter Label Background Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:129
+msgid "Enter Label Color"
+msgstr ""
+
+#: addons/styler/uacf7style.php:160
+msgid "Enter Label Font Family"
+msgstr ""
+
+#: addons/styler/uacf7style.php:156
+msgid "Enter Label Font Size"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:75
+msgid "Enter Placeholder Background Color"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:71
+msgid "Enter Placeholder Color"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:103
+msgid "Enter Placeholder Font Name"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:99
+msgid "Enter Placeholder Font Size (in px)"
+msgstr ""
+
+#: addons/styler/uacf7style.php:230
+msgid "Enter textarea input Height"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:292 addons/styler/uacf7style.php:377
+msgid "Enter Your Custom CSS"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:180
+#: addons/range-slider/range-slider.php:183
+#: addons/star-rating/star-rating.php:196
+#: addons/star-rating/star-rating.php:199
+msgid "Field Type"
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:141
+#: addons/country-dropdown/country-dropdown.php:144
+#: addons/dynamic-text/dynamic-text.php:169
+#: addons/dynamic-text/dynamic-text.php:172
+#: addons/product-dropdown/product-dropdown.php:201
+msgid "Field type"
+msgstr ""
+
+#: addons/dynamic-text/dynamic-text.php:182
+msgid "Field Visibility"
+msgstr ""
+
+#: addons/styler/uacf7style.php:159 addons/styler/uacf7style.php:221
+msgid "Font Family"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:102
+msgid "Font Name"
+msgstr ""
+
+#: addons/styler/uacf7style.php:155 addons/styler/uacf7style.php:217
+#: addons/styler/uacf7style.php:299
+msgid "Font Size (in px)"
+msgstr ""
+
+#: addons/multistep/multistep.php:332
+msgid "Font Size (px)"
+msgstr ""
+
+#: addons/styler/uacf7style.php:136 addons/styler/uacf7style.php:198
+#: addons/styler/uacf7style.php:303
+msgid "Font Style"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:85 addons/styler/uacf7style.php:143
+#: addons/styler/uacf7style.php:205 addons/styler/uacf7style.php:310
+msgid "Font Weight"
+msgstr ""
+
+#: addons/multistep/multistep.php:234
+msgid "Form Auto Scrolling "
+msgstr ""
+
+#: addons/styler/uacf7style.php:115
+msgid "Form Styles"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:168
+msgid "Frontend Post Submission"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:97
+msgid "General Addons:"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:106
+msgid ""
+"Generate a conditional tag to wrap the elements that can be shown "
+"conditionally."
+msgstr ""
+
+#: addons/column/column.php:77
+msgid "Generate tag: Column"
+msgstr ""
+
+#: addons/multistep/multistep.php:124
+msgid "Generate tag: Step"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:340
+msgid "Handle Border Radius (px)"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:328
+msgid "Handle Color"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:336
+msgid "Handle Height"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:332
+msgid "Handle Width"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:308
+msgid "Header Image"
+msgstr ""
+
+#: addons/styler/uacf7style.php:382
+msgid "here"
+msgstr ""
+
+#: addons/dynamic-text/dynamic-text.php:188
+msgid "Hidden"
+msgstr ""
+
+#: addons/multistep/multistep.php:276
+msgid "Hide Progressbar labels"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://cf7addons.com/"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://themefic.com/"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:227
+msgid "Icon Class"
+msgstr ""
+
+#: addons/styler/uacf7style.php:229
+msgid "Input (Textarea) Height (in px)"
+msgstr ""
+
+#: addons/styler/uacf7style.php:188
+msgid "Input Field Options"
+msgstr ""
+
+#: addons/styler/uacf7style.php:225
+msgid "Input Height (in px)"
+msgstr ""
+
+#: addons/column/column.php:173
+#: addons/conditional-field/conditional-fields.php:123
+#: addons/country-dropdown/country-dropdown.php:195
+#: addons/dynamic-text/dynamic-text.php:221 addons/multistep/multistep.php:159
+#: addons/multistep/multistep.php:180
+#: addons/product-dropdown/product-dropdown.php:360
+#: addons/range-slider/range-slider.php:280
+msgid "Insert Tag"
+msgstr ""
+
+#: addons/column/column.php:93 addons/column/column.php:106
+#: addons/column/column.php:120 addons/column/column.php:135
+#: addons/column/column.php:151
+msgid "Insert tag"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:275
+msgid "IP Geo Fields (Autocomplete Country, City, State, Zip Fields)"
+msgstr ""
+
+#: addons/multistep/multistep.php:212
+msgid "Is It Multistep Form?"
+msgstr ""
+
+#: addons/multistep/multistep.php:128
+msgid "Label"
+msgstr ""
+
+#: addons/styler/uacf7style.php:126
+msgid "Label Options"
+msgstr ""
+
+#: addons/styler/uacf7style.php:168 addons/styler/uacf7style.php:178
+#: addons/styler/uacf7style.php:239 addons/styler/uacf7style.php:249
+#: addons/styler/uacf7style.php:357 addons/styler/uacf7style.php:367
+msgid "Left"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:176 addons/mailchimp/mailchimp.php:29
+msgid "Mailchimp"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:283
+msgid "Mailchimp API"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:145
+msgid "Mailchimp field"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:20
+msgid "Mailchimp form settings "
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:105
+msgid "Mailchimp settings:"
+msgstr ""
+
+#: addons/styler/uacf7style.php:173 addons/styler/uacf7style.php:244
+#: addons/styler/uacf7style.php:362
+msgid "Margin (in px)"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:239
+msgid "Maximum Label"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:255
+msgid "Maximum range"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:232
+msgid "Minimum Label"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:251
+msgid "Minimum range"
+msgstr ""
+
+#: addons/multistep/multistep.php:111 addons/multistep/multistep.php:172
+msgid "Multistep end"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:152
+msgid "Multistep Form"
+msgstr ""
+
+#: addons/multistep/multistep.php:226
+msgid "Multistep Progressbar"
+msgstr ""
+
+#: addons/multistep/multistep.php:105
+msgid "Multistep Start"
+msgstr ""
+
+#: inc/functions.php:178 addons/conditional-field/conditional-fields.php:110
+#: addons/country-dropdown/country-dropdown.php:151
+#: addons/dynamic-text/dynamic-text.php:178 addons/multistep/multistep.php:134
+#: addons/product-dropdown/product-dropdown.php:225
+#: addons/range-slider/range-slider.php:190
+#: addons/star-rating/star-rating.php:205
+msgid "Name"
+msgstr ""
+
+#: addons/styler/uacf7style.php:382
+msgid "Need more options? Let us know "
+msgstr ""
+
+#: addons/multistep/multistep.php:53
+msgid "Next"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:109
+#, php-format
+msgid "NNeed more placeholder or other options? Let us know %1s ."
+msgstr ""
+
+#: addons/column/column.php:84 addons/country-dropdown/country-dropdown.php:177
+#, php-format
+msgid "Not sure how to set this? Check our step by step  %1s ."
+msgstr ""
+
+#: addons/column/column.php:162 addons/dynamic-text/dynamic-text.php:160
+#: addons/multistep/multistep.php:148 addons/multistep/multistep.php:218
+#: addons/pre-populate-field/pre-populate-field.php:95
+#: addons/range-slider/range-slider.php:271
+#: addons/range-slider/range-slider.php:316 addons/styler/uacf7style.php:119
+#, php-format
+msgid "Not sure how to set this? Check our step by step  %1s."
+msgstr ""
+
+#: addons/placeholder/placeholder.php:54
+#, php-format
+msgid "Not sure how to set this? Check our step by step %1s ."
+msgstr ""
+
+#: addons/star-rating/star-rating.php:189
+#, php-format
+msgid "Not sure how to set this? Check our step by step %1s."
+msgstr ""
+
+#: addons/redirection/redirect.php:303
+#, php-format
+msgid ""
+"Not sure how to set this? Check our step by step documentation on  %1s, %2s "
+"and %3s ."
+msgstr ""
+
+#: addons/redirection/redirect.php:286
+msgid "Open page in a new tab"
+msgstr ""
+
+#: addons/styler/uacf7style.php:163 addons/styler/uacf7style.php:234
+#: addons/styler/uacf7style.php:352
+msgid "Padding (in px)"
+msgstr ""
+
+#: addons/multistep/multistep.php:379
+msgid "Padding Left - Right (px)"
+msgstr ""
+
+#: addons/multistep/multistep.php:373
+msgid "Padding Top - Bottom (px)"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:205 addons/pdf-generator/pdf-generator.php:238
+msgid "PDF Generator"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:253
+msgid "PDF Title"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:50 addons/placeholder/placeholder.php:63
+msgid "Placeholder Styles"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:136
+msgid "Placeholder Styling"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:191
+msgid "Pre-populate Field"
+msgstr ""
+
+#: addons/multistep/multistep.php:52
+msgid "Previous"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:264
+msgid "Product category"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:185
+msgid "Product Dropdown"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:235
+msgid "Product Dropdown Menu"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:249
+msgid "Product ID"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:297
+msgid "Product tag"
+msgstr ""
+
+#: addons/multistep/multistep.php:337
+msgid "Progressbar Background Color"
+msgstr ""
+
+#: addons/multistep/multistep.php:353
+msgid "Progressbar Description Color"
+msgstr ""
+
+#: addons/multistep/multistep.php:357
+msgid "Progressbar Height"
+msgstr ""
+
+#: addons/multistep/multistep.php:249
+msgid "Progressbar Layout (Multistep Skins)"
+msgstr ""
+
+#: addons/multistep/multistep.php:341
+msgid "Progressbar Line Color"
+msgstr ""
+
+#: addons/multistep/multistep.php:298
+msgid "Progressbar Style"
+msgstr ""
+
+#: addons/multistep/multistep.php:349
+msgid "Progressbar Title Color"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:218
+msgid "Range Label"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:225
+msgid "Range Separator"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:251 addons/range-slider/range-slider.php:164
+msgid "Range Slider"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:312
+msgid "Range Slider Styles"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:263
+msgid "Range steps"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:213
+msgid "Rating Icon"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:103
+msgid "Redirect URL"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:112
+msgid "Redirection"
+msgstr ""
+
+#: inc/functions.php:186
+msgid "Remove Button Text"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:169
+#: addons/conditional-field/conditional-fields.php:280
+msgid "Remove Rule"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:259
+msgid "Repeater Field"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:184
+#: addons/star-rating/star-rating.php:200
+msgid "Required Field"
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:145
+#: addons/dynamic-text/dynamic-text.php:173
+#: addons/product-dropdown/product-dropdown.php:205
+msgid "Required field"
+msgstr ""
+
+#: addons/styler/uacf7style.php:166 addons/styler/uacf7style.php:176
+#: addons/styler/uacf7style.php:237 addons/styler/uacf7style.php:247
+#: addons/styler/uacf7style.php:355 addons/styler/uacf7style.php:365
+msgid "Right"
+msgstr ""
+
+#: addons/multistep/multistep.php:618
+msgid "Security error"
+msgstr ""
+
+#: addons/redirection/redirect.php:145
+msgid "Select a page to redirect"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:40
+msgid "Select Audience"
+msgstr ""
+
+#: addons/database/database.php:143
+msgid "Select Form"
+msgstr ""
+
+#: addons/database/database.php:140
+msgid "Select Form :"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:330
+msgid "Select Layout Style"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:265
+#: addons/pdf-generator/pdf-generator.php:310
+msgid "Select or Upload picture"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:128
+msgid "Select Pre-populate Field"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:109
+msgid "Select Pre-populate form"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:324
+msgid "Selection Color"
+msgstr ""
+
+#: addons/dynamic-text/dynamic-text.php:184
+msgid "Show"
+msgstr ""
+
+#: addons/product-dropdown/product-dropdown.php:231
+msgid "Show Product By"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:194
+msgid "Show Values"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:327
+msgid "Slider Handle Color"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:335
+msgid "Slider Handle Height (px)"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:331
+msgid "Slider Handle Width (px)"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:345
+msgid "Slider Height"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:344
+msgid "Slider Height  (px)"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:323
+msgid "Slider Selection Color"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:201
+msgid "Slider Type"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:260
+msgid "Star 1"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:265
+msgid "Star 2"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:270
+msgid "Star 3"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:275
+msgid "Star 4"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:280
+msgid "Star 5"
+msgstr ""
+
+#. id
+#: admin/admin-menu.php:220
+msgid "Star Rating"
+msgstr ""
+
+#: addons/star-rating/star-rating.php:236
+msgid "Star Rating Style"
+msgstr ""
+
+#: addons/mailchimp/mailchimp.php:132
+msgid "Status: "
+msgstr ""
+
+#: inc/functions.php:80
+msgid "Step description"
+msgstr ""
+
+#: addons/multistep/multistep.php:345
+msgid "Step Title Color"
+msgstr ""
+
+#: addons/database/database.php:153
+msgid "Submit"
+msgstr ""
+
+#: addons/styler/uacf7style.php:281
+msgid "Submit Button Options"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:71
+msgid "Subscriber Email"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:84
+msgid "Subscriber First Name"
+msgstr ""
+
+#: addons/mailchimp/inc/template/form-fields.php:97
+msgid "Subscriber Last Name"
+msgstr ""
+
+#: addons/redirection/redirect.php:292
+msgid "Tags support to redirect URL"
+msgstr ""
+
+#. Author of the plugin
+msgid "Themefic"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:115
+msgid ""
+"There are additional settings on the 'UACF7 Conditional Fields' tab. Make "
+"sure you set those, otherwise the conditions may not work correctly."
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:239
+msgid ""
+"This feature will help you to create pdf after form submission, send to mail,"
+" stored pdf into the server and export pdf form the admin."
+msgstr ""
+
+#: addons/placeholder/placeholder.php:51
+msgid ""
+"This feature will help you to edit the Styles of Placeholder of your form. "
+"Note that, all below fields are optional. If any field is not needed, leave "
+"them blank."
+msgstr ""
+
+#: addons/range-slider/range-slider.php:313
+msgid ""
+"This feature will help you to edit the Styles of Range Slider of your form. "
+"Note that, all below fields are optional. If any field is not needed, leave "
+"them blank."
+msgstr ""
+
+#: addons/styler/uacf7style.php:116
+msgid ""
+"This feature will help you to edit the Styles of your form. Note that, all "
+"below fields are optional. If any field is not needed, leave them blank."
+msgstr ""
+
+#: addons/redirection/redirect.php:119
+msgid ""
+"This feature will help you to redirect contact form 7 after submission. You "
+"can Redirect users to a Thank you page or External page after user fills up "
+"the form. You can check this"
+msgstr ""
+
+#: inc/functions.php:173
+msgid ""
+"This is a Pro feature of Ultimate Addons for contact form 7. You can add "
+"repeatable field and repeatable fields group with this addon."
+msgstr ""
+
+#: admin/admin-menu.php:34
+msgid ""
+"Tick the addons you need from the below settings Panel and click Save. Those "
+"addons will be activated. Then go to the Contact Form 7 settings Panel and "
+"start editing."
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:136
+#: addons/redirection/redirect.php:119
+msgid "to learn more."
+msgstr ""
+
+#: addons/styler/uacf7style.php:165 addons/styler/uacf7style.php:175
+#: addons/styler/uacf7style.php:236 addons/styler/uacf7style.php:246
+#: addons/styler/uacf7style.php:354 addons/styler/uacf7style.php:364
+msgid "Top"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:59
+msgid "UACF7 Conditional Fields"
+msgstr ""
+
+#: addons/styler/uacf7style.php:44
+msgid "UACF7 Form Styler"
+msgstr ""
+
+#: addons/mailchimp/mailchimp.php:163
+msgid "UACF7 Mailchimp"
+msgstr ""
+
+#: addons/multistep/multistep.php:191
+msgid "UACF7 Multistep Form"
+msgstr ""
+
+#: addons/pdf-generator/pdf-generator.php:207
+msgid "UACF7 PDF Generator"
+msgstr ""
+
+#: addons/placeholder/placeholder.php:32
+msgid "UACF7 Placeholder"
+msgstr ""
+
+#: addons/pre-populate-field/pre-populate-field.php:55
+msgid "UACF7 pre-populate Fields"
+msgstr ""
+
+#: addons/range-slider/range-slider.php:291
+msgid "UACF7 Range Slider"
+msgstr ""
+
+#: addons/redirection/redirect.php:78
+msgid "UACF7 Redirection"
+msgstr ""
+
+#: addons/redirection/redirect.php:117
+msgid "UACF7 Redirection Settings"
+msgstr ""
+
+#. parent slug
+#. page_title
+#: admin/admin-menu.php:19 admin/admin-menu.php:20
+msgid "Ultimate Addons"
+msgstr ""
+
+#. Name of the plugin
+msgid "Ultimate Addons for Contact Form 7"
+msgstr ""
+
+#: admin/admin-menu.php:33
+msgid "Ultimate Addons for Contact Form 7 (UACF7) Settings"
+msgstr ""
+
+#: addons/database/database.php:94 addons/database/database.php:132
+msgid "Ultimate Database"
+msgstr ""
+
+#: addons/database/database.php:126
+msgid "Ultimate Database Addon"
+msgstr ""
+
+#. parent slug
+#. page_title
+#: addons/database/database.php:68 addons/database/database.php:69
+msgid "Ultimate DB"
+msgstr ""
+
+#: inc/functions.php:159
+msgid "Ultimate Repeater (pro)"
+msgstr ""
+
+#: addons/country-dropdown/country-dropdown.php:184
+#, php-format
+msgid ""
+"Use Our Pro plugin %1s to enable autocomplete country, city, state and zip "
+"code field based on user IP address."
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:136
+#: addons/redirection/redirect.php:119
+msgid "video"
+msgstr ""
+
+#: addons/styler/uacf7style.php:320
+msgid "Width (in px or %)"
+msgstr ""
+
+#: addons/conditional-field/conditional-fields.php:136
+msgid ""
+"With this feature, you can show or hide form fields depending on Contact "
+"form 7 Conditional Logic. You can check this"
+msgstr ""
+
+#: addons/column/column.php:81
+msgid ""
+"You can easily create two columns, three Columns even Four columns form with "
+"Contact form 7 using this feature. Just insert tag you need from below list."
+msgstr ""
+
+#: addons/range-slider/range-slider.php:268
+msgid "You can set the styles of the slider from \"UACF7 Range Slider\" tab."
+msgstr ""
+
+#: addons/multistep/multistep.php:142
+msgid ""
+"You need to enable the form from the \"UACF7 Multistep Form\" tab. The tab "
+"also includes additional necessary settings. Make sure you set those, "
+"otherwise the form submission may not work correctly."
+msgstr ""

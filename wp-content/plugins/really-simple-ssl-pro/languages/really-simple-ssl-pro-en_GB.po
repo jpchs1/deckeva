@@ -1,0 +1,759 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Project-Id-Version: Really Simple SSL pro multisite\n"
+"POT-Creation-Date: 2020-12-07 08:36+0100\n"
+"PO-Revision-Date: 2022-10-26 16:56+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (UK)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: really-simple-ssl-pro-multisite.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Report-Msgid-Bugs-To: \n"
+"Language: en_GB\n"
+"X-Loco-Version: 2.6.2; wp-6.0.3\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: class-admin.php:12 class-scan.php:44 csp-violation-endpoint.php:11
+#, php-format
+msgid "%s is a singleton class and you cannot create a second instance."
+msgstr "%s is a singleton class and you cannot create a second instance."
+
+#: class-licensing.php:540 class-licensing.php:636
+#, php-format
+msgid "%s/%s activations available."
+msgstr "%s/%s activations available."
+
+#: class-licensing.php:713
+#, php-format
+msgid "%sActivate%s your license."
+msgstr "%sActivate%s your licence."
+
+#: class-admin.php:582
+#, php-format
+msgid "%sRead more%s."
+msgstr "%sRead more%s."
+
+#: class-scan.php:226
+#, php-format
+msgctxt "'date' at 'time'"
+msgid "%s at %s"
+msgstr "%s at %s"
+
+#: class-admin.php:582
+msgid "A redirect to http was detected. This might result in redirect loops."
+msgstr "A redirect to http was detected. This might result in redirect loops."
+
+#: class-licensing.php:56
+msgid "Activate your license for automatic updates."
+msgstr "Activate your licence for automatic updates."
+
+#: class-scan.php:1686 class-scan.php:1720 class-scan.php:1796
+#: class-scan.php:1833 class-scan.php:1882
+#, php-format
+msgid "Blocked URL: %s"
+msgstr "Blocked URL: %s"
+
+#: class-scan.php:1645
+msgid "cached file, deactivate cache to see the actual source"
+msgstr "cached file, deactivate cache to see the actual source"
+
+#: class-scan.php:1721
+msgid ""
+"Can be fixed automatically by pressing the Fix button. If fixing fails, the "
+"source file can be edited manually by pressing the Edit button."
+msgstr ""
+"Can be fixed automatically by pressing the Fix button. If fixing fails, the "
+"source file can be edited manually by pressing the Edit button."
+
+#: class-scan.php:1721
+msgid ""
+"Can be fixed manually by editing the respective mu-plugin file in the /wp-"
+"content/mu-plugins/ directory "
+msgstr ""
+"Can be fixed manually by editing the respective mu-plugin file in the /wp-"
+"content/mu-plugins/ directory "
+
+#: class-scan.php:1759
+msgid ""
+"Cannot be fixed automatically, as the mixed content is coming from an "
+"external domain. Contact the owner of the domain to update the CSS/JS file"
+msgstr ""
+"Cannot be fixed automatically, as the mixed content is coming from an "
+"external domain. Contact the owner of the domain to update the CSS/JS file"
+
+#: class-scan.php:377
+#, php-format
+msgid "Checking if external js or css files contain http links, %s of %s"
+msgstr "Checking if external JS or CSS files contain http links, %s of %s"
+
+#: class-scan.php:321
+#, php-format
+msgid "Checking posts for external URLs, %s of %s"
+msgstr "Checking posts for external URLs, %s of %s"
+
+#: class-scan.php:347
+msgid "Checking which postmeta contain external resources"
+msgstr "Checking which postmeta contain external resources"
+
+#: class-scan.php:361
+#, php-format
+msgid "Checking which resources can't load over ssl, %s of %s"
+msgstr "Checking which resources can't load over ssl, %s of %s"
+
+#: class-scan.php:335
+msgid "Checking widgets for external URLs"
+msgstr "Checking widgets for external URLs"
+
+#: csp-violation-endpoint.php:151
+msgid "Click 'Enforce' to enforce the configuration on your site."
+msgstr "Click 'Enforce' to enforce the configuration on your site."
+
+#: class-scan.php:1740 class-scan.php:1815 class-scan.php:1853
+#: class-scan.php:1900 class-scan.php:2195
+msgid "Copyright warning!"
+msgstr "Copyright warning!"
+
+#: class-scan.php:1664
+msgid ""
+"Downloading files from other websites can cause serious copyright issues! It "
+"is always illegal to use images, files, or any copyright protected material "
+"on your own site without the consent of the copyrightholder. Please ask the "
+"copyrightholder for permission. Use this function at your own risk."
+msgstr ""
+"Downloading files from other websites can cause serious copyright issues! It "
+"is always illegal to use images, files, or any copyright protected material "
+"on your own site without the consent of the copyrightholder. Please ask the "
+"copyrightholder for permission. Use this function at your own risk."
+
+#: class-admin.php:563
+msgid "Elementor mixed content successfully converted."
+msgstr "Elementor mixed content successfully converted."
+
+#: class-scan.php:1647
+msgid "file"
+msgstr "file"
+
+#: class-scan.php:446
+msgid "Finished scan"
+msgstr "Finished scan"
+
+#: csp-violation-endpoint.php:148
+msgid "Follow these steps to complete the setup:"
+msgstr "Follow these steps to complete the setup:"
+
+#: class-scan.php:306
+msgid "Generating file list"
+msgstr "Generating file list"
+
+#: class-scan.php:261
+msgid "Generating web page list"
+msgstr "Generating web page list"
+
+#: class-scan.php:135 class-scan.php:149
+msgid "Great! Your scan last completed without errors."
+msgstr "Great! Your scan last completed without errors."
+
+#: class-headers.php:253
+msgid "HSTS not enabled"
+msgstr "HSTS not enabled"
+
+#: class-headers.php:240 class-headers.php:246
+msgid "HSTS Preload"
+msgstr "HSTS Preload"
+
+#. Plugin URI of the plugin
+msgid "https://really-simple-ssl.com/pro"
+msgstr "https://really-simple-ssl.com/pro"
+
+#. Author URI of the plugin
+msgid "https://www.really-simple-plugins.com"
+msgstr "https://www.really-simple-plugins.com"
+
+#: class-scan.php:1832
+msgid "iFrame in the wp_postmeta database table"
+msgstr "iFrame in the wp_postmeta database table"
+
+#: class-scan.php:1739 class-scan.php:1814 class-scan.php:1852
+#: class-scan.php:1899
+msgid "Import and insert file"
+msgstr "Import and insert file"
+
+#: really-simple-ssl-pro-multisite.php:291
+msgid "Install and activate Really Simple SSL"
+msgstr "Install and activate Really Simple SSL"
+
+#: csp-violation-endpoint.php:135
+msgid ""
+"Learning Mode is active for your Content Security and will complete in %s "
+"days."
+msgstr ""
+"Learning Mode is active for your Content Security and will complete in %s "
+"days."
+
+#: class-licensing.php:176 class-licensing.php:204 class-licensing.php:721
+#: class-licensing.php:728 class-licensing.php:735 class-licensing.php:742
+#: class-licensing.php:749 class-licensing.php:764
+msgid "License"
+msgstr "Licence"
+
+#: class-scan.php:393
+#, php-format
+msgid "Looking up blocked resources in files, %s of %s"
+msgstr "Looking up blocked resources in files, %s of %s"
+
+#: class-scan.php:422
+msgid "Looking up blocked resources in postmeta"
+msgstr "Looking up blocked resources in postmeta"
+
+#: class-scan.php:408
+msgid "Looking up blocked resources in posts"
+msgstr "Looking up blocked resources in posts"
+
+#: class-scan.php:438
+msgid "Looking up blocked resources in widgets"
+msgstr "Looking up blocked resources in widgets"
+
+#: class-scan.php:1882
+msgid ""
+"Mixed content found in a widget. Press the edit link to edit the widget "
+"manually."
+msgstr ""
+"Mixed content found in a widget. Press the edit link to edit the widget "
+"manually."
+
+#: class-scan.php:1797
+msgid ""
+"Mixed content found in in a post. Can be fixed automatically by pressing the "
+"fix button. Pressing the edit button allows you to update the link in the "
+"post manually."
+msgstr ""
+"Mixed content found in in a post. Can be fixed automatically by pressing the "
+"fix button. Pressing the edit button allows you to update the link in the "
+"post manually."
+
+#: class-scan.php:1834
+msgid ""
+"Mixed content from a postmeta table in your database. Usually won't cause "
+"any mixed content on the front-end. Check the post if it causes mixed "
+"content. If so, the link can be replace directly in the database."
+msgstr ""
+"Mixed content from a postmeta table in your database. Usually won't cause "
+"any mixed content on the front-end. Check the post if it causes mixed "
+"content. If so, the link can be replace directly in the database."
+
+#: class-scan.php:1726
+#, php-format
+msgid "Mixed content in %s"
+msgstr "Mixed content in %s"
+
+#: class-scan.php:1765
+msgid "Mixed content in CSS/JS file from other domain"
+msgstr "Mixed content in CSS/JS file from other domain"
+
+#: class-scan.php:1691
+msgid "Mixed content in PHP file in %s"
+msgstr "Mixed content in PHP file in %s"
+
+#: class-scan.php:1802
+msgid "Mixed content in post: "
+msgstr "Mixed content in post: "
+
+#: class-scan.php:1832
+msgid "Mixed content in the postmeta table"
+msgstr "Mixed content in the postmeta table"
+
+#: class-scan.php:1760
+#, php-format
+msgid "Mixed content resources: %s"
+msgstr "Mixed content resources: %s"
+
+#: class-scan.php:1639
+msgid "mu plugin file"
+msgstr "mu plugin file"
+
+#: class-licensing.php:581
+#, php-format
+#| msgid "Multisite detected. Please consider upgrading to %smultisite%s."
+msgid "Multisite detected. Please upgrade to %smultisite%s."
+msgstr "Multisite detected. Please upgrade to %smultisite%s."
+
+#: class-scan.php:220 class-scan.php:1926
+msgid "Never"
+msgstr "Never"
+
+#: class-admin.php:577
+msgid "No redirect to http detected."
+msgstr "No redirect to http detected."
+
+#: class-licensing.php:649
+msgid "Open"
+msgstr "Open"
+
+#. Description of the plugin
+msgid ""
+"Optimize your SSL security with the mixed content scan, secure cookies and "
+"advanced security headers."
+msgstr ""
+"Optimise your SSL security with the mixed content scan, secure cookies and "
+"advanced security headers."
+
+#: really-simple-ssl-pro-multisite.php:281
+#: really-simple-ssl-pro-multisite.php:306
+#| msgid ""
+#| "Please upgrade to the latest version to be able use the full "
+#| "functionality of the plugin."
+msgid ""
+"Please %supgrade%s to the latest version to be able use the full "
+"functionality of the plugin."
+msgstr ""
+"Please %supgrade%s to the latest version to be able use the full "
+"functionality of the plugin."
+
+#: class-licensing.php:603
+msgid "Please activate your license key."
+msgstr "Please activate your licence key."
+
+#: class-licensing.php:595
+#, php-format
+msgid "Please enter your license key. Available in your %saccount%s."
+msgstr "Please enter your licence key. Available in your %saccount%s."
+
+#: really-simple-ssl-pro-multisite.php:279
+#| msgid ""
+#| "Please install and activate Really Simple SSL before activating this add-"
+#| "on."
+msgid "Please install and activate Really Simple SSL to enable the add-on."
+msgstr "Please install and activate Really Simple SSL to enable the add-on."
+
+#: class-scan.php:2200
+#| msgid ""
+#| "Please note that any changes you have made since to your current files, "
+#| "will be lost. "
+msgid ""
+"Please note that any changes you have made since to your current files, will "
+"be lost."
+msgstr ""
+"Please note that any changes you have made since to your current files, will "
+"be lost."
+
+#: really-simple-ssl-pro-multisite.php:273
+#: really-simple-ssl-pro-multisite.php:302
+msgid "Plugin dependency error"
+msgstr "Plugin dependency error"
+
+#: class-scan.php:1641
+msgid "plugin file"
+msgstr "plugin file"
+
+#: class-admin.php:576 class-admin.php:581
+msgid "Potential redirect loop."
+msgstr "Potential redirect loop."
+
+#: class-licensing.php:651
+msgid "Premium"
+msgstr "Premium"
+
+#. Author of the plugin
+msgid "Really Simple Plugins"
+msgstr "Really Simple Plugins"
+
+#: really-simple-ssl-pro-multisite.php:305
+msgid ""
+"Really Simple SSL needs to be updated to the latest version to be compatible."
+msgstr ""
+"Really Simple SSL needs to be updated to the latest version to be compatible."
+
+#: really-simple-ssl-pro-multisite.php:28
+#, fuzzy
+#| msgid ""
+#| "Really Simple SSL pro cannot be activated. The plugin requires PHP 5.6 or "
+#| "higher"
+msgid ""
+"Really Simple SSL pro cannot be activated. The plugin requires PHP 7.2 or "
+"higher"
+msgstr ""
+"Really Simple SSL pro cannot be activated. The plugin requires PHP 5.6 or "
+"higher"
+
+#: really-simple-ssl-pro-multisite.php:34
+#, fuzzy
+#| msgid ""
+#| "Really Simple SSL pro cannot be activated. The plugin requires WordPress "
+#| "4.9 or higher"
+msgid ""
+"Really Simple SSL pro cannot be activated. The plugin requires WordPress 5.7 "
+"or higher"
+msgstr ""
+"Really Simple SSL pro cannot be activated. The plugin requires WordPress 4.9 "
+"or higher"
+
+#: really-simple-ssl-pro-multisite.php:278
+#| msgid ""
+#| "Really Simple SSL pro is an add-on for Really Simple SSL, and cannot do "
+#| "it on its own :("
+msgid ""
+"Really Simple SSL pro is an add-on for Really Simple SSL, and cannot do it "
+"on its own :-("
+msgstr ""
+"Really Simple SSL pro is an add-on for Really Simple SSL, and cannot do it "
+"on its own :-("
+
+#. Plugin Name of the plugin
+msgid "Really Simple SSL pro multisite"
+msgstr "Really Simple SSL pro multisite"
+
+#: class-scan.php:2205
+msgid "Restore files"
+msgstr "Restore files"
+
+#: csp-violation-endpoint.php:150
+msgid "Review the detected configuration in 'Content Security Policy'."
+msgstr "Review the detected configuration in 'Content Security Policy'."
+
+#: class-scan.php:2194
+msgid "Roll back changes made to your files"
+msgstr "Roll back changes made to your files"
+
+#: class-importer.php:63
+msgid "Roll back file changes"
+msgstr "Roll back file changes"
+
+#: class-scan.php:275
+#, php-format
+msgid ""
+"Searching for js and css files and links to external resources in website, "
+"%s of %s"
+msgstr ""
+"Searching for js and css files and links to external resources in website, "
+"%s of %s"
+
+#: class-scan.php:291
+#, php-format
+msgid "Searching for mixed content in css and js files, %s of %s"
+msgstr "Searching for mixed content in css and js files, %s of %s"
+
+#: class-admin.php:655
+msgid "Settings"
+msgstr "Settings"
+
+#: class-importer.php:529
+msgid "Something went wrong."
+msgstr "Something went wrong."
+
+#: class-importer.php:96
+#| msgid ""
+#| "Someting went wrong. If this doesn't work, you can put the original files "
+#| "back by changing files named 'rsssl-bkp-filename' to filename."
+msgid ""
+"Something went wrong. If this doesn't work, you can put the original files "
+"back by changing files named 'rsssl-bkp-filename' to filename."
+msgstr ""
+"Something went wrong. If this doesn't work, you can put the original files "
+"back by changing files named 'rsssl-bkp-filename' to filename."
+
+#: class-importer.php:123 class-importer.php:162 class-importer.php:198
+#: class-importer.php:238 class-importer.php:272
+msgid ""
+"Something went wrong. Please refresh the page and try again, or fix manually."
+msgstr ""
+"Something went wrong. Please refresh the page and try again, or fix manually."
+
+#: class-licensing.php:650
+msgid "Success"
+msgstr "Success"
+
+#: class-importer.php:179
+msgid ""
+"The file could not be downloaded. It might not exist, or downloading is "
+"blocked. Fix manually."
+msgstr ""
+"The file could not be downloaded. It might not exist, or downloading is "
+"blocked. Fix manually."
+
+#: class-importer.php:219 class-importer.php:254 class-importer.php:291
+msgid ""
+"The file could not be downloaded. The file might not exist, or downloading "
+"is be blocked by the server. Fix manually."
+msgstr ""
+"The file could not be downloaded. The file might not exist, or downloading "
+"is be blocked by the server. Fix manually."
+
+#: class-scan.php:153
+msgid ""
+"The last scan was completed with errors. Are you sure these issues don't "
+"impact your site?"
+msgstr ""
+"The last scan was completed with errors. Are you sure these issues don't "
+"impact your site?"
+
+#: class-scan.php:139
+msgid ""
+"The last scan was completed with errors. Only migrate if you are sure the "
+"found errors are not a problem for your site."
+msgstr ""
+"The last scan was completed with errors. Only migrate if you are sure the "
+"found errors are not a problem for your site."
+
+#: class-licensing.php:589
+msgid ""
+"The license information could not be retrieved at this moment. Please try "
+"again at a later time."
+msgstr ""
+"The licence information could not be retrieved at this moment. Please try "
+"again at a later time."
+
+#: class-scan.php:1637
+msgid "theme file"
+msgstr "theme file"
+
+#: class-importer.php:138
+msgid "There was a problem editing the file. Please try manually."
+msgstr "There was a problem editing the file. Please try manually."
+
+#: class-licensing.php:736
+msgid ""
+"This domain is not activated for this Really Simple SSL Pro license. Please "
+"activate the license for this domain."
+msgstr ""
+"This domain is not activated for this Really Simple SSL Pro licence. Please "
+"activate the licence for this domain."
+
+#: class-scan.php:1665
+msgid ""
+"This downloads the file from the domain without SSL, inserts it into WP "
+"media, and changes the URL to the new URL."
+msgstr ""
+"This downloads the file from the domain without SSL, inserts it into WP "
+"media, and changes the URL to the new URL."
+
+#: class-licensing.php:629
+#, php-format
+msgid ""
+"This license is not valid for this product. Find out why on your %saccount%s."
+msgstr ""
+"This licence is not valid for this product. Find out why on your %saccount%s."
+
+#: class-licensing.php:622
+#, php-format
+msgid "This license is not valid. Find out why on your %saccount%s."
+msgstr "This licence is not valid. Find out why on your %saccount%s."
+
+#: class-scan.php:2198
+#| msgid ""
+#| "This will put the files back that were changed by the fix option in "
+#| "Really Simple SSL pro."
+msgid ""
+"This will put the files back that were changed by the fix option in Really "
+"Simple SSL Pro."
+msgstr ""
+"This will put the files back that were changed by the fix option in Really "
+"Simple SSL Pro."
+
+#: class-admin.php:596 class-admin.php:602
+msgid "TLS version"
+msgstr "TLS version"
+
+#: class-admin.php:597
+msgid "TLS version is up-to-date"
+msgstr "TLS version is up-to-date"
+
+#: class-licensing.php:513
+msgid "unlimited"
+msgstr "unlimited"
+
+#: class-licensing.php:537
+msgid "Unlimited activations available."
+msgstr "Unlimited activations available."
+
+#: class-admin.php:631
+msgid ""
+"Update Really Simple SSL Free to the latest version for optimal "
+"compatibility."
+msgstr ""
+"Update Really Simple SSL Free to the latest version for optimal "
+"compatibility."
+
+#: class-licensing.php:526
+#, php-format
+msgid "Upgrade to a %s5 sites or Agency%s license."
+msgstr "Upgrade to a %s5 sites or Agency%s licence."
+
+#: class-licensing.php:529
+#, php-format
+msgid "Upgrade to an %sAgency%s license."
+msgstr "Upgrade to an %sAgency%s licence."
+
+#: class-scan.php:1643
+msgid "uploads file, possibly generated by plugin or theme"
+msgstr "uploads file, possibly generated by plugin or theme"
+
+#: class-licensing.php:556
+#, php-format
+msgid "Valid license for %s."
+msgstr "Valid licence for %s."
+
+#: class-licensing.php:520
+#, php-format
+msgid "Valid until %s."
+msgstr "Valid until %s."
+
+#: class-licensing.php:648
+msgid "Warning"
+msgstr "Warning"
+
+#: class-scan.php:1877
+#, php-format
+msgid "Widget area \"%s\""
+msgstr "Widget area \"%s\""
+
+#: class-scan.php:1887
+msgid "Widget with mixed content"
+msgstr "Widget with mixed content"
+
+#: class-licensing.php:765
+msgid ""
+"You are using Really Simple SSL pro single site on a multisite environment. "
+"Please install Really Simple SSL multisite networkwide for multisite support."
+msgstr ""
+"You are using Really Simple SSL pro single site on a multisite environment. "
+"Please install Really Simple SSL multisite networkwide for multisite support."
+
+#: class-scan.php:1686
+msgid "You can edit the source file manually by pressing the edit button."
+msgstr "You can edit the source file manually by pressing the edit button."
+
+#: class-licensing.php:532
+#, php-format
+msgid "You can renew your license on your %saccount%s."
+msgstr "You can renew your licence on your %saccount%s."
+
+#: class-licensing.php:715
+#, php-format
+msgid "You can upgrade on your %saccount%s."
+msgstr "You can upgrade on your %saccount%s."
+
+#: class-licensing.php:743
+msgid ""
+"You do not have any activations left on your Really Simple SSL Pro license. "
+"Please upgrade your plan for additional activations."
+msgstr ""
+"You do not have any activations left on your Really Simple SSL Pro licence. "
+"Please upgrade your plan for additional activations."
+
+#: class-licensing.php:520
+msgid "You have a lifetime license."
+msgstr "You have a lifetime licence."
+
+#: class-scan.php:144
+msgid ""
+"You haven't scanned the site yet, you should scan your site to check for "
+"possible issues."
+msgstr ""
+"You haven't scanned the site yet, you should scan your site to check for "
+"possible issues."
+
+#: class-importer.php:110
+msgid "Your files already were restored."
+msgstr "Your files already were restored."
+
+#: class-importer.php:108
+msgid "Your files were restored."
+msgstr "Your files were restored."
+
+#: class-licensing.php:615
+#, php-format
+msgid ""
+"Your license could not be found in our system. Please contact %ssupport%s."
+msgstr ""
+"Your licence could not be found in our system. Please contact %ssupport%s."
+
+#: class-licensing.php:609
+#, php-format
+msgid "Your license has been revoked. Please contact %ssupport%s."
+msgstr "Your licence has been revoked. Please contact %ssupport%s."
+
+#: class-licensing.php:642
+#, php-format
+msgid ""
+"Your license key has expired. Please renew your license key on your "
+"%saccount%s."
+msgstr ""
+"Your licence key has expired. Please renew your licence key on your "
+"%saccount%s."
+
+#: class-licensing.php:694
+#| msgid "Your Really Simple SSL pro license hasn't been activated."
+msgid "Your Really Simple SSL Pro license hasn't been activated."
+msgstr "Your Really Simple SSL Pro licence hasn't been activated."
+
+#: class-licensing.php:695
+#| msgid "Your Really Simple SSL pro license is not valid."
+msgid "Your Really Simple SSL Pro license is not valid."
+msgstr "Your Really Simple SSL Pro licence is not valid."
+
+#: class-licensing.php:722
+msgid ""
+"Your Really Simple SSL Pro license key has expired. Please renew your "
+"license to continue receiving updates and premium support."
+msgstr ""
+"Your Really Simple SSL Pro licence key has expired. Please renew your "
+"licence to continue receiving updates and premium support."
+
+#: class-licensing.php:750
+msgid ""
+"Your Really Simple SSL Pro license key hasn't been activated yet. You can "
+"activate your license key on the license tab."
+msgstr ""
+"Your Really Simple SSL Pro licence key hasn't been activated yet. You can "
+"activate your licence key on the licence tab."
+
+#: class-licensing.php:729
+msgid ""
+"Your Really Simple SSL Pro license key is not activated. Please activate "
+"your license to continue receiving updates and premium support."
+msgstr ""
+"Your Really Simple SSL Pro licence key is not activated. Please activate "
+"your licence to continue receiving updates and premium support."
+
+#: class-headers.php:241
+#, php-format
+msgid ""
+"Your site has been configured for the HSTS preload list. If you have "
+"submitted your site, it will be preloaded. Click %shere%s to submit."
+msgstr ""
+"Your site has been configured for the HSTS preload list. If you have "
+"submitted your site, it will be preloaded. Click %shere%s to submit."
+
+#: class-headers.php:254
+msgid "Your site is not configured for HSTS yet."
+msgstr "Your site is not configured for HSTS yet."
+
+#: class-headers.php:247
+msgid "Your site is not yet configured for the HSTS preload list."
+msgstr "Your site is not yet configured for the HSTS preload list."
+
+#: class-admin.php:617
+msgid ""
+"Your site redirects 404 pages to the http:// version of your homepage. This "
+"can cause mixed content issues with images."
+msgstr ""
+"Your site redirects 404 pages to the http:// version of your homepage. This "
+"can cause mixed content issues with images."
+
+#: class-admin.php:603
+msgid ""
+"Your site uses an outdated version of TLS. Upgrade to TLS 1.2 or TLS 1.3 to "
+"keep your site secure."
+msgstr ""
+"Your site uses an outdated version of TLS. Upgrade to TLS 1.2 or TLS 1.3 to "
+"keep your site secure."

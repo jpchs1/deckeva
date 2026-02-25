@@ -1,0 +1,1 @@
+a:1:{s:42:"/home/wwimpo/deckeva.cl/wp-admin/error_log";s:42:"9e4061db9e3efde2e3423f546a14a7c5_error_log";}

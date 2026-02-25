@@ -1,0 +1,1712 @@
+/*
+
+    The following CSS codes are created by the YellowPencil plugin.
+    https://yellowpencil.waspthemes.com/
+
+
+    T A B L E   O F   C O N T E N T S
+    ........................................................................
+
+    01. Global Styles
+    02. "Proyectos222" Page
+    03. "Inicio" Page
+    04. "Remodelaciones y Reacondicionamientos de Lanchas en Santiago: Calidad y Confianza en Deckeva 🚤" Post
+    05. "¿Qué es Sea Dek?" Post
+    06. "¿Por qué elegir pisos de goma eva para mi lancha?" Post
+    07. "¿Por qué necesitas un piso antideslizante para tu lancha?" Post
+    08. "Lancha Starcraft – Pintado" Movie
+    09. "Piso Deckeva – Lago Rapel" Movie
+    10. "Yamaha 242 Limited S – Lago Villarrica" Movie
+    11. "Velero Dufour – Valparaiso" Movie
+    12. "Sea Ray Sundancer 240 – Lago Puerto Varas" Movie
+    13. "Plataforma Yamaha AR – Lago Colbun" Movie
+    14. "Semirrigido – Lago Ranco" Movie
+    15. "Semirrigido – Lago Vichuquen" Movie
+    16. "Lancha Monterey 258SS – Deckeva" Movie
+    17. "Lancha Monterey 214 FS 2007 – Deckeva" Movie
+    18. "Todos" Page
+    19. "Blog" Page
+    20. "Iniciopp" Page
+    21. "Proyectosss" Page
+    22. "Proyectos" Page
+    23. "🔧 Servicio Técnico Eléctrico Náutico para Lanchas y Embarcaciones | Deckeva Chile" Post
+
+*/
+
+
+
+/*-----------------------------------------------*/
+/*  Global Styles                                */
+/*-----------------------------------------------*/
+body .elementor-element-ac1fabe .active h3 a{
+	color:#77524a;
+}
+
+body .elementor-element-53392f8 .active p{
+	color:#ffffff;
+}
+
+body .elementor-element-ac1fabe .gen-info-contain li{
+	display:none !important;
+}
+
+body .elementor-element-b0bf324 .elementor-widget-heading h4{
+	display:none;
+}
+
+body .elementor-element-d9278bb .active h3 a{
+	color:#77524a;
+}
+
+body .elementor-element-d9278bb .active .gen-info-contain ul{
+	display:none;
+}
+
+body .elementor-element-20b712b h3 a{
+	color:#77524a;
+}
+
+body .elementor-element-20b712b .gen-info-contain ul{
+	display:none !important;
+}
+
+body .elementor-element-ac1fabe .dropdown-toggle .fa{
+	display:none;
+}
+
+body .post-loadmore-wrapper .gen-info-contain ul{
+	display:none !important;
+}
+
+body .post-loadmore-wrapper .dropdown-toggle .fa{
+	display:none;
+}
+
+body .gen-more-like .gen-info-contain ul{
+	display:none !important;
+}
+
+body .gen-more-like .share .fa-share-alt{
+	display:none;
+}
+
+body .gen-more-like .col-xl-3:nth-child(3) .dropdown-toggle{
+	display:none;
+}
+
+body .gen-more-like .hentry .dropdown-toggle{
+	display:none;
+}
+
+body .elementor-element-0359e9b .elementor-widget-heading .elementor-heading-title{
+	color:#f9f9f9 !important;
+}
+
+body .elementor-element-0359e9b .elementor-widget-text-editor p{
+	color:#e0e0e0;
+}
+
+body .gen-more-like .gen-movie-action a{
+	color:#ededed;
+}
+
+body .gen-more-like h3 a{
+	color:#dad7d7;
+}
+
+body .elementor-widget-image-carousel .swiper-pagination span{
+	background-color:#ffffff;
+}
+
+body .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	color:#e5e5e5 !important;
+}
+
+body .elementor-element-5a734b6 .elementor-widget-text-editor p{
+	color:#dbdbdb;
+}
+
+body .n-uc-zUswGVmK8Jtq h1 a{
+	margin-right:-31px;
+	margin-left:-150px;
+}
+
+body .n-uc-kOfcBeuQy8TD div p{
+	margin-left:-150px !important;
+}
+
+body .n-uc-1ee0db941a48b .n-uc-16f058d745a53 .n2-ss-layer-row{
+	margin-left:-170px;
+}
+
+body .n-uc-ZgivmBHjQFUI h1 a{
+	margin-left:-150px;
+}
+
+body .n-uc-j7f6gFcpcWip div p{
+	margin-left:-150px !important;
+}
+
+body .n-uc-lxJq4HPN2bvM .n-uc-mYYNLt50fIh1 .n2-ss-layer-row{
+	margin-left:-170px;
+}
+
+body .n-uc-LSrFqYvCZd0b h1 a{
+	margin-left:-150px;
+}
+
+body .n-uc-qPDMbQJCKW7T div p{
+	margin-left:-150px !important;
+}
+
+body .n-uc-nXPOSOf6gQjE .n-uc-Y48VHzDLvDpD .n2-ss-layer-row{
+	margin-left:-170px;
+}
+
+@media (max-width:479px){
+
+	body .elementor-location-header .elementor-nav-menu--dropdown ul{
+	padding-top:49px !important;
+}
+
+body .n-uc-lEf3wQlZ5rgl .n2-ss-layer-row .n2-ss-layer-row-inner .n-uc-nXPOSOf6gQjE .n-uc-nXPOSOf6gQjE-inner .n-uc-LSrFqYvCZd0b h1 a{
+	font-size:31px !important;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Proyectos222" Page                          */
+/*-----------------------------------------------*/
+body.page-id-5617 .slider-for div p{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-d9278bb .active .dropdown-toggle .fa{
+	display:none;
+}
+
+body.page-id-5617 .elementor-element-53392f8 .active ul{
+	display:none !important;
+}
+
+body.page-id-5617 .elementor-element-20b712b div .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-5617 .elementor-element-20b712b .share a{
+	color:#77524a !important;
+}
+
+body.page-id-5617 .elementor-element-d9278bb .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-5617 .elementor-element-ac1fabe div .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-5617 .elementor-element-ac1fabe button i{
+	color:rgba(162,92,57,0.81);
+}
+
+body.page-id-5617 .elementor-element-ac1fabe .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-5617 .elementor-element-d9278bb div .fa-share-alt{
+	display:none;
+}
+
+body.page-id-5617 .slider-nav div ul{
+	display:none !important;
+}
+
+body.page-id-5617 .active .item .gen-movie-contain .container .align-items-center .col-xl-6 .gen-tag-line span{
+	font-family:'Montserrat', sans-serif;
+	color:#f2f2f2;
+}
+
+body.page-id-5617 .elementor-element-53392f8 .active h3{
+	font-family:'Montserrat', sans-serif;
+	--google-webfont:no-include;
+	text-transform:capitalize !important;
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-53392f8 .active .button-2 span{
+	color:#ededed;
+}
+
+body.page-id-5617 .elementor-element-53392f8 .active .button-2 i{
+	color:#f9f9f9;
+}
+
+body.page-id-5617 .elementor-element-7d801de .elementor-widget-heading h4{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-ac1fabe .active h3 a{
+	color:#ffffff;
+}
+
+body.page-id-5617 .slider-for div h3{
+	color:#ffffff;
+}
+
+body.page-id-5617 .slider-for div .gen-button-flat{
+	background-color:#e50916;
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-7842647 .elementor-widget-heading h4{
+	color:rgba(255,255,255,0) !important;
+}
+
+body.page-id-5617 .elementor-element-d9278bb h3 a{
+	color:#ffffff !important;
+}
+
+body.page-id-5617 .slider-nav div h3{
+	color:#ffffff;
+}
+
+body.page-id-5617 .slider-nav .next span{
+	color:#ffffff;
+}
+
+body.page-id-5617 .slider-nav .prev span{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-ac1fabe .active .gen-button{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-d9278bb div .gen-button{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-53392f8 button i{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-96abfce .active p{
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-96abfce .active h3{
+	color:#fcfcfc;
+	text-transform:none !important;
+	font-family:'Montserrat', sans-serif;
+}
+
+body.page-id-5617 .elementor-element-96abfce .active ul{
+	display:none !important;
+}
+
+body.page-id-5617 .elementor-element-96abfce div .owl-dot{
+	background-color:#1c1111 !important;
+}
+
+body.page-id-5617 .elementor-element-96abfce div .owl-dot:active{
+	background-color:#e90712 !important;
+}
+
+body.page-id-5617 .elementor-element-96abfce .active .button-1 a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-5617 .elementor-element-96abfce .active .button-2 a{
+	background-color:rgba(125,77,65,0.07);
+	color:#f4f4f4;
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Inicio" Page                                */
+/*-----------------------------------------------*/
+body.page-id-8782 .elementor-main-swiper .elementor-swiper-button .eicon-chevron-right{
+	color:#1b5e9c;
+}
+
+body.page-id-8782 .elementor-main-swiper .elementor-swiper-button .eicon-chevron-left{
+	color:#1b5e9c;
+}
+
+body.page-id-8782 .elementor-main-swiper .swiper-pagination span:hover{
+	background-color:#1b5e9c !important;
+}
+
+body.page-id-8782 .elementor-main-swiper .swiper-pagination span{
+	background-color:#1b5e9c !important;
+}
+
+body.page-id-8782 .cf-col-12 .colorp p{
+	font-weight:600 !important;
+}
+
+body.page-id-8782 #precio .elementor-column-gap-wider .elementor-top-column .elementor-widget-wrap .elementor-widget-shortcode .elementor-widget-container .elementor-shortcode .js .init .fieldset-cf7mls-wrapper .fieldset-cf7mls .cf-container .cf-col-12 p span select{
+	background-color:#ffffff !important;
+	color:#201d1d !important;
+}
+
+body.page-id-8782 .precios_form div p{
+	color:#343d41;
+}
+
+body.page-id-8782 .fieldset-cf7mls-wrapper p input[type=text]{
+	background-color:#ffffff;
+	color:#221f1f;
+}
+
+body.page-id-8782 .fieldset-cf7mls-wrapper p input[type=email]{
+	background-color:#ffffff;
+	color:#414a52;
+}
+
+body.page-id-8782 .fieldset-cf7mls-wrapper p input[type=tel]{
+	background-color:#ffffff;
+	color:#000000;
+}
+
+body.page-id-8782 .fieldset-cf7mls-wrapper p input{
+	font-weight:600 !important;
+}
+
+body.page-id-8782 .owl-carousel .active h3 a{
+	color:#271101;
+}
+
+body.page-id-8782 .owl-carousel .active .gen-info-contain ul{
+	display:none;
+}
+
+body.page-id-8782 .owl-carousel .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-8782 .owl-carousel .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-8782 .owl-carousel button i{
+	color:#af6b12;
+}
+
+body.page-id-8782 .owl-carousel .active .share a{
+	display:none !important;
+}
+
+body.page-id-8782 .owl-carousel .active .gen-movie-action a{
+	color:#ffffff;
+}
+
+body.page-id-8782 .elementor-nav-menu--dropdown-tablet .elementor-nav-menu--main div a{
+	margin-top:8px;
+	margin-left:0px;
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Remodelaciones y Reacondicionamientos de Lanchas en Santiago: Calidad y Confianza en Deckeva 🚤" Post*/
+/*-----------------------------------------------*/
+body.postid-3112 #main{
+	width:60%;
+	position:relative;
+	left:379px;
+	-webkit-transform:translatex(0px) translatey(0px);	-ms-transform:translatex(0px) translatey(0px);	transform:translatex(0px) translatey(0px);
+}
+
+body.postid-3112 .hentry .gen-blog-post .gen-blog-contain{
+	background-color:#ffffff;
+}
+
+body.postid-3112 .gen-blog-post .gen-blog-contain h5{
+	color:#000000;
+	text-align:center;
+	font-weight:700;
+}
+
+body.postid-3112 .gen-blog-post .gen-blog-contain h2.wp-block-heading{
+	text-align:center;
+	font-size:30px;
+	color:#000000;
+}
+
+body.postid-3112 .gen-blog-post .gen-blog-contain p{
+	color:#000000;
+}
+
+body.postid-3112 .gen-blog-contain .wp-block-heading strong{
+	color:#000000;
+}
+
+body.postid-3112 #comment{
+	background-color:#ffffff;
+}
+
+body.postid-3112 .elementor-location-footer{
+	background-color:#ffffff;
+}
+
+@media (max-width:479px){
+
+	body.postid-3112 #main{
+	left:-13px;
+	width:408px;
+}
+
+body.postid-3112 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+@media (min-width:480px){
+
+	body.postid-3112 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "¿Qué es Sea Dek?" Post                    */
+/*-----------------------------------------------*/
+body.postid-1948 #main{
+	width:60%;
+	position:relative;
+	left:379px;
+	-webkit-transform:translatex(0px) translatey(0px);	-ms-transform:translatex(0px) translatey(0px);	transform:translatex(0px) translatey(0px);
+}
+
+body.postid-1948 .hentry .gen-blog-post .gen-blog-contain{
+	background-color:#ffffff;
+}
+
+body.postid-1948 .gen-blog-post .gen-blog-contain h5{
+	color:#000000;
+	text-align:center;
+	font-weight:700;
+}
+
+body.postid-1948 .gen-blog-post .gen-blog-contain h2.wp-block-heading{
+	text-align:center;
+	font-size:30px;
+	color:#000000;
+}
+
+body.postid-1948 .gen-blog-post .gen-blog-contain p{
+	color:#000000;
+}
+
+body.postid-1948 .gen-blog-contain .wp-block-heading strong{
+	color:#000000;
+}
+
+body.postid-1948 #comment{
+	background-color:#ffffff;
+}
+
+body.postid-1948 .elementor-location-footer{
+	background-color:#ffffff;
+}
+
+body.postid-1948 .gen-blog-contain .code-block pre{
+	background-color:#ffffff;
+}
+
+@media (max-width:479px){
+
+	body.postid-1948 #main{
+	left:-13px;
+	width:408px;
+}
+
+body.postid-1948 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+@media (min-width:480px){
+
+	body.postid-1948 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "¿Por qué elegir pisos de goma eva para mi lancha?" Post*/
+/*-----------------------------------------------*/
+body.postid-1943 #main{
+	width:47%;
+	position:relative;
+	left:379px;
+	-webkit-transform:translatex(0px) translatey(0px);	-ms-transform:translatex(0px) translatey(0px);	transform:translatex(0px) translatey(0px);
+	margin-left:169px;
+}
+
+body.postid-1943 .hentry .gen-blog-post .gen-blog-contain{
+	background-color:#ffffff;
+}
+
+body.postid-1943 .gen-blog-post .gen-blog-contain h5{
+	color:#000000;
+	text-align:center;
+	font-weight:700;
+}
+
+body.postid-1943 .gen-blog-post .gen-blog-contain h2.wp-block-heading{
+	text-align:center;
+	font-size:30px;
+	color:#000000;
+}
+
+body.postid-1943 .gen-blog-post .gen-blog-contain p{
+	color:#000000;
+}
+
+body.postid-1943 .gen-blog-contain .wp-block-heading strong{
+	color:#000000;
+}
+
+body.postid-1943 #comment{
+	background-color:#ffffff;
+}
+
+body.postid-1943 .hentry .gen-blog-post .gen-post-media{
+	background-color:#ffffff;
+}
+
+body.postid-1943 .gen-blog-post .gen-post-media img{
+	position:relative;
+}
+
+body.postid-1943 .elementor-location-footer{
+	background-color:#ffffff;
+}
+
+body.postid-1943 .gen-blog-contain .code-block pre{
+	background-color:#ffffff;
+}
+
+@media (max-width:479px){
+
+	body.postid-1943 #main{
+	left:-182px;
+	width:408px;
+}
+
+body.postid-1943 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+@media (min-width:480px){
+
+	body.postid-1943 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "¿Por qué necesitas un piso antideslizante para tu lancha?" Post*/
+/*-----------------------------------------------*/
+body.postid-1936 .gen-blog-contain .wp-block-heading strong{
+	color:#000000;
+}
+
+body.postid-1936 #comment{
+	background-color:#ffffff;
+}
+
+body.postid-1936 .hentry .gen-blog-post .gen-post-media{
+	background-color:#ffffff;
+}
+
+body.postid-1936 .gen-blog-post .gen-post-media img{
+	position:relative;
+	text-align:center;
+	margin-left:128px;
+}
+
+body.postid-1936 .gen-blog-post .gen-blog-contain h5{
+	color:#121010;
+}
+
+body.postid-1936 .hentry .gen-blog-post .gen-blog-contain{
+	background-color:#ffffff;
+}
+
+body.postid-1936 .gen-blog-post .gen-blog-contain p{
+	color:#2a2d31;
+}
+
+body.postid-1936 #main{
+	width:54%;
+	position:relative;
+	left:400px;
+}
+
+body.postid-1936 .elementor-location-footer{
+	background-color:#ffffff;
+}
+
+body.postid-1936 .gen-blog-contain .code-block pre{
+	background-color:#ffffff;
+}
+
+@media (max-width:479px){
+
+	body.postid-1936 #main{
+	width:433px;
+	left:-24px;
+}
+
+body.postid-1936 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+}
+
+body.postid-1936 .gen-blog-post .gen-post-media img{
+	margin-left:2px;
+	width:385px;
+	padding-left:18px;
+	}
+
+}
+
+
+
+@media (min-width:480px){
+
+	body.postid-1936 .gen-blog-contain .gen-post-meta ul{
+	display:none !important;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Lancha Starcraft – Pintado" Movie         */
+/*-----------------------------------------------*/
+body.postid-6707 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-6707 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-6707 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-6707 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-6707 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-6707 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-6707 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Piso Deckeva – Lago Rapel" Movie          */
+/*-----------------------------------------------*/
+body.postid-9013 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9013 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9013 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9013 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9013 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9013 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9013 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Yamaha 242 Limited S – Lago Villarrica" Movie*/
+/*-----------------------------------------------*/
+body.postid-9031 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9031 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9031 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9031 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9031 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9031 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9031 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Velero Dufour – Valparaiso" Movie         */
+/*-----------------------------------------------*/
+body.postid-9086 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9086 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9086 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9086 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9086 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9086 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9086 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Sea Ray Sundancer 240 – Lago Puerto Varas" Movie*/
+/*-----------------------------------------------*/
+body.postid-9097 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9097 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9097 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9097 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9097 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9097 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9097 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Plataforma Yamaha AR – Lago Colbun" Movie */
+/*-----------------------------------------------*/
+body.postid-9117 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9117 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9117 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9117 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9117 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9117 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9117 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Semirrigido – Lago Ranco" Movie           */
+/*-----------------------------------------------*/
+body.postid-9123 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9123 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9123 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9123 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9123 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9123 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9123 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Semirrigido – Lago Vichuquen" Movie       */
+/*-----------------------------------------------*/
+body.postid-9149 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9149 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9149 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9149 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9149 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9149 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9149 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Lancha Monterey 258SS – Deckeva" Movie    */
+/*-----------------------------------------------*/
+body.postid-9170 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9170 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9170 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9170 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9170 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9170 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9170 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Lancha Monterey 214 FS 2007 – Deckeva" Movie*/
+/*-----------------------------------------------*/
+body.postid-9187 .elementor-widget-video .elementor-open-inline{
+	margin-bottom:-500px;
+}
+
+body.postid-9187 .gen-extra-data ul span{
+	display:none !important;
+}
+
+body.postid-9187 .gen-single-movie-info .gen-excerpt p{
+	display:none;
+}
+
+body.postid-9187 .gen-single-movie-wrapper .gen-single-movie-info{
+	display:none;
+}
+
+body.postid-9187 .gen-single-movie-wrapper .gen-more-like h5{
+	display:block;
+	padding-bottom:0px !important;
+}
+
+body.postid-9187 .elementor-element-5a734b6 .elementor-widget-heading .elementor-heading-title{
+	margin-bottom:-19px;
+}
+
+@media (min-width:1024px){
+
+	body.postid-9187 #main{
+	padding-bottom:-9px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Todos" Page                                 */
+/*-----------------------------------------------*/
+body.page-id-8473 .elementor-widget-Movies h3 a{
+	color:#ffffff;
+}
+
+body.page-id-8473 .elementor-widget-Movies .gen-info-contain ul{
+	display:none !important;
+}
+
+body.page-id-8473 .elementor-widget-Movies .gen-movie-action a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-8473 .elementor-widget-Movies .share .fa-share-alt{
+	display:none;
+}
+
+body.page-id-8473 .elementor-widget-Movies .share a{
+	display:none !important;
+}
+
+body.page-id-8473 .elementor-widget-Movies .hentry .dropdown-toggle{
+	display:none;
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Blog" Page                                  */
+/*-----------------------------------------------*/
+body.page-id-7289 #main{
+	background-color:#ffffff;
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Iniciopp" Page                              */
+/*-----------------------------------------------*/
+body.page-id-9642 .elementor-main-swiper .elementor-swiper-button .eicon-chevron-right{
+	color:#1b5e9c;
+}
+
+body.page-id-9642 .elementor-main-swiper .elementor-swiper-button .eicon-chevron-left{
+	color:#1b5e9c;
+}
+
+body.page-id-9642 .elementor-main-swiper .swiper-pagination span:hover{
+	background-color:#1b5e9c !important;
+}
+
+body.page-id-9642 .elementor-main-swiper .swiper-pagination span{
+	background-color:#1b5e9c !important;
+}
+
+body.page-id-9642 .cf-col-12 .colorp p{
+	font-weight:600 !important;
+}
+
+body.page-id-9642 #precio .elementor-column-gap-wider .elementor-top-column .elementor-widget-wrap .elementor-widget-shortcode .elementor-widget-container .elementor-shortcode .js .init .fieldset-cf7mls-wrapper .fieldset-cf7mls .cf-container .cf-col-12 p span select{
+	background-color:#ffffff !important;
+	color:#201d1d !important;
+}
+
+body.page-id-9642 .precios_form div p{
+	color:#343d41;
+}
+
+body.page-id-9642 .fieldset-cf7mls-wrapper p input[type=text]{
+	background-color:#ffffff;
+	color:#221f1f;
+}
+
+body.page-id-9642 .fieldset-cf7mls-wrapper p input[type=email]{
+	background-color:#ffffff;
+	color:#414a52;
+}
+
+body.page-id-9642 .fieldset-cf7mls-wrapper p input[type=tel]{
+	background-color:#ffffff;
+	color:#000000;
+}
+
+body.page-id-9642 .fieldset-cf7mls-wrapper p input{
+	font-weight:600 !important;
+}
+
+body.page-id-9642 .owl-carousel .active h3 a{
+	color:#271101;
+}
+
+body.page-id-9642 .owl-carousel .active .gen-info-contain ul{
+	display:none;
+}
+
+body.page-id-9642 .owl-carousel .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-9642 .owl-carousel .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-9642 .owl-carousel button i{
+	color:#af6b12;
+}
+
+body.page-id-9642 .owl-carousel .active .share a{
+	display:none !important;
+}
+
+body.page-id-9642 .owl-carousel .active .gen-movie-action a{
+	color:#ffffff;
+}
+
+body.page-id-9642 .elementor-nav-menu--dropdown-tablet .elementor-nav-menu--main div a{
+	margin-top:8px;
+	margin-left:0px;
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Proyectosss" Page                           */
+/*-----------------------------------------------*/
+body.page-id-9647 .elementor-element-eac33dd .active .item{
+	top:-118px;
+}
+
+body.page-id-9647 .elementor-element-7af503c .active h3 a{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-7af503c .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-7af503c .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f .active h3 a{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-7af503c .active .gen-info-contain ul{
+	color:rgba(34,90,159,0);
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-eac33dd .active h3{
+	text-transform:none !important;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-eac33dd .active ul{
+	display:none !important;
+}
+
+body.page-id-9647 .elementor-element-eac33dd .active .gen-tag-line{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-eac33dd .active p{
+	color:#f9f9f9;
+}
+
+body.page-id-9647 .elementor-element-eac33dd .active .button-2 span{
+	color:#f9f9f9;
+}
+
+body.page-id-9647 .elementor-element-eac33dd .active .button-2 i{
+	background-color:#ffffff;
+	color:#e90712;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active h3{
+	text-transform:none !important;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active .gen-tag-line{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active ul{
+	display:none !important;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active p{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active .button-2 span{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active .button-1 a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-eac33dd button i{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f .active .gen-info-contain ul{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-7af503c .active .gen-button{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-6cfa5a1 .elementor-widget-Button a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-549cac9 .elementor-widget-Button a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-8a11603 .active .item{
+	border-left-color:#e90712;
+}
+
+body.page-id-9647 .owl-carousel > div > .active{
+	background-color:#e90712 !important;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f .active .gen-button{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-7af503c button i{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f button i{
+	color:#ffffff;
+}
+
+body.page-id-9647 .elementor-element-7af503c .active .share ul{
+	display:none;
+}
+
+body.page-id-9647 .elementor-element-d8cc86f .active .share ul{
+	display:none;
+}
+
+@media (max-width:479px){
+
+	body.page-id-9647 .elementor-location-header .elementor-nav-menu--dropdown a{
+	z-index:132;
+}
+
+body.page-id-9647 .elementor-location-header .gtranslate_wrapper a{
+	z-index:-10;
+}
+
+body.page-id-9647 .elementor-location-header .elementor-nav-menu--dropdown ul{
+	padding-top:52px;
+}
+
+body.page-id-9647 .n-uc-zUswGVmK8Jtq h1 a{
+	margin-left:-19px;
+	font-size:34px !important;
+	-webkit-transform:translatex(0px) translatey(0px);	-ms-transform:translatex(0px) translatey(0px);	transform:translatex(0px) translatey(0px);
+	width:367px;
+	height:119px;
+}
+
+body.page-id-9647 .n-uc-kOfcBeuQy8TD div p{
+	margin-left:0px !important;
+	font-size:13px !important;
+}
+
+body.page-id-9647 .n-uc-1ee0db941a48b .n-uc-16f058d745a53 .n2-ss-layer-row{
+	margin-left:-8px;
+}
+
+body.page-id-9647 .n-uc-ZgivmBHjQFUI h1 a{
+	margin-left:0px;
+	font-size:29px !important;
+}
+
+body.page-id-9647 .n-uc-j7f6gFcpcWip div p{
+	margin-left:0px !important;
+	font-size:13px !important;
+}
+
+body.page-id-9647 .n-uc-lxJq4HPN2bvM .n-uc-mYYNLt50fIh1 .n2-ss-layer-row{
+	margin-left:0px;
+}
+
+body.page-id-9647 .n-uc-LSrFqYvCZd0b h1 a{
+	margin-left:0px;
+	font-size:43px !important;
+}
+
+body.page-id-9647 .n-uc-qPDMbQJCKW7T div p{
+	margin-left:0px !important;
+	font-size:13px !important;
+}
+
+body.page-id-9647 .n-uc-nXPOSOf6gQjE .n-uc-Y48VHzDLvDpD .n2-ss-layer-row{
+	margin-left:0px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "Proyectos" Page                             */
+/*-----------------------------------------------*/
+body.page-id-9723 .elementor-element-eac33dd .active .item{
+	top:-118px;
+}
+
+body.page-id-9723 .elementor-element-7af503c .active h3 a{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-7af503c .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-7af503c .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f .active .fa-share-alt{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f .active .dropdown-toggle{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f .active h3 a{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-7af503c .active .gen-info-contain ul{
+	color:rgba(34,90,159,0);
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-eac33dd .active h3{
+	text-transform:none !important;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-eac33dd .active ul{
+	display:none !important;
+}
+
+body.page-id-9723 .elementor-element-eac33dd .active .gen-tag-line{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-eac33dd .active p{
+	color:#f9f9f9;
+}
+
+body.page-id-9723 .elementor-element-eac33dd .active .button-2 span{
+	color:#f9f9f9;
+}
+
+body.page-id-9723 .elementor-element-eac33dd .active .button-2 i{
+	background-color:#ffffff;
+	color:#e90712;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active h3{
+	text-transform:none !important;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active .gen-tag-line{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active ul{
+	display:none !important;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active p{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active .button-2 span{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active .button-1 a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-eac33dd button i{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f .active .gen-info-contain ul{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-7af503c .active .gen-button{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-6cfa5a1 .elementor-widget-Button a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-549cac9 .elementor-widget-Button a{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-8a11603 .active .item{
+	border-left-color:#e90712;
+}
+
+body.page-id-9723 .owl-carousel > div > .active{
+	background-color:#e90712 !important;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f .active .gen-button{
+	background-color:#e90712;
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-7af503c button i{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f button i{
+	color:#ffffff;
+}
+
+body.page-id-9723 .elementor-element-7af503c .active .share ul{
+	display:none;
+}
+
+body.page-id-9723 .elementor-element-d8cc86f .active .share ul{
+	display:none;
+}
+
+@media (max-width:479px){
+
+	body.page-id-9723 .elementor-location-header .elementor-nav-menu--dropdown a{
+	z-index:132;
+}
+
+body.page-id-9723 .elementor-location-header .gtranslate_wrapper a{
+	z-index:-10;
+}
+
+body.page-id-9723 .elementor-location-header .elementor-nav-menu--dropdown ul{
+	padding-top:52px;
+}
+
+body.page-id-9723 .n-uc-zUswGVmK8Jtq h1 a{
+	margin-left:-19px;
+	font-size:34px !important;
+	-webkit-transform:translatex(0px) translatey(0px);	-ms-transform:translatex(0px) translatey(0px);	transform:translatex(0px) translatey(0px);
+	width:367px;
+	height:119px;
+}
+
+body.page-id-9723 .n-uc-kOfcBeuQy8TD div p{
+	margin-left:0px !important;
+	font-size:13px !important;
+}
+
+body.page-id-9723 .n-uc-1ee0db941a48b .n-uc-16f058d745a53 .n2-ss-layer-row{
+	margin-left:-8px;
+}
+
+body.page-id-9723 .n-uc-ZgivmBHjQFUI h1 a{
+	margin-left:0px;
+	font-size:29px !important;
+}
+
+body.page-id-9723 .n-uc-j7f6gFcpcWip div p{
+	margin-left:0px !important;
+	font-size:13px !important;
+}
+
+body.page-id-9723 .n-uc-lxJq4HPN2bvM .n-uc-mYYNLt50fIh1 .n2-ss-layer-row{
+	margin-left:0px;
+}
+
+body.page-id-9723 .n-uc-LSrFqYvCZd0b h1 a{
+	margin-left:0px;
+	font-size:43px !important;
+}
+
+body.page-id-9723 .n-uc-qPDMbQJCKW7T div p{
+	margin-left:0px !important;
+	font-size:13px !important;
+}
+
+body.page-id-9723 .n-uc-nXPOSOf6gQjE .n-uc-Y48VHzDLvDpD .n2-ss-layer-row{
+	margin-left:0px;
+	}
+
+}
+
+
+
+/*-----------------------------------------------*/
+/*  "🔧 Servicio Técnico Eléctrico Náutico para Lanchas y Embarcaciones | Deckeva Chile" Post*/
+/*-----------------------------------------------*/
+body.postid-9743 #main{
+	-webkit-transform:translatex(0px) translatey(4px);	-ms-transform:translatex(0px) translatey(4px);	transform:translatex(0px) translatey(4px);
+	display:inline-block;
+	background-color:#ffffff;
+}
+
+body.postid-9743 .gen-blog-contain ul .gen-post-meta a{
+	color:#000000 !important;
+}
+
+body.postid-9743 .gen-blog-contain .gen-post-tag a{
+	color:#000000 !important;
+}
+
+body.postid-9743 .gen-blog-post .gen-blog-contain h5{
+	color:#000000;
+}
+
+body.postid-9743 .gen-blog-post .gen-blog-contain h3.wp-block-heading{
+	color:#000000;
+}
+
+body.postid-9743 .gen-blog-post .gen-blog-contain p{
+	color:#000000;
+}
+
+body.postid-9743 .gen-blog-post .gen-blog-contain h2.wp-block-heading{
+	color:#000000;
+}
+
+body.postid-9743 .gen-blog-contain .wp-block-list li{
+	color:#000000;
+}
+
+body.postid-9743 #reply-title{
+	color:#000000;
+	padding-left:0px;
+}
+
+body.postid-9743 #commentform .required-field-message{
+	color:#000000;
+}
+
+body.postid-9743 #commentform .logged-in-as{
+	color:#000000;
+	padding-left:3px;
+}
+
+body.postid-9743 #comment{
+	-webkit-transform:translatex(0px) translatey(4px);	-ms-transform:translatex(0px) translatey(4px);	transform:translatex(0px) translatey(4px);
+	color:#000000;
+}
+
+body.postid-9743 .hentry .gen-blog-post .gen-post-media{
+	background-color:#ffffff;
+	-webkit-transform:translatex(0px) translatey(4px);	-ms-transform:translatex(0px) translatey(4px);	transform:translatex(0px) translatey(4px);
+}
+
+body.postid-9743 .hentry .gen-blog-post .gen-blog-contain{
+	background-color:#ffffff;
+}
+
+body.postid-9743 .gen-blog-post .gen-post-media img{
+	color:#7895c9;
+	background-color:#ffffff;
+	padding-bottom:39px;
+	-webkit-transform:translatex(479px) translatey(19px) !important;	-ms-transform:translatex(479px) translatey(19px) !important;	transform:translatex(479px) translatey(19px) !important;
+	min-height:761px;
+	height:761px;
+	padding-right:0px;
+	width:744px;
+	max-width:973px;
+}
+
+body.postid-9743 #respond{
+	padding-left:182px;
+	padding-right:207px;
+}
+
+@media (min-width:768px){
+
+	body.postid-9743 .hentry .gen-blog-post .gen-blog-contain{
+	padding-left:184px;
+	padding-right:216px;
+	}
+
+}

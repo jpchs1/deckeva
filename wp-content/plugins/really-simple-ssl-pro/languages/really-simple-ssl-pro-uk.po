@@ -1,0 +1,762 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Really Simple SSL pro\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-07 08:36+0100\n"
+"PO-Revision-Date: 2022-10-26 17:04+0000\n"
+"Last-Translator: russian - Creative Pudding\n"
+"Language-Team: Ukrainian\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.8; wp-5.9.3"
+
+#: class-admin.php:12 class-scan.php:44 csp-violation-endpoint.php:11
+#, php-format
+msgid "%s is a singleton class and you cannot create a second instance."
+msgstr "%s є одиничним класом, а отже неможливо створити другий запис."
+
+#: class-licensing.php:540 class-licensing.php:636
+#, php-format
+msgid "%s/%s activations available."
+msgstr "%s/%s активацій лишилось."
+
+#: class-licensing.php:713
+#, php-format
+msgid "%sActivate%s your license."
+msgstr "%sАктивувати%s вашу ліцензію."
+
+#: class-admin.php:582
+#, php-format
+msgid "%sRead more%s."
+msgstr "%sДетальніше%s."
+
+#: class-scan.php:226
+#, php-format
+msgctxt "'date' at 'time'"
+msgid "%s at %s"
+msgstr "%s о %s"
+
+#: class-admin.php:582
+msgid "A redirect to http was detected. This might result in redirect loops."
+msgstr ""
+"Було виявлено переадресування до http. Воно може призвести до петель "
+"переадресувань."
+
+#: class-licensing.php:56
+msgid "Activate your license for automatic updates."
+msgstr "Активуйте ліцензію, щоб оновлюватись автоматично"
+
+#: class-scan.php:1686 class-scan.php:1720 class-scan.php:1796
+#: class-scan.php:1833 class-scan.php:1882
+#, php-format
+msgid "Blocked URL: %s"
+msgstr "Заблоковано URL: %s"
+
+#: class-scan.php:1645
+msgid "cached file, deactivate cache to see the actual source"
+msgstr "файл з кешу, деактивуйте кеш, щоб побачити актуальне джерело"
+
+#: class-scan.php:1721
+msgid ""
+"Can be fixed automatically by pressing the Fix button. If fixing fails, the "
+"source file can be edited manually by pressing the Edit button."
+msgstr ""
+"Може бути автоматично виправлено натисканням кнопки Виправити. В разі "
+"невдачі, похідний файл можна буде відредагувати вручну натисканням кнопки "
+"Редагувати."
+
+#: class-scan.php:1721
+msgid ""
+"Can be fixed manually by editing the respective mu-plugin file in the /wp-"
+"content/mu-plugins/ directory "
+msgstr ""
+"Можна виправити вручну редагуванням відповідного mu-плагін файлу у "
+"директорії /wp-content/mu-plugins/"
+
+#: class-scan.php:1759
+msgid ""
+"Cannot be fixed automatically, as the mixed content is coming from an "
+"external domain. Contact the owner of the domain to update the CSS/JS file"
+msgstr ""
+"Неможливо виправити автоматично тому, що змішаний вміст надходить з "
+"зовнішнього домену. Зв'яжіться з власником домену для оновлення файлу CSS/JS"
+
+#: class-scan.php:377
+#, php-format
+msgid "Checking if external js or css files contain http links, %s of %s"
+msgstr "Перевірка зовнішніх файлів js чи css на вміст http посилань, %s з %s"
+
+#: class-scan.php:321
+#, php-format
+msgid "Checking posts for external URLs, %s of %s"
+msgstr "Перевірка повідомлень на зовнішні URL, %s з %s"
+
+#: class-scan.php:347
+msgid "Checking which postmeta contain external resources"
+msgstr "Перевіряємо котрі postmeta містять зовнішні ресурси"
+
+#: class-scan.php:361
+#, php-format
+msgid "Checking which resources can't load over ssl, %s of %s"
+msgstr "Перевіряємо які ресурси неможливо завантажити через ssl, %s з %s"
+
+#: class-scan.php:335
+msgid "Checking widgets for external URLs"
+msgstr "Перевірка віджетів на зовнішні URL"
+
+#: csp-violation-endpoint.php:151
+msgid "Click 'Enforce' to enforce the configuration on your site."
+msgstr ""
+
+#: class-scan.php:1740 class-scan.php:1815 class-scan.php:1853
+#: class-scan.php:1900 class-scan.php:2195
+msgid "Copyright warning!"
+msgstr "Попередження про авторські права!"
+
+#: class-scan.php:1664
+msgid ""
+"Downloading files from other websites can cause serious copyright issues! It "
+"is always illegal to use images, files, or any copyright protected material "
+"on your own site without the consent of the copyrightholder. Please ask the "
+"copyrightholder for permission. Use this function at your own risk."
+msgstr ""
+"Завантаження файлів з інших джерел може призвести до серйозних проблем з "
+"авторськими правами! Завжди нелегальним є використання зображень, файлів чи "
+"будь-яких захищених авторськими правами матеріалів на вашому сайті без "
+"посилання на власника цих прав. Будь ласка зв'яжіться з власником авторських "
+"прав для отримання дозволу. Використовуйте цю функцію на власний ризик."
+
+#: class-admin.php:563
+msgid "Elementor mixed content successfully converted."
+msgstr "Змішаний вміст Elementor успішно конвертовано."
+
+#: class-scan.php:1647
+msgid "file"
+msgstr "файл"
+
+#: class-scan.php:446
+msgid "Finished scan"
+msgstr "Завершене сканування"
+
+#: csp-violation-endpoint.php:148
+msgid "Follow these steps to complete the setup:"
+msgstr "Виконате ці кроки для встановлення:"
+
+#: class-scan.php:306
+msgid "Generating file list"
+msgstr "Побудова списку файлів"
+
+#: class-scan.php:261
+msgid "Generating web page list"
+msgstr "Побудова списку веб-сторінок"
+
+#: class-scan.php:135 class-scan.php:149
+msgid "Great! Your scan last completed without errors."
+msgstr "Чудово! Ваше останнє сканування завершено без помилок."
+
+#: class-headers.php:253
+msgid "HSTS not enabled"
+msgstr ""
+
+#: class-headers.php:240 class-headers.php:246
+msgid "HSTS Preload"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://really-simple-ssl.com/pro"
+msgstr "https://really-simple-ssl.com/pro"
+
+#. Author URI of the plugin
+msgid "https://www.really-simple-plugins.com"
+msgstr "https://www.really-simple-plugins.com"
+
+#: class-scan.php:1832
+msgid "iFrame in the wp_postmeta database table"
+msgstr "iFrame у таблиці бази даних wp_postmeta"
+
+#: class-scan.php:1739 class-scan.php:1814 class-scan.php:1852
+#: class-scan.php:1899
+msgid "Import and insert file"
+msgstr "Імпортувати і вставити файл"
+
+#: really-simple-ssl-pro-multisite.php:291
+msgid "Install and activate Really Simple SSL"
+msgstr ""
+
+#: csp-violation-endpoint.php:135
+msgid ""
+"Learning Mode is active for your Content Security and will complete in %s "
+"days."
+msgstr ""
+
+#: class-licensing.php:176 class-licensing.php:204 class-licensing.php:721
+#: class-licensing.php:728 class-licensing.php:735 class-licensing.php:742
+#: class-licensing.php:749 class-licensing.php:764
+msgid "License"
+msgstr "Ліцензія"
+
+#: class-scan.php:393
+#, php-format
+msgid "Looking up blocked resources in files, %s of %s"
+msgstr "Пошук заблокованих ресурсів у файлах, %s з %s"
+
+#: class-scan.php:422
+msgid "Looking up blocked resources in postmeta"
+msgstr "Пошук заблокованих ресурсів у postmeta"
+
+#: class-scan.php:408
+msgid "Looking up blocked resources in posts"
+msgstr "Пошук заблокованих ресурсів у повідомленнях"
+
+#: class-scan.php:438
+msgid "Looking up blocked resources in widgets"
+msgstr "Пошук заблокованих ресурсів у віджетах"
+
+#: class-scan.php:1882
+msgid ""
+"Mixed content found in a widget. Press the edit link to edit the widget "
+"manually."
+msgstr ""
+"Виявлено змішаний вміст у віджеті. Натисніть на посилання для редагування "
+"віджета вручну."
+
+#: class-scan.php:1797
+msgid ""
+"Mixed content found in in a post. Can be fixed automatically by pressing the "
+"fix button. Pressing the edit button allows you to update the link in the "
+"post manually."
+msgstr ""
+"Змішаний вміст виявлено у повідомленні. Може бути виправлено натисканням "
+"кнопки Виправити. Натискання кнопки Редагування дозволить змінити посилання "
+"у повідомленні вручну."
+
+#: class-scan.php:1834
+msgid ""
+"Mixed content from a postmeta table in your database. Usually won't cause "
+"any mixed content on the front-end. Check the post if it causes mixed "
+"content. If so, the link can be replace directly in the database."
+msgstr ""
+"Змішаний вміст з таблиці postmeta у вашій базі даних. Зазвичай не буде "
+"створено жодного змішаного вмісту у front-end. Перевірте, чи запис створює "
+"змішаний вміст. Якщо так - посилання можна змінити вручну прямо у базі даних."
+
+#: class-scan.php:1726
+#, php-format
+msgid "Mixed content in %s"
+msgstr "Змішаний вміст у %s"
+
+#: class-scan.php:1765
+msgid "Mixed content in CSS/JS file from other domain"
+msgstr "Змішаний вміст у файлі CSS/JS з іншого домену"
+
+#: class-scan.php:1691
+msgid "Mixed content in PHP file in %s"
+msgstr ""
+
+#: class-scan.php:1802
+msgid "Mixed content in post: "
+msgstr ""
+
+#: class-scan.php:1832
+msgid "Mixed content in the postmeta table"
+msgstr "Змішаний вміст у таблиці postmeta"
+
+#: class-scan.php:1760
+#, php-format
+msgid "Mixed content resources: %s"
+msgstr "Ресурси зі змішаним вмістом"
+
+#: class-scan.php:1639
+msgid "mu plugin file"
+msgstr "mu файл плагіну"
+
+#: class-licensing.php:581
+#, fuzzy, php-format
+#| msgid "Multisite detected. Please consider upgrading to %smultisite%s."
+msgid "Multisite detected. Please upgrade to %smultisite%s."
+msgstr "Виявлено мультисайт. Будь ласка, оновіться до %sмультисайту%s."
+
+#: class-scan.php:220 class-scan.php:1926
+msgid "Never"
+msgstr "Ніколи"
+
+#: class-admin.php:577
+msgid "No redirect to http detected."
+msgstr "Переадресувань до http не виявлено"
+
+#: class-licensing.php:649
+msgid "Open"
+msgstr "Відкрити"
+
+#. Description of the plugin
+msgid ""
+"Optimize your SSL security with the mixed content scan, secure cookies and "
+"advanced security headers."
+msgstr ""
+"Оптимізуйте вашу SSL безпеку за допомогою сканування змішаного вмісту, "
+"безпечних cookies та покращених заголовків безпеки."
+
+#: really-simple-ssl-pro-multisite.php:281
+#: really-simple-ssl-pro-multisite.php:306
+#, fuzzy
+#| msgid ""
+#| "Please upgrade to the latest version to be able use the full "
+#| "functionality of the plugin."
+msgid ""
+"Please %supgrade%s to the latest version to be able use the full "
+"functionality of the plugin."
+msgstr ""
+"Будь ласка оновіться до останньої версії, щоб користуватися всіма "
+"можливостями плагіну."
+
+#: class-licensing.php:603
+msgid "Please activate your license key."
+msgstr "Будь ласка, активуйте ваш ліцензійний ключ."
+
+#: class-licensing.php:595
+#, php-format
+msgid "Please enter your license key. Available in your %saccount%s."
+msgstr ""
+"Будь ласка, введіть ваш ліцензійний ключ. Доступний у вашому %sобліковому "
+"записі%s."
+
+#: really-simple-ssl-pro-multisite.php:279
+#| msgid ""
+#| "Please install and activate Really Simple SSL before activating this add-"
+#| "on."
+msgid "Please install and activate Really Simple SSL to enable the add-on."
+msgstr ""
+"Будь ласка встановіть та активуйте Really Simple SSL для активації цього "
+"додатку."
+
+#: class-scan.php:2200
+#| msgid ""
+#| "Please note that any changes you have made since to your current files, "
+#| "will be lost. "
+msgid ""
+"Please note that any changes you have made since to your current files, will "
+"be lost."
+msgstr ""
+"Будь ласка, зауважте що всі не збережені зміни, зроблені вами у поточні "
+"файли, будуть втрачені."
+
+#: really-simple-ssl-pro-multisite.php:273
+#: really-simple-ssl-pro-multisite.php:302
+msgid "Plugin dependency error"
+msgstr "Помилка залежностей плагіну"
+
+#: class-scan.php:1641
+msgid "plugin file"
+msgstr "файл плагіну"
+
+#: class-admin.php:576 class-admin.php:581
+msgid "Potential redirect loop."
+msgstr "Потенційна петля переадресувань."
+
+#: class-licensing.php:651
+msgid "Premium"
+msgstr ""
+
+#. Author of the plugin
+msgid "Really Simple Plugins"
+msgstr "Really Simple Plugins"
+
+#: really-simple-ssl-pro-multisite.php:305
+msgid ""
+"Really Simple SSL needs to be updated to the latest version to be compatible."
+msgstr "Really Simple SSL потрібно оновити до останньої версії для сумісності."
+
+#: really-simple-ssl-pro-multisite.php:28
+#, fuzzy
+#| msgid ""
+#| "Really Simple SSL pro cannot be activated. The plugin requires PHP 5.6 or "
+#| "higher"
+msgid ""
+"Really Simple SSL pro cannot be activated. The plugin requires PHP 7.2 or "
+"higher"
+msgstr ""
+"Really Simple SSL Рro не може бути активовано. Плагін потребує PHP 5.6 або "
+"вище"
+
+#: really-simple-ssl-pro-multisite.php:34
+#, fuzzy
+#| msgid ""
+#| "Really Simple SSL pro cannot be activated. The plugin requires WordPress "
+#| "4.9 or higher"
+msgid ""
+"Really Simple SSL pro cannot be activated. The plugin requires WordPress 5.7 "
+"or higher"
+msgstr ""
+"Really Simple SSL Рro не може бути активовано. Плагін потребує WordPress 4.9 "
+"або вище"
+
+#: really-simple-ssl-pro-multisite.php:278
+#| msgid ""
+#| "Really Simple SSL pro is an add-on for Really Simple SSL, and cannot do "
+#| "it on its own :("
+msgid ""
+"Really Simple SSL pro is an add-on for Really Simple SSL, and cannot do it "
+"on its own :-("
+msgstr ""
+"Really Simple SSL pro є додатком для Really Simple SSL та не здатний "
+"працювати самостійно  :-("
+
+#. Plugin Name of the plugin
+msgid "Really Simple SSL pro multisite"
+msgstr "Really Simple SSL Pro для мультисайту"
+
+#: class-scan.php:2205
+msgid "Restore files"
+msgstr "Відновити файли"
+
+#: csp-violation-endpoint.php:150
+msgid "Review the detected configuration in 'Content Security Policy'."
+msgstr ""
+
+#: class-scan.php:2194
+msgid "Roll back changes made to your files"
+msgstr "Відкатити зміни у ваших файлах"
+
+#: class-importer.php:63
+msgid "Roll back file changes"
+msgstr "Відкатити зміни файлів"
+
+#: class-scan.php:275
+#, php-format
+msgid ""
+"Searching for js and css files and links to external resources in website, "
+"%s of %s"
+msgstr ""
+"Пошук js та css файлів а також посилань до зовнішніх ресурсів у веб-сайті. "
+"%s з %s"
+
+#: class-scan.php:291
+#, php-format
+msgid "Searching for mixed content in css and js files, %s of %s"
+msgstr "Пошук змішаного вмісту у css та js файлах, %s з %s"
+
+#: class-admin.php:655
+msgid "Settings"
+msgstr "Налаштування"
+
+#: class-importer.php:529
+msgid "Something went wrong."
+msgstr "Щось пішло не так."
+
+#: class-importer.php:96
+#| msgid ""
+#| "Someting went wrong. If this doesn't work, you can put the original files "
+#| "back by changing files named 'rsssl-bkp-filename' to filename."
+msgid ""
+"Something went wrong. If this doesn't work, you can put the original files "
+"back by changing files named 'rsssl-bkp-filename' to filename."
+msgstr ""
+"Щось пішло не так. Якщо це не працює, ви можете повернути назад оригінальні "
+"файли просто змінивши імена з \"rsssl-bkp-ім'я файлу\" на ім'я файлу\""
+
+#: class-importer.php:123 class-importer.php:162 class-importer.php:198
+#: class-importer.php:238 class-importer.php:272
+msgid ""
+"Something went wrong. Please refresh the page and try again, or fix manually."
+msgstr ""
+"Щось пішло не так. Будь ласка оновіть сторінку та спробуйте знову або "
+"виправте вручну."
+
+#: class-licensing.php:650
+msgid "Success"
+msgstr ""
+
+#: class-importer.php:179
+msgid ""
+"The file could not be downloaded. It might not exist, or downloading is "
+"blocked. Fix manually."
+msgstr ""
+"Неможливо завантажити цей файл. Він може не існувати або завантаження було "
+"заблоковане. Виправте вручну."
+
+#: class-importer.php:219 class-importer.php:254 class-importer.php:291
+msgid ""
+"The file could not be downloaded. The file might not exist, or downloading "
+"is be blocked by the server. Fix manually."
+msgstr ""
+"Неможливо завантажити цей файл. Він може не існувати або завантаження "
+"блокується сервером. Виправте вручну."
+
+#: class-scan.php:153
+msgid ""
+"The last scan was completed with errors. Are you sure these issues don't "
+"impact your site?"
+msgstr ""
+"Останнє сканування завершилось з помилками. Ви впевнені, що ці проблеми не "
+"впливатимуть на ваш сайт?"
+
+#: class-scan.php:139
+msgid ""
+"The last scan was completed with errors. Only migrate if you are sure the "
+"found errors are not a problem for your site."
+msgstr ""
+"Останнє сканування завершилось з помилками. Мігруйте лише якщо ви впевнені, "
+"що виявлені помилки не стануть проблемою для вашого сайту."
+
+#: class-licensing.php:589
+msgid ""
+"The license information could not be retrieved at this moment. Please try "
+"again at a later time."
+msgstr ""
+"Інформація про ліцензію на даний момент не може бути отримана. Будь ласка, "
+"спробуйте пізніше."
+
+#: class-scan.php:1637
+msgid "theme file"
+msgstr "файл теми"
+
+#: class-importer.php:138
+msgid "There was a problem editing the file. Please try manually."
+msgstr "Виникла проблема з редагуванням файлу. Будь ласка спробуйте вручну."
+
+#: class-licensing.php:736
+msgid ""
+"This domain is not activated for this Really Simple SSL Pro license. Please "
+"activate the license for this domain."
+msgstr ""
+"Цей домен не активований для цієї лицензії Really Simple SSL Pro. Будь ласка,"
+" активуйте ліцензію для цього домену."
+
+#: class-scan.php:1665
+msgid ""
+"This downloads the file from the domain without SSL, inserts it into WP "
+"media, and changes the URL to the new URL."
+msgstr ""
+"Це завантажує файл з домену не використовуючи SSL, вставляє його до WP media "
+"та змінює його URL на нову."
+
+#: class-licensing.php:629
+#, php-format
+msgid ""
+"This license is not valid for this product. Find out why on your %saccount%s."
+msgstr ""
+"Ця ліцензія не дійсна для цього продукту. З'ясуйте чому у вашому "
+"%sобліковому записі%s."
+
+#: class-licensing.php:622
+#, php-format
+msgid "This license is not valid. Find out why on your %saccount%s."
+msgstr "Ця ліцензія не дійсна. З'ясуйте чому у вашому %sобліковому записі%s."
+
+#: class-scan.php:2198
+#, fuzzy
+#| msgid ""
+#| "This will put the files back that were changed by the fix option in "
+#| "Really Simple SSL pro."
+msgid ""
+"This will put the files back that were changed by the fix option in Really "
+"Simple SSL Pro."
+msgstr ""
+"Це поверне всі файли, змінені опцією виправлення у Really Simple SSL Рro."
+
+#: class-admin.php:596 class-admin.php:602
+msgid "TLS version"
+msgstr ""
+
+#: class-admin.php:597
+msgid "TLS version is up-to-date"
+msgstr "У вас остання версія TLS"
+
+#: class-licensing.php:513
+msgid "unlimited"
+msgstr "не обмежено"
+
+#: class-licensing.php:537
+msgid "Unlimited activations available."
+msgstr "Доступні необмежені активації."
+
+#: class-admin.php:631
+msgid ""
+"Update Really Simple SSL Free to the latest version for optimal "
+"compatibility."
+msgstr ""
+"Оновіть безкоштовну версію Really Simple SSL до останньої версії для "
+"забезпечення оптимальної сумісності."
+
+#: class-licensing.php:526
+#, php-format
+msgid "Upgrade to a %s5 sites or Agency%s license."
+msgstr "Оновити ліцензію до %s5 сайтів або Агенство%s."
+
+#: class-licensing.php:529
+#, php-format
+msgid "Upgrade to an %sAgency%s license."
+msgstr "Оновити ліцензію до %sАгенство%s."
+
+#: class-scan.php:1643
+msgid "uploads file, possibly generated by plugin or theme"
+msgstr "завантажує вайл, можливо створений плагіном чи темою"
+
+#: class-licensing.php:556
+#, php-format
+msgid "Valid license for %s."
+msgstr "Дійсна ліцензія до %s."
+
+#: class-licensing.php:520
+#, php-format
+msgid "Valid until %s."
+msgstr "Дійсна до %s."
+
+#: class-licensing.php:648
+msgid "Warning"
+msgstr "Попередження"
+
+#: class-scan.php:1877
+#, php-format
+msgid "Widget area \"%s\""
+msgstr "Зона віджету \"%s\""
+
+#: class-scan.php:1887
+msgid "Widget with mixed content"
+msgstr "Віджет зі змішаним вмістом"
+
+#: class-licensing.php:765
+msgid ""
+"You are using Really Simple SSL pro single site on a multisite environment. "
+"Please install Really Simple SSL multisite networkwide for multisite support."
+msgstr ""
+
+#: class-scan.php:1686
+msgid "You can edit the source file manually by pressing the edit button."
+msgstr ""
+"Ви можете вручну відредагувати похідний файл натиснувши кнопку Редагувати."
+
+#: class-licensing.php:532
+#, php-format
+msgid "You can renew your license on your %saccount%s."
+msgstr "Ви можете оновити свою ліцензію у вашому %sобліковому записі%s."
+
+#: class-licensing.php:715
+#, php-format
+msgid "You can upgrade on your %saccount%s."
+msgstr "Ви можете оновитися у вашому %sобліковому записі%s."
+
+#: class-licensing.php:743
+msgid ""
+"You do not have any activations left on your Really Simple SSL Pro license. "
+"Please upgrade your plan for additional activations."
+msgstr ""
+"У вашій ліцензії Really Simple SSL Pro не залишилось активацій. Будь ласка, "
+"оновіть свій план для отримання додаткових активацій."
+
+#: class-licensing.php:520
+msgid "You have a lifetime license."
+msgstr "У вас пожиттєва ліцензія."
+
+#: class-scan.php:144
+msgid ""
+"You haven't scanned the site yet, you should scan your site to check for "
+"possible issues."
+msgstr ""
+"Ви ще не сканували свій сайт. Вам необхідно виконати сканування, щоб знайти "
+"можливі проблеми."
+
+#: class-importer.php:110
+msgid "Your files already were restored."
+msgstr "Ваші файли вже відновлено."
+
+#: class-importer.php:108
+msgid "Your files were restored."
+msgstr "Ваші файли відновлено."
+
+#: class-licensing.php:615
+#, php-format
+msgid ""
+"Your license could not be found in our system. Please contact %ssupport%s."
+msgstr ""
+"Не можемо знайти вашу ліцензію в нашій системі. Будь ласка, зв'яжіться з "
+"%sпідтримкою%s."
+
+#: class-licensing.php:609
+#, php-format
+msgid "Your license has been revoked. Please contact %ssupport%s."
+msgstr "Вашу ліцензію було відізвано. Будь ласка, зв'яжіться з %sпідтримкою%s."
+
+#: class-licensing.php:642
+#, php-format
+msgid ""
+"Your license key has expired. Please renew your license key on your "
+"%saccount%s."
+msgstr ""
+"Термін дії вашої ліцензії сплив. Будь ласка, оновіть свій ліцензійний ключ у "
+"вашому %sобліковому записі%s."
+
+#: class-licensing.php:694
+#, fuzzy
+#| msgid "Your Really Simple SSL pro license hasn't been activated."
+msgid "Your Really Simple SSL Pro license hasn't been activated."
+msgstr "Вашу ліцензію Really Simple SSL pro ще не активовано."
+
+#: class-licensing.php:695
+#, fuzzy
+#| msgid "Your Really Simple SSL pro license is not valid."
+msgid "Your Really Simple SSL Pro license is not valid."
+msgstr "Ваша ліцензія Really Simple SSL pro недійсна. "
+
+#: class-licensing.php:722
+msgid ""
+"Your Really Simple SSL Pro license key has expired. Please renew your "
+"license to continue receiving updates and premium support."
+msgstr ""
+"Термін дії вашої ліцензії Really Simple SSL Pro вичерпано. Будь ласка, "
+"оновіть ліцензію, щоб продовжити отримувати оновлення та преміум підтримку."
+
+#: class-licensing.php:750
+msgid ""
+"Your Really Simple SSL Pro license key hasn't been activated yet. You can "
+"activate your license key on the license tab."
+msgstr ""
+"Вашу ліцензію Really Simple SSL Pro ще не активовано. Ви можете активувати "
+"її на вкладці лицензії."
+
+#: class-licensing.php:729
+msgid ""
+"Your Really Simple SSL Pro license key is not activated. Please activate "
+"your license to continue receiving updates and premium support."
+msgstr ""
+"Вашу ліцензію Really Simple SSL Pro ще не активовано. Будь ласка, активуйте "
+"ліцензію, щоб продовжити отвримувати оновлення та преміум підтримку."
+
+#: class-headers.php:241
+#, php-format
+msgid ""
+"Your site has been configured for the HSTS preload list. If you have "
+"submitted your site, it will be preloaded. Click %shere%s to submit."
+msgstr ""
+"Ваш сайт було налаштовано для списків попереднього завантаження HSTS. Якщо "
+"ви підписали ваш сайт - він буде попередньо завантажений. Натисніть %sтут%s "
+"для підпису."
+
+#: class-headers.php:254
+msgid "Your site is not configured for HSTS yet."
+msgstr ""
+
+#: class-headers.php:247
+msgid "Your site is not yet configured for the HSTS preload list."
+msgstr "Цей сайт ще не налаштовано для списків передзавантаження HSTS"
+
+#: class-admin.php:617
+msgid ""
+"Your site redirects 404 pages to the http:// version of your homepage. This "
+"can cause mixed content issues with images."
+msgstr ""
+"Ваш сайт переадресовує 404 сторінки до http:// версії вашої домашньої "
+"сторінки. Це може створити проблеми змішаного вмісту із зображеннями."
+
+#: class-admin.php:603
+msgid ""
+"Your site uses an outdated version of TLS. Upgrade to TLS 1.2 or TLS 1.3 to "
+"keep your site secure."
+msgstr ""
+"Ваш сайт використовує застарілу версію TLS. Оновіться до TLS 1.2 чи TLS 1.3, "
+"щоб тримати ваш сайт в безпеці."

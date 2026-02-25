@@ -1,0 +1,311 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Multi Step for Contact Form 7 (Lite)\n"
+"POT-Creation-Date: 2024-03-20 09:39+0700\n"
+"PO-Revision-Date: 2024-03-20 09:51+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: cf7-multi-step.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: apps/node_modules\n"
+
+#: inc/Fallback.php:11
+msgid ""
+"It looks like you have another Contact Form 7 Multi-Step version installed, "
+"please delete it before activating this new version. All of the settings and "
+"data are still preserved."
+msgstr ""
+"يبدو أن لديك إصدارًا آخر من Contact Form 7 Multi-Step مثبتًا، يرجى حذفه قبل "
+"تفعيل هذا الإصدار الجديد."
+
+#: inc/admin/dashboard-widget.php:18
+msgid "Contact Form 7 Multi-Step Pro"
+msgstr "‫Contact Form 7 Multi-Step Pro"
+
+#: inc/admin/dashboard-widget.php:25
+msgid "Unlock the Best of Contact Form 7"
+msgstr "فتح أفضل نموذج الاتصال 7"
+
+#: inc/admin/dashboard-widget.php:29
+msgid "Bring your form to life with progress bar and better design"
+msgstr ""
+"اجعل النموذج الخاص بك ينبض بالحياة باستخدام شريط التقدم والتصميم الأفضل"
+
+#: inc/admin/dashboard-widget.php:30
+msgid "Spice up steps with animation effects, and more"
+msgstr ""
+"قم بإضفاء الحيوية على الخطوات باستخدام تأثيرات الرسوم المتحركة، والمزيد"
+
+#: inc/admin/dashboard-widget.php:31
+msgid "Let audience know what to expect and <strong>collect more leads!"
+msgstr ""
+"اسمح للجمهور بمعرفة ما يمكن توقعه و<strong>اجمع المزيد من العملاء المحتملين!"
+
+#: inc/admin/dashboard-widget.php:40
+msgid "Upgrade to Pro"
+msgstr "التطور للاحترافية"
+
+#: inc/admin/init.php:14
+msgid "Go Pro"
+msgstr "اذهب برو"
+
+#: inc/admin/init.php:22
+msgid "Documentation"
+msgstr "توثيق"
+
+#: inc/admin/init.php:33 inc/admin/init.php:47
+msgid "Form"
+msgstr "استمارة"
+
+#: inc/admin/init.php:40
+msgid "https://contactform7.com/editing-form-template/"
+msgstr "‫https://contactform7.com/editing-form-template/"
+
+#: inc/admin/init.php:41
+msgid "Editing Form Template"
+msgstr "تحرير قالب النموذج"
+
+#: inc/admin/init.php:43
+#, php-format
+msgid "You can edit the form template here. For details, see %s."
+msgstr "يمكنك تعديل قالب النموذج هنا. للحصول على التفاصيل، راجع %s."
+
+#: inc/admin/init.php:80
+msgid "Step Name"
+msgstr "اسم الخطوة"
+
+#: inc/admin/init.php:81 inc/admin/settings.php:25
+msgid "Back Button"
+msgstr "زر العودة"
+
+#: inc/admin/init.php:82 inc/admin/settings.php:39
+msgid "Next Button"
+msgstr "زر’ التالي"
+
+#: inc/admin/init.php:83
+msgid "Edit With Moana"
+msgstr "تحرير مع موانا"
+
+#: inc/admin/init.php:161
+msgid "Step"
+msgstr "خطوة"
+
+#: inc/admin/init.php:175
+msgid "Generate buttons for form's steps."
+msgstr "إنشاء أزرار لخطوات النموذج."
+
+#: inc/admin/init.php:179
+msgid "Name"
+msgstr "اسم"
+
+#: inc/admin/init.php:184
+msgid "Back, Next Buttons Title"
+msgstr "العودة، عنوان الأزرار التالي"
+
+#: inc/admin/init.php:190
+msgid ""
+"One title per line. Back Button's title on the first line and Next Button's "
+"title on the second line.<br />If this is a first step, type only one line "
+"for Next Button"
+msgstr ""
+"عنوان واحد في كل سطر. عنوان زر الرجوع في السطر الأول وعنوان زر التالي في "
+"السطر الثاني.<br />إذا كانت هذه هي الخطوة الأولى، فاكتب سطرًا واحدًا فقط للزر "
+"التالي"
+
+#: inc/admin/init.php:203
+msgid "Insert Tag"
+msgstr "أدخل علامة"
+
+#: inc/admin/init.php:208
+msgid "This field should not be used on the Mail tab."
+msgstr "لا ينبغي استخدام هذا الحقل في علامة التبويب “البريد”."
+
+#: inc/admin/review.php:51
+msgid "Give Multi Step for Contact Form 7 a review"
+msgstr "قم بمراجعة الخطوات المتعددة لنموذج الاتصال 7"
+
+#: inc/admin/review.php:53
+msgid ""
+"Thank you for choosing Multi Step for Contact Form 7. We hope you love it. "
+"Could you take a couple of seconds posting a nice review to share your happy "
+"experience?"
+msgstr ""
+"شكرًا لاختيارك Multi Step لنموذج الاتصال 7. نأمل أن تنال إعجابك. هل يمكن أن "
+"تستغرق بضع ثوانٍ لنشر مراجعة لطيفة لمشاركة تجربتك السعيدة؟"
+
+#: inc/admin/review.php:56
+msgid "We will be forever grateful. Thank you in advance ;)"
+msgstr "سنكون ممتنين إلى الأبد. شكرا لكم مقدما ؛)"
+
+#: inc/admin/review.php:59
+msgid "Rate now"
+msgstr "قيم الآن"
+
+#: inc/admin/review.php:60
+msgid "Later"
+msgstr "لاحقاً"
+
+#: inc/admin/review.php:61
+msgid "Already did"
+msgstr "فعلت مسبقا"
+
+#: inc/admin/settings.php:8
+msgid "Multi-Step Settings"
+msgstr "إعدادات متعددة الخطوات"
+
+#: inc/admin/settings.php:12
+msgid "Progress Bar (PRO)"
+msgstr "شريط التقدم (للمحترفين)"
+
+#: inc/admin/settings.php:19
+msgid "Color"
+msgstr "لون"
+
+#: inc/admin/settings.php:22
+msgid ""
+"You can change the background-color or text-color of Back, Next buttons here."
+msgstr "يمكنك تغيير لون الخلفية أو لون النص لأزرار الرجوع والتالي هنا."
+
+#: inc/admin/settings.php:28 inc/admin/settings.php:42
+msgid "BG color"
+msgstr "لون بي جي"
+
+#: inc/admin/settings.php:33 inc/admin/settings.php:47
+msgid "Text color"
+msgstr "لون الخط"
+
+#: inc/admin/settings.php:55
+msgid "Auto Scroll to Top"
+msgstr "التمرير التلقائي إلى الأعلى"
+
+#: inc/admin/settings.php:70
+msgid "Return First Step After Submit"
+msgstr "العودة الخطوة الأولى بعد الإرسال"
+
+#: inc/admin/settings.php:84
+msgid "Transition Effects (PRO)"
+msgstr "تأثيرات الانتقال (PRO)"
+
+#: inc/admin/settings.php:94
+msgid "Animation"
+msgstr "الرسوم المتحركة"
+
+#: inc/admin/settings.php:116
+msgid "Save to database"
+msgstr "حفظ إلى قاعدة البيانات"
+
+#: inc/admin/settings.php:120
+msgid "Save form's every step?"
+msgstr "حفظ النموذج في كل خطوة؟"
+
+#: inc/admin/settings.php:133
+msgid "This features only available in PRO version"
+msgstr "هذه الميزات متوفرة فقط في الإصدار PRO"
+
+#: inc/admin/settings.php:134
+msgid "Upgrade Now"
+msgstr "تحديث الآن"
+
+#: inc/admin/settings.php:139
+msgid "Progress Bar"
+msgstr "شريط التقدم"
+
+#: inc/admin/settings.php:149 inc/admin/settings.php:197
+msgid "Background Color"
+msgstr "لون الخلفية"
+
+#: inc/admin/settings.php:154
+msgid "Progress Bar Style"
+msgstr "نمط شريط التقدم"
+
+#: inc/admin/settings.php:157
+msgid "Horizontal"
+msgstr "أفقي"
+
+#: inc/admin/settings.php:158
+msgid "Vertical"
+msgstr "رَأسِيّ"
+
+#: inc/admin/settings.php:160
+msgid "Border Style"
+msgstr "نمط الحدود"
+
+#: inc/admin/settings.php:163
+msgid "Squaren"
+msgstr "تربيع"
+
+#: inc/admin/settings.php:164
+msgid "Round"
+msgstr "دائري"
+
+#: inc/admin/settings.php:170
+msgid "Title Options"
+msgstr "خيارات العنوان"
+
+#: inc/admin/settings.php:175
+msgid "Horizontal text"
+msgstr "النص الأفقي"
+
+#: inc/admin/settings.php:179
+msgid "Vertical text"
+msgstr "نص عمودي"
+
+#: inc/admin/settings.php:183
+msgid "No text"
+msgstr "لا يوجد نص"
+
+#: inc/admin/settings.php:189
+msgid "Progress Bar Percent"
+msgstr "نسبة شريط التقدم"
+
+#: inc/admin/settings.php:205
+msgid "Allow Choose Step"
+msgstr "السماح باختيار الخطوة"
+
+#: inc/admin/settings.php:304
+msgid "Back"
+msgstr "خلف"
+
+#: inc/admin/settings.php:305
+msgid "Next"
+msgstr "التالي"
+
+#: inc/admin/settings.php:321
+msgid "Preview only shows 3 steps."
+msgstr "تظهر المعاينة 3 خطوات فقط."
+
+#: inc/frontend/validation.php:47 inc/frontend/validation.php:194
+msgid "The requested contact form was not found."
+msgstr "لم يتم العثور على نموذج الاتصال المطلوب."
+
+#. Plugin Name of the plugin/theme
+msgid "Multi Step for Contact Form 7 (Lite)"
+msgstr "خطوات متعددة لنموذج الاتصال 7 (لايت)"
+
+#. Plugin URI of the plugin/theme
+msgid "https://ninjateam.org/contact-form-7-multi-step/"
+msgstr "‫https://ninjateam.org/contact-form-7-multi-step/"
+
+#. Description of the plugin/theme
+msgid "Break your long form into user-friendly steps."
+msgstr "قم بتقسيم النموذج الطويل إلى خطوات سهلة الاستخدام."
+
+#. Author of the plugin/theme
+msgid "NinjaTeam"
+msgstr "‫NinjaTeam"
+
+#. Author URI of the plugin/theme
+msgid "http://ninjateam.org"
+msgstr "‫http://ninjateam.org"

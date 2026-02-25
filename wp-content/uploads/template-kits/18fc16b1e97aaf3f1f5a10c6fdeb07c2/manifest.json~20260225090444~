@@ -1,0 +1,1355 @@
+{
+    "manifest_version": "1.0.21",
+    "title": "Medcare - Health Care & Medical Elementor Template Kit",
+    "page_builder": "elementor",
+    "kit_version": "1.0.0",
+    "templates": [
+        {
+            "name": "Global Kit Styles",
+            "screenshot": "screenshots\/global-kit-styles.jpg",
+            "source": "templates\/global.json",
+            "preview_url": "https:\/\/demo.bosathemes.com",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "global-styles",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "additional_template_information": [
+                    "These are the global theme styles configured through the Elementor Theme Styles area."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Header",
+            "screenshot": "screenshots\/header.jpg",
+            "source": "templates\/header.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=header",
+            "type": "header",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-header",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "header",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Header\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Footer",
+            "screenshot": "screenshots\/footer.jpg",
+            "source": "templates\/footer.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=footer",
+            "type": "footer",
+            "category": "section",
+            "metadata": {
+                "template_type": "section-footer",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "footer",
+                "elementor_pro_conditions": [
+                    "include\/general"
+                ],
+                "additional_template_information": [
+                    "This is a \"Footer\" template for Elementor Pro.",
+                    "This template will display on: Entire Site."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Home",
+            "screenshot": "screenshots\/home.jpg",
+            "source": "templates\/home.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/home\/",
+            "type": "section",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-home",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Archive",
+            "screenshot": "screenshots\/archive.jpg",
+            "source": "templates\/archive.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=archive",
+            "type": "archive",
+            "category": "page",
+            "metadata": {
+                "template_type": "archive-blog",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "archive",
+                "elementor_pro_conditions": [
+                    "include\/archive"
+                ],
+                "additional_template_information": [
+                    "This is a \"Archive\" template for Elementor Pro.",
+                    "This template will display on: All Archives."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Single page",
+            "screenshot": "screenshots\/single-page.jpg",
+            "source": "templates\/single-page.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=single-page",
+            "type": "single-page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "single-page",
+                "elementor_pro_conditions": [
+                    "include\/singular\/page"
+                ],
+                "additional_template_information": [
+                    "This is a \"Single Page\" template for Elementor Pro.",
+                    "This template will display on: Pages."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Single Post",
+            "screenshot": "screenshots\/single-post.jpg",
+            "source": "templates\/single-post.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=single-post",
+            "type": "single-post",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-post",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "single-post",
+                "elementor_pro_conditions": [
+                    "include\/singular\/post"
+                ],
+                "additional_template_information": [
+                    "This is a \"Single Post\" template for Elementor Pro.",
+                    "This template will display on: Posts."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Shop",
+            "screenshot": "screenshots\/shop.jpg",
+            "source": "templates\/shop.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=shop",
+            "type": "product-archive",
+            "category": "page",
+            "metadata": {
+                "template_type": "archive-product",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "product-archive",
+                "elementor_pro_conditions": [
+                    "include\/product_archive"
+                ],
+                "additional_template_information": [
+                    "This is a \"Product Archive\" template for Elementor Pro.",
+                    "This template will display on: All Product Archives."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Single product",
+            "screenshot": "screenshots\/single-product.jpg",
+            "source": "templates\/single-product.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=single-product",
+            "type": "product",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-product",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "product",
+                "elementor_pro_conditions": [
+                    "include\/product"
+                ],
+                "additional_template_information": [
+                    "This is a \"Product\" template for Elementor Pro.",
+                    "This template will display on: Products."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Search Results",
+            "screenshot": "screenshots\/search-results.jpg",
+            "source": "templates\/search-results.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=search-results",
+            "type": "search-results",
+            "category": "page",
+            "metadata": {
+                "template_type": "archive-search",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "search-results",
+                "elementor_pro_conditions": [
+                    "include\/archive\/search"
+                ],
+                "additional_template_information": [
+                    "This is a \"Search Results\" template for Elementor Pro.",
+                    "This template will display on: Search Results."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "About Us",
+            "screenshot": "screenshots\/about-us.jpg",
+            "source": "templates\/about-us.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/about-us\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Facility",
+            "screenshot": "screenshots\/facility.jpg",
+            "source": "templates\/facility.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/facility\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Department",
+            "screenshot": "screenshots\/department.jpg",
+            "source": "templates\/department.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/department\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Professional",
+            "screenshot": "screenshots\/professional.jpg",
+            "source": "templates\/professional.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/professional\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Services",
+            "screenshot": "screenshots\/services.jpg",
+            "source": "templates\/services.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/services\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Career",
+            "screenshot": "screenshots\/career.jpg",
+            "source": "templates\/career.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/career\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Career Detail",
+            "screenshot": "screenshots\/career-detail.jpg",
+            "source": "templates\/career-detail.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/career-detail\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Testimonial",
+            "screenshot": "screenshots\/testimonial.jpg",
+            "source": "templates\/testimonial.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/testimonial\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": null
+            },
+            "elementor_pro_required": false
+        },
+        {
+            "name": "Faq",
+            "screenshot": "screenshots\/faq.jpg",
+            "source": "templates\/faq.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/faq\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Contact",
+            "screenshot": "screenshots\/contact.jpg",
+            "source": "templates\/contact.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/contact\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "404 page",
+            "screenshot": "screenshots\/404-page.jpg",
+            "source": "templates\/404-page.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/?elementor_library=404-page",
+            "type": "error-404",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-404",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1",
+                "elementor_library_type": "error-404",
+                "elementor_pro_conditions": [
+                    "include\/singular\/not_found404"
+                ],
+                "additional_template_information": [
+                    "This is a \"Error 404\" template for Elementor Pro.",
+                    "This template will display on: 404 Page."
+                ]
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Coming Soon",
+            "screenshot": "screenshots\/coming-soon.jpg",
+            "source": "templates\/coming-soon.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/coming-soon\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "My Account",
+            "screenshot": "screenshots\/my-account.jpg",
+            "source": "templates\/my-account.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/my-account\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Checkout",
+            "screenshot": "screenshots\/checkout.jpg",
+            "source": "templates\/checkout.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/checkout\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        },
+        {
+            "name": "Cart",
+            "screenshot": "screenshots\/cart.jpg",
+            "source": "templates\/cart.json",
+            "preview_url": "https:\/\/demo.bosathemes.com\/medcare\/template-kit\/cart\/",
+            "type": "page",
+            "category": "page",
+            "metadata": {
+                "template_type": "single-page",
+                "include_in_zip": "1",
+                "elementor_pro_required": "1"
+            },
+            "elementor_pro_required": true
+        }
+    ],
+    "required_plugins": [
+        {
+            "name": "Elementor Pro",
+            "version": "3.5.2",
+            "file": "elementor-pro\/elementor-pro.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "Elementor",
+            "version": "3.5.5",
+            "file": "elementor\/elementor.php",
+            "author": "Elementor.com"
+        },
+        {
+            "name": "ElementsKit Lite",
+            "version": "2.5.3",
+            "file": "elementskit-lite\/elementskit-lite.php",
+            "author": "Wpmet"
+        },
+        {
+            "name": "WooCommerce",
+            "version": "6.2.0",
+            "file": "woocommerce\/woocommerce.php",
+            "author": "Automattic"
+        }
+    ],
+    "images": [
+        {
+            "filename": "medcare-logo1.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-logo1.png",
+            "templates": [
+                {
+                    "source": "templates\/footer.json",
+                    "name": "Footer"
+                },
+                {
+                    "source": "templates\/coming-soon.json",
+                    "name": "Coming Soon"
+                }
+            ],
+            "filesize": 2676,
+            "dimensions": [
+                215,
+                50
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "medcare-img7.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img7-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/department.json",
+                    "name": "Department"
+                }
+            ],
+            "filesize": 121352,
+            "dimensions": [
+                1200,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/nurse-interviewing-patient-in-hospital-PG2ADVR"
+        },
+        {
+            "filename": "medcare-img9.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img9-800x510.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/coming-soon.json",
+                    "name": "Coming Soon"
+                }
+            ],
+            "filesize": 144068,
+            "dimensions": [
+                1200,
+                765
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medical-team-doing-checkup-visit-for-aged-patient--989M29U"
+        },
+        {
+            "filename": "medcare-img3.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img3.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                }
+            ],
+            "filesize": 54269,
+            "dimensions": [
+                500,
+                520
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/successful-treatment-at-hospital-PF69SK2"
+        },
+        {
+            "filename": "bosatheme-top-bg.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosatheme-top-bg.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                },
+                {
+                    "source": "templates\/faq.json",
+                    "name": "Faq"
+                }
+            ],
+            "filesize": 20716,
+            "dimensions": [
+                798,
+                902
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "medcare-img13.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img13.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                },
+                {
+                    "source": "templates\/faq.json",
+                    "name": "Faq"
+                }
+            ],
+            "filesize": 67815,
+            "dimensions": [
+                370,
+                485
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/portrait-of-young-smiling-doctor-in-the-doctors-of-GB3RUNL"
+        },
+        {
+            "filename": "medcare-img19.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img19.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 7676,
+            "dimensions": [
+                150,
+                150
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/trustworthy-proud-old-medical-professional-doctor--EHB43MT"
+        },
+        {
+            "filename": "bosa-dental-img10-197-64-1.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosa-dental-img10-197-64-1.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 5771,
+            "dimensions": [
+                197,
+                64
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bosa-medical-img14.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosa-medical-img14.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1807,
+            "dimensions": [
+                210,
+                90
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bosa-medical-img15.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosa-medical-img15.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2070,
+            "dimensions": [
+                210,
+                90
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bosa-medical-img16.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosa-medical-img16.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 1445,
+            "dimensions": [
+                210,
+                90
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bosa-medical-img17.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosa-medical-img17.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2165,
+            "dimensions": [
+                210,
+                90
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "bosa-medical-img18.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/bosa-medical-img18.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 2193,
+            "dimensions": [
+                210,
+                90
+            ],
+            "image_source": "self_created",
+            "person_or_place": "no",
+            "image_urls": ""
+        },
+        {
+            "filename": "medcare-img2.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img2.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                }
+            ],
+            "filesize": 48547,
+            "dimensions": [
+                500,
+                520
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medical-assistance-for-elderly-people-with-disabil-AJ6M6CT"
+        },
+        {
+            "filename": "medcare-img4.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img4.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                }
+            ],
+            "filesize": 58955,
+            "dimensions": [
+                500,
+                520
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/portrait-of-senior-male-doctor-standing-in-hospita-L8DHUJ6"
+        },
+        {
+            "filename": "medcare-img1.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img1.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                }
+            ],
+            "filesize": 68363,
+            "dimensions": [
+                500,
+                520
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/doctor-with-laptop-talking-to-a-senior-woman-in-of-PMPBQCR"
+        },
+        {
+            "filename": "medcare-img18.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img18.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 89632,
+            "dimensions": [
+                435,
+                721
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/young-beautiful-female-doctor-in-white-surgical-co-5A9A2DG"
+        },
+        {
+            "filename": "medcare-img14.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img14.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                }
+            ],
+            "filesize": 22849,
+            "dimensions": [
+                320,
+                350
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/portrait-of-smiling-doctor-with-colleagues-behind--V922QZV"
+        },
+        {
+            "filename": "medcare-img15.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img15.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                }
+            ],
+            "filesize": 16188,
+            "dimensions": [
+                320,
+                350
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/doctor-working-VKZ97MT"
+        },
+        {
+            "filename": "medcare-img17.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img17.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                }
+            ],
+            "filesize": 27593,
+            "dimensions": [
+                320,
+                350
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/young-clinician-LNCBAGM"
+        },
+        {
+            "filename": "medcare-img16.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img16.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                }
+            ],
+            "filesize": 22661,
+            "dimensions": [
+                320,
+                350
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/trustworthy-proud-old-medical-professional-doctor--EHB43MT"
+        },
+        {
+            "filename": "medcare-img10.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img10.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/testimonial.json",
+                    "name": "Testimonial"
+                }
+            ],
+            "filesize": 4971,
+            "dimensions": [
+                150,
+                150
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/gallant-young-brunette-haired-gentleman-in-plaid-b-XSSK5B9"
+        },
+        {
+            "filename": "medcare-img11.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img11.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/testimonial.json",
+                    "name": "Testimonial"
+                }
+            ],
+            "filesize": 8127,
+            "dimensions": [
+                150,
+                150
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/smiling-mature-professional-businesswoman-with-arm-CX6NLD3"
+        },
+        {
+            "filename": "medcare-img12.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img12.jpg",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                },
+                {
+                    "source": "templates\/testimonial.json",
+                    "name": "Testimonial"
+                }
+            ],
+            "filesize": 8668,
+            "dimensions": [
+                150,
+                150
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/young-indian-freelancer-guy-sitting-at-desk-in-off-ZF64QTC"
+        },
+        {
+            "filename": "medcare-img20.png",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img20.png",
+            "templates": [
+                {
+                    "source": "templates\/home.json",
+                    "name": "Home"
+                }
+            ],
+            "filesize": 56504,
+            "dimensions": [
+                370,
+                490
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/asian-woman-doctor-with-clipboard-QZLZ36Q"
+        },
+        {
+            "filename": "medcare-img021.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img021-800x343.jpg",
+            "templates": [
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-page.json",
+                    "name": "Single page"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/search-results.json",
+                    "name": "Search Results"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                },
+                {
+                    "source": "templates\/facility.json",
+                    "name": "Facility"
+                },
+                {
+                    "source": "templates\/department.json",
+                    "name": "Department"
+                },
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                },
+                {
+                    "source": "templates\/services.json",
+                    "name": "Services"
+                },
+                {
+                    "source": "templates\/career.json",
+                    "name": "Career"
+                },
+                {
+                    "source": "templates\/career-detail.json",
+                    "name": "Career Detail"
+                },
+                {
+                    "source": "templates\/testimonial.json",
+                    "name": "Testimonial"
+                },
+                {
+                    "source": "templates\/faq.json",
+                    "name": "Faq"
+                },
+                {
+                    "source": "templates\/contact.json",
+                    "name": "Contact"
+                },
+                {
+                    "source": "templates\/my-account.json",
+                    "name": "My Account"
+                },
+                {
+                    "source": "templates\/checkout.json",
+                    "name": "Checkout"
+                },
+                {
+                    "source": "templates\/cart.json",
+                    "name": "Cart"
+                }
+            ],
+            "filesize": 113920,
+            "dimensions": [
+                1400,
+                600
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medical-team-doing-checkup-visit-for-aged-patient--989M29U"
+        },
+        {
+            "filename": "medcare-img8.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img8-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/about-us.json",
+                    "name": "About Us"
+                }
+            ],
+            "filesize": 124950,
+            "dimensions": [
+                1200,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/doctors-standing-in-hospital-room-examining-an-x-r-92V4CQ4"
+        },
+        {
+            "filename": "medcare-img6.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img6-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                },
+                {
+                    "source": "templates\/career-detail.json",
+                    "name": "Career Detail"
+                }
+            ],
+            "filesize": 147745,
+            "dimensions": [
+                1200,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/caring-female-doctor-holding-hands-with-senior-pat-GQS278B"
+        },
+        {
+            "filename": "medcare-img5.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img5-800x533.jpg",
+            "templates": [
+                {
+                    "source": "templates\/archive.json",
+                    "name": "Archive"
+                },
+                {
+                    "source": "templates\/single-post.json",
+                    "name": "Single Post"
+                }
+            ],
+            "filesize": 119144,
+            "dimensions": [
+                1200,
+                800
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/doctor-and-patient-at-hospital-775TK6U"
+        },
+        {
+            "filename": "medcare-product6.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-product6.jpg",
+            "templates": [
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single product"
+                }
+            ],
+            "filesize": 13401,
+            "dimensions": [
+                570,
+                570
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medicine-box-red-clean-TYV4UYR"
+        },
+        {
+            "filename": "medcare-product5.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-product5.jpg",
+            "templates": [
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single product"
+                }
+            ],
+            "filesize": 22106,
+            "dimensions": [
+                570,
+                570
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medical-protective-gloves-E5C4FW7"
+        },
+        {
+            "filename": "medcare-product3.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-product3.jpg",
+            "templates": [
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single product"
+                }
+            ],
+            "filesize": 17381,
+            "dimensions": [
+                570,
+                570
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/digital-medical-thermometer-BRPFP55"
+        },
+        {
+            "filename": "medcare-product4.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-product4.jpg",
+            "templates": [
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single product"
+                }
+            ],
+            "filesize": 37251,
+            "dimensions": [
+                570,
+                570
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/stack-of-medical-face-mask-QKPJ3A3"
+        },
+        {
+            "filename": "medcare-product2.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-product2.jpg",
+            "templates": [
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single product"
+                }
+            ],
+            "filesize": 31761,
+            "dimensions": [
+                570,
+                570
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medical-bed-9AY2HJS"
+        },
+        {
+            "filename": "medcare-product1.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-product1.jpg",
+            "templates": [
+                {
+                    "source": "templates\/shop.json",
+                    "name": "Shop"
+                },
+                {
+                    "source": "templates\/single-product.json",
+                    "name": "Single product"
+                }
+            ],
+            "filesize": 19424,
+            "dimensions": [
+                570,
+                570
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/medical-microscope-P9MP8A"
+        },
+        {
+            "filename": "medcare-img22.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img22.jpg",
+            "templates": [
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                }
+            ],
+            "filesize": 26482,
+            "dimensions": [
+                320,
+                350
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/friendly-female-doctor-and-small-girl-in-bed-in-ho-5A5LE87"
+        },
+        {
+            "filename": "medcare-img23.jpg",
+            "thumbnail_url": "https:\/\/demo.bosathemes.com\/medcare\/wp-content\/uploads\/sites\/22\/2022\/02\/medcare-img23.jpg",
+            "templates": [
+                {
+                    "source": "templates\/professional.json",
+                    "name": "Professional"
+                }
+            ],
+            "filesize": 25079,
+            "dimensions": [
+                320,
+                350
+            ],
+            "image_source": "envato_elements",
+            "person_or_place": "yes",
+            "image_urls": "https:\/\/elements.envato.com\/young-nurse-working-at-the-hospital-7LDN2PH"
+        }
+    ]
+}

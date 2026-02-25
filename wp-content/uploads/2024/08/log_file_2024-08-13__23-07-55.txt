@@ -1,0 +1,174 @@
+
+---Archivos descargados---
+Los archivos de importación para Red Home ¡han sido descargados correctamente!
+Tiempo de ejecución máximo inicial = 30
+Información de archivos:
+URL del sitio = https://cristinabruckmann.com/Medicina2
+Archivo de datos = /home/guxuopoe/public_html/Medicina2/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/red/xml.xml
+Archivo de widget = /home/guxuopoe/public_html/Medicina2/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/red/wie.wie
+Archivo del personalizador = /home/guxuopoe/public_html/Medicina2/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/red/dat.dat
+Archivos de Redux:
+ theme_options -> /home/guxuopoe/public_html/Medicina2/wp-content/themes/streamlab/admin//classes/import/demos/demo-1/red/json.json 
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+[ERROR] Failed to import "laptop" (Medios)
+
+
+------
+¡Nueva llamada AJAX!
+[ERROR] Failed to import "tabtel" (Medios)
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+------
+¡Nueva llamada AJAX!
+
+
+---Importando los widgets---
+Sidebar : 
+
+Búsqueda - Sin título - Importado
+Entradas recientes - Sin título - Importado
+Comentarios recientes - Sin título - Importado
+Archivos - Sin título - Importado
+Categorías - Sin título - Importado
+Meta - Sin título - Importado
+
+Footer  1 : 
+
+Footer Logo - Sin título - Importado
+
+Footer  2 : 
+
+Menú de navegación - Explore - Importado
+
+Footer  3 : 
+
+Menú de navegación - Company - Importado
+
+Footer  4 : 
+
+Downlaod App - Downlaod App - Importado
+
+Movie sidebar : 
+
+MAS Videos Search - Sin título - Importado
+Videos Genre And Tags - Filter By genre - Importado
+Videos Genre And Tags - Filter By Tags - Importado
+
+Tv shows sidebar : 
+
+MAS Videos Search - Search Tv shows - Importado
+MAS Videos Search - Search Episodes - Importado
+Videos Genre And Tags - Filter By Genre - Importado
+Videos Genre And Tags - Filter By Tags - Importado
+
+Video sidebar : 
+
+MAS Videos Search - Search Videos - Importado
+Videos Genre And Tags - Filter By Category - Importado
+Videos Genre And Tags - Filter By Tags - Importado
+
+
+
+---Ajustes de importación de Redux---
+¡La importación de los ajustes de Redux theme_options ha finalizado correctamente!
+
+---Importación de los ajustes del personalizador---
+¡Importación de los ajustes del personalizador finalizado!
+
+---ocdi/after_import---
+

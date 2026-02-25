@@ -1,0 +1,25 @@
+name: PHP CS
+
+on:
+  push:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  runPHPCSInspection:
+    name: Run PHPCS inspection
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Run PHPCS inspection
+      uses: rtCamp/action-phpcs-code-review@v3
+      env:
+        GH_BOT_TOKEN: "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"
+        SKIP_FOLDERS: "framework,assets,languages,.github"
+        PHPCS_SNIFFS_EXCLUDE: "WordPress.Files.FileName"
+      with:
+        args: "WordPress,WordPress-Core,WordPress-Docs"

@@ -1,0 +1,257 @@
+# Translation of Plugins - Conditional Fields for Contact Form 7 - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Conditional Fields for Contact Form 7 - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-12-24 13:31:43+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: es\n"
+"Project-Id-Version: Plugins - Conditional Fields for Contact Form 7 - Stable (latest release)\n"
+
+#: wpcf7cf-options.php:153
+msgid "Multiple file upload"
+msgstr "Subida múltiple de archivos"
+
+#: wpcf7cf-options.php:152
+msgid "Define conditions with custom javascript functions"
+msgstr "Define condiciones con funciones JavaScript personalizadas"
+
+#: wpcf7cf-options.php:151
+msgid "Define conditions with regular expression"
+msgstr "Define condiciones con expresiones regulares"
+
+#: wpcf7cf-options.php:150
+msgid "Multistep forms (with Summary)"
+msgstr "Formularios multipaso (con resumen)"
+
+#: wpcf7cf-options.php:149
+msgid "Repeatable fields"
+msgstr "Campos repetibles"
+
+#: tg_pane_group.php:122
+msgid "disable inner fields when this group is hidden"
+msgstr "desactiva los campos interiores cuando este grupo está oculto"
+
+#: tg_pane_group.php:116
+msgid "use <span> instead of <div>"
+msgstr "usa <span> en vez de <div>"
+
+#: tg_pane_group.php:111
+msgid "clear inner fields when this group is hidden"
+msgstr "vacía los campos interiores cuando este grupo está oculto"
+
+#: tg_pane_group.php:107
+msgid "Options"
+msgstr "Opciones"
+
+#: tg_pane_group.php:84
+msgid "Field type"
+msgstr "Tipo de campo"
+
+#: tg_pane_group.php:55
+msgid "Generates the opening and closing form-tag for a Conditional group."
+msgstr "Genera las etiquetas de formulario de apertura y cierre para un grupo condicional."
+
+#: tg_pane_group.php:54
+msgid "Conditional group form-tag generator"
+msgstr "Generador de etiqueta de formulario de grupo condicional"
+
+#: tg_pane_group.php:42 tg_pane_group.php:53
+msgid "Conditional group"
+msgstr "Grupo condicional"
+
+#: wpcf7cf-options.php:305
+msgid "Nonce verification failed"
+msgstr "Ha fallado la verificación del nonce"
+
+#: wpcf7cf-options.php:102
+msgid "<strong>Notice</strong>: These are global settings for Conditional Fields for Contact Form 7."
+msgstr "<strong>Aviso</strong>: Estos son los ajustes globales para Conditional Fields for Contact Form 7."
+
+#: wpcf7cf-options.php:98
+msgid "Conditional Fields for Contact Form 7 Settings"
+msgstr "Ajustes de Conditional Fields for Contact Form 7"
+
+#. translators: 1. <a>, 2. </a>
+#: conditional-fields.php:41
+msgid "<strong>Conditional Fields for Contact Form 7</strong> needs to %1$sdeactivate the free plugin%1$s"
+msgstr "<strong>Conditional Fields for Contact Form 7</strong> necesita %1$sdesactivar el plugin gratuito%1$s"
+
+#. Plugin Name of the plugin
+#: conditional-fields.php
+msgid "Conditional Fields for Contact Form 7"
+msgstr "Conditional Fields for Contact Form 7"
+
+#. translators: 1,2: strong tags, 3. max recommended conditions
+#: admin.php:124
+msgid "Please switch to %1$sText mode%2$s if you want to add more than %3$d conditions."
+msgstr "Por favor, cambia al %1$smodo texto%2$s si quieres añadir mas que %3$d condiciones"
+
+#. translators: 1. max recommended conditions
+#: admin.php:122
+msgid "You can only add up to %d conditions using this interface."
+msgstr "Solo puedes añadir %d condiciones usando esta interfaz."
+
+#: admin.php:119
+msgid "Wow, That's a lot of conditions!"
+msgstr "¡Vaya, son muchas condiciones!"
+
+#: admin.php:115
+msgid "+ add new conditional rule"
+msgstr "+ añadir nueva regla condicional"
+
+#: admin.php:115
+msgid "add new rule"
+msgstr "añadir nueva regla"
+
+#: admin.php:55
+msgid "-- Select group --"
+msgstr "-- Selecciona un grupo --"
+
+#: admin.php:41
+msgid "-- Select field --"
+msgstr "-- Selecciona un campo --"
+
+#: admin.php:31 admin.php:109
+msgid "Conditional fields"
+msgstr "Campos condicionales"
+
+#: wpcf7cf-options.php:241 wpcf7cf-options.php:279
+msgid "Default:"
+msgstr "Por defecto:"
+
+#: wpcf7cf-options.php:183
+msgid "Restore defaults"
+msgstr "Restablecer los valores por defecto"
+
+#: wpcf7cf-options.php:180
+msgid "Restore Default Settings"
+msgstr "Restaurar los ajustes por defecto"
+
+#: admin.php:102 wpcf7cf-options.php:169
+msgid "Text mode"
+msgstr "Modo texto"
+
+#: wpcf7cf-options.php:169
+msgid "Normal"
+msgstr "Normal"
+
+#. translators: max recommended conditions
+#: wpcf7cf-options.php:168
+msgid "If you want to add more than %s conditions, it's recommended to switch to <strong>Text mode</strong> mode for better performance."
+msgstr "Si quieres añadir más que %s condiciones, se recomienda cambiar al <strong>modo de texto</strong> para un mejor rendimiento."
+
+#: wpcf7cf-options.php:165
+msgid "Conditional Fields UI"
+msgstr "Interfaz de campos condicionales"
+
+#: wpcf7cf-options.php:161
+msgid "Advanced Settings"
+msgstr "Ajustes avanzados"
+
+#: wpcf7cf-options.php:156
+msgid "Get PRO"
+msgstr "Obtén la versión Pro"
+
+#: wpcf7cf-options.php:154
+msgid "More comming soon (Calculated Fields, ...)"
+msgstr "Pronto habrá más (campos calculados, ...)"
+
+#: wpcf7cf-options.php:147
+msgid "Get Conditional Fields  PRO to unlock the full potential of CF7"
+msgstr "Obtén Conditional Fields PRO para desbloquear todo el potencial de CF7"
+
+#: wpcf7cf-options.php:146
+msgid "Conditional Fields  PRO"
+msgstr "Conditional Fields PRO"
+
+#: wpcf7cf-options.php:138
+msgid "A positive integer value indicating the time, in milliseconds, it will take for each group to hide."
+msgstr "Un número entero positivo que indique el tiempo, en milisegundos, que tardará cada grupo en ocultarse."
+
+#: wpcf7cf-options.php:137
+msgid "Animation Out Time"
+msgstr " Tiempo de salida de la animación"
+
+#: wpcf7cf-options.php:133
+msgid "A positive integer value indicating the time, in milliseconds, it will take for each group to show."
+msgstr "Un número entero positivo que indique el tiempo, en milisegundos, que tardará cada grupo en mostrarse."
+
+#: wpcf7cf-options.php:132
+msgid "Animation In time"
+msgstr "Tiempo de entrada de la animación"
+
+#: wpcf7cf-options.php:128
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: wpcf7cf-options.php:128
+msgid "Enabled"
+msgstr "Activado"
+
+#: wpcf7cf-options.php:127
+msgid "Use animations while showing/hiding groups"
+msgstr "Utilizar animaciones al mostrar/ocultar grupos"
+
+#: wpcf7cf-options.php:126
+msgid "Animation"
+msgstr "Animación"
+
+#: wpcf7cf-options.php:122
+msgid "Default animation Settings"
+msgstr "Ajustes por defecto de la animación"
+
+#: wpcf7cf-options.php:111
+msgid "Show me an example"
+msgstr "Muéstrame un ejemplo"
+
+#: wpcf7cf-options.php:109
+msgid "Go to the <strong><em>Conditional Fields</em></strong> Tab"
+msgstr "Ir a la pestaña de <strong><em>campos condicionales</em></strong>"
+
+#: wpcf7cf-options.php:108
+msgid "Save the Contact Form"
+msgstr "Guardar el formulario de contacto"
+
+#: wpcf7cf-options.php:107
+msgid "Create at least one [group] inside the form"
+msgstr "Crear al menos un [group] dentro del formulario"
+
+#: wpcf7cf-options.php:106
+msgid "Create a new Contact Form or edit an existing one"
+msgstr "Crear un nuevo formulario de contacto o editar uno existente"
+
+#: wpcf7cf-options.php:104
+msgid "How to create/edit conditional fields?"
+msgstr "¿Cómo crear/editar campos condicionales?"
+
+#: wpcf7cf-options.php:92
+msgid "Settings updated"
+msgstr "Ajustes actualizados"
+
+#: wpcf7cf-options.php:90
+msgid "Settings restored to defaults"
+msgstr "Ajustes restaurados a los valores por defecto"
+
+#: wpcf7cf-options.php:83
+msgid "Conditional Fields"
+msgstr "Campos condicionales"
+
+#. Author of the plugin
+#: conditional-fields.php
+msgid "Jules Colle"
+msgstr "Jules Colle"
+
+#. Description of the plugin
+#: conditional-fields.php
+msgid "Adds support for conditional fields to Contact Form 7. This plugin depends on Contact Form 7."
+msgstr "Añade compatibilidad para campos condicionales a Contact Form 7. Este plugin depende de Contact Form 7."
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: conditional-fields.php
+msgid "http://bdwm.be/"
+msgstr "https://bdwm.be/"

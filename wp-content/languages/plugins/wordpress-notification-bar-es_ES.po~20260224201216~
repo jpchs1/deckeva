@@ -1,0 +1,181 @@
+# Translation of Plugins - WordPress Notification Bar - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - WordPress Notification Bar - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-01-16 10:23:06+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.3\n"
+"Language: es\n"
+"Project-Id-Version: Plugins - WordPress Notification Bar - Stable (latest release)\n"
+
+#: framework/framework.php:409
+msgid "Upgrade to the Pro Version for more features!"
+msgstr "¡Actualiza a versión Pro para más funcionalidades!"
+
+#: inc/config.php:52 inc/config.php:78
+msgid "Message"
+msgstr "Mensaje"
+
+#: inc/config.php:127
+msgid "Background Color"
+msgstr "Color de fondo"
+
+#: inc/config.php:118
+msgid "Position"
+msgstr "Posición"
+
+#. Author URI of the plugin
+msgid "http://www.seedprod.com"
+msgstr "http://www.seedprod.com"
+
+#. Author of the plugin
+msgid "SeedProd"
+msgstr "SeedProd"
+
+#. Description of the plugin
+msgid "Global Notification Bar for WordPress"
+msgstr "Avisos globales en la barra de WordPress"
+
+#. Plugin URI of the plugin
+msgid "http://seedprod.com/wordpress-notification-bar/"
+msgstr "http://seedprod.com/wordpress-notification-bar/"
+
+#: wordpress-notification-bar.php:44
+msgid "WordPress %s and higher required. The plugin has now disabled itself. On a side note why are you running an old version :( Upgrade!"
+msgstr "Se requiere versión WordPress %s o superior. El plug-in se ha desactivado. Toma nota que estás utilizando una versión antigua :( Actualiza!"
+
+#. Plugin Name of the plugin
+#: wordpress-notification-bar.php:29
+msgid "WordPress Notification Bar"
+msgstr "WordPress Notification Bar"
+
+#: inc/config.php:112
+msgid "Style"
+msgstr "Estilo"
+
+#: inc/config.php:100
+msgid "Button Target"
+msgstr "Destino del botón"
+
+#: inc/config.php:93
+msgid "Enter a link for the button."
+msgstr "Introduce un enlace para el botón."
+
+#: inc/config.php:92
+msgid "Button Link"
+msgstr "Enlace del botón"
+
+#: inc/config.php:86
+msgid "Enter a title for your call to action button. If not entered the button will not appear."
+msgstr "Introduce un título para la llamada al botón de acción. Si no lo introdujiste en el botón no aparecerá."
+
+#: inc/config.php:85
+msgid "Button Label"
+msgstr "Etiqueta del botón"
+
+#: inc/config.php:79
+msgid "Enter your message."
+msgstr "Escribe tu mensaje."
+
+#: inc/config.php:67
+msgid "Enabled"
+msgstr "Activado"
+
+#: inc/config.php:23
+msgid "Notification Bar"
+msgstr "Barra de notificaciones"
+
+#: framework/validations/required.php:10
+msgid "is required."
+msgstr "se requiere."
+
+#: framework/validations/number.php:11
+msgid "Please enter a valid number."
+msgstr "Por favor escribe un número válido."
+
+#: framework/validations/color.php:13
+msgid "Please enter a valid color value."
+msgstr "Por favor, escribe un código de color válido."
+
+#: framework/framework.php:400
+msgid "Submit your site to the Showcase"
+msgstr "Enviar tu sitio a nuestra vitrina"
+
+#: inc/config.php:137
+msgid "<p>Enter your information then click \"Save Changes\" to see a preview above. Check \"Enabled\" when you are ready to go live.</p>"
+msgstr "<p>Introduce la información y luego haz clic en \"Guardar cambios\" para ver una vista previa. Habilita \"Activado\" cuando estés listo para que se vea públicamente.</p>"
+
+#: inc/config.php:120
+msgid "Sticky, stays at the top of the page even when you scroll down."
+msgstr "Pegajoso, se queda en la parte superior de la página incluso cuando te desplazas hacia abajo."
+
+#: inc/config.php:101
+msgid "Open link in new window. If this is not checked the link will open in the same window."
+msgstr "Abre el enlace en nueva ventana. Si no lo activas, el enlace se abrirá en la misma ventana."
+
+#: inc/config.php:68
+msgid "Check if you want to enable the notification bar on your site."
+msgstr "Comprueba si deseas habilitar la barra de notificación en tu sitio web."
+
+#: framework/framework.php:443
+msgid "All custom settings values be deleted. Are you sure you want to reset?"
+msgstr "Se eliminarán todos los valores de configuración personalizados. ¿Estás seguro de que deseas reiniciarlos?"
+
+#: framework/validations/email.php:10
+msgid "Please enter a valid email."
+msgstr "Por favor, introduce un correo válido."
+
+#: inc/config.php:70 inc/config.php:103
+msgid "Yes"
+msgstr "Sí"
+
+#: framework/framework.php:108
+msgid "Settings reset."
+msgstr "Ajustes restablecidos."
+
+#: framework/framework.php:398
+msgid "Tweet It"
+msgstr "Tuitéalo"
+
+#: framework/framework.php:397
+msgid "Rate It"
+msgstr "Valóralo"
+
+#: framework/framework.php:395
+msgid "Buy It"
+msgstr "Cómpralo"
+
+#: framework/framework.php:393
+msgid "Like this plugin? Show your support by:"
+msgstr "¿Te gusta el plugin? Danos tu apoyo:"
+
+#: framework/framework.php:390
+msgid "Show Some Love"
+msgstr "Danos un poco de cariño"
+
+#: framework/framework.php:381
+msgid "Support Request"
+msgstr "Solicitud de soporte"
+
+#: framework/framework.php:378
+msgid "Got a Question, Idea, Problem or Praise?"
+msgstr "¿Tienes alguna pregunta, Idea, problema o alabanza?"
+
+#: framework/framework.php:374
+msgid "Plugin Support"
+msgstr "Soporte de Plugin"
+
+#: framework/field-types/upload.php:8
+msgid "Media Image Library"
+msgstr "Biblioteca de imágenes"
+
+#: framework/framework.php:360
+msgid "Reset"
+msgstr "Restablecer"
+
+#: framework/framework.php:359
+msgid "Save Changes"
+msgstr "Guardar los cambios"

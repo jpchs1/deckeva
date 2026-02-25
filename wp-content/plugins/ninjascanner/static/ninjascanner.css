@@ -1,0 +1,178 @@
+/*
+ +=====================================================================+
+ |     _   _ _        _       ____                                     |
+ |    | \ | (_)_ __  (_) __ _/ ___|  ___ __ _ _ __  _ __   ___ _ __    |
+ |    |  \| | | '_ \ | |/ _` \___ \ / __/ _` | '_ \| '_ \ / _ \ '__|   |
+ |    | |\  | | | | || | (_| |___) | (_| (_| | | | | | | |  __/ |      |
+ |    |_| \_|_|_| |_|/ |\__,_|____/ \___\__,_|_| |_|_| |_|\___|_|      |
+ |                 |__/                                                |
+ |                                                                     |
+ | (c) NinTechNet ~ https://nintechnet.com/                            |
+ +=====================================================================+
+*/
+
+.ns-dashicons-header {
+	font-size: 40px;
+	vertical-align: middle;
+}
+.ns-unknown-file-icon {
+	color:orange;
+	font-size:29px
+}
+.ns-orange-file-icon {
+	color:orange;
+	font-size:25px
+}
+.ns-grey-file-icon {
+	color:#999;
+	font-size:25px
+}
+.ns-modified-file-icon {
+	color:red;
+	font-size:25px
+}
+.ns-ok-file-icon {
+	color:green;
+	font-size:25px
+}
+.ns-skip-file-icon {
+	color:grey;
+	font-size:25px
+}
+
+/* HTML report: table header (icon + title) */
+tr.ns-table-header-tr {
+	height:60px;
+}
+td.ns-table-header-td-icon {
+	width:30px;
+}
+td.ns-table-header-td-file {
+	font-size:14px;
+	vertical-align:middle;
+}
+
+/* HTML report: Div section (icon, file etc) */
+tr.ns-grey {
+	background-color:#F9F9F9;
+	height:70px;
+}
+tr.ns-white {
+	background-color:#FFFFFF;
+	height:70px
+}
+div.ns-sub {
+	width:100%;
+	background-color:#fff;
+	padding: 0;
+	overflow: auto;
+}
+/* File icon */
+td.ns-icon {
+	width:30px;
+	vertical-align:top;
+	text-align: center;
+}
+
+td.ns-file , p.ns-file{
+	font-size:15px;
+}
+td.ns-file-centered {
+	font-size:15px;
+	vertical-align:middle;
+}
+td.ns-file-top {
+	font-size:15px;
+	vertical-align:top;
+}
+label.ns-label-menu {
+	font-size:12px;
+}
+.table-file-info {
+	width:8%;
+	font-weight:bold;
+	padding:1;
+	text-align:right;
+	color:red !important;
+}
+
+.scan-progress-bar {
+	background-color: #23282D;
+	height: 26px;
+	padding: 1px;
+	width: 100%;
+	margin: 5px 0;
+	border-radius: 5px;
+}
+.scan-progress-bar span {
+	display: inline-block;
+	float: left;
+	height: 100%;
+	border-radius: 3px;
+	background-color: #0073aa;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset;
+	transition: width .6s ease;
+}
+
+.progress-text {
+	text-align: right;
+	color: white;
+	margin: 5px 10px;
+}
+
+#nscan-status-span-pulse {
+  -moz-animation: pulse 1s ease-out;-moz-animation-iteration-count: 3;
+  -webkit-animation: pulse 1s ease-out;-webkit-animation-iteration-count: 3;
+  -ms-animation: pulse 1s ease-out;-ms-animation-iteration-count: 3;
+}
+@-webkit-keyframes pulse {
+	 0% { background-color: none; }
+	 50% { background-color: orange; border-radius:3px;
+		 text-shadow:0 1px 1px #666;box-shadow: 1px 1px 3px #A36900 inset; }
+	 100% { background-color: none; }
+}
+@-moz-keyframes pulse {
+	 0% { background-color: none; }
+	 50% { background-color: orange; border-radius:3px;
+		 text-shadow:0 1px 1px #666;box-shadow: 1px 1px 3px #A36900 inset; }
+	 100% { background-color: none; }
+}
+@-ms-keyframes pulse {
+	 0% { background-color: none; }
+	 50% { background-color: orange; border-radius:3px;
+		 text-shadow:0 1px 1px #666;box-shadow: 1px 1px 3px #A36900 inset; }
+	 100% { background-color: none; }
+}
+td.r1 {
+	width:20%;
+	font-weight: bold;
+	font-size: 15px;
+}
+td.r2 {
+	width:80%;
+	font-size: 15px;
+}
+div.nsf-sub {
+	width:100%;
+	background-color:#fff;
+	padding: 0;
+	overflow: auto;
+	max-height:200px;
+	resize:vertical;
+	border:1px solid #7e8993;
+	border-radius: 4px;
+}
+tr.nsf-grey {
+	background-color:#F9F9F9;
+	line-height:15px;
+}
+
+tr.nsf-white {
+	background-color:#FFFFFF;
+	line-height:15px;
+}
+td.dir-list {
+	line-height:1;
+	padding: 10px 10px;
+}
+/* ================================================================== */

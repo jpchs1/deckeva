@@ -1,0 +1,800 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Really Simple SSL pro\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-07 08:36+0100\n"
+"PO-Revision-Date: 2022-11-05 12:38+0000\n"
+"Last-Translator: Manuel\n"
+"Language-Team: Ελληνικά\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.3; wp-6.1"
+
+#: class-admin.php:12 class-scan.php:44 csp-violation-endpoint.php:10
+#, php-format
+msgid "%s is a singleton class and you cannot create a second instance."
+msgstr ""
+"Το %s είναι μια κλάση singleton και δεν μπορείτε να δημιουργήσετε μια "
+"δεύτερη παρουσία."
+
+#: class-licensing.php:540 class-licensing.php:636
+#, php-format
+msgid "%s/%s activations available."
+msgstr "%s/%s διαθέσιμες ενεργοποιήσεις."
+
+#: class-licensing.php:713
+#, php-format
+msgid "%sActivate%s your license."
+msgstr "%sΕνεργοποίηση%s της άδειας χρήσης σας."
+
+#: class-admin.php:581
+#, php-format
+msgid "%sRead more%s."
+msgstr "%sΔιαβάστε περισσότερα%s."
+
+#: class-scan.php:224
+#, php-format
+msgctxt "'date' at 'time'"
+msgid "%s at %s"
+msgstr "%s στις %s"
+
+#: class-admin.php:581
+msgid "A redirect to http was detected. This might result in redirect loops."
+msgstr ""
+"Εντοπίστηκε ανακατεύθυνση σε http. Αυτό μπορεί να έχει ως αποτέλεσμα βρόχους "
+"ανακατεύθυνσης."
+
+#: csp-violation-endpoint.php:132
+msgid ""
+"A required database table is missing. Please check if you have permissions "
+"to add this database table."
+msgstr ""
+"Λείπει ένας απαιτούμενος πίνακας από τη βάση δεδομένων. Παρακαλώ ελέγξτε αν "
+"έχετε το δικαιώματα προσθήκης αυτού του πίνακα στη βάση δεδομένων."
+
+#: class-licensing.php:56
+msgid "Activate your license for automatic updates."
+msgstr "Ενεργοποιήστε την άδεια χρήσης σας για αυτόματες ενημερώσεις."
+
+#: class-scan.php:1665 class-scan.php:1699 class-scan.php:1775
+#: class-scan.php:1812 class-scan.php:1861
+#, php-format
+msgid "Blocked URL: %s"
+msgstr "Αποκλεισμένη διεύθυνση URL: %s"
+
+#: class-scan.php:1624
+msgid "cached file, deactivate cache to see the actual source"
+msgstr ""
+"προσωρινά αποθηκευμένο αρχείο, απενεργοποιήστε την προσωρινή μνήμη για να "
+"δείτε την πραγματική πηγή"
+
+#: class-scan.php:1700
+msgid ""
+"Can be fixed automatically by pressing the Fix button. If fixing fails, the "
+"source file can be edited manually by pressing the Edit button."
+msgstr ""
+"Μπορεί να διορθωθεί αυτόματα πατώντας το κουμπί 'Διόρθωση'. Εάν η διόρθωση "
+"αποτύχει, μπορείτε να επεξεργαστείτε το πηγαίο αρχείο με χειροκίνητο τρόπο "
+"πατώντας το κουμπί 'Επεξεργασία'."
+
+#: class-scan.php:1700
+msgid ""
+"Can be fixed manually by editing the respective mu-plugin file in the /wp-"
+"content/mu-plugins/ directory "
+msgstr ""
+"Μπορεί να διορθωθεί χειροκίνητα με επεξεργασία του αντίστοιχου αρχείου mu-"
+"plugin στον κατάλογο /wp-content/mu-plugins/ "
+
+#: class-scan.php:1738
+msgid ""
+"Cannot be fixed automatically, as the mixed content is coming from an "
+"external domain. Contact the owner of the domain to update the CSS/JS file"
+msgstr ""
+"Δεν είναι δυνατή η αυτόματη διόρθωση, καθώς το μεικτό περιεχόμενο προέρχεται "
+"από έναν εξωτερικό τομέα. Επικοινωνήστε με τον κάτοχο του τομέα για να "
+"ενημερώσετε το αρχείο CSS/JS"
+
+#: class-scan.php:365
+#, php-format
+msgid "Checking if external js or css files contain http links, %s of %s"
+msgstr ""
+"Έλεγχος εάν τα εξωτερικά αρχεία JS ή CSS περιέχουν συνδέσμους http, %s από %s"
+
+#: class-scan.php:313
+#, php-format
+msgid "Checking posts for external URLs, %s of %s"
+msgstr "Έλεγχος δημοσιεύσεων για εξωτερικές διευθύνσεις URL, %s από %s"
+
+#: class-scan.php:337
+msgid "Checking which postmeta contain external resources"
+msgstr "Ελέγξτε ποια postmeta περιέχουν εξωτερικούς πόρους"
+
+#: class-scan.php:350
+#, php-format
+msgid "Checking which resources can't load over ssl, %s of %s"
+msgstr "Έλεγχος των πόρων που δεν μπορούν να φορτωθούν μέσω SSL, %s από %s"
+
+#: class-scan.php:326
+msgid "Checking widgets for external URLs"
+msgstr "Έλεγχος μικροεφαρμογών για εξωτερικές διευθύνσεις URL"
+
+#: csp-violation-endpoint.php:171
+msgid "Click 'Enforce' to enforce the configuration on your site."
+msgstr ""
+"Κάντε κλικ στην επιλογή 'Επιβολή' για να επιβάλετε τη ρύθμιση παραμέτρων "
+"στον ιστότοπό σας."
+
+#: class-scan.php:1719 class-scan.php:1794 class-scan.php:1832
+#: class-scan.php:1879 class-scan.php:2179
+msgid "Copyright warning!"
+msgstr "Προειδοποίηση πνευματικών δικαιωμάτων!"
+
+#: class-scan.php:1643
+msgid ""
+"Downloading files from other websites can cause serious copyright issues! It "
+"is always illegal to use images, files, or any copyright protected material "
+"on your own site without the consent of the copyrightholder. Please ask the "
+"copyrightholder for permission. Use this function at your own risk."
+msgstr ""
+"Η λήψη αρχείων από άλλους ιστότοπους μπορεί να προκαλέσει σοβαρά ζητήματα "
+"πνευματικών δικαιωμάτων! Είναι πάντα παράνομο να χρησιμοποιείτε εικόνες, "
+"αρχεία ή οποιοδήποτε υλικό που προστατεύεται από πνευματικά δικαιώματα στον "
+"ιστότοπό σας χωρίς τη συγκατάθεση του κατόχου των πνευματικών δικαιωμάτων. "
+"Παρακαλώ ζητήστε την άδεια του κατόχου των πνευματικών δικαιωμάτων. "
+"Χρησιμοποιήστε αυτήν τη λειτουργία με δική σας ευθύνη."
+
+#: class-admin.php:562
+msgid "Elementor mixed content successfully converted."
+msgstr "Το μεικτό περιεχόμενο του Elementor έχει μετατραπεί με επιτυχία."
+
+#: class-scan.php:1626
+msgid "file"
+msgstr "αρχείο"
+
+#: class-scan.php:430
+msgid "Finished scan"
+msgstr "Ολοκλήρωση σάρωσης"
+
+#: csp-violation-endpoint.php:168
+msgid "Follow these steps to complete the setup:"
+msgstr "Ακολουθήστε τα εξής βήματα για να ολοκληρώσετε τη ρύθμιση:"
+
+#: class-scan.php:299
+msgid "Generating file list"
+msgstr "Δημιουργία λίστας αρχείων"
+
+#: class-scan.php:257
+msgid "Generating web page list"
+msgstr "Δημιουργία λίστας ιστοσελίδων"
+
+#: class-scan.php:133 class-scan.php:147
+msgid "Great! Your scan last completed without errors."
+msgstr "Τέλεια! Η σάρωση ολοκληρώθηκε τελευταία χωρίς σφάλματα."
+
+#. Description of the plugin
+msgid "Heavyweight Security Features"
+msgstr "Σημαντικές Λειτουργίες Ασφαλείας"
+
+#: class-headers.php:253
+msgid "HSTS not enabled"
+msgstr "Το HSTS δεν είναι ενεργοποιημένο"
+
+#: class-headers.php:240 class-headers.php:246
+msgid "HSTS Preload"
+msgstr "Προφόρτωση HSTS"
+
+#. Plugin URI of the plugin
+msgid "https://really-simple-ssl.com/pro"
+msgstr "https://really-simple-ssl.com/pro"
+
+#. Author URI of the plugin
+msgid "https://www.really-simple-plugins.com"
+msgstr "https://www.really-simple-plugins.com"
+
+#: class-scan.php:1811
+msgid "iFrame in the wp_postmeta database table"
+msgstr "iFrame στον πίνακα wp_postmeta της βάσης δεδομένων"
+
+#: class-scan.php:1718 class-scan.php:1793 class-scan.php:1831
+#: class-scan.php:1878
+msgid "Import and insert file"
+msgstr "Εισαγωγή και εισαγωγή αρχείου"
+
+#: really-simple-ssl-pro-multisite.php:287
+msgid "Install and activate Really Simple SSL"
+msgstr "Εγκαταστήστε και ενεργοποιήστε το Really Simple SSL"
+
+#: csp-violation-endpoint.php:155
+msgid ""
+"Learning Mode is active for your Content Security and will complete in %s "
+"days."
+msgstr ""
+"Η Λειτουργία Εκμάθησης είναι ενεργή για την Ασφάλεια Περιεχομένου σας και θα "
+"ολοκληρωθεί σε %s ημέρες."
+
+#: class-licensing.php:176 class-licensing.php:204 class-licensing.php:721
+#: class-licensing.php:728 class-licensing.php:735 class-licensing.php:742
+#: class-licensing.php:749 class-licensing.php:764
+msgid "License"
+msgstr "Άδεια χρήσης"
+
+#: class-scan.php:380
+#, php-format
+msgid "Looking up blocked resources in files, %s of %s"
+msgstr "Αναζήτηση αποκλεισμένων πόρων σε αρχεία, %s από %s"
+
+#: class-scan.php:407
+msgid "Looking up blocked resources in postmeta"
+msgstr "Αναζήτηση αποκλεισμένων πόρων σε postmeta"
+
+#: class-scan.php:394
+msgid "Looking up blocked resources in posts"
+msgstr "Αναζήτηση αποκλεισμένων πόρων σε δημοσιεύσεις"
+
+#: class-scan.php:422
+msgid "Looking up blocked resources in widgets"
+msgstr "Αναζήτηση αποκλεισμένων πόρων στις μικροεφαρμογές"
+
+#: class-scan.php:1861
+msgid ""
+"Mixed content found in a widget. Press the edit link to edit the widget "
+"manually."
+msgstr ""
+"Βρέθηκε μεικτό περιεχόμενο σε μικροεφαρμογή. Πατήστε τον σύνδεσμο "
+"'επεξεργασία' για να επεξεργαστείτε την μικροεφαρμογή με χειροκίνητο τρόπο."
+
+#: class-scan.php:1776
+msgid ""
+"Mixed content found in in a post. Can be fixed automatically by pressing the "
+"fix button. Pressing the edit button allows you to update the link in the "
+"post manually."
+msgstr ""
+"Βρέθηκε μεικτό περιεχόμενο σε μια δημοσίευση. Μπορεί να διορθωθεί αυτόματα "
+"πατώντας το κουμπί 'διόρθωση'. Πατώντας το κουμπί 'επεξεργασία' σας "
+"επιτρέπει να ενημερώσετε τον σύνδεσμο στη δημοσίευση με χειροκίνητο τρόπο."
+
+#: class-scan.php:1813
+msgid ""
+"Mixed content from a postmeta table in your database. Usually won't cause "
+"any mixed content on the front-end. Check the post if it causes mixed "
+"content. If so, the link can be replace directly in the database."
+msgstr ""
+"Μεικτό περιεχόμενο από έναν πίνακα postmeta στη βάση δεδομένων σας. Συνήθως "
+"δεν θα προκαλέσει μεικτό περιεχόμενο στο front-end. Ελέγξτε τη δημοσίευση αν "
+"προκαλεί μεικτό περιεχόμενο. Σε αυτήν την περίπτωση, ο σύνδεσμος μπορεί να "
+"αντικατασταθεί απευθείας στη βάση δεδομένων."
+
+#: class-scan.php:1705
+#, php-format
+msgid "Mixed content in %s"
+msgstr "Μεικτό περιεχόμενο σε %s"
+
+#: class-scan.php:1744
+msgid "Mixed content in CSS/JS file from other domain"
+msgstr "Μεικτό περιεχόμενο σε αρχείο CSS/JS από άλλον τομέα"
+
+#: class-scan.php:1670
+msgid "Mixed content in PHP file in %s"
+msgstr "Μεικτό περιεχόμενο σε αρχείο PHP, σε %s"
+
+#: class-scan.php:1781
+msgid "Mixed content in post: "
+msgstr "Μεικτό περιεχόμενο σε άρθρο"
+
+#: class-scan.php:1811
+msgid "Mixed content in the postmeta table"
+msgstr "Μεικτό περιεχόμενο στον πίνακα postmeta"
+
+#: class-scan.php:1739
+#, php-format
+msgid "Mixed content resources: %s"
+msgstr "Πόροι μεικτού περιεχομένου: %s"
+
+#: class-scan.php:1618
+msgid "mu plugin file"
+msgstr "αρχείο πρόσθετου mu"
+
+#: class-licensing.php:581
+#, php-format
+#| msgid "Multisite detected. Please consider upgrading to %smultisite%s."
+msgid "Multisite detected. Please upgrade to %smultisite%s."
+msgstr "Εντοπίστηκε Multisite. Παρακαλώ αναβαθμίστε σε %smultisite%s."
+
+#: class-scan.php:218 class-scan.php:1914
+msgid "Never"
+msgstr "Ποτέ"
+
+#: class-admin.php:576
+msgid "No redirect to http detected."
+msgstr "Δεν εντοπίστηκε ανακατεύθυνση στο http."
+
+#: class-licensing.php:649
+msgid "Open"
+msgstr "Ανοικτό"
+
+#: really-simple-ssl-pro-multisite.php:277
+#: really-simple-ssl-pro-multisite.php:302
+#| msgid ""
+#| "Please upgrade to the latest version to be able use the full "
+#| "functionality of the plugin."
+msgid ""
+"Please %supgrade%s to the latest version to be able use the full "
+"functionality of the plugin."
+msgstr ""
+"Παρακαλώ %sαναβαθμίστε%s στην τελευταία έκδοση ώστε να είναι εφικτή η πλήρης "
+"λειτουργικότητα του πρόσθετου."
+
+#: class-licensing.php:603
+msgid "Please activate your license key."
+msgstr "Παρακαλώ ενεργοποιήστε το κλειδί άδειας χρήσης σας."
+
+#: class-licensing.php:595
+#, php-format
+msgid "Please enter your license key. Available in your %saccount%s."
+msgstr ""
+"Παρακαλώ εισαγάγετε το κλειδί άδειας χρήσης σας. Διατίθεται στον "
+"%sλογαριασμό σας%s."
+
+#: really-simple-ssl-pro-multisite.php:275
+#| msgid ""
+#| "Please install and activate Really Simple SSL before activating this add-"
+#| "on."
+msgid "Please install and activate Really Simple SSL to enable the add-on."
+msgstr ""
+"Παρακαλώ εγκαταστήστε και ενεργοποιήστε το πρόσθετο Really Simple SSL για να "
+"ενεργοποιήσετε την επέκταση."
+
+#: class-scan.php:2184
+#| msgid ""
+#| "Please note that any changes you have made since to your current files, "
+#| "will be lost. "
+msgid ""
+"Please note that any changes you have made since to your current files, will "
+"be lost."
+msgstr ""
+"Παρακαλώ λάβετε υπόψη ότι τυχόν αλλαγές που έχετε πραγματοποιήσει στα "
+"τρέχοντα αρχεία σας, θα χαθούν."
+
+#: really-simple-ssl-pro-multisite.php:269
+#: really-simple-ssl-pro-multisite.php:298
+msgid "Plugin dependency error"
+msgstr "σφάλμα εξάρτησης πρόσθετου"
+
+#: class-scan.php:1620
+msgid "plugin file"
+msgstr "αρχείο πρόσθετου"
+
+#: class-admin.php:575 class-admin.php:580
+msgid "Potential redirect loop."
+msgstr "Πιθανός βρόχος ανακατεύθυνσης."
+
+#: class-licensing.php:651
+msgid "Premium"
+msgstr "Premium"
+
+#. Author of the plugin
+msgid "Really Simple Plugins"
+msgstr "Really Simple Plugins"
+
+#: really-simple-ssl-pro-multisite.php:301
+msgid ""
+"Really Simple SSL needs to be updated to the latest version to be compatible."
+msgstr ""
+"Το Really Simple SSL πρέπει να ενημερωθεί στην πιο πρόσφατη έκδοση για να "
+"είναι συμβατό."
+
+#: really-simple-ssl-pro-multisite.php:28
+#| msgid ""
+#| "Really Simple SSL pro cannot be activated. The plugin requires PHP 7.2 or "
+#| "higher"
+msgid ""
+"Really Simple SSL Pro cannot be activated. The plugin requires PHP 7.2 or "
+"higher"
+msgstr ""
+"Δεν είναι δυνατή η ενεργοποίηση της επέκτασης Really Simple SSL Pro. Η "
+"επέκταση απαιτεί την PHP 7.2 ή νεότερη έκδοση"
+
+#: really-simple-ssl-pro-multisite.php:34
+#| msgid ""
+#| "Really Simple SSL pro cannot be activated. The plugin requires WordPress "
+#| "5.7 or higher"
+msgid ""
+"Really Simple SSL Pro cannot be activated. The plugin requires WordPress 5.7 "
+"or higher"
+msgstr ""
+"Δεν είναι δυνατή η ενεργοποίηση της επέκτασης Really Simple SSL Pro. Η "
+"επέκταση απαιτεί το WordPress 5.7 ή νεότερη έκδοση"
+
+#: really-simple-ssl-pro-multisite.php:274
+#| msgid ""
+#| "Really Simple SSL pro is an add-on for Really Simple SSL, and cannot do "
+#| "it on its own :-("
+msgid ""
+"Really Simple SSL Pro is an add-on for Really Simple SSL, and cannot do it "
+"on its own :-("
+msgstr ""
+"Το Really Simple SSL Pro είναι μια επέκταση του πρόσθετου Really Simple SSL "
+"και δεν μπορεί να λειτουργήσει μόνη της :-("
+
+#. Plugin Name of the plugin
+#| msgid "Really Simple SSL pro multisite"
+msgid "Really Simple SSL Pro multisite"
+msgstr "Really Simple SSL Pro για multisite"
+
+#: class-scan.php:2189
+msgid "Restore files"
+msgstr "Επαναφορά αρχείων"
+
+#: csp-violation-endpoint.php:170
+msgid "Review the detected configuration in 'Content Security Policy'."
+msgstr ""
+"Ελέγξτε τη ρύθμιση παραμέτρων στην ενότητα 'Πολιτική Ασφάλειας Περιεχομένου'."
+
+#: class-scan.php:2178
+msgid "Roll back changes made to your files"
+msgstr "Επαναφορά των αλλαγών που έγιναν στα αρχεία σας"
+
+#: class-importer.php:62
+msgid "Roll back file changes"
+msgstr "Επαναφορά αλλαγών αρχείων"
+
+#: class-scan.php:270
+#, php-format
+msgid ""
+"Searching for js and css files and links to external resources in website, "
+"%s of %s"
+msgstr ""
+"Αναζήτηση JS και CSS αρχείων και συνδέσμων σε εξωτερικούς πόρους στον "
+"ιστότοπο, %s από %s"
+
+#: class-scan.php:285
+#, php-format
+msgid "Searching for mixed content in css and js files, %s of %s"
+msgstr "Αναζήτηση μεικτού περιεχομένου σε αρχεία CSS και JS, %s από %s"
+
+#: class-admin.php:654
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+#: class-importer.php:527
+msgid "Something went wrong."
+msgstr "Κάτι πήγε στραβά."
+
+#: class-importer.php:94
+#| msgid ""
+#| "Someting went wrong. If this doesn't work, you can put the original files "
+#| "back by changing files named 'rsssl-bkp-filename' to filename."
+msgid ""
+"Something went wrong. If this doesn't work, you can put the original files "
+"back by changing files named 'rsssl-bkp-filename' to filename."
+msgstr ""
+"Κάτι πήγε στραβά. Εάν αυτό δεν λειτουργεί, μπορείτε να επαναφέρετε τα αρχικά "
+"αρχεία αλλάζοντας αρχεία με το όνομα 'rsssl-bkp-filename' σε 'filename'."
+
+#: class-importer.php:121 class-importer.php:160 class-importer.php:196
+#: class-importer.php:236 class-importer.php:270
+msgid ""
+"Something went wrong. Please refresh the page and try again, or fix manually."
+msgstr ""
+"Κάτι πήγε στραβά. Παρακαλώ ανανεώστε τη σελίδα και προσπαθήστε ξανά, "
+"διαφορετικά επιδιορθώστε χειροκίνητα."
+
+#: class-licensing.php:650
+msgid "Success"
+msgstr "Επιτυχία"
+
+#: class-importer.php:177
+msgid ""
+"The file could not be downloaded. It might not exist, or downloading is "
+"blocked. Fix manually."
+msgstr ""
+"Δεν ήταν δυνατή η λήψη του αρχείου. Μπορεί να μην υπάρχει ή η λήψη έχει "
+"αποκλειστεί. Διορθώστε το με χειροκίνητο τρόπο."
+
+#: class-importer.php:217 class-importer.php:252 class-importer.php:289
+msgid ""
+"The file could not be downloaded. The file might not exist, or downloading "
+"is be blocked by the server. Fix manually."
+msgstr ""
+"Δεν ήταν δυνατή η λήψη του αρχείου. Το αρχείο ενδέχεται να μην υπάρχει ή η "
+"λήψη έχει αποκλειστεί από τον διακομιστή. Διορθώστε το με χειροκίνητο τρόπο."
+
+#: class-scan.php:151
+msgid ""
+"The last scan was completed with errors. Are you sure these issues don't "
+"impact your site?"
+msgstr ""
+"Η τελευταία σάρωση ολοκληρώθηκε με σφάλματα. Είστε βέβαιοι ότι αυτά τα "
+"ζητήματα δεν επηρεάζουν τον ιστότοπό σας;"
+
+#: class-scan.php:137
+msgid ""
+"The last scan was completed with errors. Only migrate if you are sure the "
+"found errors are not a problem for your site."
+msgstr ""
+"Η τελευταία σάρωση ολοκληρώθηκε με σφάλματα. Πραγματοποιήστε μετεγκατάσταση "
+"μόνο εάν είστε βέβαιοι ότι τα σφάλματα που εντοπίστηκαν δεν αποτελούν "
+"πρόβλημα για τον ιστότοπό σας"
+
+#: class-licensing.php:589
+msgid ""
+"The license information could not be retrieved at this moment. Please try "
+"again at a later time."
+msgstr ""
+"Δεν ήταν δυνατή η ανάκτηση των πληροφοριών άδειας χρήσης αυτήν τη στιγμή. "
+"Παρακαλώ προσπαθήστε ξανά αργότερα."
+
+#: class-scan.php:1616
+msgid "theme file"
+msgstr "αρχείο εικαστικού θέματος"
+
+#: class-importer.php:136
+msgid "There was a problem editing the file. Please try manually."
+msgstr ""
+"Παρουσιάστηκε πρόβλημα κατά την επεξεργασία του αρχείου. Παρακαλώ δοκιμάστε "
+"χειροκίνητα."
+
+#: class-licensing.php:736
+msgid ""
+"This domain is not activated for this Really Simple SSL Pro license. Please "
+"activate the license for this domain."
+msgstr ""
+"Αυτός ο τομέας δεν είναι ενεργοποιημένος για αυτήν την άδεια χρήσης του "
+"Really Simple SSL Pro. Παρακαλώ ενεργοποιήστε την άδεια χρήσης για αυτόν τον "
+"τομέα."
+
+#: class-scan.php:1644
+msgid ""
+"This downloads the file from the domain without SSL, inserts it into WP "
+"media, and changes the URL to the new URL."
+msgstr ""
+"Αυτό κάνει λήψη του αρχείου από τον τομέα χωρίς SSL, το εισάγει στα πολυμέσα "
+"του WP και αλλάζει τη διεύθυνση URL στη νέα διεύθυνση URL."
+
+#: class-licensing.php:629
+#, php-format
+msgid ""
+"This license is not valid for this product. Find out why on your %saccount%s."
+msgstr ""
+"Η άδεια χρήσης δεν είναι έγκυρη για αυτό το προϊόν. Μάθετε γιατί συμβαίνει "
+"αυτό στον %sλογαριασμό σας%s."
+
+#: class-licensing.php:622
+#, php-format
+msgid "This license is not valid. Find out why on your %saccount%s."
+msgstr ""
+"Η άδεια χρήσης δεν είναι έγκυρη. Μάθετε γιατί συμβαίνει αυτό στον "
+"%sλογαριασμό σας%s."
+
+#: class-scan.php:2182
+#| msgid ""
+#| "This will put the files back that were changed by the fix option in "
+#| "Really Simple SSL pro."
+msgid ""
+"This will put the files back that were changed by the fix option in Really "
+"Simple SSL Pro."
+msgstr ""
+"Αυτό θα επαναφέρει τα αρχεία που άλλαξαν με την επιλογή διόρθωσης του Really "
+"Simple SSL Pro."
+
+#: class-admin.php:595 class-admin.php:601
+msgid "TLS version"
+msgstr "Έκδοση TLS"
+
+#: class-admin.php:596
+msgid "TLS version is up-to-date"
+msgstr "Η έκδοση TLS είναι ενημερωμένη"
+
+#: class-licensing.php:513
+msgid "unlimited"
+msgstr "απεριόριστες"
+
+#: class-licensing.php:537
+msgid "Unlimited activations available."
+msgstr "Απεριόριστες ενεργοποιήσεις διαθέσιμες."
+
+#: class-admin.php:630
+msgid ""
+"Update Really Simple SSL Free to the latest version for optimal "
+"compatibility."
+msgstr ""
+"Ενημερώστε το δωρεάν Really Simple SSL στην πιο πρόσφατη έκδοση για βέλτιστη "
+"συμβατότητα."
+
+#: class-licensing.php:526
+#, php-format
+msgid "Upgrade to a %s5 sites or Agency%s license."
+msgstr "Αναβάθμιση σε άδεια χρήσης %s5 ιστότοπων ή Agency%s."
+
+#: class-licensing.php:529
+#, php-format
+msgid "Upgrade to an %sAgency%s license."
+msgstr "Αναβάθμιση σε άδεια χρήσης %sAgency%s."
+
+#: class-scan.php:1622
+msgid "uploads file, possibly generated by plugin or theme"
+msgstr ""
+"φορτώνει το αρχείο, που δημιουργείται ενδεχομένως από το πρόσθετο ή το "
+"εικαστικό θέμα"
+
+#: class-licensing.php:556
+#, php-format
+msgid "Valid license for %s."
+msgstr "Έγκυρη άδεια χρήσης για το %s."
+
+#: class-licensing.php:520
+#, php-format
+msgid "Valid until %s."
+msgstr "Ισχύει μέχρι %s."
+
+#: class-licensing.php:648
+msgid "Warning"
+msgstr "Προειδοποίηση"
+
+#: class-scan.php:1856
+#, php-format
+msgid "Widget area \"%s\""
+msgstr "Περιοχή μικροεφαρμογών '%s'"
+
+#: class-scan.php:1866
+msgid "Widget with mixed content"
+msgstr "Μικροεφαρμογή με μεικτό περιεχόμενο"
+
+#: class-licensing.php:765
+#| msgid ""
+#| "You are using Really Simple SSL pro single site on a multisite "
+#| "environment. Please install Really Simple SSL multisite networkwide for "
+#| "multisite support."
+msgid ""
+"You are using Really Simple SSL Pro single site on a multisite environment. "
+"Please install Really Simple SSL multisite networkwide for multisite support."
+msgstr ""
+"Χρησιμοποιείτε το Really Simple SSL Pro για μονό ιστότοπο σε περιβάλλον "
+"multisite. Παρακαλώ εγκαταστήστε το Really Simple SSL για περιβάλλον "
+"multisite σε όλο το δίκτυο ώστε να υποστηρίζονται πολλαπλοί ιστότοποι."
+
+#: class-scan.php:1665
+msgid "You can edit the source file manually by pressing the edit button."
+msgstr ""
+"Μπορείτε να επεξεργαστείτε το πηγαίο αρχείο χειροκίνητα πατώντας το κουμπί "
+"'επεξεργασία'."
+
+#: class-licensing.php:532
+#, php-format
+msgid "You can renew your license on your %saccount%s."
+msgstr ""
+"Μπορείτε να ανανεώσετε την άδεια χρήσης σας από τον %sλογαριασμό%s σας."
+
+#: class-licensing.php:715
+#, php-format
+msgid "You can upgrade on your %saccount%s."
+msgstr "Μπορείτε να κάνετε αναβάθμιση από τον %sλογαριασμό σας%s."
+
+#: class-licensing.php:743
+msgid ""
+"You do not have any activations left on your Really Simple SSL Pro license. "
+"Please upgrade your plan for additional activations."
+msgstr ""
+"Δεν έχετε περαιτέρω ενεργοποιήσεις της άδειας χρήσης σας για το Really "
+"Simple SSL Pro. Παρακακαλώ αναβαθμίστε το πλάνο σας για επιπλέον "
+"ενεργοποιήσεις."
+
+#: class-licensing.php:520
+msgid "You have a lifetime license."
+msgstr "Έχετε άδεια χρήσης lifetime."
+
+#: class-scan.php:142
+msgid ""
+"You haven't scanned the site yet, you should scan your site to check for "
+"possible issues."
+msgstr ""
+"Δεν έχετε σαρώσει ακόμα τον ιστότοπο, θα πρέπει να σαρώσετε τον ιστότοπό σας "
+"για να ελέγξετε για πιθανά ζητήματα."
+
+#: class-importer.php:108
+msgid "Your files already were restored."
+msgstr "Τα αρχεία σας έχουν ήδη αποκατασταθεί."
+
+#: class-importer.php:106
+msgid "Your files were restored."
+msgstr "Τα αρχεία σας αποκαταστάθηκαν."
+
+#: class-licensing.php:615
+#, php-format
+msgid ""
+"Your license could not be found in our system. Please contact %ssupport%s."
+msgstr ""
+"Δεν ήταν δυνατή η εύρεση της άδειας χρήσης σας στο σύστημά μας. Παρακαλώ "
+"επικοινωνήστε με την %sυποστήριξη%s."
+
+#: class-licensing.php:609
+#, php-format
+msgid "Your license has been revoked. Please contact %ssupport%s."
+msgstr ""
+"Η άδεια χρήσης σας έχει αρθεί. Παρακαλώ επικοινωνήστε με την %sυποστίριξη%s."
+
+#: class-licensing.php:642
+#, php-format
+msgid ""
+"Your license key has expired. Please renew your license key on your "
+"%saccount%s."
+msgstr ""
+"Το κλειδί άδειας χρήσης σας έχει λήξει. Παρακαλώ ανανεώστε το κλειδί άδειας "
+"χρήσης σας στον %sλογαριασμό σας%s."
+
+#: class-licensing.php:694
+#| msgid "Your Really Simple SSL pro license hasn't been activated."
+msgid "Your Really Simple SSL Pro license hasn't been activated."
+msgstr ""
+"Η άδεια χρήσης σας για το Really Simple SSL Pro δεν έχει ενεργοποιηθεί."
+
+#: class-licensing.php:695
+#| msgid "Your Really Simple SSL pro license is not valid."
+msgid "Your Really Simple SSL Pro license is not valid."
+msgstr "Η άδεια χρήσης σας για το Really Simple SSL Pro δεν είναι έγκυρη."
+
+#: class-licensing.php:722
+msgid ""
+"Your Really Simple SSL Pro license key has expired. Please renew your "
+"license to continue receiving updates and premium support."
+msgstr ""
+"Το κλειδί άδειας χρήσης σας για το Really Simple SSL Pro έχει λήξει. "
+"Παρακαλώ ανανεώστε την άδεια χρήσης σας ώστε να συνεχίσετε να λαμβάνετε "
+"ενημερώσεις και υποστήριξη premium."
+
+#: class-licensing.php:750
+msgid ""
+"Your Really Simple SSL Pro license key hasn't been activated yet. You can "
+"activate your license key on the license tab."
+msgstr ""
+"Το κλειδί άδειας χρήσης Really Simple SSL Pro δεν έχει ενεργοποιηθεί ακόμα. "
+"Μπορείτε να ενεργοποιήσετε το κλειδί άδειας χρήσης στην καρτέλα 'Άδεια'."
+
+#: class-licensing.php:729
+msgid ""
+"Your Really Simple SSL Pro license key is not activated. Please activate "
+"your license to continue receiving updates and premium support."
+msgstr ""
+"Το κλειδί άδειας χρήσης σας για το Really Simple SSL Pro δεν είναι "
+"ενεργοποιημένο. Παρακαλώ ενεργοποιήστε την άδεια χρήσης σας ώστε να "
+"συνεχίσετε να λαμβάνετε ενημερώσεις και υποστήριξη premium."
+
+#: class-headers.php:241
+#, php-format
+msgid ""
+"Your site has been configured for the HSTS preload list. If you have "
+"submitted your site, it will be preloaded. Click %shere%s to submit."
+msgstr ""
+"Ο ιστότοπός σας έχει ρυθμιστεί για τη λίστα προφόρτωσης HSTS. Εάν έχετε "
+"υποβάλλει τον ιστότοπό σας, θα είναι προφορτωμένος. Κάντε κλικ %sεδώ%s για "
+"υποβολή."
+
+#: class-headers.php:254
+msgid "Your site is not configured for HSTS yet."
+msgstr "Ο ιστότοπός σας δεν έχει ρυθμιστεί ακόμα για HSTS."
+
+#: class-headers.php:247
+msgid "Your site is not yet configured for the HSTS preload list."
+msgstr ""
+"Ο ιστότοπός σας δεν έχει ρυθμιστεί ακόμα για τη λίστα προφόρτωσης HSTS."
+
+#: class-admin.php:616
+msgid ""
+"Your site redirects 404 pages to the http:// version of your homepage. This "
+"can cause mixed content issues with images."
+msgstr ""
+"Ο ιστότοπός σας ανακατευθύνει σελίδες 404 στην http:// έκδοση της αρχικής "
+"σελίδας σας. Αυτό μπορεί να προκαλέσει ζητήματα μεικτού περιεχομένου με "
+"εικόνες."
+
+#: class-admin.php:602
+msgid ""
+"Your site uses an outdated version of TLS. Upgrade to TLS 1.2 or TLS 1.3 to "
+"keep your site secure."
+msgstr ""
+"Ο ιστότοπός σας χρησιμοποιεί μια παλιά έκδοση του TLS. Αναβαθμίστε σε TLS 1."
+"2 ή TLS 1.3 για να διατηρήσετε τον ιστότοπό σας ασφαλή."

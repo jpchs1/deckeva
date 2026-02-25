@@ -1,0 +1,1234 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Project-Id-Version: streamlab\n"
+"POT-Creation-Date: 2021-07-27 10:28+0530\n"
+"PO-Revision-Date: 2024-09-04 16:28+0000\n"
+"Last-Translator: \n"
+"Language-Team: Español\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: style.css\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"\n"
+"Report-Msgid-Bugs-To: \n"
+"Language: es_ES\n"
+"X-Loco-Version: 2.6.11; wp-6.6.1"
+
+#: 404.php:34
+msgid "404"
+msgstr ""
+
+#: 404.php:44
+msgid "Oops! This Page is Not Found."
+msgstr ""
+
+#: 404.php:57
+msgid "Please go back to home and try to find out once again."
+msgstr ""
+
+#: 404.php:65
+msgid "Back to Home"
+msgstr ""
+
+#: admin/classes/helper.php:121
+msgid "Click Here"
+msgstr ""
+
+#: admin/classes/helper.php:121
+msgid "The Liecence is not active"
+msgstr ""
+
+#: admin/classes/import/demo-import.php:17
+#: admin/classes/import/demo-import.php:34
+msgid ""
+"After you import this demo, you will have to setup the slider separately."
+msgstr ""
+
+#: admin/classes/panel.php:47
+msgid "Acticate"
+msgstr ""
+
+#: admin/classes/panel.php:48
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2406
+#: admin/dashboard/tpl-activate.php:50
+msgid "Activate"
+msgstr ""
+
+#: admin/classes/panel.php:57 admin/classes/panel.php:58
+msgid "Welcome"
+msgstr ""
+
+#: admin/classes/panel.php:64 admin/classes/panel.php:65
+msgid "Activate Theme"
+msgstr ""
+
+#: admin/classes/panel.php:71 admin/classes/panel.php:72
+msgid "Requirements"
+msgstr ""
+
+#: admin/classes/panel.php:79 admin/classes/panel.php:80
+msgid "Theme Plugins"
+msgstr ""
+
+#: admin/classes/panel.php:87 admin/classes/panel.php:88
+msgid "Help Center"
+msgstr ""
+
+#: admin/classes/styles.php:61 admin/classes/verify.php:84
+msgid "Thank you, your license has been validated"
+msgstr ""
+
+#: admin/classes/styles.php:145
+msgctxt "Jost font: on or off"
+msgid "on"
+msgstr ""
+
+#: admin/classes/styles.php:146
+msgctxt "Roboto font: on or off"
+msgid "on"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:224
+msgid "Install Required Plugins"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:225
+msgid "Install Plugins"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:227
+#, php-format
+msgid "Installing Plugin: %s"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:229
+#, php-format
+msgid "Updating Plugin: %s"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:230
+msgid "Something went wrong with the plugin API."
+msgstr ""
+
+#. translators: 1: plugin name(s).
+#: admin/classes/tgm/class-tgm-plugin-activation.php:233
+#, php-format
+msgid "This theme requires the following plugin: %1$s."
+msgid_plural "This theme requires the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: admin/classes/tgm/class-tgm-plugin-activation.php:239
+#, php-format
+msgid "This theme recommends the following plugin: %1$s."
+msgid_plural "This theme recommends the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: admin/classes/tgm/class-tgm-plugin-activation.php:245
+#, php-format
+msgid ""
+"The following plugin needs to be updated to its latest version to ensure "
+"maximum compatibility with this theme: %1$s."
+msgid_plural ""
+"The following plugins need to be updated to their latest version to ensure "
+"maximum compatibility with this theme: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: admin/classes/tgm/class-tgm-plugin-activation.php:251
+#, php-format
+msgid "There is an update available for: %1$s."
+msgid_plural "There are updates available for the following plugins: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: admin/classes/tgm/class-tgm-plugin-activation.php:257
+#, php-format
+msgid "The following required plugin is currently inactive: %1$s."
+msgid_plural "The following required plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name(s).
+#: admin/classes/tgm/class-tgm-plugin-activation.php:263
+#, php-format
+msgid "The following recommended plugin is currently inactive: %1$s."
+msgid_plural "The following recommended plugins are currently inactive: %1$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:268
+msgid "Begin installing plugin"
+msgid_plural "Begin installing plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:273
+msgid "Begin updating plugin"
+msgid_plural "Begin updating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:278
+msgid "Begin activating plugin"
+msgid_plural "Begin activating plugins"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:282
+msgid "Return to Required Plugins Installer"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:283
+#: admin/classes/tgm/class-tgm-plugin-activation.php:734
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2233
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3123
+msgid "Return to the Dashboard"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:284
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2763
+msgid "Plugin activated successfully."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:285
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2584
+msgid "The following plugin was activated successfully:"
+msgid_plural "The following plugins were activated successfully:"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:287
+#, php-format
+msgid "No action taken. Plugin %1$s was already active."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:289
+#, php-format
+msgid ""
+"Plugin not activated. A higher version of %s is needed for this theme. "
+"Please update the plugin."
+msgstr ""
+
+#. translators: 1: dashboard link.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:291
+#, php-format
+msgid "All plugins installed and activated successfully. %1$s"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:292
+msgid "Dismiss this notice"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:293
+msgid ""
+"There are one or more required or recommended plugins to install, update or "
+"activate."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:294
+msgid "Please contact the administrator of this site for help."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:472
+msgid "This plugin needs to be updated to be compatible with your theme."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:473
+msgid "Update Required"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:825
+msgid ""
+"The remote plugin package does not contain a folder with the desired slug "
+"and renaming did not work."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:825
+#: admin/classes/tgm/class-tgm-plugin-activation.php:828
+msgid ""
+"Please contact the plugin provider and ask them to package their plugin "
+"according to the WordPress guidelines."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:828
+msgid ""
+"The remote plugin package consists of more than one file, but the files are "
+"not packaged in a folder."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:990
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2581
+msgctxt "plugin A *and* plugin B"
+msgid "and"
+msgstr ""
+
+#. translators: %s: version number
+#: admin/classes/tgm/class-tgm-plugin-activation.php:1753
+#, php-format
+msgid "TGMPA v%s"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2007
+msgid "Required"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2009
+msgid "Recommended"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2023
+msgid "WordPress Repository"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2026
+msgid "External Source"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2029
+msgid "Pre-Packaged"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2044
+msgid "Not Installed"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2047
+msgid "Installed But Not Activated"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2049
+msgid "Active"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2053
+msgid "Required Update not Available"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2055
+msgid "Requires Update"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2057
+msgid "Update recommended"
+msgstr ""
+
+#. translators: 1: install status, 2: update status
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2064
+#, php-format
+msgctxt "Install/Update Status"
+msgid "%1$s, %2$s"
+msgstr ""
+
+#. translators: 1: number of plugins.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2103
+#, php-format
+msgctxt "plugins"
+msgid "All <span class=\"count\">(%s)</span>"
+msgid_plural "All <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2107
+#, php-format
+msgid "To Install <span class=\"count\">(%s)</span>"
+msgid_plural "To Install <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2111
+#, php-format
+msgid "Update Available <span class=\"count\">(%s)</span>"
+msgid_plural "Update Available <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of plugins.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2115
+#, php-format
+msgid "To Activate <span class=\"count\">(%s)</span>"
+msgid_plural "To Activate <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2189
+msgctxt "as in: \"version nr unknown\""
+msgid "unknown"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2195
+msgid "Installed version:"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2202
+msgid "Minimum required version:"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2212
+msgid "Available version:"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2233
+msgid "No plugins to install, update or activate."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2246
+msgid "Plugin"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2247
+msgid "Source"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2248
+msgid "Type"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2251
+#: admin/dashboard/tpl-status.php:251
+msgid "Version"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2252
+msgid "Status"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2296
+#, php-format
+msgid "Install %2$s"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2301
+#, php-format
+msgid "Update %2$s"
+msgstr ""
+
+#. translators: %2$s: plugin name in screen reader markup
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2306
+#, php-format
+msgid "Activate %2$s"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2369
+msgid "Upgrade message from the plugin author:"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2398
+msgid "Install"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2403
+msgid "Update"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2431
+msgid "No plugins were selected to be installed. No action taken."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2433
+msgid "No plugins were selected to be updated. No action taken."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2466
+msgid "No plugins are available to be installed at this time."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2468
+msgid "No plugins are available to be updated at this time."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2549
+msgid "No plugins were selected to be activated. No action taken."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2570
+msgid "No plugins are available to be activated at this time."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:2762
+msgid "Plugin activation failed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3050
+#, php-format
+msgid "Updating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#. translators: 1: plugin name, 2: error message.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3053
+#, php-format
+msgid "An error occurred while installing %1$s: <strong>%2$s</strong>."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3055
+#, php-format
+msgid "The installation of %1$s failed."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3058
+msgid ""
+"The installation and activation process is starting. This process may take a "
+"while on some hosts, so please be patient."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3060
+#, php-format
+msgid "%1$s installed and activated successfully."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3060
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3068
+msgid "Show Details"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3060
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3068
+msgid "Hide Details"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3061
+msgid "All installations and activations have been completed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3063
+#, php-format
+msgid "Installing and Activating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3066
+msgid ""
+"The installation process is starting. This process may take a while on some "
+"hosts, so please be patient."
+msgstr ""
+
+#. translators: 1: plugin name.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3068
+#, php-format
+msgid "%1$s installed successfully."
+msgstr ""
+
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3069
+msgid "All installations have been completed."
+msgstr ""
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: admin/classes/tgm/class-tgm-plugin-activation.php:3071
+#, php-format
+msgid "Installing Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:6
+msgid "Advanced Custom Fields"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:11
+msgid "Elementor"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:16
+msgid "Redux Framework"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:22
+msgid "MAS Videos"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:28
+msgid "Paid Member Subscriptions"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:34
+msgid "One Click Demo Import"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:40
+msgid "Contact Form 7"
+msgstr ""
+
+#: admin/classes/tgm/required_plugin.php:45
+msgid "Streamlab Core"
+msgstr ""
+
+#: admin/classes/verify.php:49
+msgid "Please enter a valid field"
+msgstr ""
+
+#: admin/classes/verify.php:57
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: admin/classes/verify.php:63
+msgid "Purchase code is empty "
+msgstr ""
+
+#: admin/classes/verify.php:70
+msgid "Purchase code is Not Valid"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:23
+msgid "Activate your Licence"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:26
+#, php-format
+msgid "Welcome and thank you for Choosing %s Theme!"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:28
+#, php-format
+msgid ""
+"The %s theme needs to be activated to enable all features, import demo and "
+"Support."
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:33
+msgid "How to find purchase code?"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:37 admin/dashboard/tpl-activate.php:38
+msgid "E-mail address"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:41 admin/dashboard/tpl-activate.php:42
+msgid "Enter Your Purchase Code"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:62
+msgid "Thank you!"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:65
+msgid "Your theme's license is activated successfully."
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:74
+msgid "Deactivate"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:82
+msgid "Important Note:"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:85
+msgid ""
+"The purchase code is valid only for two domains. One for devlopment and "
+"other for production."
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:87
+msgid ""
+"If you want to use purchase code on third domain then you have to deactivate "
+"one domain."
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:90
+msgid "If you want to buy more license then follow the link:"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:96 admin/dashboard/tpl-plugins.php:55
+#: admin/dashboard/tpl-status.php:292
+msgid "Prev Step"
+msgstr ""
+
+#: admin/dashboard/tpl-activate.php:99 admin/dashboard/tpl-plugins.php:58
+#: admin/dashboard/tpl-status.php:295 admin/dashboard/tpl-weclome.php:71
+msgid "Next Step"
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:30
+msgid "Need Help?"
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:35
+msgid ""
+"Please read a <a target=\"_blank\" href=\"https://themeforest."
+"net/page/item_support_policy\">Support Policy</a> before submitting a ticket "
+"and make sure that your question related to our product issues."
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:39
+msgid ""
+"If you did not find an answer to your question, feel free to contact us."
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:57
+msgid "Documentation"
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:64
+msgid ""
+"please read the documentation. All functionality will mension here to "
+"resolved you issues."
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:71
+msgid "Visit Documentation"
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:94
+msgid "Support Mail"
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:101
+msgid ""
+"If your query not solved., submit a ticket with well describe your issue."
+msgstr ""
+
+#: admin/dashboard/tpl-helper.php:110
+msgid "Create a ticket"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:61
+msgid "Server Info"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:66
+msgid "PHP Version"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:77
+msgid "- We recommend a minimum PHP version of "
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:91
+msgid "PHP Post Max Size"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:103 admin/dashboard/tpl-status.php:129
+msgid " How you can change this"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:111
+msgid "PHP Max Execution Time Limit"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:123
+msgid "- We recommend setting max execution time to at least "
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:144
+msgid "PHP Max Input Time"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:155
+msgid "- We recommend setting max input time to at least "
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:161 admin/dashboard/tpl-status.php:192
+msgid " How you can change this."
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:176
+msgid "PHP Max Input Vars"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:187
+#, php-format
+msgid ""
+". We recommend minimum value: %d. Max input vars limitation will truncate "
+"POST data such as menus."
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:207
+msgid "MySql Version"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:211
+msgid "Max upload size"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:221
+msgid ". We recommend minimum value: 128 MB."
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:226 admin/dashboard/tpl-status.php:271
+msgid " To see how you can change this please check this guide"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:245
+msgid "WordPress Info"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:255
+msgid "Memory Limit"
+msgstr ""
+
+#: admin/dashboard/tpl-status.php:266
+msgid " .We recommend setting memory to be at least 128MB."
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:29
+msgid "Welcome to the setup for"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:36
+msgid ""
+"It looks like you may have recently upgraded to this theme. Great! This "
+"setup  will help ensure all the default settings are correct. It will also "
+"show some information about your new website and support options"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:42
+msgid "Step 1"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:44
+msgid "Activate your license."
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:47
+msgid "Important:"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:49
+msgid "one license  only for one website"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:54
+msgid "Step 2"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:63
+msgid "Step 3"
+msgstr ""
+
+#: admin/dashboard/tpl-weclome.php:65
+msgid "Install Required and recommended plugins."
+msgstr ""
+
+#: comments.php:34
+msgid "Comment"
+msgstr ""
+
+#: comments.php:45
+msgid "Previous"
+msgstr ""
+
+#: comments.php:46
+msgid "Next"
+msgstr ""
+
+#: comments.php:51
+msgid "Comments are closed."
+msgstr ""
+
+#: comments.php:58
+msgid "Post comment"
+msgstr ""
+
+#: comments.php:60
+msgid "Write a Reply or Comment"
+msgstr ""
+
+#: comments.php:65
+msgid "Enter Your Comment"
+msgstr ""
+
+#: header.php:51
+msgid "Skip to content"
+msgstr ""
+
+#: image.php:20
+msgid "Previous Image"
+msgstr ""
+
+#: image.php:21
+msgid "Next Image"
+msgstr ""
+
+#: image.php:46 template-parts/page/content-page.php:20
+#: template-parts/post/content-audio.php:89
+#: template-parts/post/content-excerpt.php:81
+#: template-parts/post/content-gallery.php:85
+#: template-parts/post/content-image.php:81
+#: template-parts/post/content-video.php:98 template-parts/post/content.php:106
+msgid "Pages:"
+msgstr ""
+
+#: image.php:50 inc/theme-helper.php:201
+msgid "Page"
+msgstr ""
+
+#: image.php:64
+msgctxt "Used before full size attachment link."
+msgid "Full size"
+msgstr ""
+
+#. translators: %s: Name of current post
+#: image.php:75
+#, php-format
+msgid "Edit<span class=\"screen-reader-text\"> \"%s\"</span>"
+msgstr ""
+
+#: image.php:92
+msgctxt "Parent post link"
+msgid ""
+"<span class=\"meta-nav\">Published in</span><span class=\"post-title\">"
+"%title</span>"
+msgstr ""
+
+#: inc/back-compat.php:37 inc/back-compat.php:49 inc/back-compat.php:66
+#, php-format
+msgid ""
+"streamlab requires at least WordPress version 4.4. You are running version "
+"%s. Please upgrade and try again."
+msgstr ""
+
+#: inc/classes/load-more.php:90 inc/classes/load-more.php:119
+msgid "Load More"
+msgstr ""
+
+#: inc/classes/options.php:287
+msgid "Social Share :"
+msgstr ""
+
+#: inc/classes/options.php:390
+msgid "More Like This"
+msgstr ""
+
+#: inc/classes/options.php:510
+msgid "login"
+msgstr ""
+
+#: inc/classes/options.php:515
+msgid "Register"
+msgstr ""
+
+#: inc/classes/options.php:525
+msgid "My Account"
+msgstr ""
+
+#: inc/classes/options.php:540
+msgid "Library"
+msgstr ""
+
+#: inc/classes/options.php:546
+msgid "Movie Playlist"
+msgstr ""
+
+#: inc/classes/options.php:552
+msgid "Tv Show Playlist"
+msgstr ""
+
+#: inc/classes/options.php:558
+msgid "Video Playlist"
+msgstr ""
+
+#: inc/classes/options.php:569
+msgid "Upload Video"
+msgstr ""
+
+#: inc/classes/options.php:806
+msgid "search.."
+msgstr ""
+
+#: inc/classes/options.php:910 template-parts/tv_show/content-style-1.php:40
+#: template-parts/tv_show/content-style-2.php:40
+#: template-parts/tv_show/content-style-3.php:40
+msgid " Seasons"
+msgstr ""
+
+#: inc/classes/options.php:914 template-parts/tv_show/content-style-1.php:44
+#: template-parts/tv_show/content-style-2.php:44
+#: template-parts/tv_show/content-style-3.php:44
+msgid " Season"
+msgstr ""
+
+#: inc/classes/options.php:921 template-parts/tv_show/content-style-1.php:51
+#: template-parts/tv_show/content-style-2.php:51
+#: template-parts/tv_show/content-style-3.php:51
+msgid " Episodes"
+msgstr ""
+
+#: inc/classes/options.php:925 template-parts/tv_show/content-style-1.php:55
+#: template-parts/tv_show/content-style-2.php:55
+#: template-parts/tv_show/content-style-3.php:55
+msgid " Episode"
+msgstr ""
+
+#: inc/classes/options.php:988
+msgid "No movies were found matching your selection."
+msgstr ""
+
+#: inc/classes/options.php:1001
+msgid "No tv shows were found matching your selection."
+msgstr ""
+
+#: inc/classes/options.php:1014
+msgid "No video were found matching your selection."
+msgstr ""
+
+#: inc/customizer/theme-functions.php:14 inc/customizer/theme-functions.php:38
+msgid "loading"
+msgstr ""
+
+#. Theme Name of the plugin/theme
+#: inc/customizer/theme-functions.php:58 inc/customizer/theme-functions.php:87
+msgid "streamlab"
+msgstr ""
+
+#: inc/theme-helper.php:46 inc/theme-helper.php:95
+msgid "Home"
+msgstr ""
+
+#: inc/theme-helper.php:67
+#, php-format
+msgid "Daily Archives: %s"
+msgstr ""
+
+#: inc/theme-helper.php:70
+#, php-format
+msgid "Monthly Archives: %s"
+msgstr ""
+
+#: inc/theme-helper.php:73
+#, php-format
+msgid "Yearly Archives: %s"
+msgstr ""
+
+#: inc/theme-helper.php:77
+#, php-format
+msgid "Author Archives: %s"
+msgstr ""
+
+#: inc/theme-helper.php:84
+#, php-format
+msgid "Search Results for %s"
+msgstr ""
+
+#: inc/theme-helper.php:87
+msgid "Page Not Found"
+msgstr ""
+
+#: inc/theme-helper.php:110
+msgid "Blogs"
+msgstr ""
+
+#: inc/theme-helper.php:114
+msgid "Archive by category : "
+msgstr ""
+
+#: inc/theme-helper.php:117
+msgid "Search results for : "
+msgstr ""
+
+#: inc/theme-helper.php:188
+msgid "Posts tagged"
+msgstr ""
+
+#: inc/theme-helper.php:193
+msgid "Articles posted by : "
+msgstr ""
+
+#: inc/theme-helper.php:196
+msgid "Error 404"
+msgstr ""
+
+#: inc/theme-helper.php:209
+msgid "Please define default parameters in the form of an array."
+msgstr ""
+
+#: inc/theme-helper.php:212
+msgid "Please define an SVG icon filename."
+msgstr ""
+
+#: inc/theme-helper.php:263
+msgid "Previous page"
+msgstr ""
+
+#: inc/theme-helper.php:264
+msgid "Next page"
+msgstr ""
+
+#: inc/theme-helper.php:276
+#, php-format
+msgid "%s"
+msgstr ""
+
+#: inc/theme-helper.php:299
+msgid "Pingback:"
+msgstr ""
+
+#: inc/theme-helper.php:299
+msgid "(Edit)"
+msgstr ""
+
+#: inc/theme-helper.php:318
+msgid "Edit"
+msgstr ""
+
+#: inc/theme-helper.php:321
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: inc/theme-helper.php:363 inc/theme-helper.php:387
+msgid " View"
+msgstr ""
+
+#: inc/theme-helper.php:367 inc/theme-helper.php:391
+msgid " Views"
+msgstr ""
+
+#: inc/theme-helper.php:374 inc/theme-helper.php:398
+msgid "0 Views"
+msgstr ""
+
+#: inc/theme-setup.php:70
+msgid "Primary"
+msgstr ""
+
+#: inc/theme-setup.php:71
+msgid "Social Links Menu"
+msgstr ""
+
+#: inc/theme-setup.php:72
+msgid "Sidebar Menu"
+msgstr ""
+
+#: inc/theme-setup.php:83
+msgid "Sidebar"
+msgstr ""
+
+#: inc/theme-setup.php:85
+msgid ""
+"Add widgets here to appear in your sidebar on blog posts and archive pages."
+msgstr ""
+
+#: inc/theme-setup.php:93
+msgid "Footer  1"
+msgstr ""
+
+#: inc/theme-setup.php:103
+msgid "Footer  2"
+msgstr ""
+
+#: inc/theme-setup.php:113
+msgid "Footer  3"
+msgstr ""
+
+#: inc/theme-setup.php:123
+msgid "Footer  4"
+msgstr ""
+
+#: inc/theme-setup.php:144
+msgid "Movie sidebar"
+msgstr ""
+
+#: inc/theme-setup.php:154
+msgid "Tv shows sidebar"
+msgstr ""
+
+#: inc/theme-setup.php:163
+msgid "Video sidebar"
+msgstr ""
+
+#: inc/theme-setup.php:188
+msgid "* Enter Name"
+msgstr ""
+
+#: inc/theme-setup.php:190
+msgid "* Enter Email"
+msgstr ""
+
+#: inc/theme-setup.php:192
+msgid "Enter Url"
+msgstr ""
+
+#: inc/theme-setup.php:293
+msgid ", "
+msgstr ""
+
+#: inc/theme-setup.php:302
+msgid "Tags"
+msgstr ""
+
+#: searchform.php:13
+msgctxt "label"
+msgid "Search for:"
+msgstr ""
+
+#: searchform.php:14
+msgctxt "placeholder"
+msgid "Search &hellip;"
+msgstr ""
+
+#: searchform.php:16
+msgctxt "submit button"
+msgid "Search"
+msgstr ""
+
+#: template-parts/footer/footer-subscribe.php:20
+msgid "streamlab-subscribe-image"
+msgstr ""
+
+#: template-parts/footer/site-info.php:27
+msgid "https://themeforest.net/user/gentechtree/portfolio"
+msgstr ""
+
+#: template-parts/footer/site-info.php:27
+#, php-format
+msgid "Proudly powered by %s"
+msgstr ""
+
+#: template-parts/post/content-none.php:5
+#, php-format
+msgid ""
+"Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: template-parts/post/content-none.php:7
+msgid ""
+"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
+"searching can help."
+msgstr ""
+
+#: template-parts/post/content.php:45
+msgid "Featured"
+msgstr ""
+
+#. Theme URI of the plugin/theme
+msgid "https://gentechtree.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Streamlab is a powerful WordPress theme for Video Streaming platforms. It is "
+"a sleek and clean looking dashboard and front-end. With some unique features "
+"and stunning UI/UX elements, Streamlab template is a perfect package for any "
+"media or video, movie, show streaming related web applications."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Gentechtree"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://gentechtree.com/wp-themes/streamlab/"
+msgstr ""

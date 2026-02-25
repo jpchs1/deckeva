@@ -1,0 +1,468 @@
+# Translation of Plugins - Flamingo - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Flamingo - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-05-19 09:08:14+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
+"Language: es\n"
+"Project-Id-Version: Plugins - Flamingo - Stable (latest release)\n"
+
+#. Author URI of the plugin
+msgid "https://ideasilo.wordpress.com/"
+msgstr "https://ideasilo.wordpress.com/"
+
+#: includes/class-contact.php:168 includes/class-inbound-message.php:234
+msgid "Flamingo 2.2"
+msgstr "Flamingo 2.2"
+
+#. translators: 1: Property, 2: Version, 3: Class, 4: Method.
+#: includes/class-contact.php:161 includes/class-inbound-message.php:227
+msgid "The visibility of the %1$s property has been changed in %2$s. Now the property may only be accessed by the %3$s class. You can use the %4$s method instead."
+msgstr "La visibilidad de la propiedad %1$s ha sido cambiada en %2$s. Ahora, solo se puede acceder a la propiedad por la clase %3$s. En su lugar, puedes usar el método %4$s."
+
+#. translators: %s: Result of the submission.
+#: admin/includes/meta-boxes.php:154
+msgid "Submission result: %s"
+msgstr "Resultado del envío: %s"
+
+#. translators: Publish box time format, see https://www.php.net/date
+#: admin/includes/meta-boxes.php:135
+msgctxt "publish box time format"
+msgid "H:i"
+msgstr "H:i"
+
+#. translators: Publish box date format, see https://www.php.net/date
+#: admin/includes/meta-boxes.php:130
+msgctxt "publish box date format"
+msgid "M j, Y"
+msgstr "j M Y"
+
+#. translators: time format, see https://www.php.net/date
+#: admin/includes/class-contacts-list-table.php:353
+#: admin/includes/class-inbound-messages-list-table.php:456
+msgid "g:i a"
+msgstr "H:i"
+
+#. translators: 1: date, 2: time
+#. translators: Publish box date string. 1: Date, 2: Time.
+#: admin/includes/class-contacts-list-table.php:349
+#: admin/includes/class-inbound-messages-list-table.php:452
+#: admin/includes/meta-boxes.php:127
+msgid "%1$s at %2$s"
+msgstr "%1$s a las %2$s"
+
+#: includes/csv.php:230
+msgid "https://contactform7.com/heads-up-about-spreadsheet-vulnerabilities"
+msgstr "https://contactform7.com/heads-up-about-spreadsheet-vulnerabilities"
+
+#. translators: %s: URL
+#: includes/csv.php:222
+msgid "(Security Alert: Suspicious content is detected. See %s for details.)"
+msgstr "(Alerta de seguridad: Se ha detectado contenido sospechoso. Ver %s para más detalles.)"
+
+#. translators: %s: WordPress user name
+#: includes/class-inbound-message.php:401
+msgid "%s has marked this message as spam."
+msgstr "%s ha marcado este mensaje como spam."
+
+#: includes/class-inbound-message.php:390
+msgid "Unknown"
+msgstr "Desconocido"
+
+#. translators: %s: reason why this message is regarded as spam
+#: admin/includes/meta-boxes.php:178
+msgid "Spam log: %s"
+msgstr "Registro de spam: %s"
+
+#: admin/admin.php:643
+msgid "reCAPTCHA"
+msgstr "reCAPTCHA"
+
+#: admin/includes/privacy.php:99
+msgid "Flamingo Inbound Messages: You are not allowed to delete inbound messages."
+msgstr "Mensajes entrantes de Flamingo: No tienes permisos para borrar mensajes entrantes."
+
+#: admin/includes/privacy.php:53
+msgid "Flamingo Address Book: You are not allowed to delete contact data."
+msgstr "Libreta de direcciones Flamingo: No tienes permisos para borrar datos de contactos."
+
+#: admin/includes/meta-boxes.php:231
+msgid "Update"
+msgstr "Actualizar"
+
+#. translators: %s: message submission date
+#: admin/includes/meta-boxes.php:142
+msgid "Submitted on: %s"
+msgstr "Enviado el: %s"
+
+#: admin/includes/meta-boxes.php:115
+msgid "Inbound message status"
+msgstr "Estado de mensaje entrante"
+
+#: admin/includes/class-inbound-messages-list-table.php:338
+msgid "View"
+msgstr "Ver"
+
+#: admin/admin.php:637
+msgid "Consent"
+msgstr "Consentimiento"
+
+#: admin/admin.php:626
+msgid "Status"
+msgstr "Estado"
+
+#. Description of the plugin
+msgid "A trustworthy message storage plugin for Contact Form 7."
+msgstr "Un plugin fiable para almacenar los mensajes de Contact Form 7. "
+
+#: admin/admin.php:649
+msgid "Meta"
+msgstr "Meta"
+
+#. Author of the plugin
+msgid "Takayuki Miyoshi"
+msgstr "Takayuki Miyoshi"
+
+#: includes/class-inbound-message.php:252
+msgid "(No Title)"
+msgstr "(Sin título)"
+
+#: includes/class-inbound-message.php:49
+msgid "Flamingo Inbound Message Channel"
+msgstr "Canal de mensaje entrante de Flamingo"
+
+#: includes/class-inbound-message.php:48
+msgid "Flamingo Inbound Message Channels"
+msgstr "Canales de mensajes entrantes de Flamingo"
+
+#: includes/class-inbound-message.php:32
+msgid "Flamingo Inbound Message"
+msgstr "Mensaje entrante de Flamingo"
+
+#: includes/class-contact.php:30
+msgid "Flamingo Contact Tag"
+msgstr "Etiqueta de contacto de Flamingo"
+
+#: includes/class-contact.php:29
+msgid "Flamingo Contact Tags"
+msgstr "Etiquetas de contactos de Flamingo"
+
+#: includes/class-contact.php:21
+msgid "Flamingo Contact"
+msgstr "Contacto de Flamingo"
+
+#: includes/class-contact.php:20
+msgid "Flamingo Contacts"
+msgstr "Contactos de Flamingo"
+
+#: admin/includes/meta-boxes.php:84
+msgid "Choose from the most used tags"
+msgstr "Elegir desde las etiquetas más utilizadas"
+
+#: admin/includes/meta-boxes.php:81
+msgid "Separate tags with commas"
+msgstr "Separar etiquetas con comas"
+
+#: admin/includes/meta-boxes.php:34
+msgid "Add contact"
+msgstr "Añadir un contacto"
+
+#: admin/includes/meta-boxes.php:32
+msgid "Update contact"
+msgstr "Actualizar el contacto"
+
+#: admin/includes/meta-boxes.php:26
+msgid ""
+"You are about to delete this contact '%s'\n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+"Estás a punto de borrar el contacto «%s»\n"
+" «Cancelar» para detener, «Aceptar» para borrar."
+
+#: admin/includes/class-inbound-messages-list-table.php:378
+#: admin/includes/meta-boxes.php:116 includes/class-inbound-message.php:39
+msgid "Spam"
+msgstr "Spam"
+
+#: admin/includes/class-inbound-messages-list-table.php:268
+msgid "Empty trash"
+msgstr "Vaciar la papelera"
+
+#: admin/includes/class-inbound-messages-list-table.php:248
+msgid "View all channels"
+msgstr "Ver todos los canales"
+
+#: admin/includes/class-inbound-messages-list-table.php:211
+msgid "Mark as spam"
+msgstr "Marcar como spam"
+
+#: admin/includes/class-inbound-messages-list-table.php:209
+#: admin/includes/class-inbound-messages-list-table.php:358
+#: admin/includes/meta-boxes.php:117
+msgid "Not spam"
+msgstr "No es spam"
+
+#: admin/includes/class-inbound-messages-list-table.php:205
+#: admin/includes/meta-boxes.php:205
+msgid "Move to trash"
+msgstr "Mover a la papelera"
+
+#: admin/includes/class-inbound-messages-list-table.php:203
+#: admin/includes/meta-boxes.php:203
+msgid "Delete permanently"
+msgstr "Borrar permanentemente"
+
+#: admin/includes/class-inbound-messages-list-table.php:199
+msgid "Restore"
+msgstr "Restaurar"
+
+#: admin/includes/class-inbound-messages-list-table.php:161
+msgctxt "posts"
+msgid "Trash <span class=\"count\">(%s)</span>"
+msgid_plural "Trash <span class=\"count\">(%s)</span>"
+msgstr[0] "Papelera <span class=\"count\">(%s)</span>"
+msgstr[1] "Papelera <span class=\"count\">(%s)</span>"
+
+#: admin/includes/class-inbound-messages-list-table.php:132
+msgctxt "posts"
+msgid "Spam <span class=\"count\">(%s)</span>"
+msgid_plural "Spam <span class=\"count\">(%s)</span>"
+msgstr[0] "Spam <span class=\"count\">(%s)</span>"
+msgstr[1] "Spam <span class=\"count\">(%s)</span>"
+
+#: admin/includes/class-inbound-messages-list-table.php:113
+msgctxt "posts"
+msgid "Inbox <span class=\"count\">(%s)</span>"
+msgid_plural "Inbox <span class=\"count\">(%s)</span>"
+msgstr[0] "Bandeja de entrada <span class=\"count\">(%s)</span>"
+msgstr[1] "Bandeja de entrada <span class=\"count\">(%s)</span>"
+
+#: admin/includes/class-inbound-messages-list-table.php:17
+msgid "Channel"
+msgstr "Canal"
+
+#. translators: date format, see https://www.php.net/date
+#: admin/includes/class-contacts-list-table.php:351
+#: admin/includes/class-inbound-messages-list-table.php:454
+msgid "Y/m/d"
+msgstr "Y/m/d"
+
+#. translators: 1: contact channel name, 2: contact count
+#: admin/includes/class-contacts-list-table.php:313
+msgctxt "contact history"
+msgid "%1$s (%2$d)"
+msgstr "%1$s (%2$d)"
+
+#: admin/includes/class-contacts-list-table.php:278
+msgid "Comment (%d)"
+msgstr "Comentario (%d)"
+
+#: admin/includes/class-contacts-list-table.php:259
+msgid "User"
+msgstr "Usuario"
+
+#: admin/includes/class-contacts-list-table.php:216
+msgid "No tags"
+msgstr "Sin etiquetas"
+
+#: admin/includes/class-contacts-list-table.php:171
+#: admin/includes/class-inbound-messages-list-table.php:308
+msgid "Edit &#8220;%s&#8221;"
+msgstr "Editar &#171;%s&#187;"
+
+#: admin/includes/class-contacts-list-table.php:203
+msgid "Edit"
+msgstr "Editar"
+
+#: admin/includes/class-contacts-list-table.php:136
+#: admin/includes/class-inbound-messages-list-table.php:261
+msgid "Export"
+msgstr "Exportar"
+
+#: admin/includes/class-contacts-list-table.php:131
+#: admin/includes/class-inbound-messages-list-table.php:257
+msgid "Filter"
+msgstr "Filtro"
+
+#: admin/includes/class-contacts-list-table.php:123
+msgid "View all tags"
+msgstr "Ver todas las etiquetas"
+
+#: admin/includes/class-contacts-list-table.php:95
+#: admin/includes/meta-boxes.php:11
+msgid "Delete"
+msgstr "Borrar"
+
+#: admin/includes/class-contacts-list-table.php:16
+msgid "Last contact"
+msgstr "Último contacto"
+
+#: admin/includes/class-contacts-list-table.php:15
+msgid "History"
+msgstr "Historial"
+
+#: admin/edit-inbound-form.php:41
+#: admin/includes/class-inbound-messages-list-table.php:16
+msgid "From"
+msgstr "De"
+
+#: admin/edit-inbound-form.php:36
+#: admin/includes/class-inbound-messages-list-table.php:15
+msgid "Subject"
+msgstr "Asunto"
+
+#: admin/edit-inbound-form.php:17
+msgid "Inbound Message"
+msgstr "Mensaje entrante"
+
+#: admin/edit-contact-form.php:37
+msgid "Enter email here"
+msgstr "Introduce el correo electrónico aquí"
+
+#: admin/edit-contact-form.php:17
+msgid "Edit Contact"
+msgstr "Editar contacto"
+
+#: admin/admin.php:706
+msgid "Search messages"
+msgstr "Buscar mensajes"
+
+#: admin/admin.php:631
+msgid "Fields"
+msgstr "Campos"
+
+#: admin/includes/class-inbound-messages-list-table.php:18 includes/csv.php:149
+msgid "Date"
+msgstr "Fecha"
+
+#: admin/admin.php:574
+msgid "You are not allowed to unspam this item."
+msgstr "No tienes permisos para marcar este elemento como no spam."
+
+#: admin/admin.php:533
+msgid "You are not allowed to spam this item."
+msgstr "No tienes permisos para marcar este elemento como spam."
+
+#: admin/admin.php:443
+msgid "Error in restoring from Trash."
+msgstr "Error restaurando desde la papelera."
+
+#: admin/admin.php:439
+msgid "You are not allowed to restore this item from the Trash."
+msgstr "No tienes permiso para restaurar este elemento de la papelera."
+
+#: admin/admin.php:400
+msgid "Error in moving to Trash."
+msgstr "Error moviendo a la papelera."
+
+#: admin/admin.php:396
+msgid "You are not allowed to move this item to the Trash."
+msgstr "No tienes permiso para mover este elemento a la papelera."
+
+#: admin/admin.php:308
+msgid "Search contacts"
+msgstr "Buscar contactos"
+
+#: admin/admin.php:297 admin/admin.php:692
+msgid "Search results for &#8220;%s&#8221;"
+msgstr "Resultados de la búsqueda de &#171;%s&#187;"
+
+#: admin/admin.php:254 admin/includes/class-contacts-list-table.php:13
+msgid "Name"
+msgstr "Nombre"
+
+#: admin/admin.php:250 admin/includes/class-contacts-list-table.php:14
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: admin/admin.php:246
+msgid "Save"
+msgstr "Guardar"
+
+#: admin/includes/meta-boxes.php:257 includes/csv.php:40
+msgid "Last name"
+msgstr "Apellidos"
+
+#: admin/includes/meta-boxes.php:252 includes/csv.php:39
+msgid "First name"
+msgstr "Nombre"
+
+#: admin/includes/meta-boxes.php:247 includes/csv.php:38
+msgid "Full name"
+msgstr "Nombre completo"
+
+#: admin/includes/class-contacts-list-table.php:12 includes/csv.php:37
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: admin/admin.php:201 admin/admin.php:495
+msgid "Error in deleting."
+msgstr "Error al borrar."
+
+#: admin/admin.php:197 admin/admin.php:491
+msgid "You are not allowed to delete this item."
+msgstr "No tienes permiso para borrar este elemento."
+
+#: admin/admin.php:152 admin/admin.php:243 admin/admin.php:349
+#: admin/admin.php:621
+msgid "You are not allowed to edit this item."
+msgstr "No tienes permiso para editar este elemento."
+
+#: admin/admin.php:119
+msgid "Messages updated."
+msgstr "Mensajes actualizados."
+
+#: admin/admin.php:129
+msgid "Messages got marked as not spam."
+msgstr "Mensajes marcados como no spam."
+
+#: admin/admin.php:127
+msgid "Messages got marked as spam."
+msgstr "Mensajes marcados como spam."
+
+#: admin/admin.php:125
+msgid "Messages deleted."
+msgstr "Mensajes borrados."
+
+#: admin/admin.php:123
+msgid "Messages restored."
+msgstr "Mensajes restaurados."
+
+#: admin/admin.php:121
+msgid "Messages trashed."
+msgstr "Mensajes eliminados."
+
+#: admin/admin.php:117
+msgid "Contact deleted."
+msgstr "Contacto borrado."
+
+#: admin/admin.php:115
+msgid "Contact updated."
+msgstr "Contacto actualizado."
+
+#: admin/admin.php:37 admin/admin.php:686
+msgid "Inbound Messages"
+msgstr "Mensajes entrantes"
+
+#: admin/admin.php:36 admin/includes/privacy.php:24
+#: includes/class-inbound-message.php:31
+msgid "Flamingo Inbound Messages"
+msgstr "Mensajes entrantes de Flamingo"
+
+#: admin/admin.php:22
+msgid "Address Book"
+msgstr "Libreta de direcciones"
+
+#. Plugin Name of the plugin
+#: admin/admin.php:11
+msgid "Flamingo"
+msgstr "Flamingo"
+
+#: admin/admin.php:10 admin/admin.php:21 admin/admin.php:291
+#: admin/includes/privacy.php:20
+msgid "Flamingo Address Book"
+msgstr "Libreta de direcciones de Flamingo"
