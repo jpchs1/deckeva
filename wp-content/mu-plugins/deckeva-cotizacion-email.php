@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Deckeva - Email Automático de Cotización
  * Description: Envía un email de cotización formal al usuario y una notificación al admin cuando se completa el formulario de precio (CF7 ID 1031).
- * Version: 1.1
+ * Version: 1.4
  * Author: Deckeva
  */
 
@@ -109,6 +109,29 @@ function deckeva_clear_price_cache($contact_form) {
  */
 add_action('wpcf7_mail_sent', 'deckeva_send_cotizacion_emails');
 
+function deckeva_log($msg) {
+    error_log('[Deckeva Cotizacion] ' . $msg);
+}
+
+/**
+ * Extrae un campo de CF7 de forma segura.
+ * CF7 puede devolver arrays para selects, checkboxes, etc.
+ */
+function deckeva_get_field_raw($data, $key) {
+    if (!isset($data[$key])) {
+        return '';
+    }
+    $val = $data[$key];
+    if (is_array($val)) {
+        return isset($val[0]) ? $val[0] : '';
+    }
+    return $val;
+}
+
+function deckeva_get_field($data, $key) {
+    return sanitize_text_field(deckeva_get_field_raw($data, $key));
+}
+
 function deckeva_send_cotizacion_emails($contact_form) {
     // Solo actuar en el formulario de cotización (ID 1031)
     if ($contact_form->id() != 1031) {
@@ -122,16 +145,16 @@ function deckeva_send_cotizacion_emails($contact_form) {
 
     $data = $submission->get_posted_data();
 
-    // Extraer campos
-    $nombre    = isset($data['your-name']) ? sanitize_text_field($data['your-name']) : '';
-    $apellido  = isset($data['your-lastname']) ? sanitize_text_field($data['your-lastname']) : '';
-    $email     = isset($data['your-email']) ? sanitize_email($data['your-email']) : '';
-    $telefono  = isset($data['your-tel']) ? sanitize_text_field($data['your-tel']) : '';
-    $tamano    = isset($data['menu-size']) ? sanitize_text_field($data['menu-size']) : '';
-    $marca     = isset($data['lancha-marca']) ? sanitize_text_field($data['lancha-marca']) : '';
-    $modelo    = isset($data['lancha-modelo']) ? sanitize_text_field($data['lancha-modelo']) : '';
-    $year      = isset($data['lancha-year']) ? sanitize_text_field($data['lancha-year']) : '';
-    $color     = isset($data['lancha-color']) ? sanitize_text_field($data['lancha-color']) : '';
+    // Extraer campos (CF7 puede devolver arrays para selects y checkboxes)
+    $nombre    = deckeva_get_field($data, 'your-name');
+    $apellido  = deckeva_get_field($data, 'your-lastname');
+    $email     = isset($data['your-email']) ? sanitize_email(deckeva_get_field_raw($data, 'your-email')) : '';
+    $telefono  = deckeva_get_field($data, 'your-tel');
+    $tamano    = deckeva_get_field($data, 'menu-size');
+    $marca     = deckeva_get_field($data, 'lancha-marca');
+    $modelo    = deckeva_get_field($data, 'lancha-modelo');
+    $year      = deckeva_get_field($data, 'lancha-year');
+    $color     = deckeva_get_field($data, 'lancha-color');
 
     // Obtener precio
     $price_map = deckeva_get_price_map();
@@ -151,14 +174,20 @@ function deckeva_send_cotizacion_emails($contact_form) {
     if (!empty($email)) {
         $asunto_cliente = "Cotización Formal Deckeva - Piso para tu " . ($marca ? $marca : 'Lancha') . " " . $modelo . " | N° " . $numero_cotizacion;
         $body_cliente   = deckeva_build_client_email($nombre, $nombre_completo, $tamano, $marca, $modelo, $year, $color, $precio, $numero_cotizacion, $fecha);
-        wp_mail($email, $asunto_cliente, $body_cliente, $headers);
+        $sent_cliente = wp_mail($email, $asunto_cliente, $body_cliente, $headers);
+        if (!$sent_cliente) {
+            deckeva_log('Client email FAILED for ' . $email);
+        }
     }
 
     // ─── EMAIL AL ADMIN ───
     $admin_email   = get_option('admin_email');
     $asunto_admin  = "Nueva Cotización Deckeva N° " . $numero_cotizacion . " - " . $nombre_completo;
     $body_admin    = deckeva_build_admin_email($nombre_completo, $email, $telefono, $tamano, $marca, $modelo, $year, $color, $precio, $numero_cotizacion, $fecha);
-    wp_mail($admin_email, $asunto_admin, $body_admin, $headers);
+    $sent_admin = wp_mail($admin_email, $asunto_admin, $body_admin, $headers);
+    if (!$sent_admin) {
+        deckeva_log('Admin email FAILED for ' . $admin_email);
+    }
 }
 
 /**
