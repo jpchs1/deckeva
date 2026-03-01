@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) exit;
 
 /**
  * Obtiene el mapa de precios dinámicamente desde el contenido del formulario CF7 (ID 1031).
- * Parsea el HTML del formulario para extraer los precios de los grupos condicionales.
+ * Parsea los shortcodes [group] del formulario para extraer los precios de los grupos condicionales.
  * De esta forma, si se actualizan los precios en el formulario, el email siempre refleja los mismos valores.
  */
 function deckeva_get_price_map() {
@@ -27,12 +27,20 @@ function deckeva_get_price_map() {
     if ($form_post && $form_post->post_type === 'wpcf7_contact_form') {
         $form_content = $form_post->post_content;
 
-        // Buscar los grupos condicionales con precios: data-id="pies-XX" ... <p>CLP XXX + IVA</p>
-        // También captura el grupo "Otro"
-        if (preg_match_all('/data-id=["\']([^"\']+)["\'][^>]*>\s*<p>([^<]+)<\/p>/i', $form_content, $matches, PREG_SET_ORDER)) {
+        // CF7 Conditional Fields almacena los grupos como shortcodes:
+        // [group pies-14]CLP 626.988 + IVA[/group]
+        // [group Otro]CLP 123.123 + IVA[/group]
+        // Buscamos ese patrón para extraer data-id y precio dinámicamente.
+        if (preg_match_all('/\[group\s+([^\]\s]+)[^\]]*\]\s*(.+?)\s*\[\/group\]/is', $form_content, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {
                 $data_id = trim($match[1]);
-                $precio  = trim($match[2]);
+                // Limpiar HTML del contenido (puede venir como <p>CLP...</p>)
+                $precio  = trim(strip_tags($match[2]));
+
+                // Ignorar grupos que no contienen precio (ej. grupos de otros steps)
+                if (empty($precio) || strpos($data_id, 'pies-') !== 0 && $data_id !== 'Otro') {
+                    continue;
+                }
 
                 // Convertir data-id a la clave del select:
                 // "pies-14" => "14 (Pies)", "pies-30" => "30 (Pies)", "Otro" => "Otro"
