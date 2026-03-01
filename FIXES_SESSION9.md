@@ -3,18 +3,24 @@
 ## Date: 2026-02-28
 
 ## Issue 1: Footer Contact Section Not Centered on Mobile
-**Problem:** The contact items (phone, email, address) in the footer were not properly centered on mobile/responsive view (max-width 767px). Previous CSS had a syntax error (57 open braces vs 58 close braces) that prevented all CSS rules from applying.
+**Problem:** The contact items (phone, email, address) in the footer were not properly centered on mobile/responsive view (max-width 767px).
 
-**Root Cause:** CSS syntax error in the custom_css post (ID 9850) - mismatched braces caused the browser to reject the entire CSS block.
+**Root Causes (multiple):**
+1. Previous CSS had a syntax error (57 open braces vs 58 close braces) preventing all rules from applying
+2. The `.elementor-widget-wrap` in the contact column had asymmetric padding (`padding-left: 80px; padding-right: 0px`) shifting content off-center
+3. Elementor kept regenerating a cached CSS file (`post-8825.css`) that overrode custom CSS
 
 **Fix Applied (Database - post 9850):**
-- Completely rewrote the footer CSS with proper brace matching (20 open, 20 close)
-- Targeted `.elementor-8825 .elementor-widget-icon-box > .elementor-widget-container` with `display: flex; justify-content: center; align-items: center`
-- Targeted `.elementor-8825 .elementor-widget-icon-box .elementor-icon-box-wrapper` with `display: inline-flex; width: auto; justify-content: center; align-items: center; flex-direction: row`
-- Targeted `.elementor-8825 .elementor-position-inline-start .elementor-icon-box-icon` with `margin-right: 10px; margin-bottom: 0; flex-shrink: 0`
-- Targeted `.elementor-8825 .elementor-widget-icon-box .elementor-icon-box-content` with `flex-grow: 0; text-align: left`
-- Deleted competing Elementor cached CSS file at `/home/wwimpo/deckeva.cl/wp-content/uploads/elementor/css/post-8825.css`
-- Cleared all Elementor CSS transients
+- Completely rewrote footer CSS from scratch with clean brace matching (14 open, 14 close)
+- Fixed asymmetric padding: set `padding-left: 10px; padding-right: 10px` on all `.elementor-widget-wrap` elements
+- Centered footer columns: `flex-direction: column; align-items: center` on `.elementor-container`
+- Centered icon-box widgets: container uses `display: flex; justify-content: center; align-items: center`
+- Icon-box wrapper uses `display: inline-flex; width: auto` to shrink-wrap around icon+text
+- Icon spacing: `margin-right: 10px; flex-shrink: 0` on icon element
+- Centered headings, nav menu, text editor, image, and button widgets
+- Set Elementor CSS print method to 'internal' to prevent file-based caching
+- Deleted ALL Elementor cached CSS files from uploads directory
+- Cleared Elementor CSS meta for post 8825 and all transients
 
 ## Issue 2: Menu Inconsistency Across Pages
 **Problem:** The header and footer menus were showing only 2 items (Proyectos, Blog) on some pages instead of the full 6-item menu (Caracteristicas, Como trabajamos, Testimonios, Precio, Proyectos, Blog).
