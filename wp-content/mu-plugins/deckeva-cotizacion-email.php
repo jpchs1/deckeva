@@ -2,17 +2,67 @@
 /**
  * Plugin Name: Deckeva - Email Automático de Cotización
  * Description: Envía un email de cotización formal al usuario y una notificación al admin cuando se completa el formulario de precio (CF7 ID 1031).
- * Version: 1.0
+ * Version: 1.1
  * Author: Deckeva
  */
 
 if (!defined('ABSPATH')) exit;
 
 /**
- * Mapa de precios por tamaño de lancha (en pies).
- * Se usa para incluir el precio en el email de cotización.
+ * Obtiene el mapa de precios dinámicamente desde el contenido del formulario CF7 (ID 1031).
+ * Parsea el HTML del formulario para extraer los precios de los grupos condicionales.
+ * De esta forma, si se actualizan los precios en el formulario, el email siempre refleja los mismos valores.
  */
 function deckeva_get_price_map() {
+    // Intentar obtener desde cache transitoria (1 hora)
+    $cached = get_transient('deckeva_price_map');
+    if ($cached !== false) {
+        return $cached;
+    }
+
+    $price_map = array();
+
+    // Leer el contenido del formulario CF7 ID 1031 desde la base de datos
+    $form_post = get_post(1031);
+    if ($form_post && $form_post->post_type === 'wpcf7_contact_form') {
+        $form_content = $form_post->post_content;
+
+        // Buscar los grupos condicionales con precios: data-id="pies-XX" ... <p>CLP XXX + IVA</p>
+        // También captura el grupo "Otro"
+        if (preg_match_all('/data-id=["\']([^"\']+)["\'][^>]*>\s*<p>([^<]+)<\/p>/i', $form_content, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $data_id = trim($match[1]);
+                $precio  = trim($match[2]);
+
+                // Convertir data-id a la clave del select:
+                // "pies-14" => "14 (Pies)", "pies-30" => "30 (Pies)", "Otro" => "Otro"
+                if (preg_match('/^pies-(\d+)$/i', $data_id, $num_match)) {
+                    $key = $num_match[1] . ' (Pies)';
+                } else {
+                    $key = $data_id; // "Otro" u otro valor
+                }
+
+                $price_map[$key] = $precio;
+            }
+        }
+    }
+
+    // Si no se pudieron extraer precios (formulario no encontrado, formato cambió, etc.),
+    // usar fallback estático para no enviar emails sin precio
+    if (empty($price_map)) {
+        $price_map = deckeva_get_fallback_price_map();
+    }
+
+    // Guardar en cache por 1 hora
+    set_transient('deckeva_price_map', $price_map, HOUR_IN_SECONDS);
+
+    return $price_map;
+}
+
+/**
+ * Fallback estático en caso de que no se pueda leer el formulario CF7.
+ */
+function deckeva_get_fallback_price_map() {
     return array(
         '14 (Pies)' => 'CLP 626.988 + IVA',
         '15 (Pies)' => 'CLP 742.925 + IVA',
@@ -33,6 +83,17 @@ function deckeva_get_price_map() {
         '30 (Pies)' => 'CLP 2.081.312 + IVA',
         'Otro'      => 'A cotizar',
     );
+}
+
+/**
+ * Limpiar cache de precios cuando se actualiza el formulario CF7.
+ * Así los cambios de precio se reflejan inmediatamente en los emails.
+ */
+add_action('wpcf7_save_contact_form', 'deckeva_clear_price_cache');
+function deckeva_clear_price_cache($contact_form) {
+    if ($contact_form->id() == 1031) {
+        delete_transient('deckeva_price_map');
+    }
 }
 
 /**
