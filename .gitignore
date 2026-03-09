@@ -1,0 +1,68 @@
+# =========================
+# WordPress .gitignore
+# =========================
+
+# -- Archivos temporales/backup con tilde (EWWW, etc.) --
+*~*
+
+# -- Backups de EWWW Image Optimizer --
+wp-content/ewww/image-backup/
+
+# -- Papelera de Media Cleaner --
+wp-content/uploads/wpmc-trash/
+
+# -- Backups de Duplicator --
+wp-content/backups-dup-lite/
+wp-content/backups-dup-pro/
+
+# -- Backups de Backuply --
+wp-content/backuply/
+
+# -- Backups de UpdraftPlus --
+wp-content/updraft/
+
+# -- Logs de Wordfence --
+wp-content/wflogs/
+
+# -- Cache (regenerado automaticamente) --
+wp-content/cache/
+
+# -- NinjaScanner data --
+wp-content/ninjascanner/
+
+# -- Maintenance mode (generado por plugins) --
+wp-content/maintenance/
+
+# -- Archivos de debug y logs --
+wp-content/debug.log
+debug.log
+error_log
+*.log
+
+# -- Archivos del sistema operativo --
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -- Editores / IDEs --
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# -- Variables de entorno --
+.env
+.env.local
+.env.production
+
+# -- wp-config local (si usas uno separado) --
+wp-config-local.php
+
+# -- Node modules (si se usan herramientas de build) --
+node_modules/
+
+# -- Archivos de backup genéricos --
+*.bak
+*.backup
+*.orig
