@@ -2,6 +2,97 @@
 # END LSCACHE
 # BEGIN NON_LSCACHE
 # END NON_LSCACHE
+
+# ============================================================
+# BEGIN Deckeva Anti-Spam & Security Rules
+# ============================================================
+
+# --- Bloquear acceso a xmlrpc.php (evita ataques de fuerza bruta y spam) ---
+<Files xmlrpc.php>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+</Files>
+
+# --- Bloquear acceso directo a wp-config.php ---
+<Files wp-config.php>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+</Files>
+
+# --- Bloquear acceso a archivos sensibles ---
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak|swp|env)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# --- Deshabilitar listado de directorios ---
+Options -Indexes
+
+# --- Bloquear bots conocidos de spam por User-Agent ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Bloquear User-Agents vacíos o bots spam conocidos
+RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+RewriteCond %{HTTP_USER_AGENT} (ahrefs|semrush|mj12bot|dotbot|rogerbot|blexbot|linkfluence|seznambot|megaindex|ltx71|sogou|yandexbot|petalbot|baiduspider|bytespider) [NC]
+RewriteRule ^(wp-comments-post|wp-login|xmlrpc)\.php$ - [F,L]
+
+# Bloquear POST requests directos sin Referer (bots que no vienen del sitio)
+RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{REQUEST_URI} ^/wp-comments-post\.php$ [OR]
+RewriteCond %{REQUEST_URI} ^/wp-json/.*/send-mail$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?deckeva\.cl [NC]
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?deckeva\.com [NC]
+RewriteCond %{HTTP_REFERER} !^$
+RewriteRule .* - [F,L]
+</IfModule>
+
+# --- Proteger wp-includes (bloquear acceso directo a archivos PHP) ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^wp-admin/includes/ - [F,L]
+RewriteRule !^wp-includes/ - [S=3]
+RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+
+# --- Bloquear ejecución de PHP en uploads (evita shells/backdoors) ---
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^wp-content/uploads/.*\.php$ - [F,L]
+</IfModule>
+
+# --- Headers de seguridad adicionales ---
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    # Prevenir MIME type sniffing
+    Header set Content-Security-Policy "frame-ancestors 'self'"
+</IfModule>
+
+# ============================================================
+# END Deckeva Anti-Spam & Security Rules
+# ============================================================
+
 # BEGIN Force HTTPS
 <IfModule mod_rewrite.c>
 RewriteEngine On

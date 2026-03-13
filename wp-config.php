@@ -86,7 +86,14 @@ define( 'WP_DEBUG', false );
 /* Add any custom values between this line and the "stop editing" line. */
 define( 'FORCE_SSL_ADMIN', true );
 
+/** Deshabilitar edición de archivos desde el admin (previene inyección de código) */
+define( 'DISALLOW_FILE_EDIT', true );
 
+/** Limitar revisiones de posts para evitar bloat en la BD */
+define( 'WP_POST_REVISIONS', 5 );
+
+/** Vaciar la papelera automáticamente después de 15 días */
+define( 'EMPTY_TRASH_DAYS', 15 );
 
 /* That's all, stop editing! Happy publishing. */
 
