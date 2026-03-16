@@ -30,20 +30,12 @@
 </Files>
 
 # --- Prevent PHP execution in uploads directory ---
-<Directory "/wp-content/uploads/">
-    <Files "*.php">
-        <IfModule mod_authz_core.c>
-            Require all denied
-        </IfModule>
-        <IfModule !mod_authz_core.c>
-            Order Allow,Deny
-            Deny from all
-        </IfModule>
-    </Files>
-</Directory>
+# Note: <Directory> directive removed - invalid in .htaccess context.
+# Using RewriteRule to block PHP/script execution in uploads.
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^wp-content/uploads/.*\.ph(p[345s]?|t|tml)$ - [F,L]
+    RewriteRule ^wp-content/uploads/.*\.(cgi|pl|py|sh|bash|exe|bat|cmd)$ - [F,L]
 </IfModule>
 
 # --- Block author enumeration (prevents user scanning) ---

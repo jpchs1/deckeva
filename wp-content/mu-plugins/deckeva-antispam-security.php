@@ -428,6 +428,9 @@ add_filter('rest_authentication_errors', function ($result) {
         '/oembed/',
         '/gtranslate/',
         '/elementor/',
+        '/wc/',
+        '/smart-slider3/',
+        '/aioseo/',
     );
 
     $current_route = isset($GLOBALS['wp']->query_vars['rest_route'])
@@ -495,7 +498,7 @@ function deckeva_get_client_ip() {
 // =============================================
 // 14. LOG SPAM ATTEMPTS (for monitoring)
 // =============================================
-add_action('wpcf7_spam', function ($spam) {
+add_filter('wpcf7_spam', function ($spam) {
     if ($spam) {
         $ip = deckeva_get_client_ip();
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Unknown';
@@ -506,4 +509,5 @@ add_action('wpcf7_spam', function ($spam) {
             current_time('mysql')
         ));
     }
+    return $spam;
 }, 99);
