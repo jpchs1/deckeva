@@ -86,7 +86,20 @@ define( 'WP_DEBUG', false );
 /* Add any custom values between this line and the "stop editing" line. */
 define( 'FORCE_SSL_ADMIN', true );
 
+// --- Security Hardening ---
+// Disable file editing from WordPress admin (prevents malicious code injection)
+define( 'DISALLOW_FILE_EDIT', true );
 
+// Disable unfiltered uploads (prevents uploading dangerous file types)
+define( 'DISALLOW_UNFILTERED_UPLOADS', true );
+
+// Limit post revisions to reduce database bloat
+define( 'WP_POST_REVISIONS', 5 );
+
+// Block external HTTP requests except to trusted hosts (prevents phone-home malware)
+// Uncomment below if you want to restrict all external requests:
+// define( 'WP_HTTP_BLOCK_EXTERNAL', true );
+// define( 'WP_ACCESSIBLE_HOSTS', 'api.wordpress.org,downloads.wordpress.org,*.github.com' );
 
 /* That's all, stop editing! Happy publishing. */
 
