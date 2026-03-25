@@ -162,9 +162,9 @@
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "lowPrice": "200",
-      "highPrice": "3000",
-      "offerCount": "6",
+      "lowPrice": "150",
+      "highPrice": "5000",
+      "offerCount": "10",
       "availability": "https://schema.org/InStock",
       "seller": {
         "@type": "Organization",
@@ -1058,6 +1058,59 @@
       margin-bottom: 10px; line-height: 1.2;
     }
     .blog-excerpt { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+
+    /* ─── FAQ SECTION ─── */
+    .faq-section {
+      background: linear-gradient(180deg, #0a1628 0%, #0d1f3c 100%);
+      padding: 80px 0;
+    }
+    .faq-grid {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 24px 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      user-select: none;
+    }
+    .faq-question:hover { color: var(--gold); }
+    .faq-question .faq-icon {
+      font-size: 24px;
+      color: var(--gold);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .faq-item.active .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      color: var(--gray);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding-top: 16px;
+    }
+    @media (max-width: 768px) {
+      .faq-section { padding: 60px 0; }
+      .faq-question { font-size: 17px; }
+      .faq-answer { font-size: 14px; }
+    }
 
     /* ─── FOOTER ─── */
     footer {
@@ -2711,6 +2764,80 @@
           <p class="blog-excerpt" data-en>Non-slip boat flooring improves safety on your vessel and prevents accidents on deck.</p>
         </div>
       </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- FAQ SECTION -->
+<section class="section faq-section" id="faq">
+  <div class="container">
+    <span class="section-tag" data-es>Preguntas Frecuentes</span>
+    <span class="section-tag" data-en>Frequently Asked Questions</span>
+    <h2 class="section-title" data-es>Lo que nuestros clientes quieren saber</h2>
+    <h2 class="section-title" data-en>What our customers want to know</h2>
+    <div class="faq-grid">
+
+      <div class="faq-item active">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          <span data-es>Que es un piso de Goma EVA para lanchas?</span>
+          <span data-en>What is EVA foam marine decking?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p data-es>Los pisos de Goma EVA (Etileno-Vinil Acetato) son una solucion premium de pisos antideslizantes para lanchas, veleros y embarcaciones. Ofrecen agarre superior, comodidad, resistencia UV e instalacion facil con adhesivo 3M incluido. DECKEVA corta cada pieza a medida para tu embarcacion.</p>
+          <p data-en>EVA (Ethylene-Vinyl Acetate) foam marine decking is a premium non-slip flooring solution for boats, yachts, and watercraft. It provides superior grip, comfort, UV resistance, and easy installation with self-adhesive 3M backing. DECKEVA custom-cuts each piece to fit your specific vessel.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          <span data-es>Hacen envios internacionales?</span>
+          <span data-en>Do you ship internationally?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p data-es>Si! DECKEVA envia a todo el mundo. Enviamos regularmente a Chile, Argentina, Uruguay, Colombia, Peru, Mexico, Brasil, USA, UK, Australia, Nueva Zelanda y muchos mas paises. Contactanos para una cotizacion de envio internacional gratuita.</p>
+          <p data-en>Yes! DECKEVA ships worldwide. We regularly ship to Chile, Argentina, Uruguay, Colombia, Peru, Mexico, Brazil, USA, UK, Australia, New Zealand and many more countries. Contact us for a free international shipping quote.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          <span data-es>Como se instala el piso EVA?</span>
+          <span data-en>How do I install EVA marine decking?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p data-es>La instalacion es facil: tu piso DECKEVA llega cortado a medida con adhesivo 3M pre-aplicado. Solo limpia la superficie de tu embarcacion, retira el respaldo y presiona firmemente. Incluimos un video tutorial y soporte por WhatsApp para guiarte paso a paso.</p>
+          <p data-en>Installation is easy: your custom-cut DECKEVA deck arrives ready to install with pre-applied 3M adhesive. Simply clean your boat surface, peel the backing, and press firmly. We include a video tutorial and WhatsApp support for step-by-step guidance.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          <span data-es>Es DECKEVA una buena alternativa a SeaDek?</span>
+          <span data-en>Is DECKEVA a good alternative to SeaDek?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p data-es>Si, DECKEVA ofrece pisos de goma EVA premium comparables a SeaDek a precios competitivos. Nuestros pisos son hechos a medida, resistentes a UV, antideslizantes, y enviamos a todo el mundo con excelente servicio al cliente en espanol e ingles.</p>
+          <p data-en>Yes, DECKEVA offers premium EVA foam marine decking comparable to SeaDek at competitive prices. Our flooring is custom-made, UV resistant, non-slip, and ships worldwide with excellent customer service in both Spanish and English.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+          <span data-es>Que tipos de embarcaciones pueden usar pisos DECKEVA?</span>
+          <span data-en>What types of boats can use DECKEVA flooring?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p data-es>Los pisos DECKEVA se fabrican a medida para cualquier embarcacion: lanchas, veleros, yates, botes de pesca, motos de agua, pontones, consolas centrales y mas. Cada pieza se corta con precision para ajustarse a tu modelo y dimensiones especificas.</p>
+          <p data-en>DECKEVA flooring is custom-made for any vessel: speedboats, sailboats, yachts, fishing boats, jet skis, pontoon boats, center consoles, and more. Each piece is precision-cut to fit your specific boat model and dimensions.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
