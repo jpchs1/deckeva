@@ -62,6 +62,9 @@ wp-config-local.php
 # -- Node modules (si se usan herramientas de build) --
 node_modules/
 
+# -- DOMPDF vendor library (deployed separately via cPanel) --
+wp-content/mu-plugins/dompdf/
+
 # -- Archivos de backup genéricos --
 *.bak
 *.backup
