@@ -81,7 +81,7 @@ class Deckeva_Cotizador {
         $discount_type  = sanitize_text_field($_POST['discount_type'] ?? 'amount');
         $total          = intval($_POST['total'] ?? 0);
         $quote_number   = sanitize_text_field($_POST['quote_number'] ?? '');
-        $html_content   = stripslashes($_POST['pdf_html'] ?? '');
+        $html_content   = wp_kses_post(stripslashes($_POST['pdf_html'] ?? ''));
 
         if (empty($client_email) || empty($client_name)) {
             wp_send_json_error(['message' => 'Nombre y email son requeridos.']);
@@ -90,7 +90,7 @@ class Deckeva_Cotizador {
 
         // Build PDF with DOMPDF
         $pdf_path = null;
-        $dompdf_autoload = __DIR__ . '/dompdf/autoload.inc.php';
+        $dompdf_autoload = __DIR__ . '/dompdf/autoload.php';
         if (file_exists($dompdf_autoload)) {
             require_once $dompdf_autoload;
             try {
