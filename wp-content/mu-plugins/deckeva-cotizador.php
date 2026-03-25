@@ -60,6 +60,16 @@ class Deckeva_Cotizador {
             return;
         }
 
+        // Rate limiting: max 5 emails per IP per hour
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $rate_key = 'cotiz_rate_' . md5($ip);
+        $rate_count = intval(get_transient($rate_key));
+        if ($rate_count >= 5) {
+            wp_send_json_error(['message' => 'Demasiados envíos. Intente de nuevo en una hora.']);
+            return;
+        }
+        set_transient($rate_key, $rate_count + 1, HOUR_IN_SECONDS);
+
         $client_name    = sanitize_text_field($_POST['client_name'] ?? '');
         $client_email   = sanitize_email($_POST['client_email'] ?? '');
         $client_phone   = sanitize_text_field($_POST['client_phone'] ?? '');
@@ -81,27 +91,25 @@ class Deckeva_Cotizador {
         $discount_type  = sanitize_text_field($_POST['discount_type'] ?? 'amount');
         $total          = intval($_POST['total'] ?? 0);
         $quote_number   = sanitize_text_field($_POST['quote_number'] ?? '');
-        $html_content   = wp_kses_post(stripslashes($_POST['pdf_html'] ?? ''));
+        // pdf_html is no longer used from client; PDF is generated server-side
 
         if (empty($client_email) || empty($client_name)) {
             wp_send_json_error(['message' => 'Nombre y email son requeridos.']);
             return;
         }
 
-        // Build PDF with DOMPDF
+        // Build PDF server-side with DOMPDF (no client-supplied HTML)
         $pdf_path = null;
         $dompdf_autoload = __DIR__ . '/dompdf/autoload.php';
         if (file_exists($dompdf_autoload)) {
             require_once $dompdf_autoload;
             try {
-                $dompdf = new \Dompdf\Dompdf(['isRemoteEnabled' => true]);
-                $pdf_full_html = '<!DOCTYPE html><html><head><meta charset="UTF-8">
-                <style>
-                    body { font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; color: #1a2a3a; font-size: 13px; }
-                    * { box-sizing: border-box; }
-                </style>
-                </head><body>' . $html_content . '</body></html>';
-                $dompdf->loadHtml($pdf_full_html);
+                $dompdf = new \Dompdf\Dompdf([
+                    'isRemoteEnabled' => false,
+                    'isPhpEnabled'    => false,
+                ]);
+                $pdf_html = $this->build_pdf_html($client_name, $client_email, $client_phone, $client_company, $client_rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number);
+                $dompdf->loadHtml($pdf_html);
                 $dompdf->setPaper('A4', 'portrait');
                 $dompdf->render();
                 $pdf_output = $dompdf->output();
@@ -155,6 +163,84 @@ class Deckeva_Cotizador {
         } else {
             wp_send_json_error(['message' => 'Error al enviar el email. Intente nuevamente.']);
         }
+    }
+
+    /* ──────────────────────────────────────────
+       BUILD PDF HTML (server-side, no client input)
+    ────────────────────────────────────────── */
+    private function build_pdf_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number) {
+        $fecha = date_i18n('d/m/Y');
+
+        $services_rows = '';
+        foreach ($services as $s) {
+            $sname  = esc_html($s['name'] ?? '');
+            $sprice = '$' . number_format(intval($s['price'] ?? 0), 0, ',', '.');
+            $services_rows .= '<tr><td style="padding:8px 12px;border-bottom:1px solid #ddd;">' . $sname . '</td><td style="padding:8px 12px;border-bottom:1px solid #ddd;text-align:right;font-weight:bold;">' . $sprice . '</td></tr>';
+        }
+
+        $discount_row = '';
+        if ($discount_value > 0) {
+            $disc_label = ($discount_type === 'percent') ? $discount_value . '%' : '$' . number_format($discount_value, 0, ',', '.');
+            $disc_amount = $subtotal - $total;
+            $discount_row = '<tr><td style="padding:8px 12px;color:#888;">Descuento (' . $disc_label . ')</td><td style="padding:8px 12px;text-align:right;color:#e53e3e;font-weight:bold;">-$' . number_format($disc_amount, 0, ',', '.') . '</td></tr>';
+        }
+
+        $boat_info = '';
+        if ($boat_type) $boat_info .= '<tr><td style="padding:4px 12px;color:#666;width:35%;">Tipo</td><td style="padding:4px 12px;font-weight:600;">' . esc_html($boat_type) . '</td></tr>';
+        if ($boat_brand) $boat_info .= '<tr><td style="padding:4px 12px;color:#666;">Marca</td><td style="padding:4px 12px;font-weight:600;">' . esc_html($boat_brand) . '</td></tr>';
+        if ($boat_model) $boat_info .= '<tr><td style="padding:4px 12px;color:#666;">Modelo</td><td style="padding:4px 12px;font-weight:600;">' . esc_html($boat_model) . '</td></tr>';
+        if ($boat_year) $boat_info .= '<tr><td style="padding:4px 12px;color:#666;">Año</td><td style="padding:4px 12px;font-weight:600;">' . esc_html($boat_year) . '</td></tr>';
+        if ($boat_marina) $boat_info .= '<tr><td style="padding:4px 12px;color:#666;">Marina</td><td style="padding:4px 12px;font-weight:600;">' . esc_html($boat_marina) . '</td></tr>';
+
+        return '<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+body { font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 20px; color: #1a2a3a; font-size: 13px; }
+* { box-sizing: border-box; }
+h1 { font-size: 20px; color: #1a3a5c; margin: 0 0 5px; }
+h2 { font-size: 14px; color: #1a3a5c; margin: 20px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+.header { text-align: center; padding: 20px 0; border-bottom: 3px solid #1a3a5c; margin-bottom: 20px; }
+.badge { display: inline-block; background: #e8a735; color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+table { width: 100%; border-collapse: collapse; }
+.total-row td { padding: 12px; font-size: 16px; font-weight: 800; border-top: 2px solid #1a3a5c; }
+.footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center; font-size: 11px; color: #888; }
+</style>
+</head><body>
+<div class="header">
+<h1>DECKEVA</h1>
+<p style="margin:4px 0;color:#666;font-size:11px;letter-spacing:2px;">SERVICIOS NÁUTICOS PROFESIONALES</p>
+<div class="badge">COTIZACIÓN N° ' . esc_html($quote_number) . '</div>
+<p style="margin:8px 0 0;color:#999;font-size:12px;">Fecha: ' . esc_html($fecha) . '</p>
+</div>
+
+<h2>Datos del Cliente</h2>
+<table>
+<tr><td style="padding:4px 12px;color:#666;width:35%;">Nombre</td><td style="padding:4px 12px;font-weight:600;">' . esc_html($name) . '</td></tr>
+<tr><td style="padding:4px 12px;color:#666;">Email</td><td style="padding:4px 12px;">' . esc_html($email) . '</td></tr>'
+. ($phone ? '<tr><td style="padding:4px 12px;color:#666;">Teléfono</td><td style="padding:4px 12px;">' . esc_html($phone) . '</td></tr>' : '')
+. ($company ? '<tr><td style="padding:4px 12px;color:#666;">Empresa</td><td style="padding:4px 12px;">' . esc_html($company) . '</td></tr>' : '')
+. ($rut ? '<tr><td style="padding:4px 12px;color:#666;">RUT</td><td style="padding:4px 12px;">' . esc_html($rut) . '</td></tr>' : '')
+. '</table>
+
+<h2>Datos de la Embarcación</h2>
+<table>' . $boat_info . '</table>
+
+<h2>Servicios Cotizados</h2>
+<table>
+<tr style="background:#1a3a5c;color:#fff;"><td style="padding:8px 12px;font-weight:700;">Servicio</td><td style="padding:8px 12px;font-weight:700;text-align:right;">Precio</td></tr>
+' . $services_rows . '
+</table>
+
+<table style="margin-top:10px;">
+<tr><td style="padding:8px 12px;color:#666;">Sub Total</td><td style="padding:8px 12px;text-align:right;font-weight:600;">$' . number_format($subtotal, 0, ',', '.') . '</td></tr>
+' . $discount_row . '
+<tr class="total-row"><td>TOTAL</td><td style="text-align:right;color:#e8a735;">$' . number_format($total, 0, ',', '.') . '</td></tr>
+</table>
+
+<div class="footer">
+<p>Esta cotización es válida por 15 días hábiles.</p>
+<p>WhatsApp: +56 9 4021 1459 | contacto@deckeva.cl | deckeva.cl</p>
+</div>
+</body></html>';
     }
 
     /* ──────────────────────────────────────────
@@ -1416,7 +1502,6 @@ class Deckeva_Cotizador {
         btn.innerHTML = '<span class="dc-spinner"></span> Enviando...';
 
         var quoteNum = generateQuoteNumber();
-        var pdfHtml = buildQuoteHTML();
 
         var formData = new FormData();
         formData.append('_cotizador_nonce', nonce);
@@ -1436,7 +1521,6 @@ class Deckeva_Cotizador {
         formData.append('discount_type', d.discount_type);
         formData.append('total', d.total);
         formData.append('quote_number', quoteNum);
-        formData.append('pdf_html', pdfHtml);
 
         fetch(siteUrl + '/cotizador/enviar-email', {
             method: 'POST',
