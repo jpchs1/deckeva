@@ -14,14 +14,14 @@ if (!defined('ABSPATH')) {
 
 class Deckeva_Cotizador {
 
-    private $site_url   = 'https://deckeva.com';
+    private $site_url   = 'https://deckeva.cl';
     private $email_from = 'contacto@deckeva.cl';
     private $bcc_email  = 'jpchs1@gmail.com';
     private $logo_url;
     private $whatsapp   = '+56940211459';
 
     public function __construct() {
-        $this->logo_url = $this->site_url . '/wp-content/uploads/2020/12/WhatsApp-Image-2023-08-03-at-11.27.49-AM.jpeg';
+        $this->logo_url = $this->site_url . '/wp-content/uploads/2024/08/WhatsApp-Image-2023-08-03-at-11.27.49-AM.jpeg.webp';
         add_action('init', [$this, 'intercept_route'], 1);
     }
 
