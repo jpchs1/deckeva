@@ -20,18 +20,20 @@ class Deckeva_Cotizador {
     private $logo_url;
     private $whatsapp   = '+56940211459';
 
-    /* Supported currencies: symbol + thousands separator + human label */
+    /* Supported currencies. 'rate' is reference CLP per 1 unit of currency.
+       Used by the international (deckeva.com) endpoint for on-quote display
+       only; the real quote is confirmed by the Deckeva team afterwards. */
     private $currencies = [
-        'CLP' => ['symbol' => '$',  'thousands' => '.', 'label' => 'Pesos Chilenos (CLP)'],
-        'USD' => ['symbol' => '$',  'thousands' => ',', 'label' => 'US Dollars (USD)'],
-        'EUR' => ['symbol' => '€',  'thousands' => '.', 'label' => 'Euros (EUR)'],
-        'ARS' => ['symbol' => '$',  'thousands' => '.', 'label' => 'Pesos Argentinos (ARS)'],
-        'MXN' => ['symbol' => '$',  'thousands' => ',', 'label' => 'Pesos Mexicanos (MXN)'],
-        'BRL' => ['symbol' => 'R$', 'thousands' => '.', 'label' => 'Reales Brasileños (BRL)'],
-        'UYU' => ['symbol' => '$U', 'thousands' => '.', 'label' => 'Pesos Uruguayos (UYU)'],
-        'PEN' => ['symbol' => 'S/', 'thousands' => ',', 'label' => 'Soles Peruanos (PEN)'],
-        'COP' => ['symbol' => '$',  'thousands' => '.', 'label' => 'Pesos Colombianos (COP)'],
-        'GBP' => ['symbol' => '£',  'thousands' => ',', 'label' => 'Libras Esterlinas (GBP)'],
+        'CLP' => ['symbol' => '$',  'thousands' => '.', 'rate' => 1,    'label' => 'Pesos Chilenos (CLP)'],
+        'USD' => ['symbol' => '$',  'thousands' => ',', 'rate' => 970,  'label' => 'US Dollars (USD)'],
+        'EUR' => ['symbol' => '€',  'thousands' => '.', 'rate' => 1050, 'label' => 'Euros (EUR)'],
+        'ARS' => ['symbol' => '$',  'thousands' => '.', 'rate' => 0.90, 'label' => 'Pesos Argentinos (ARS)'],
+        'MXN' => ['symbol' => '$',  'thousands' => ',', 'rate' => 55,   'label' => 'Pesos Mexicanos (MXN)'],
+        'BRL' => ['symbol' => 'R$', 'thousands' => '.', 'rate' => 180,  'label' => 'Reales Brasileños (BRL)'],
+        'UYU' => ['symbol' => '$U', 'thousands' => '.', 'rate' => 24,   'label' => 'Pesos Uruguayos (UYU)'],
+        'PEN' => ['symbol' => 'S/', 'thousands' => ',', 'rate' => 260,  'label' => 'Soles Peruanos (PEN)'],
+        'COP' => ['symbol' => '$',  'thousands' => '.', 'rate' => 0.25, 'label' => 'Pesos Colombianos (COP)'],
+        'GBP' => ['symbol' => '£',  'thousands' => ',', 'rate' => 1230, 'label' => 'Libras Esterlinas (GBP)'],
     ];
 
     private function get_currency($code) {
@@ -41,6 +43,15 @@ class Deckeva_Cotizador {
     private function format_money($amount, $code) {
         $c = $this->get_currency($code);
         return $c['symbol'] . number_format(intval($amount), 0, ',', $c['thousands']);
+    }
+
+    /* Convert a CLP amount to the target currency using the configured rate
+       and format with the target currency's symbol & thousands separator. */
+    private function convert_and_format_from_clp($clp, $code) {
+        $c = $this->get_currency($code);
+        $rate = isset($c['rate']) && $c['rate'] > 0 ? (float)$c['rate'] : 1.0;
+        $converted = (int) round(((float)$clp) / $rate);
+        return $c['symbol'] . number_format($converted, 0, ',', $c['thousands']);
     }
 
     public function __construct() {
@@ -56,6 +67,11 @@ class Deckeva_Cotizador {
 
         if ($uri === 'cotizador/enviar-email' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handle_send_email();
+            return;
+        }
+
+        if ($uri === 'cotizador/enviar-international') {
+            $this->handle_send_international();
             return;
         }
 
@@ -190,6 +206,364 @@ class Deckeva_Cotizador {
         } else {
             wp_send_json_error(['message' => 'Error al enviar el email. Intente nuevamente.']);
         }
+    }
+
+    /* ──────────────────────────────────────────
+       INTERNATIONAL (deckeva.com) — send quote endpoint
+       POST /cotizador/enviar-international
+       Accepts from deckeva.com / www.deckeva.com (CORS), returns JSON.
+       mode: "email" | "whatsapp" | "both"
+    ────────────────────────────────────────── */
+    private $whatsapp_retention_days = 30;
+
+    private function set_intl_cors_headers() {
+        $allowed = ['https://deckeva.com', 'https://www.deckeva.com', 'https://deckeva.cl', 'https://www.deckeva.cl'];
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+        if (in_array($origin, $allowed, true)) {
+            header('Access-Control-Allow-Origin: ' . $origin);
+            header('Vary: Origin');
+        }
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+    }
+
+    private function cleanup_intl_quotes() {
+        $upload_dir = wp_upload_dir();
+        $pdf_dir = $upload_dir['basedir'] . '/cotizaciones-intl';
+        if (!is_dir($pdf_dir)) return;
+        $max_age = intval($this->whatsapp_retention_days) * DAY_IN_SECONDS;
+        $now = time();
+        foreach (glob($pdf_dir . '/DECKEVA-Quote-*.pdf') as $file) {
+            if (($now - @filemtime($file)) > $max_age) {
+                @unlink($file);
+            }
+        }
+    }
+
+    private function handle_send_international() {
+        $this->set_intl_cors_headers();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            status_header(204);
+            exit;
+        }
+
+        header('Content-Type: application/json; charset=UTF-8');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            wp_send_json_error(['message' => 'Method not allowed.']);
+            return;
+        }
+
+        // Probabilistic cleanup (~1% of requests trigger)
+        if (mt_rand(1, 100) === 1) {
+            $this->cleanup_intl_quotes();
+        }
+
+        // Rate limit: 5 requests/hour per IP
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        $rate_key = 'cotiz_intl_' . md5($ip);
+        $rate_count = intval(get_transient($rate_key));
+        if ($rate_count >= 5) {
+            wp_send_json_error(['message' => 'Demasiados envíos. Intente de nuevo en una hora.']);
+            return;
+        }
+        set_transient($rate_key, $rate_count + 1, HOUR_IN_SECONDS);
+
+        // Honeypot (if present, bot)
+        if (!empty($_POST['website'])) {
+            wp_send_json_error(['message' => 'Bot detected.']);
+            return;
+        }
+
+        $mode = sanitize_text_field($_POST['mode'] ?? '');
+        if (!in_array($mode, ['email', 'whatsapp', 'both'], true)) {
+            wp_send_json_error(['message' => 'Modo inválido.']);
+            return;
+        }
+
+        $first   = sanitize_text_field($_POST['client_first_name'] ?? '');
+        $last    = sanitize_text_field($_POST['client_last_name'] ?? '');
+        $email   = sanitize_email($_POST['client_email'] ?? '');
+        $phone   = sanitize_text_field($_POST['client_phone'] ?? '');
+        $country = sanitize_text_field($_POST['client_country'] ?? '');
+
+        $boat_size  = sanitize_text_field($_POST['boat_size'] ?? '');
+        $boat_brand = sanitize_text_field($_POST['boat_brand'] ?? '');
+        $boat_model = sanitize_text_field($_POST['boat_model'] ?? '');
+        $boat_year  = sanitize_text_field($_POST['boat_year'] ?? '');
+        $boat_color = sanitize_text_field($_POST['boat_color'] ?? '');
+
+        $price_clp = max(0, intval($_POST['price_clp'] ?? 0));
+        $currency_code = strtoupper(sanitize_text_field($_POST['currency_code'] ?? 'CLP'));
+        if (!isset($this->currencies[$currency_code])) $currency_code = 'CLP';
+
+        if (empty($first) || empty($email) || empty($country)) {
+            wp_send_json_error(['message' => 'Nombre, email y país son requeridos.']);
+            return;
+        }
+        if (!is_email($email)) {
+            wp_send_json_error(['message' => 'Email inválido.']);
+            return;
+        }
+
+        // IVA 19% always (regardless of country)
+        $iva_clp = intval(round($price_clp * 0.19));
+        $total_clp = $price_clp + $iva_clp;
+
+        $quote_number = 'DCK-INT-' . date('YmdHis') . '-' . strtoupper(substr(md5(uniqid('', true)), 0, 5));
+
+        // Build PDF via DOMPDF (if available)
+        $pdf_path = null;
+        $pdf_url = null;
+        $dompdf_autoload = __DIR__ . '/dompdf/autoload.php';
+        if (file_exists($dompdf_autoload)) {
+            require_once $dompdf_autoload;
+            try {
+                $dompdf = new \Dompdf\Dompdf([
+                    'isRemoteEnabled' => false,
+                    'isPhpEnabled'    => false,
+                ]);
+                $pdf_html = $this->build_international_pdf_html(
+                    $first, $last, $email, $phone, $country,
+                    $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
+                    $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
+                );
+                $dompdf->loadHtml($pdf_html, 'UTF-8');
+                $dompdf->setPaper('A4', 'portrait');
+                $dompdf->render();
+                $pdf_output = $dompdf->output();
+
+                $upload_dir = wp_upload_dir();
+                $pdf_dir = $upload_dir['basedir'] . '/cotizaciones-intl';
+                $pdf_url_base = $upload_dir['baseurl'] . '/cotizaciones-intl';
+                if (!is_dir($pdf_dir)) wp_mkdir_p($pdf_dir);
+                // Prevent search indexing of the directory
+                $htaccess = $pdf_dir . '/.htaccess';
+                if (!file_exists($htaccess)) {
+                    @file_put_contents($htaccess, "<IfModule mod_headers.c>\nHeader set X-Robots-Tag \"noindex, nofollow\"\n</IfModule>\n");
+                }
+                // Unguessable filename
+                $uuid = bin2hex(random_bytes(16));
+                $pdf_filename = 'DECKEVA-Quote-' . $quote_number . '-' . $uuid . '.pdf';
+                $pdf_path = $pdf_dir . '/' . $pdf_filename;
+                file_put_contents($pdf_path, $pdf_output);
+                $pdf_url = $pdf_url_base . '/' . $pdf_filename;
+            } catch (\Exception $e) {
+                error_log('[Deckeva INT PDF] ' . $e->getMessage());
+                $pdf_path = null;
+                $pdf_url = null;
+            }
+        }
+
+        $email_sent = false;
+        $email_error = null;
+        if ($mode === 'email' || $mode === 'both') {
+            $email_html = $this->build_international_email_html(
+                $first, $last, $email, $phone, $country,
+                $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
+                $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
+            );
+            $headers = [
+                'Content-Type: text/html; charset=UTF-8',
+                'From: Deckeva <' . $this->email_from . '>',
+                'Bcc: ' . $this->bcc_email,
+            ];
+            $subject = 'DECKEVA — Cotización / Quote ' . $quote_number;
+            $attachments = ($pdf_path && file_exists($pdf_path)) ? [$pdf_path] : [];
+            $email_sent = wp_mail($email, $subject, $email_html, $headers, $attachments);
+            if (!$email_sent) {
+                $email_error = 'No pudimos enviar el email. Intente por WhatsApp.';
+            }
+        }
+
+        // Email-only: delete server copy after sending. WhatsApp/Both: keep
+        // for the client to download via the link in WhatsApp.
+        if ($mode === 'email' && $pdf_path && file_exists($pdf_path)) {
+            @unlink($pdf_path);
+            $pdf_url = null;
+        }
+
+        $response = [
+            'mode'         => $mode,
+            'quote_number' => $quote_number,
+            'email_sent'   => $email_sent,
+        ];
+        if ($email_error) $response['email_error'] = $email_error;
+        if ($pdf_url)     $response['pdf_url'] = $pdf_url;
+
+        // Failure only if email requested and send failed.
+        if (($mode === 'email' || $mode === 'both') && !$email_sent) {
+            wp_send_json_error($response);
+            return;
+        }
+        wp_send_json_success($response);
+    }
+
+    /* ──────────────────────────────────────────
+       INTERNATIONAL — PDF builder (DOMPDF HTML)
+    ────────────────────────────────────────── */
+    private function build_international_pdf_html($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
+        $fecha = date_i18n('d/m/Y');
+        $currency = $this->get_currency($currency_code);
+        $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
+
+        $size_label = ($boat_size && $boat_size !== 'otro') ? esc_html($boat_size) . ' ft / pies' : 'Otro / Other';
+        $boat_desc  = trim($boat_brand . ' ' . $boat_model . ' ' . ($boat_year ? '(' . $boat_year . ')' : ''));
+        $rate_line  = ($currency_code === 'CLP')
+            ? ''
+            : '<p style="margin:2px 0 0;font-size:10px;color:#888;">Ref: 1 ' . esc_html($currency_code) . ' ≈ ' . esc_html(number_format($currency['thousands'] === ',' ? (float)$currency['thousands'] : 0, 0)) . '</p>';
+        // Build rate line precisely from the in-memory currency definition
+        $rate_str = '';
+        if ($currency_code !== 'CLP' && isset($this->currency_rates[$currency_code])) {
+            $r = $this->currency_rates[$currency_code];
+            if ($r >= 1) $rate_str = '1 ' . $currency_code . ' ≈ ' . number_format($r, 0, ',', '.') . ' CLP';
+            else         $rate_str = '1 CLP ≈ ' . number_format(1 / $r, 2, ',', '.') . ' ' . $currency_code;
+        }
+
+        return '<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+body { font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 22px; color: #1a2a3a; font-size: 12px; line-height: 1.5; }
+h1 { font-size: 20px; color: #0d2137; margin: 0 0 4px; }
+h2 { font-size: 12px; color: #0d2137; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: 1px; }
+.header { text-align: center; padding: 14px 0; border-bottom: 3px solid #0d2137; margin-bottom: 14px; }
+.badge { display: inline-block; background: #e8a735; color: #fff; padding: 5px 14px; border-radius: 16px; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+table { width: 100%; border-collapse: collapse; }
+td { padding: 4px 10px; vertical-align: top; }
+.lbl { color: #666; width: 28%; }
+.val { font-weight: 600; color: #1a2a3a; }
+.price-box { margin-top: 8px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 14px; background: #f8faff; }
+.price-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px; }
+.price-row.total { margin-top: 8px; padding-top: 8px; border-top: 2px solid #0d2137; font-size: 15px; font-weight: 800; }
+.notice { margin-top: 16px; padding: 14px 16px; border: 1px solid #e8a735; border-radius: 8px; background: #fffbee; }
+.notice h3 { font-size: 12px; color: #a56a00; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 1px; }
+.notice ul { margin: 6px 0 0 18px; padding: 0; font-size: 11px; color: #4a4a4a; }
+.notice li { margin-bottom: 3px; }
+.footer { margin-top: 18px; padding-top: 10px; border-top: 1px solid #ddd; text-align: center; font-size: 10px; color: #888; }
+</style>
+</head><body>
+<div class="header">
+  <h1>DECKEVA</h1>
+  <p style="margin:2px 0;color:#666;font-size:10px;letter-spacing:2px;">CUSTOM MARINE EVA FLOORING · PISOS NÁUTICOS A MEDIDA</p>
+  <div class="badge">QUOTE · COTIZACIÓN ' . esc_html($quote_number) . '</div>
+  <p style="margin:6px 0 0;color:#999;font-size:11px;">Date / Fecha: ' . esc_html($fecha) . '</p>
+</div>
+
+<h2>Client / Cliente</h2>
+<table>
+<tr><td class="lbl">Name / Nombre</td><td class="val">' . esc_html(trim($first . ' ' . $last)) . '</td></tr>
+<tr><td class="lbl">Email</td><td class="val">' . esc_html($email) . '</td></tr>
+' . ($phone ? '<tr><td class="lbl">Phone / Teléfono</td><td class="val">' . esc_html($phone) . '</td></tr>' : '') . '
+<tr><td class="lbl">Shipping / Envío</td><td class="val">' . esc_html($country) . '</td></tr>
+</table>
+
+<h2>Vessel / Embarcación</h2>
+<table>
+<tr><td class="lbl">Size / Tamaño</td><td class="val">' . $size_label . '</td></tr>
+' . ($boat_desc ? '<tr><td class="lbl">Make &amp; Model</td><td class="val">' . esc_html($boat_desc) . '</td></tr>' : '') . '
+' . ($boat_color ? '<tr><td class="lbl">Color</td><td class="val">' . esc_html($boat_color) . '</td></tr>' : '') . '
+</table>
+
+<h2>Pricing / Precios</h2>
+<div class="price-box">
+  <div class="price-row"><span>Base / Subtotal</span><span>' . esc_html($fm($price_clp)) . '</span></div>
+  <div class="price-row"><span>IVA / VAT 19%</span><span>' . esc_html($fm($iva_clp)) . '</span></div>
+  <div class="price-row total"><span>TOTAL</span><span>' . esc_html($fm($total_clp)) . '</span></div>
+  ' . ($rate_str ? '<p style="margin:6px 0 0;font-size:10px;color:#888;">Reference rate / Tipo de cambio ref: ' . esc_html($rate_str) . '</p>' : '') . '
+  <p style="margin:4px 0 0;font-size:10px;color:#888;">* Precio referencial / Reference quote · Final confirmation upon order.</p>
+</div>
+
+<div class="notice">
+  <h3>📐 Toma de Medidas &amp; 🛠️ Instalación — Importante / Important</h3>
+  <p style="margin:0 0 6px;font-size:11px;color:#4a4a4a;"><strong>ES:</strong> La <strong>toma de medidas</strong> (para envíos dentro de Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Deckeva no realiza estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.</p>
+  <table style="width:100%;margin-top:6px;border-collapse:collapse;font-size:11px;">
+    <tr style="background:#fff4d6;"><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Ítem / Item</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Costo ref. / Ref. cost</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Tiempo / Time</td></tr>
+    <tr><td style="padding:6px 10px;color:#4a4a4a;">📐 Toma de medidas · Measurement</td><td style="padding:6px 10px;color:#4a4a4a;font-weight:600;">USD $120</td><td style="padding:6px 10px;color:#4a4a4a;">4–6 hrs aprox.</td></tr>
+    <tr><td style="padding:6px 10px;color:#4a4a4a;">🛠️ Instalación · Installation</td><td style="padding:6px 10px;color:#4a4a4a;font-weight:600;">USD $120</td><td style="padding:6px 10px;color:#4a4a4a;">3–5 hrs aprox.</td></tr>
+  </table>
+  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;">Para acompañarte en ambos procesos, Deckeva entrega <strong>sin costo</strong>:</p>
+  <ul>
+    <li>Video explicativo paso a paso para la <strong>toma de medidas</strong>.</li>
+    <li>Video explicativo paso a paso para la <strong>instalación</strong>.</li>
+    <li>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo.</li>
+  </ul>
+  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>USD $120</strong> each, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
+</div>
+
+<div class="footer">
+  <p>This quote is valid for 15 business days. / Esta cotización es válida por 15 días hábiles.<br>
+  WhatsApp: +56 9 4021 1459 · contacto@deckeva.cl · deckeva.com · deckeva.cl</p>
+</div>
+</body></html>';
+    }
+
+    /* ──────────────────────────────────────────
+       INTERNATIONAL — Email HTML builder
+    ────────────────────────────────────────── */
+    private function build_international_email_html($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
+        $fecha = date_i18n('d/m/Y');
+        $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
+        $size_label = ($boat_size && $boat_size !== 'otro') ? esc_html($boat_size) . ' ft / pies' : 'Otro / Other';
+        $boat_desc  = trim($boat_brand . ' ' . $boat_model . ' ' . ($boat_year ? '(' . $boat_year . ')' : ''));
+
+        $html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:Helvetica,Arial,sans-serif;color:#1a2a3a;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f2f5;">
+<tr><td align="center" style="padding:30px 15px;">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,40,80,0.12);">
+<tr><td style="background:linear-gradient(135deg,#0d2137 0%,#1a3a5c 50%,#2a5a8c 100%);padding:28px 36px;text-align:center;color:#fff;">
+<h1 style="margin:0;font-size:28px;letter-spacing:3px;">DECKEVA</h1>
+<p style="margin:4px 0 0;color:rgba(255,255,255,0.75);font-size:11px;letter-spacing:2px;text-transform:uppercase;">Custom Marine EVA Flooring · Pisos a medida</p>
+</td></tr>
+<tr><td style="padding:28px 36px 10px;">
+<h2 style="margin:0 0 4px;font-size:18px;color:#0d2137;">Hi ' . esc_html($first) . ',</h2>
+<p style="margin:0;color:#6b7280;font-size:14px;line-height:1.7;">Thanks for reaching out! Attached is your custom quote from Deckeva. We will follow up via WhatsApp or email within 24 hours to confirm details.</p>
+<p style="margin:12px 0 0;color:#6b7280;font-size:14px;line-height:1.7;">Hola ' . esc_html($first) . ', adjuntamos tu cotización. Te contactaremos en menos de 24 horas para confirmar los detalles.</p>
+<p style="margin:10px 0 0;color:#9ca3af;font-size:12px;">Quote Nº ' . esc_html($quote_number) . ' · ' . esc_html($fecha) . '</p>
+</td></tr>
+<tr><td style="padding:6px 36px 0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f8faff;border-radius:10px;border:1px solid #e5e7eb;padding:14px 18px;">
+<tr><td style="padding:0 0 8px;font-size:10px;color:#0d2137;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Vessel / Embarcación</td></tr>
+<tr><td style="font-size:13px;color:#1a2a3a;"><strong>' . $size_label . '</strong>' . ($boat_desc ? ' · ' . esc_html($boat_desc) : '') . ($boat_color ? ' · ' . esc_html($boat_color) : '') . '</td></tr>
+</table>
+</td></tr>
+<tr><td style="padding:14px 36px 0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-radius:10px;border:1px solid #e5e7eb;">
+<tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">Base / Subtotal</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($price_clp)) . '</td></tr>
+<tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">IVA / VAT 19%</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($iva_clp)) . '</td></tr>
+<tr><td colspan="2" style="padding:6px 16px;"><div style="border-top:2px dashed #e5e7eb;"></div></td></tr>
+<tr><td style="padding:12px 16px;font-size:16px;color:#1a2a3a;font-weight:800;">TOTAL</td><td style="padding:12px 16px;text-align:right;"><span style="background:#e8a735;color:#fff;padding:6px 16px;border-radius:8px;font-size:16px;font-weight:800;">' . esc_html($fm($total_clp)) . '</span></td></tr>
+</table>
+</td></tr>
+<tr><td style="padding:16px 36px 10px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbee;border:1px solid #e8a735;border-radius:10px;padding:14px 18px;">
+<tr><td style="padding:0 0 6px;font-size:10px;color:#a56a00;font-weight:700;letter-spacing:2px;text-transform:uppercase;">📐 Toma de Medidas &amp; 🛠️ Instalación · Importante</td></tr>
+<tr><td style="font-size:12px;color:#4a4a4a;line-height:1.6;">
+<strong>ES:</strong> La <strong>toma de medidas</strong> (envíos a Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Nosotros no realizamos estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.
+</td></tr>
+<tr><td style="padding-top:8px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #f0d89a;border-radius:6px;font-size:12px;">
+<tr style="background:#fff4d6;"><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Ítem / Item</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Costo ref.</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Tiempo</td></tr>
+<tr><td style="padding:7px 10px;color:#4a4a4a;">📐 Toma de medidas · Measurement</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;">USD $120</td><td style="padding:7px 10px;color:#4a4a4a;">4–6 hrs</td></tr>
+<tr><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">🛠️ Instalación · Installation</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;border-top:1px solid #f0d89a;">USD $120</td><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">3–5 hrs</td></tr>
+</table>
+</td></tr>
+<tr><td style="padding-top:10px;font-size:12px;color:#4a4a4a;line-height:1.6;">
+Deckeva entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo durante el trabajo.
+<br><br>
+<strong>EN:</strong> <strong>Measurement (shipments to Chile)</strong> and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. These are <u>not included</u> in the quote. Reference: USD $120 each · ~4–6 hrs measurement · ~3–5 hrs installation. Deckeva provides free step-by-step videos + 24/7 WhatsApp &amp; phone support.
+</td></tr>
+</table>
+</td></tr>
+<tr><td style="padding:24px 36px;background:#f8faff;text-align:center;border-top:1px solid #e5e7eb;">
+<p style="margin:0 0 6px;font-size:13px;color:#6b7280;">Quote valid for 15 business days / Cotización válida 15 días hábiles.</p>
+<p style="margin:0;font-size:12px;color:#0d2137;font-weight:600;">WhatsApp: +56 9 4021 1459 · contacto@deckeva.cl · deckeva.com</p>
+</td></tr>
+</table>
+</td></tr></table>
+</body></html>';
+        return $html;
     }
 
     /* ──────────────────────────────────────────
