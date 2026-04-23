@@ -1038,6 +1038,13 @@
       border-top: 1px dashed rgba(245,166,35,0.35);
     }
     .price-line.total .label { font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+    .price-usd-ref {
+      margin-top: 4px; text-align: right;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+      color: var(--gray); font-style: italic;
+    }
+    .price-usd-ref strong { color: var(--text); font-style: normal; }
 
     .install-notice {
       background: rgba(245,166,35,0.07);
@@ -2663,6 +2670,7 @@
                 <div class="price-line"><span data-es>Subtotal</span><span data-en>Subtotal</span><span id="pbSubtotal">—</span></div>
                 <div class="price-line"><span>IVA 19%</span><span id="pbIva">—</span></div>
                 <div class="price-line total"><span class="label">Total</span><span id="pbTotal">—</span></div>
+                <div class="price-usd-ref" id="pbUsdRef" style="display:none;"></div>
               </div>
               <div class="price-sub" data-es>* Precio referencial. Sujeto a diseño, complejidad y tipo de cambio al momento de confirmar. IVA 19% incluido en el Total.</div>
               <div class="price-sub" data-en>* Reference price. Subject to design, complexity and FX rate at quote-confirmation time. VAT 19% included in Total.</div>
@@ -3297,6 +3305,19 @@
     document.getElementById('pbTotal').textContent    = code + ' ' + formatMoney(totalClp, code);
     breakdown.style.display = 'flex';
 
+    // USD reference line — shown for non-CLP, non-USD currencies so international
+    // clients always see the Total in USD too (their common reference).
+    const usdRef = document.getElementById('pbUsdRef');
+    if (code !== 'CLP' && code !== 'USD') {
+      const totalUsd = Math.round(totalClp / currencyMap.USD.rate);
+      const usdStr = 'USD $' + totalUsd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      usdRef.innerHTML = '≈ <strong>' + usdStr + '</strong>';
+      usdRef.style.display = 'block';
+    } else {
+      usdRef.style.display = 'none';
+      usdRef.innerHTML = '';
+    }
+
     if (code === 'CLP') {
       subEl.textContent = '';
     } else {
@@ -3370,6 +3391,14 @@
     const ivaStr   = priceClp ? (code + ' ' + formatMoney(ivaClp,   code))   : '—';
     const totalStr = priceClp ? (code + ' ' + formatMoney(totalClp, code))   : '—';
 
+    // USD reference (shown when currency is neither CLP nor USD)
+    let usdRefLine = null;
+    if (priceClp && code !== 'CLP' && code !== 'USD') {
+      const totalUsd = Math.round(totalClp / currencyMap.USD.rate);
+      const usdTxt = 'USD $' + totalUsd.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      usdRefLine = '   _(≈ ' + usdTxt + ')_';
+    }
+
     const sizeTxt = fields.size === 'otro'
       ? (isES ? 'A consultar' : 'To be confirmed')
       : (fields.size ? (fields.size + ' ft') : '—');
@@ -3396,6 +3425,7 @@
       '   Subtotal: ' + subStr,
       '   IVA 19%: ' + ivaStr,
       '   *TOTAL: ' + totalStr + '*',
+      usdRefLine,
       '',
       '📝 *MIS DATOS*',
       '👤 ' + fullName,
@@ -3424,6 +3454,7 @@
       '   Subtotal: ' + subStr,
       '   VAT 19%: ' + ivaStr,
       '   *TOTAL: ' + totalStr + '*',
+      usdRefLine,
       '',
       '📝 *MY DETAILS*',
       '👤 ' + fullName,
