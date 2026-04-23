@@ -46,12 +46,14 @@ class Deckeva_Cotizador {
     }
 
     /* Convert a CLP amount to the target currency using the configured rate
-       and format with the target currency's symbol & thousands separator. */
+       and format with the target currency's CODE + symbol + thousands sep.
+       Prefixing the code (e.g. "MXN $24,813") matches the home display and
+       avoids ambiguity since "$" is used by several currencies. */
     private function convert_and_format_from_clp($clp, $code) {
         $c = $this->get_currency($code);
         $rate = isset($c['rate']) && $c['rate'] > 0 ? (float)$c['rate'] : 1.0;
         $converted = (int) round(((float)$clp) / $rate);
-        return $c['symbol'] . number_format($converted, 0, ',', $c['thousands']);
+        return $code . ' ' . $c['symbol'] . number_format($converted, 0, ',', $c['thousands']);
     }
 
     public function __construct() {
