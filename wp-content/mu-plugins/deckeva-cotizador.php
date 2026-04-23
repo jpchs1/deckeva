@@ -20,6 +20,29 @@ class Deckeva_Cotizador {
     private $logo_url;
     private $whatsapp   = '+56940211459';
 
+    /* Supported currencies: symbol + thousands separator + human label */
+    private $currencies = [
+        'CLP' => ['symbol' => '$',  'thousands' => '.', 'label' => 'Pesos Chilenos (CLP)'],
+        'USD' => ['symbol' => '$',  'thousands' => ',', 'label' => 'US Dollars (USD)'],
+        'EUR' => ['symbol' => '€',  'thousands' => '.', 'label' => 'Euros (EUR)'],
+        'ARS' => ['symbol' => '$',  'thousands' => '.', 'label' => 'Pesos Argentinos (ARS)'],
+        'MXN' => ['symbol' => '$',  'thousands' => ',', 'label' => 'Pesos Mexicanos (MXN)'],
+        'BRL' => ['symbol' => 'R$', 'thousands' => '.', 'label' => 'Reales Brasileños (BRL)'],
+        'UYU' => ['symbol' => '$U', 'thousands' => '.', 'label' => 'Pesos Uruguayos (UYU)'],
+        'PEN' => ['symbol' => 'S/', 'thousands' => ',', 'label' => 'Soles Peruanos (PEN)'],
+        'COP' => ['symbol' => '$',  'thousands' => '.', 'label' => 'Pesos Colombianos (COP)'],
+        'GBP' => ['symbol' => '£',  'thousands' => ',', 'label' => 'Libras Esterlinas (GBP)'],
+    ];
+
+    private function get_currency($code) {
+        return isset($this->currencies[$code]) ? $this->currencies[$code] : $this->currencies['CLP'];
+    }
+
+    private function format_money($amount, $code) {
+        $c = $this->get_currency($code);
+        return $c['symbol'] . number_format(intval($amount), 0, ',', $c['thousands']);
+    }
+
     public function __construct() {
         $this->logo_url = $this->site_url . '/wp-content/uploads/2024/08/WhatsApp-Image-2023-08-03-at-11.27.49-AM.jpeg.webp';
         add_action('init', [$this, 'intercept_route'], 1);
@@ -91,6 +114,10 @@ class Deckeva_Cotizador {
         $discount_type  = sanitize_text_field($_POST['discount_type'] ?? 'amount');
         $total          = intval($_POST['total'] ?? 0);
         $quote_number   = sanitize_text_field($_POST['quote_number'] ?? '');
+        $currency_code  = strtoupper(sanitize_text_field($_POST['currency_code'] ?? 'CLP'));
+        if (!isset($this->currencies[$currency_code])) {
+            $currency_code = 'CLP';
+        }
         // pdf_html is no longer used from client; PDF is generated server-side
 
         if (empty($client_email) || empty($client_name)) {
@@ -108,7 +135,7 @@ class Deckeva_Cotizador {
                     'isRemoteEnabled' => false,
                     'isPhpEnabled'    => false,
                 ]);
-                $pdf_html = $this->build_pdf_html($client_name, $client_email, $client_phone, $client_company, $client_rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number);
+                $pdf_html = $this->build_pdf_html($client_name, $client_email, $client_phone, $client_company, $client_rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code);
                 $dompdf->loadHtml($pdf_html);
                 $dompdf->setPaper('A4', 'portrait');
                 $dompdf->render();
@@ -128,7 +155,7 @@ class Deckeva_Cotizador {
         }
 
         // Build HTML email body
-        $email_html = $this->build_email_html($client_name, $client_email, $client_phone, $client_company, $client_rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number);
+        $email_html = $this->build_email_html($client_name, $client_email, $client_phone, $client_company, $client_rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code);
 
         $headers = [
             'Content-Type: text/html; charset=UTF-8',
@@ -168,21 +195,22 @@ class Deckeva_Cotizador {
     /* ──────────────────────────────────────────
        BUILD PDF HTML (server-side, no client input)
     ────────────────────────────────────────── */
-    private function build_pdf_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number) {
+    private function build_pdf_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code = 'CLP') {
         $fecha = date_i18n('d/m/Y');
+        $currency = $this->get_currency($currency_code);
 
         $services_rows = '';
         foreach ($services as $s) {
             $sname  = esc_html($s['name'] ?? '');
-            $sprice = '$' . number_format(intval($s['price'] ?? 0), 0, ',', '.');
+            $sprice = esc_html($this->format_money(intval($s['price'] ?? 0), $currency_code));
             $services_rows .= '<tr><td style="padding:8px 12px;border-bottom:1px solid #ddd;">' . $sname . '</td><td style="padding:8px 12px;border-bottom:1px solid #ddd;text-align:right;font-weight:bold;">' . $sprice . '</td></tr>';
         }
 
         $discount_row = '';
         if ($discount_value > 0) {
-            $disc_label = ($discount_type === 'percent') ? $discount_value . '%' : '$' . number_format($discount_value, 0, ',', '.');
+            $disc_label = ($discount_type === 'percent') ? $discount_value . '%' : esc_html($this->format_money($discount_value, $currency_code));
             $disc_amount = $subtotal - $total;
-            $discount_row = '<tr><td style="padding:8px 12px;color:#888;">Descuento (' . $disc_label . ')</td><td style="padding:8px 12px;text-align:right;color:#e53e3e;font-weight:bold;">-$' . number_format($disc_amount, 0, ',', '.') . '</td></tr>';
+            $discount_row = '<tr><td style="padding:8px 12px;color:#888;">Descuento (' . $disc_label . ')</td><td style="padding:8px 12px;text-align:right;color:#e53e3e;font-weight:bold;">-' . esc_html($this->format_money($disc_amount, $currency_code)) . '</td></tr>';
         }
 
         $boat_info = '';
@@ -231,13 +259,13 @@ table { width: 100%; border-collapse: collapse; }
 </table>
 
 <table style="margin-top:10px;">
-<tr><td style="padding:8px 12px;color:#666;">Sub Total</td><td style="padding:8px 12px;text-align:right;font-weight:600;">$' . number_format($subtotal, 0, ',', '.') . '</td></tr>
+<tr><td style="padding:8px 12px;color:#666;">Sub Total</td><td style="padding:8px 12px;text-align:right;font-weight:600;">' . esc_html($this->format_money($subtotal, $currency_code)) . '</td></tr>
 ' . $discount_row . '
-<tr class="total-row"><td>TOTAL</td><td style="text-align:right;color:#e8a735;">$' . number_format($total, 0, ',', '.') . '</td></tr>
+<tr class="total-row"><td>TOTAL</td><td style="text-align:right;color:#e8a735;">' . esc_html($this->format_money($total, $currency_code)) . '</td></tr>
 </table>
 
 <div class="footer">
-<p>Esta cotización es válida por 15 días hábiles.</p>
+<p>Esta cotización es válida por 15 días hábiles. Precios en ' . esc_html($currency['label']) . '.</p>
 <p>WhatsApp: +56 9 4021 1459 | contacto@deckeva.cl | deckeva.cl</p>
 </div>
 </body></html>';
@@ -246,14 +274,15 @@ table { width: 100%; border-collapse: collapse; }
     /* ──────────────────────────────────────────
        BUILD EMAIL HTML
     ────────────────────────────────────────── */
-    private function build_email_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number) {
+    private function build_email_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code = 'CLP') {
         $fecha = date_i18n('d/m/Y');
         $logo = esc_url($this->logo_url);
+        $currency = $this->get_currency($currency_code);
 
         $services_rows = '';
         foreach ($services as $s) {
             $sname = esc_html($s['name'] ?? '');
-            $sprice = '$' . number_format(intval($s['price'] ?? 0), 0, ',', '.');
+            $sprice = esc_html($this->format_money(intval($s['price'] ?? 0), $currency_code));
             $services_rows .= '<tr><td style="padding:10px 16px;border-bottom:1px solid #eee;font-size:14px;color:#333;">' . $sname . '</td><td style="padding:10px 16px;border-bottom:1px solid #eee;font-size:14px;color:#1a3a5c;font-weight:700;text-align:right;">' . $sprice . '</td></tr>';
         }
 
@@ -262,7 +291,7 @@ table { width: 100%; border-collapse: collapse; }
             if ($discount_type === 'percent') {
                 $discount_display = $discount_value . '%';
             } else {
-                $discount_display = '$' . number_format($discount_value, 0, ',', '.');
+                $discount_display = esc_html($this->format_money($discount_value, $currency_code));
             }
         }
 
@@ -317,20 +346,20 @@ table { width: 100%; border-collapse: collapse; }
 <!-- Totals -->
 <tr><td style="padding:10px 40px 25px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr><td style="padding:8px 16px;font-size:14px;color:#6b7280;">Sub Total</td><td style="padding:8px 16px;font-size:14px;color:#1a2a3a;font-weight:600;text-align:right;">$' . number_format($subtotal, 0, ',', '.') . '</td></tr>';
+<tr><td style="padding:8px 16px;font-size:14px;color:#6b7280;">Sub Total</td><td style="padding:8px 16px;font-size:14px;color:#1a2a3a;font-weight:600;text-align:right;">' . esc_html($this->format_money($subtotal, $currency_code)) . '</td></tr>';
 
         if ($discount_value > 0) {
-            $html .= '<tr><td style="padding:8px 16px;font-size:14px;color:#6b7280;">Descuento (' . $discount_display . ')</td><td style="padding:8px 16px;font-size:14px;color:#e53e3e;font-weight:600;text-align:right;">-$' . number_format($subtotal - $total, 0, ',', '.') . '</td></tr>';
+            $html .= '<tr><td style="padding:8px 16px;font-size:14px;color:#6b7280;">Descuento (' . $discount_display . ')</td><td style="padding:8px 16px;font-size:14px;color:#e53e3e;font-weight:600;text-align:right;">-' . esc_html($this->format_money($subtotal - $total, $currency_code)) . '</td></tr>';
         }
 
         $html .= '<tr><td colspan="2" style="padding:8px 16px;"><div style="border-top:2px dashed #e5e7eb;"></div></td></tr>
-<tr><td style="padding:12px 16px;font-size:18px;color:#1a2a3a;font-weight:800;">TOTAL</td><td style="padding:12px 16px;text-align:right;"><span style="background:#e8a735;color:#fff;padding:8px 20px;border-radius:8px;font-size:18px;font-weight:800;">$' . number_format($total, 0, ',', '.') . '</span></td></tr>
+<tr><td style="padding:12px 16px;font-size:18px;color:#1a2a3a;font-weight:800;">TOTAL</td><td style="padding:12px 16px;text-align:right;"><span style="background:#e8a735;color:#fff;padding:8px 20px;border-radius:8px;font-size:18px;font-weight:800;">' . esc_html($this->format_money($total, $currency_code)) . '</span></td></tr>
 </table>
 </td></tr>
 
 <!-- Footer -->
 <tr><td style="padding:25px 40px;background:#f8faff;text-align:center;border-top:1px solid #e5e7eb;">
-<p style="margin:0 0 8px;font-size:13px;color:#6b7280;line-height:1.6;">Esta cotización es válida por 15 días hábiles.<br>Para consultas, contáctenos directamente.</p>
+<p style="margin:0 0 8px;font-size:13px;color:#6b7280;line-height:1.6;">Esta cotización es válida por 15 días hábiles. Precios en ' . esc_html($currency['label']) . '.<br>Para consultas, contáctenos directamente.</p>
 <p style="margin:0;font-size:12px;color:#1a3a5c;font-weight:600;">WhatsApp: +56 9 4021 1459 | contacto@deckeva.cl | deckeva.com</p>
 </td></tr>
 
@@ -870,10 +899,25 @@ table { width: 100%; border-collapse: collapse; }
                         <input type="text" id="dcClientCompany" placeholder="Nombre de empresa">
                     </div>
                 </div>
-                <div class="dc-field-row single">
+                <div class="dc-field-row">
                     <div class="dc-field">
                         <label>RUT <small style="color:#9ca3af;">(opcional)</small></label>
                         <input type="text" id="dcClientRut" placeholder="12.345.678-9">
+                    </div>
+                    <div class="dc-field">
+                        <label>Moneda / Currency <span class="req">*</span></label>
+                        <select id="dcCurrency" onchange="dcSetCurrency(this.value)">
+                            <option value="CLP">🇨🇱 CLP — Peso Chileno ($)</option>
+                            <option value="USD">🇺🇸 USD — US Dollar ($)</option>
+                            <option value="EUR">🇪🇺 EUR — Euro (€)</option>
+                            <option value="ARS">🇦🇷 ARS — Peso Argentino ($)</option>
+                            <option value="MXN">🇲🇽 MXN — Peso Mexicano ($)</option>
+                            <option value="BRL">🇧🇷 BRL — Real (R$)</option>
+                            <option value="UYU">🇺🇾 UYU — Peso Uruguayo ($U)</option>
+                            <option value="PEN">🇵🇪 PEN — Sol Peruano (S/)</option>
+                            <option value="COP">🇨🇴 COP — Peso Colombiano ($)</option>
+                            <option value="GBP">🇬🇧 GBP — Libra Esterlina (£)</option>
+                        </select>
                     </div>
                 </div>
 
@@ -1042,7 +1086,7 @@ table { width: 100%; border-collapse: collapse; }
                         <label>Descuento:</label>
                         <input type="text" id="dcDiscountValue" placeholder="0" oninput="dcFormatPrice(this); dcUpdateTotals();">
                         <div class="dc-discount-toggle">
-                            <button class="active" id="dcDiscountCLP" onclick="dcSetDiscountType('amount')">CLP $</button>
+                            <button class="active" id="dcDiscountAmount" onclick="dcSetDiscountType('amount')">CLP $</button>
                             <button id="dcDiscountPct" onclick="dcSetDiscountType('percent')">%</button>
                         </div>
                     </div>
@@ -1145,23 +1189,95 @@ table { width: 100%; border-collapse: collapse; }
         8: 'Otros'
     };
 
-    /* ─── CLP Formatting ─── */
-    function formatCLP(num) {
-        if (!num && num !== 0) return '$0';
-        return '$' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    /* ─── Currency Map ─── */
+    var currencyMap = {
+        'CLP': { symbol: '$',  thousands: '.', label: 'Pesos Chilenos (CLP)' },
+        'USD': { symbol: '$',  thousands: ',', label: 'US Dollars (USD)' },
+        'EUR': { symbol: '€',  thousands: '.', label: 'Euros (EUR)' },
+        'ARS': { symbol: '$',  thousands: '.', label: 'Pesos Argentinos (ARS)' },
+        'MXN': { symbol: '$',  thousands: ',', label: 'Pesos Mexicanos (MXN)' },
+        'BRL': { symbol: 'R$', thousands: '.', label: 'Reales Brasileños (BRL)' },
+        'UYU': { symbol: '$U', thousands: '.', label: 'Pesos Uruguayos (UYU)' },
+        'PEN': { symbol: 'S/', thousands: ',', label: 'Soles Peruanos (PEN)' },
+        'COP': { symbol: '$',  thousands: '.', label: 'Pesos Colombianos (COP)' },
+        'GBP': { symbol: '£',  thousands: ',', label: 'Libras Esterlinas (GBP)' }
+    };
+
+    /* Country → default currency (ISO 3166-1 alpha-2) */
+    var countryToCurrency = {
+        'CL': 'CLP',
+        'US': 'USD', 'CA': 'USD',
+        'MX': 'MXN',
+        'AR': 'ARS',
+        'UY': 'UYU',
+        'PE': 'PEN',
+        'CO': 'COP',
+        'BR': 'BRL',
+        'GB': 'GBP', 'UK': 'GBP',
+        'ES': 'EUR', 'FR': 'EUR', 'DE': 'EUR', 'IT': 'EUR',
+        'PT': 'EUR', 'NL': 'EUR', 'BE': 'EUR', 'IE': 'EUR',
+        'AT': 'EUR', 'FI': 'EUR', 'GR': 'EUR'
+    };
+
+    var currentCurrency = 'CLP';
+
+    function detectInitialCurrency() {
+        try {
+            var langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'es-CL'];
+            for (var i = 0; i < langs.length; i++) {
+                var parts = String(langs[i]).toUpperCase().split(/[-_]/);
+                var country = parts[1] || '';
+                if (country && countryToCurrency[country]) return countryToCurrency[country];
+            }
+        } catch (e) {}
+        return 'CLP';
     }
 
-    function parseCLP(str) {
+    /* ─── Price Formatting (currency-aware) ─── */
+    function formatPrice(num) {
+        var cur = currencyMap[currentCurrency] || currencyMap.CLP;
+        var n = Math.round(Number(num) || 0);
+        return cur.symbol + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, cur.thousands);
+    }
+
+    function parsePrice(str) {
         if (!str) return 0;
-        return parseInt(str.replace(/\D/g, '')) || 0;
+        return parseInt(String(str).replace(/\D/g, '')) || 0;
     }
 
-    /* Format price input on typing */
+    /* Format price input on typing (uses current currency's thousands separator) */
     window.dcFormatPrice = function(input) {
+        var cur = currencyMap[currentCurrency] || currencyMap.CLP;
         var raw = input.value.replace(/\D/g, '');
         if (raw === '') { input.value = ''; return; }
         var num = parseInt(raw) || 0;
-        input.value = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, cur.thousands);
+    };
+
+    /* ─── Set active currency: reformat all price inputs, update symbol prefixes and totals ─── */
+    window.dcSetCurrency = function(code) {
+        if (!currencyMap[code]) code = 'CLP';
+        currentCurrency = code;
+        var cur = currencyMap[code];
+
+        // Update price prefixes (service rows)
+        document.querySelectorAll('.dc-service-price-prefix').forEach(function(el) {
+            el.textContent = cur.symbol;
+        });
+
+        // Update discount amount button label (e.g. "USD $", "EUR €")
+        var discBtn = document.getElementById('dcDiscountAmount');
+        if (discBtn) discBtn.textContent = code + ' ' + cur.symbol;
+
+        // Re-format all numeric inputs (service prices + discount amount) with new thousands separator
+        for (var i = 1; i <= 8; i++) {
+            var pInput = document.getElementById('dcSvcPrice' + i);
+            if (pInput) window.dcFormatPrice(pInput);
+        }
+        var dInput = document.getElementById('dcDiscountValue');
+        if (dInput) window.dcFormatPrice(dInput);
+
+        window.dcUpdateTotals();
     };
 
     /* ─── Toggle Service ─── */
@@ -1182,14 +1298,14 @@ table { width: 100%; border-collapse: collapse; }
             var cb = document.getElementById('dcSvcCheck' + i);
             var priceInput = document.getElementById('dcSvcPrice' + i);
             if (cb && cb.checked && priceInput) {
-                subtotal += parseCLP(priceInput.value);
+                subtotal += parsePrice(priceInput.value);
             }
         }
 
-        document.getElementById('dcSubtotal').textContent = formatCLP(subtotal);
+        document.getElementById('dcSubtotal').textContent = formatPrice(subtotal);
 
         var discountInput = document.getElementById('dcDiscountValue');
-        var discountRaw = parseCLP(discountInput.value);
+        var discountRaw = parsePrice(discountInput.value);
         var discountAmount = 0;
 
         if (discountType === 'percent') {
@@ -1199,15 +1315,15 @@ table { width: 100%; border-collapse: collapse; }
         }
 
         var total = Math.max(0, subtotal - discountAmount);
-        document.getElementById('dcTotal').textContent = formatCLP(total);
+        document.getElementById('dcTotal').textContent = formatPrice(total);
     };
 
     /* ─── Discount Type Toggle ─── */
     window.dcSetDiscountType = function(type) {
         discountType = type;
-        var btnCLP = document.getElementById('dcDiscountCLP');
+        var btnAmount = document.getElementById('dcDiscountAmount');
         var btnPct = document.getElementById('dcDiscountPct');
-        btnCLP.classList.toggle('active', type === 'amount');
+        btnAmount.classList.toggle('active', type === 'amount');
         btnPct.classList.toggle('active', type === 'percent');
         dcUpdateTotals();
     };
@@ -1273,7 +1389,7 @@ table { width: 100%; border-collapse: collapse; }
             var cb = document.getElementById('dcSvcCheck' + i);
             var priceInput = document.getElementById('dcSvcPrice' + i);
             if (cb && cb.checked) {
-                var price = parseCLP(priceInput.value);
+                var price = parsePrice(priceInput.value);
                 var name = serviceNames[i];
                 if (i === 8) {
                     var desc = document.getElementById('dcSvcDesc8').value.trim();
@@ -1284,7 +1400,7 @@ table { width: 100%; border-collapse: collapse; }
             }
         }
 
-        var discountRaw = parseCLP(document.getElementById('dcDiscountValue').value);
+        var discountRaw = parsePrice(document.getElementById('dcDiscountValue').value);
         var discountAmount = 0;
         if (discountType === 'percent') {
             discountAmount = Math.round(subtotal * discountRaw / 100);
@@ -1309,7 +1425,8 @@ table { width: 100%; border-collapse: collapse; }
             discount_value: discountRaw,
             discount_type: discountType,
             discount_amount: discountAmount,
-            total: total
+            total: total,
+            currency_code: currentCurrency
         };
     }
 
@@ -1360,17 +1477,17 @@ table { width: 100%; border-collapse: collapse; }
             d.services.forEach(function(s) {
                 html += '<div class="dc-summary-service">';
                 html += '<span class="dc-summary-service-name">' + esc(s.name) + '</span>';
-                html += '<span class="dc-summary-service-price">' + formatCLP(s.price) + '</span>';
+                html += '<span class="dc-summary-service-price">' + formatPrice(s.price) + '</span>';
                 html += '</div>';
             });
         }
         html += '<div style="margin-top:14px;padding-top:14px;border-top:2px dashed #e5e7eb;">';
-        html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;"><span style="color:#6b7280;">Sub Total</span><span style="font-weight:700;color:#1a2a3a;">' + formatCLP(d.subtotal) + '</span></div>';
+        html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;"><span style="color:#6b7280;">Sub Total</span><span style="font-weight:700;color:#1a2a3a;">' + formatPrice(d.subtotal) + '</span></div>';
         if (d.discount_amount > 0) {
-            var discLabel = d.discount_type === 'percent' ? d.discount_value + '%' : formatCLP(d.discount_value);
-            html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;"><span style="color:#e53e3e;">Descuento (' + discLabel + ')</span><span style="font-weight:700;color:#e53e3e;">-' + formatCLP(d.discount_amount) + '</span></div>';
+            var discLabel = d.discount_type === 'percent' ? d.discount_value + '%' : formatPrice(d.discount_value);
+            html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px;"><span style="color:#e53e3e;">Descuento (' + discLabel + ')</span><span style="font-weight:700;color:#e53e3e;">-' + formatPrice(d.discount_amount) + '</span></div>';
         }
-        html += '<div style="display:flex;justify-content:space-between;padding:10px 0 0;font-size:18px;"><span style="font-weight:800;color:#1a2a3a;">TOTAL</span><span style="font-weight:800;background:#e8a735;color:#fff;padding:6px 18px;border-radius:8px;">' + formatCLP(d.total) + '</span></div>';
+        html += '<div style="display:flex;justify-content:space-between;padding:10px 0 0;font-size:18px;"><span style="font-weight:800;color:#1a2a3a;">TOTAL</span><span style="font-weight:800;background:#e8a735;color:#fff;padding:6px 18px;border-radius:8px;">' + formatPrice(d.total) + '</span></div>';
         html += '</div></div>';
 
         document.getElementById('dcSummaryContent').innerHTML = html;
@@ -1425,26 +1542,27 @@ table { width: 100%; border-collapse: collapse; }
         d.services.forEach(function(s) {
             h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;background:#f8faff;border-radius:8px;margin-bottom:5px;border:1px solid #e5e7eb;">';
             h += '<span style="font-size:13px;font-weight:600;color:#1a2a3a;">' + esc(s.name) + '</span>';
-            h += '<span style="font-size:14px;font-weight:700;color:#1a3a5c;white-space:nowrap;">' + formatCLP(s.price) + '</span>';
+            h += '<span style="font-size:14px;font-weight:700;color:#1a3a5c;white-space:nowrap;">' + formatPrice(s.price) + '</span>';
             h += '</div>';
         });
 
         // Totals
         h += '<div style="margin-top:12px;padding-top:10px;border-top:2px dashed #e5e7eb;">';
-        h += '<div style="display:flex;justify-content:space-between;padding:5px 14px;font-size:13px;"><span style="color:#6b7280;">Sub Total</span><span style="font-weight:700;color:#1a2a3a;">' + formatCLP(d.subtotal) + '</span></div>';
+        h += '<div style="display:flex;justify-content:space-between;padding:5px 14px;font-size:13px;"><span style="color:#6b7280;">Sub Total</span><span style="font-weight:700;color:#1a2a3a;">' + formatPrice(d.subtotal) + '</span></div>';
         if (d.discount_amount > 0) {
-            var discLabel = d.discount_type === 'percent' ? d.discount_value + '%' : formatCLP(d.discount_value);
-            h += '<div style="display:flex;justify-content:space-between;padding:5px 14px;font-size:13px;"><span style="color:#e53e3e;">Descuento (' + discLabel + ')</span><span style="font-weight:700;color:#e53e3e;">-' + formatCLP(d.discount_amount) + '</span></div>';
+            var discLabel = d.discount_type === 'percent' ? d.discount_value + '%' : formatPrice(d.discount_value);
+            h += '<div style="display:flex;justify-content:space-between;padding:5px 14px;font-size:13px;"><span style="color:#e53e3e;">Descuento (' + discLabel + ')</span><span style="font-weight:700;color:#e53e3e;">-' + formatPrice(d.discount_amount) + '</span></div>';
         }
         h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#1a3a5c;border-radius:10px;margin-top:8px;">';
         h += '<span style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);">TOTAL</span>';
-        h += '<span style="font-size:20px;font-weight:800;color:#ffffff;">' + formatCLP(d.total) + '</span>';
+        h += '<span style="font-size:20px;font-weight:800;color:#ffffff;">' + formatPrice(d.total) + '</span>';
         h += '</div>';
         h += '</div></div>';
 
         // Footer
         h += '<div style="margin-top:24px;padding-top:18px;border-top:2px solid #e5e7eb;text-align:center;">';
-        h += '<div style="font-size:11px;color:#6b7280;line-height:1.5;">Esta cotización es válida por 15 días hábiles.<br>Los precios están en Pesos Chilenos (CLP).</div>';
+        var curLabel = (currencyMap[currentCurrency] || currencyMap.CLP).label;
+        h += '<div style="font-size:11px;color:#6b7280;line-height:1.5;">Esta cotización es válida por 15 días hábiles.<br>Los precios están en ' + esc(curLabel) + '.</div>';
         h += '<div style="display:flex;justify-content:center;gap:20px;margin-top:10px;flex-wrap:wrap;">';
         h += '<span style="font-size:12px;font-weight:600;color:#1a3a5c;">+56 9 4021 1459</span>';
         h += '<span style="font-size:12px;font-weight:600;color:#1a3a5c;">contacto@deckeva.cl</span>';
@@ -1521,6 +1639,7 @@ table { width: 100%; border-collapse: collapse; }
         formData.append('discount_type', d.discount_type);
         formData.append('total', d.total);
         formData.append('quote_number', quoteNum);
+        formData.append('currency_code', d.currency_code);
 
         fetch(siteUrl + '/cotizador/enviar-email', {
             method: 'POST',
@@ -1558,6 +1677,22 @@ table { width: 100%; border-collapse: collapse; }
         var div = document.createElement('div');
         div.textContent = text || '';
         return div.innerHTML;
+    }
+
+    /* ─── Init: detect currency from browser locale & apply ─── */
+    function dcInit() {
+        var detected = detectInitialCurrency();
+        var select = document.getElementById('dcCurrency');
+        if (select && currencyMap[detected]) {
+            select.value = detected;
+        }
+        window.dcSetCurrency(detected);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', dcInit);
+    } else {
+        dcInit();
     }
 
 })();
