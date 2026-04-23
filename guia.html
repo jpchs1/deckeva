@@ -240,12 +240,197 @@
       font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
     }
 
+    /* ─── STEP SECTIONS ─── */
+    .section {
+      padding: 90px 0;
+      position: relative;
+    }
+    .section + .section { border-top: 1px solid rgba(255,255,255,0.05); }
+
+    .section-header {
+      display: flex; align-items: flex-end; gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 34px;
+    }
+    .section-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold);
+      padding: 6px 12px;
+      border: 1px solid rgba(245,166,35,0.35);
+      border-radius: 999px;
+      background: rgba(245,166,35,0.06);
+    }
+    .section h2.section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(30px, 4.4vw, 46px);
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.3px;
+      flex: 1; min-width: 260px;
+    }
+    .section-sub {
+      font-size: 16.5px;
+      color: var(--text);
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    /* Video embed 16:9 */
+    .video-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: #000;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 44px;
+    }
+    .video-wrap iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    /* Grid two-col: materiales + pasos */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1.55fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(26,58,92,0.35), rgba(17,34,64,0.35));
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--r-lg);
+      padding: 26px 26px 22px;
+    }
+    .card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 20px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card h3 .pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 10.5px; letter-spacing: 1.5px;
+      color: var(--ocean-bright);
+      background: rgba(26,155,227,0.12);
+      padding: 3px 10px; border-radius: 999px;
+      font-weight: 400;
+    }
+
+    .check-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .check-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 15px; color: var(--text);
+    }
+    .check-list li::before {
+      content: "";
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      margin-top: 3px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, var(--ocean-bright) 0 4px, transparent 5px),
+        rgba(26,155,227,0.12);
+      border: 1px solid rgba(26,155,227,0.35);
+    }
+
+    .steps-ordered {
+      list-style: none;
+      counter-reset: step;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .steps-ordered li {
+      counter-increment: step;
+      position: relative;
+      padding: 16px 18px 16px 64px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--r);
+      font-size: 15px;
+      color: var(--text);
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .steps-ordered li:hover {
+      border-color: rgba(26,155,227,0.35);
+      background: rgba(26,155,227,0.05);
+    }
+    .steps-ordered li::before {
+      content: counter(step, decimal-leading-zero);
+      position: absolute;
+      left: 16px; top: 14px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gold);
+      background: rgba(245,166,35,0.10);
+      border: 1px solid rgba(245,166,35,0.30);
+      border-radius: 8px;
+      padding: 4px 8px;
+      line-height: 1;
+    }
+    .steps-ordered li strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .tips {
+      margin-top: 32px;
+      padding: 22px 24px;
+      border-radius: var(--r-lg);
+      background: linear-gradient(135deg, rgba(245,166,35,0.08), rgba(245,166,35,0.02));
+      border: 1px solid rgba(245,166,35,0.25);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .tips .tip-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: rgba(245,166,35,0.18);
+      display: grid; place-items: center;
+      color: var(--gold-light);
+    }
+    .tips h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--gold-light);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .tips ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .tips ul li {
+      font-size: 14.5px; color: var(--text);
+      padding-left: 18px; position: relative;
+    }
+    .tips ul li::before {
+      content: "→";
+      position: absolute; left: 0; top: 0;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
     /* ─── RESPONSIVE ─── */
+    @media (max-width: 880px) {
+      .split { grid-template-columns: 1fr; }
+    }
     @media (max-width: 760px) {
       .hero { padding: 60px 0 50px; }
+      .section { padding: 60px 0; }
       .steps { grid-template-columns: 1fr; }
       .btn { width: 100%; justify-content: center; }
       .cta-row { flex-direction: column; }
+      .tips { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -310,8 +495,78 @@
     </div>
   </section>
 
-  <!-- ─── PASO 1 (se construye en el siguiente commit) ─── -->
-  <section id="paso-1" class="placeholder">PASO 1 · Toma de medidas — (próximo commit)</section>
+  <!-- ─── PASO 1 · TOMA DE MEDIDAS ─── -->
+  <section id="paso-1" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Paso 1 · Lo haces tú</span>
+      </div>
+      <h2 class="section-title">Toma de medidas de tu lancha</h2>
+      <p class="section-sub">
+        Mira el video completo (5 min) y luego usa la lista y los pasos de abajo como checklist.
+        Cuanto mejor midas, mejor calzará tu piso.
+      </p>
+
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/gecQDpUJ-Ag?rel=0&modestbranding=1"
+          title="Cómo tomar las medidas de tu lancha para un piso de Goma EVA DECKEVA"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+
+      <div class="split">
+        <!-- Materiales -->
+        <div class="card">
+          <h3>Qué necesitas <span class="pill">5 cosas</span></h3>
+          <ul class="check-list">
+            <li>Huincha o cinta métrica (mínimo 3m)</li>
+            <li>Cartón grande o papel kraft para moldes</li>
+            <li>Lápiz y marcador permanente</li>
+            <li>Cúter o tijera</li>
+            <li>Celular con cámara para fotografiar</li>
+          </ul>
+        </div>
+
+        <!-- Pasos -->
+        <div>
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--white);margin-bottom:16px;">
+            Paso a paso
+          </h3>
+          <ol class="steps-ordered">
+            <li><strong>Limpia la zona.</strong> Retira cualquier piso o adhesivo viejo. La superficie debe estar visible y seca.</li>
+            <li><strong>Identifica las piezas.</strong> Anota cada zona: cubierta, escalones, asientos, tapas de compartimentos.</li>
+            <li><strong>Haz un molde 1:1.</strong> Apoya cartón o papel kraft sobre cada pieza y marca los bordes. Corta el molde.</li>
+            <li><strong>Rotula cada molde.</strong> Escribe el nombre ("proa", "popa", "escalón izq.") y una flecha indicando la proa.</li>
+            <li><strong>Verifica con medidas.</strong> Toma el largo y ancho en 3 puntos de cada pieza. Las lanchas casi nunca son cuadradas.</li>
+            <li><strong>Fotografía todo.</strong> Cada molde, cada pieza en la lancha y la lancha completa desde varios ángulos.</li>
+            <li><strong>Anota en centímetros.</strong> No mezcles unidades. Mantén todo en cm.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="tips">
+        <div class="tip-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a7 7 0 0 0-4 12.7V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.3A7 7 0 0 0 12 2z"/>
+            <line x1="9" y1="22" x2="15" y2="22"/>
+          </svg>
+        </div>
+        <div>
+          <h4>Tips importantes</h4>
+          <ul>
+            <li>Si una pieza tiene escotilla o tapa, <strong>no la cortes tú</strong>: márcala en el molde y la cortamos nosotros.</li>
+            <li>Prefiere 1 mm de más que 1 mm de menos. Los bordes contra paredes y asientos siempre calzan mejor con holgura mínima.</li>
+            <li>Para curvaturas suaves, une varios moldes de cartón con cinta adhesiva.</li>
+            <li>Envíanos las fotos y medidas por WhatsApp o mail. Las revisamos antes de cortar.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ─── PASO FINAL (se construye en el siguiente commit) ─── -->
   <section id="paso-final" class="placeholder">PASO FINAL · Instalación — (próximo commit)</section>
