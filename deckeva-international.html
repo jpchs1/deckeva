@@ -1024,6 +1024,76 @@
       color: var(--text); font-family: 'Space Mono', monospace;
       font-size: 11px; letter-spacing: 1px;
     }
+    .price-breakdown {
+      display: flex; flex-direction: column; gap: 4px;
+      margin-top: 6px; padding-top: 10px;
+      border-top: 1px solid rgba(245,166,35,0.25);
+      font-size: 13px;
+    }
+    .price-line { display: flex; justify-content: space-between; color: var(--text); }
+    .price-line.total {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px; font-weight: 800; color: var(--gold);
+      margin-top: 4px; padding-top: 8px;
+      border-top: 1px dashed rgba(245,166,35,0.35);
+    }
+    .price-line.total .label { font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+
+    .install-notice {
+      background: rgba(245,166,35,0.07);
+      border: 1px solid rgba(245,166,35,0.3);
+      border-radius: var(--r);
+      padding: 18px 20px; margin: 8px 0 22px;
+    }
+    .install-notice .install-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .install-notice p { font-size: 13px; color: var(--text); line-height: 1.6; margin: 0 0 10px; }
+    .install-table {
+      width: 100%; border-collapse: collapse; font-size: 12px;
+      margin: 10px 0;
+    }
+    .install-table th, .install-table td {
+      padding: 8px 10px; text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .install-table th {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--gold); font-weight: 700;
+    }
+    .install-table td { color: var(--text); }
+    .install-table td strong { color: #fff; font-weight: 700; }
+    .install-notice ul {
+      list-style: none; padding: 0; margin: 10px 0 0;
+      display: flex; flex-direction: column; gap: 6px;
+      font-size: 12px; color: var(--text);
+    }
+    .install-notice ul li::before {
+      content: '✓'; color: var(--gold);
+      margin-right: 8px; font-weight: 700;
+    }
+
+    .submit-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .submit-btn.email    { background: #3a8bf5; color: #fff; }
+    .submit-btn.email:hover { background: #4c99ff; }
+    .submit-btn.whatsapp { background: #25d366; color: #fff; }
+    .submit-btn.whatsapp:hover { background: #34e178; }
+    .submit-btn.both     { background: var(--gold); color: var(--navy); }
+    .submit-btn[disabled] { opacity: .55; cursor: wait; transform: none !important; }
+    .submit-btn .btn-label { display: block; font-size: 14px; }
+    .submit-btn .btn-sub   { display: block; font-size: 10px; font-weight: 500; opacity: .9; margin-top: 2px; letter-spacing: 1px; }
+    .submit-status {
+      font-size: 13px; color: var(--gray); margin-top: 10px;
+      text-align: center; min-height: 18px;
+    }
+    .submit-status.error { color: #ff6b6b; }
+    .submit-status.success { color: #3ad67a; }
+    @media (max-width: 640px) {
+      .submit-group { grid-template-columns: 1fr; }
+    }
     .submit-btn {
       width: 100%; padding: 18px;
       background: var(--gold);
@@ -2585,12 +2655,17 @@
             </div>
 
             <div class="price-display" id="priceDisplay">
-              <div class="price-label" data-es>Precio base estimado</div>
-              <div class="price-label" data-en>Estimated base price</div>
+              <div class="price-label" data-es>Precio estimado</div>
+              <div class="price-label" data-en>Estimated price</div>
               <div class="price-value" id="priceValue">—</div>
               <div class="price-sub" id="priceSub"></div>
-              <div class="price-sub" data-es>* Precio referencial (+ IVA en Chile). Sujeto a diseño, complejidad y tipo de cambio al momento de cotizar.</div>
-              <div class="price-sub" data-en>* Reference price (+ VAT in Chile). Subject to design, complexity and FX rate at quote time.</div>
+              <div class="price-breakdown" id="priceBreakdown" style="display:none;">
+                <div class="price-line"><span data-es>Subtotal</span><span data-en>Subtotal</span><span id="pbSubtotal">—</span></div>
+                <div class="price-line"><span>IVA 19%</span><span id="pbIva">—</span></div>
+                <div class="price-line total"><span class="label">Total</span><span id="pbTotal">—</span></div>
+              </div>
+              <div class="price-sub" data-es>* Precio referencial. Sujeto a diseño, complejidad y tipo de cambio al momento de confirmar. IVA 19% incluido en el Total.</div>
+              <div class="price-sub" data-en>* Reference price. Subject to design, complexity and FX rate at quote-confirmation time. VAT 19% included in Total.</div>
             </div>
 
             <div class="form-row">
@@ -2683,10 +2758,68 @@
             </div>
           </div>
 
-          <button type="submit" class="submit-btn">
-            <span data-es>🚀 Enviar Cotización por WhatsApp</span>
-            <span data-en>🚀 Send Quote via WhatsApp</span>
-          </button>
+          <!-- ─── Aviso Toma de Medidas & Instalación ─── -->
+          <div class="install-notice">
+            <div class="install-title" data-es>📐 Toma de Medidas &amp; 🛠️ Instalación — Importante</div>
+            <div class="install-title" data-en>📐 Measurement &amp; 🛠️ Installation — Important</div>
+
+            <p data-es>La <strong>toma de medidas</strong> (para envíos dentro de Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Deckeva no realiza estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización.</p>
+            <p data-en><strong>Measurement</strong> (for shipments within Chile) and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. Deckeva does not perform these tasks on-site. These costs are <u>not included</u> in the quote.</p>
+
+            <table class="install-table">
+              <thead>
+                <tr>
+                  <th data-es>Ítem</th><th data-en>Item</th>
+                  <th data-es>Costo referencial</th><th data-en>Reference cost</th>
+                  <th data-es>Tiempo</th><th data-en>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span data-es>📐 Toma de medidas</span><span data-en>📐 Measurement</span></td>
+                  <td><strong>USD $120</strong></td>
+                  <td><span data-es>4 a 6 hrs aprox.</span><span data-en>~4–6 hrs</span></td>
+                </tr>
+                <tr>
+                  <td><span data-es>🛠️ Instalación</span><span data-en>🛠️ Installation</span></td>
+                  <td><strong>USD $120</strong></td>
+                  <td><span data-es>3 a 5 hrs aprox.</span><span data-en>~3–5 hrs</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p data-es style="margin-top:10px;"><strong>Deckeva acompaña todo el proceso sin costo adicional:</strong></p>
+            <p data-en style="margin-top:10px;"><strong>Deckeva supports the entire process at no extra cost:</strong></p>
+            <ul>
+              <li><span data-es>🎥 Video explicativo paso a paso para la <strong>toma de medidas</strong>.</span><span data-en>🎥 Step-by-step explainer <strong>video for measurement</strong>.</span></li>
+              <li><span data-es>🎥 Video explicativo paso a paso para la <strong>instalación</strong>.</span><span data-en>🎥 Step-by-step explainer <strong>video for installation</strong>.</span></li>
+              <li><span data-es>📞 Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo durante el trabajo.</span><span data-en>📞 <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> for real-time guidance throughout the work.</span></li>
+            </ul>
+          </div>
+
+          <!-- Honeypot anti-bot (hidden) -->
+          <input type="text" name="website" id="fHoney" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
+
+          <!-- Tres opciones de envío -->
+          <div class="submit-group">
+            <button type="button" class="submit-btn email" data-mode="email" onclick="submitQuote('email')">
+              <span class="btn-label">📧 <span data-es>Email</span><span data-en>Email</span></span>
+              <span class="btn-sub" data-es>con PDF adjunto</span>
+              <span class="btn-sub" data-en>with PDF attached</span>
+            </button>
+            <button type="button" class="submit-btn whatsapp" data-mode="whatsapp" onclick="submitQuote('whatsapp')">
+              <span class="btn-label">💬 WhatsApp</span>
+              <span class="btn-sub" data-es>con link al PDF</span>
+              <span class="btn-sub" data-en>with PDF link</span>
+            </button>
+            <button type="button" class="submit-btn both" data-mode="both" onclick="submitQuote('both')">
+              <span class="btn-label">📧 + 💬 <span data-es>Ambos</span><span data-en>Both</span></span>
+              <span class="btn-sub" data-es>Email + WhatsApp</span>
+              <span class="btn-sub" data-en>Email + WhatsApp</span>
+            </button>
+          </div>
+          <div class="submit-status" id="submitStatus" aria-live="polite"></div>
+
           <p class="form-note" data-es>Te responderemos en menos de 24 horas hábiles 🌊</p>
           <p class="form-note" data-en>We'll respond within 24 business hours 🌊</p>
         </form>
@@ -3136,6 +3269,7 @@
     const display = document.getElementById('priceDisplay');
     const priceEl = document.getElementById('priceValue');
     const subEl = document.getElementById('priceSub');
+    const breakdown = document.getElementById('priceBreakdown');
     const val = sel.value;
     const code = curSel.value || 'CLP';
 
@@ -3145,12 +3279,23 @@
     if (size === 'otro') {
       priceEl.textContent = 'A consultar / Quote on request';
       subEl.textContent = '';
+      breakdown.style.display = 'none';
       display.classList.add('visible');
       return;
     }
 
     const clp = parseInt(priceStr) || 0;
+    const ivaClp = Math.round(clp * 0.19);
+    const totalClp = clp + ivaClp;
+
+    // Main price: keep the "headline" showing Subtotal (the base the user picked).
     priceEl.textContent = code + ' ' + formatMoney(clp, code);
+
+    // Detailed breakdown: subtotal + IVA + total (always, 19%)
+    document.getElementById('pbSubtotal').textContent = code + ' ' + formatMoney(clp, code);
+    document.getElementById('pbIva').textContent      = code + ' ' + formatMoney(ivaClp, code);
+    document.getElementById('pbTotal').textContent    = code + ' ' + formatMoney(totalClp, code);
+    breakdown.style.display = 'flex';
 
     if (code === 'CLP') {
       subEl.textContent = '';
@@ -3197,10 +3342,50 @@
     } catch (e) { /* fallback to CLP already selected */ }
   })();
 
-  // ─── FORM SUBMIT → open WhatsApp with the quote prefilled ───
+  // ─── SEND QUOTE (email / whatsapp / both) ───
+  // Cross-origin POST to the Deckeva.cl endpoint, which generates the PDF
+  // (DOMPDF) and either attaches it to an email or hosts it at a UUID URL
+  // for WhatsApp delivery.
+  const QUOTE_ENDPOINT = 'https://deckeva.cl/cotizador/enviar-international';
   const WA_NUMBER = '56940211459';
-  document.getElementById('quoteForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+
+  function setStatus(msg, kind) {
+    const el = document.getElementById('submitStatus');
+    el.className = 'submit-status' + (kind ? ' ' + kind : '');
+    el.textContent = msg || '';
+  }
+
+  function setSubmitting(isBusy) {
+    document.querySelectorAll('.submit-btn[data-mode]').forEach(b => {
+      if (isBusy) b.setAttribute('disabled', 'disabled');
+      else        b.removeAttribute('disabled');
+    });
+  }
+
+  function buildWhatsAppText(quoteNumber, pdfUrl, fields, priceStr, code, priceClp) {
+    const ivaClp = Math.round((priceClp || 0) * 0.19);
+    const totalClp = (priceClp || 0) + ivaClp;
+    return 'Hola! Te envío mi cotización DECKEVA 🌊\n\n' +
+      '📋 N° ' + quoteNumber + '\n' +
+      (pdfUrl ? ('📎 PDF: ' + pdfUrl + '\n\n') : '\n') +
+      '— EMBARCACIÓN —\n' +
+      '• Tamaño: ' + (fields.size === 'otro' ? 'Otro / A consultar' : (fields.size ? fields.size + ' ft' : '—')) + '\n' +
+      '• Marca / Modelo: ' + (fields.brand + ' ' + fields.model).trim() + '\n' +
+      '• Año: ' + fields.year + '\n' +
+      '• Color: ' + fields.color + '\n\n' +
+      '— PRECIO —\n' +
+      '• Subtotal: ' + priceStr + '\n' +
+      '• IVA 19%: ' + (priceClp ? (code + ' ' + formatMoney(ivaClp, code)) : '—') + '\n' +
+      '• Total: ' + (priceClp ? (code + ' ' + formatMoney(totalClp, code)) : '—') + '\n\n' +
+      '— MIS DATOS —\n' +
+      '• ' + (fields.first + ' ' + fields.last).trim() + '\n' +
+      '• ' + fields.email + ' · ' + fields.phone + '\n' +
+      '• Envío a: ' + fields.country + '\n';
+  }
+
+  window.submitQuote = async function(mode) {
+    const form = document.getElementById('quoteForm');
+    if (!form.reportValidity()) return;  // native HTML5 validation
 
     const sizeVal = document.getElementById('sizeSelect').value || '';
     const [sz, rawClp] = sizeVal.split('|');
@@ -3208,10 +3393,10 @@
     const priceClp = parseInt(rawClp) || 0;
     const priceStr = (sz && sz !== 'otro')
       ? code + ' ' + formatMoney(priceClp, code)
-      : 'A consultar';
+      : 'A consultar / Quote on request';
 
     const fields = {
-      size:    sz === 'otro' ? 'Otro / A consultar' : (sz ? sz + ' pies / feet' : '—'),
+      size:    sz || '',
       brand:   document.getElementById('fBrand').value.trim(),
       model:   document.getElementById('fModel').value.trim(),
       year:    document.getElementById('fYear').value.trim(),
@@ -3220,30 +3405,70 @@
       last:    document.getElementById('fLast').value.trim(),
       email:   document.getElementById('fEmail').value.trim(),
       phone:   document.getElementById('fPhone').value.trim(),
-      country: document.getElementById('fCountry').value
+      country: document.getElementById('fCountry').value,
+      honey:   document.getElementById('fHoney').value
     };
 
-    const msg =
-      'Hola! Quiero cotizar un piso DECKEVA 🌊\n\n' +
-      '— EMBARCACIÓN —\n' +
-      '• Tamaño: ' + fields.size + '\n' +
-      '• Marca / Modelo: ' + fields.brand + ' ' + fields.model + '\n' +
-      '• Año: ' + fields.year + '\n' +
-      '• Color: ' + fields.color + '\n' +
-      '• Precio referencial: ' + priceStr + '\n\n' +
-      '— CONTACTO —\n' +
-      '• Nombre: ' + fields.first + ' ' + fields.last + '\n' +
-      '• Email: ' + fields.email + '\n' +
-      '• Teléfono: ' + fields.phone + '\n\n' +
-      '— ENVÍO —\n' +
-      '• País: ' + fields.country + '\n';
+    setSubmitting(true);
+    setStatus(
+      mode === 'email' ? 'Enviando email con el PDF...' :
+      mode === 'whatsapp' ? 'Generando tu PDF...' :
+      'Enviando email + generando PDF para WhatsApp...'
+    );
 
-    const url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank', 'noopener');
+    try {
+      const body = new URLSearchParams();
+      body.set('mode', mode);
+      body.set('client_first_name', fields.first);
+      body.set('client_last_name',  fields.last);
+      body.set('client_email',      fields.email);
+      body.set('client_phone',      fields.phone);
+      body.set('client_country',    fields.country);
+      body.set('boat_size',         fields.size);
+      body.set('boat_brand',        fields.brand);
+      body.set('boat_model',        fields.model);
+      body.set('boat_year',         fields.year);
+      body.set('boat_color',        fields.color);
+      body.set('price_clp',         String(priceClp));
+      body.set('currency_code',     code);
+      body.set('website',           fields.honey);  // honeypot
 
-    this.style.display = 'none';
-    document.getElementById('successMessage').classList.add('visible');
-  });
+      const res = await fetch(QUOTE_ENDPOINT, { method: 'POST', body });
+      const json = await res.json();
+
+      if (!json.success) {
+        const msg = (json.data && json.data.message) || 'Hubo un problema al enviar. Probá de nuevo.';
+        setStatus(msg, 'error');
+        setSubmitting(false);
+        return;
+      }
+
+      const d = json.data || {};
+      const quoteNumber = d.quote_number || '—';
+
+      if (mode === 'whatsapp' || mode === 'both') {
+        const text = buildWhatsAppText(quoteNumber, d.pdf_url, fields, priceStr, code, priceClp);
+        const url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
+        window.open(url, '_blank', 'noopener');
+      }
+
+      // Show on-page success
+      form.style.display = 'none';
+      const success = document.getElementById('successMessage');
+      const successP = success.querySelector('p[data-es], p[data-en]');
+      if (mode === 'email') {
+        setStatus('✓ Enviado a ' + fields.email + ' con el PDF adjunto.', 'success');
+      } else if (mode === 'whatsapp') {
+        setStatus('✓ Se abrió WhatsApp con el detalle y link al PDF.', 'success');
+      } else {
+        setStatus('✓ Email con PDF adjunto + WhatsApp con link al PDF.', 'success');
+      }
+      success.classList.add('visible');
+    } catch (err) {
+      setStatus('Error de red. Revisá tu conexión y probá de nuevo.', 'error');
+      setSubmitting(false);
+    }
+  };
 
   // ─── SCROLL FADE IN ───
   const observer = new IntersectionObserver((entries) => {
