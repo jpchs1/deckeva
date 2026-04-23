@@ -32,6 +32,11 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- YouTube preconnects (solo se usan cuando el usuario hace click en play) -->
+  <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+  <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.google.com" />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
@@ -268,7 +273,7 @@
       margin-bottom: 40px;
     }
 
-    /* Video embed 16:9 */
+    /* Video embed 16:9 (facade click-to-play) */
     .video-wrap {
       position: relative;
       aspect-ratio: 16 / 9;
@@ -283,6 +288,79 @@
       position: absolute; inset: 0;
       width: 100%; height: 100%;
       border: 0;
+    }
+    .video-facade {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      padding: 0; border: 0; cursor: pointer;
+      background-color: #000;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: block;
+      overflow: hidden;
+      color: var(--white);
+      font: inherit;
+      transition: filter .3s ease;
+    }
+    .video-facade::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(10,22,40,0.15) 0%, rgba(10,22,40,0.0) 40%, rgba(10,22,40,0.55) 100%);
+      transition: background .3s ease;
+    }
+    .video-facade:hover { filter: brightness(1.05); }
+    .video-facade:hover::before { background: linear-gradient(180deg, rgba(10,22,40,0.05) 0%, rgba(10,22,40,0.0) 40%, rgba(10,22,40,0.45) 100%); }
+    .video-facade:focus-visible { outline: 3px solid var(--ocean-bright); outline-offset: -3px; }
+    .video-play {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 82px; height: 82px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+      display: grid; place-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      transition: transform .2s ease, background .2s ease;
+    }
+    .video-facade:hover .video-play { transform: translate(-50%, -50%) scale(1.08); background: var(--white); }
+    .video-play svg {
+      width: 34px; height: 34px;
+      color: var(--navy);
+      margin-left: 5px; /* optical centering of triangle */
+    }
+    .video-meta {
+      position: absolute;
+      left: 22px; bottom: 18px; right: 22px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px;
+      pointer-events: none;
+    }
+    .video-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.3px;
+      color: var(--white);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      line-height: 1.15;
+    }
+    .video-duration {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 1.5px;
+      color: var(--white);
+      background: rgba(10,22,40,0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 5px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 560px) {
+      .video-play { width: 64px; height: 64px; }
+      .video-play svg { width: 26px; height: 26px; }
+      .video-title { font-size: 15px; }
+      .video-meta { left: 14px; right: 14px; bottom: 12px; }
     }
 
     /* Grid two-col: materiales + pasos */
@@ -616,13 +694,19 @@
       </p>
 
       <div class="video-wrap">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/gecQDpUJ-Ag?rel=0&modestbranding=1"
-          title="Cómo tomar las medidas de tu lancha para un piso de Goma EVA DECKEVA"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <button type="button"
+                class="video-facade"
+                data-video-id="gecQDpUJ-Ag"
+                data-title="Cómo tomar las medidas de tu lancha para un piso de Goma EVA DECKEVA"
+                aria-label="Reproducir video: Cómo tomar las medidas de tu lancha">
+          <span class="video-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          </span>
+          <span class="video-meta">
+            <span class="video-title">Paso 1 — Toma de medidas de tu lancha</span>
+            <span class="video-duration">▶ YOUTUBE</span>
+          </span>
+        </button>
       </div>
 
       <div class="split">
@@ -692,13 +776,19 @@
       </p>
 
       <div class="video-wrap">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/rdhS8VvW0rQ?rel=0&modestbranding=1"
-          title="Cómo instalar tu piso de Goma EVA DECKEVA paso a paso"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        <button type="button"
+                class="video-facade"
+                data-video-id="rdhS8VvW0rQ"
+                data-title="Cómo instalar tu piso de Goma EVA DECKEVA paso a paso"
+                aria-label="Reproducir video: Cómo instalar tu piso DECKEVA">
+          <span class="video-play" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          </span>
+          <span class="video-meta">
+            <span class="video-title">Paso Final — Instalación de tu piso DECKEVA</span>
+            <span class="video-duration">▶ YOUTUBE</span>
+          </span>
+        </button>
       </div>
 
       <div class="split">
@@ -858,6 +948,35 @@
 
       var yearEl = document.getElementById('year');
       if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // ─── Video facades: thumbnail + click-to-play ───
+      var facades = document.querySelectorAll('.video-facade');
+      facades.forEach(function (btn) {
+        var id = btn.getAttribute('data-video-id');
+        if (!id) return;
+
+        // Set the best-quality thumbnail, fallback to hqdefault if not available
+        var best = 'https://i.ytimg.com/vi/' + id + '/maxresdefault.jpg';
+        var fallback = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+        btn.style.backgroundImage = 'url("' + best + '")';
+        // Pre-check maxres; swap to hq if it 404s
+        var probe = new Image();
+        probe.onerror = function () { btn.style.backgroundImage = 'url("' + fallback + '")'; };
+        probe.src = best;
+
+        btn.addEventListener('click', function () {
+          var iframe = document.createElement('iframe');
+          iframe.src = 'https://www.youtube-nocookie.com/embed/' + id +
+                       '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+          iframe.title = btn.getAttribute('data-title') || 'Video DECKEVA';
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+          iframe.setAttribute('frameborder', '0');
+          var wrap = btn.parentElement;
+          wrap.replaceChild(iframe, btn);
+        }, { once: true });
+      });
     })();
   </script>
 
