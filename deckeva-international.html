@@ -944,7 +944,44 @@
     .form-title {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 28px; font-weight: 600;
-      margin-bottom: 28px;
+    }
+    .form-header-row {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; gap: 18px;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .form-currency-pick { display: flex; flex-direction: column; min-width: 140px; }
+    .form-currency-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 2px;
+      color: var(--gray); text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .form-currency-select {
+      padding: 10px 12px; border-radius: var(--r);
+      background: rgba(245,166,35,0.08);
+      border: 1px solid rgba(245,166,35,0.35);
+      color: #fff; font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      -webkit-appearance: none; appearance: none;
+    }
+    .form-currency-select:focus, .form-currency-select:hover {
+      outline: none; border-color: var(--gold);
+      background: rgba(245,166,35,0.15);
+    }
+    .form-currency-select option { background: var(--navy-mid); color: #fff; }
+    .form-section {
+      padding: 22px 0 6px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 8px;
+    }
+    .form-section:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    .form-section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 2px;
+      color: var(--gold); text-transform: uppercase;
+      margin-bottom: 16px;
     }
     .form-group { margin-bottom: 20px; }
     .form-label {
@@ -981,7 +1018,12 @@
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 36px; font-weight: 800; color: var(--gold);
     }
-    .price-sub { font-size: 12px; color: var(--gray); }
+    .price-sub { font-size: 12px; color: var(--gray); line-height: 1.5; }
+    #priceSub:not(:empty) {
+      display: block; margin: 4px 0 8px;
+      color: var(--text); font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+    }
     .submit-btn {
       width: 100%; padding: 18px;
       background: var(--gold);
@@ -2485,113 +2527,166 @@
         </div>
       </div>
       <div class="quote-form-wrap fade-in">
-        <div class="form-title" data-es>📋 Formulario de Cotización</div>
-        <div class="form-title" data-en>📋 Quote Request Form</div>
-        <form id="quoteForm">
-          <div class="form-group">
-            <label class="form-label" data-es>Tamaño de Embarcación</label>
-            <label class="form-label" data-en>Vessel Size</label>
-            <select class="form-control" id="sizeSelect" onchange="updatePrice()" required>
-              <option value="" data-es>Selecciona el tamaño (pies)</option>
-              <option value="" data-en>Select the size (feet)</option>
-              <option value="14|626988">14 pies / feet</option>
-              <option value="15|742925">15 pies / feet</option>
-              <option value="16|787930">16 pies / feet</option>
-              <option value="17|836085">17 pies / feet</option>
-              <option value="18|887611">18 pies / feet</option>
-              <option value="19|942744">19 pies / feet</option>
-              <option value="20|1001736">20 pies / feet</option>
-              <option value="21|1064858">21 pies / feet</option>
-              <option value="22|1132398">22 pies / feet</option>
-              <option value="23|1204665">23 pies / feet</option>
-              <option value="24|1281992">24 pies / feet</option>
-              <option value="25|1364731">25 pies / feet</option>
-              <option value="26|1453263">26 pies / feet</option>
-              <option value="27|1588589">27 pies / feet</option>
-              <option value="28|1737488">28 pies / feet</option>
-              <option value="29|1901193">29 pies / feet</option>
-              <option value="30|2081312">30 pies / feet</option>
-              <option value="otro|0" data-es>Otro / consultar</option>
-              <option value="otro|0" data-en>Other / enquire</option>
+        <div class="form-header-row">
+          <div>
+            <div class="form-title" data-es>📋 Formulario de Cotización</div>
+            <div class="form-title" data-en>📋 Quote Request Form</div>
+          </div>
+          <div class="form-currency-pick">
+            <label class="form-currency-label" data-es>Moneda</label>
+            <label class="form-currency-label" data-en>Currency</label>
+            <select class="form-currency-select" id="currencySelect" onchange="updatePrice()" aria-label="Currency">
+              <option value="CLP">🇨🇱 CLP</option>
+              <option value="USD">🇺🇸 USD</option>
+              <option value="EUR">🇪🇺 EUR</option>
+              <option value="ARS">🇦🇷 ARS</option>
+              <option value="MXN">🇲🇽 MXN</option>
+              <option value="BRL">🇧🇷 BRL</option>
+              <option value="UYU">🇺🇾 UYU</option>
+              <option value="PEN">🇵🇪 PEN</option>
+              <option value="COP">🇨🇴 COP</option>
+              <option value="GBP">🇬🇧 GBP</option>
             </select>
           </div>
-          <div class="price-display" id="priceDisplay">
-            <div class="price-label" data-es>Precio base estimado (CLP + IVA)</div>
-            <div class="price-label" data-en>Estimated base price (CLP + IVA)</div>
-            <div class="price-value" id="priceValue">—</div>
-            <div class="price-sub" data-es>* Precio referencial. Sujeto a diseño y complejidad. Cotizamos en USD para clientes internacionales.</div>
-            <div class="price-sub" data-en>* Reference price. Subject to design and complexity. We quote in USD for international customers.</div>
+        </div>
+
+        <form id="quoteForm">
+          <!-- ─── Sección 1: Embarcación ─── -->
+          <div class="form-section">
+            <div class="form-section-title" data-es>⚓ Tu embarcación</div>
+            <div class="form-section-title" data-en>⚓ Your vessel</div>
+
+            <div class="form-group">
+              <label class="form-label" data-es>Tamaño de embarcación</label>
+              <label class="form-label" data-en>Vessel size</label>
+              <select class="form-control" id="sizeSelect" onchange="updatePrice()" required>
+                <option value="" data-es>Selecciona el tamaño (pies)</option>
+                <option value="" data-en>Select the size (feet)</option>
+                <option value="14|626988">14 pies / feet</option>
+                <option value="15|742925">15 pies / feet</option>
+                <option value="16|787930">16 pies / feet</option>
+                <option value="17|836085">17 pies / feet</option>
+                <option value="18|887611">18 pies / feet</option>
+                <option value="19|942744">19 pies / feet</option>
+                <option value="20|1001736">20 pies / feet</option>
+                <option value="21|1064858">21 pies / feet</option>
+                <option value="22|1132398">22 pies / feet</option>
+                <option value="23|1204665">23 pies / feet</option>
+                <option value="24|1281992">24 pies / feet</option>
+                <option value="25|1364731">25 pies / feet</option>
+                <option value="26|1453263">26 pies / feet</option>
+                <option value="27|1588589">27 pies / feet</option>
+                <option value="28|1737488">28 pies / feet</option>
+                <option value="29|1901193">29 pies / feet</option>
+                <option value="30|2081312">30 pies / feet</option>
+                <option value="otro|0" data-es>Otro / consultar</option>
+                <option value="otro|0" data-en>Other / enquire</option>
+              </select>
+            </div>
+
+            <div class="price-display" id="priceDisplay">
+              <div class="price-label" data-es>Precio base estimado</div>
+              <div class="price-label" data-en>Estimated base price</div>
+              <div class="price-value" id="priceValue">—</div>
+              <div class="price-sub" id="priceSub"></div>
+              <div class="price-sub" data-es>* Precio referencial (+ IVA en Chile). Sujeto a diseño, complejidad y tipo de cambio al momento de cotizar.</div>
+              <div class="price-sub" data-en>* Reference price (+ VAT in Chile). Subject to design, complexity and FX rate at quote time.</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" data-es>Marca</label>
+                <label class="form-label" data-en>Brand</label>
+                <input type="text" class="form-control" id="fBrand" placeholder="Ej: Yamaha, Sea Ray..." required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-es>Modelo</label>
+                <label class="form-label" data-en>Model</label>
+                <input type="text" class="form-control" id="fModel" placeholder="Ej: AR190, 242..." required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" data-es>Año</label>
+                <label class="form-label" data-en>Year</label>
+                <input type="number" class="form-control" id="fYear" placeholder="2020" min="1980" max="2026" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-es>Color preferido</label>
+                <label class="form-label" data-en>Preferred color</label>
+                <select class="form-control" id="fColor" required>
+                  <option value="">—</option>
+                  <option value="Gris / Gray">Gris / Gray</option>
+                  <option value="Beige / Teak">Beige / Teak</option>
+                  <option value="Negro / Black">Negro / Black</option>
+                  <option value="Otro / Other" data-es>Otro / Consultar</option>
+                  <option value="Otro / Other" data-en>Other / Ask</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" data-es>Marca</label>
-              <label class="form-label" data-en>Brand</label>
-              <input type="text" class="form-control" placeholder="Ej: Yamaha, Sea Ray..." required />
+
+          <!-- ─── Sección 2: Tus datos ─── -->
+          <div class="form-section">
+            <div class="form-section-title" data-es>👤 Tus datos</div>
+            <div class="form-section-title" data-en>👤 Your info</div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" data-es>Nombre</label>
+                <label class="form-label" data-en>First name</label>
+                <input type="text" class="form-control" id="fFirst" placeholder="Tu nombre" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-es>Apellido</label>
+                <label class="form-label" data-en>Last name</label>
+                <input type="text" class="form-control" id="fLast" placeholder="Tu apellido" required />
+              </div>
             </div>
             <div class="form-group">
-              <label class="form-label" data-es>Modelo</label>
-              <label class="form-label" data-en>Model</label>
-              <input type="text" class="form-control" placeholder="Ej: AR190, 242..." required />
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="fEmail" placeholder="tu@email.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-es>Teléfono / WhatsApp</label>
+              <label class="form-label" data-en>Phone / WhatsApp</label>
+              <input type="tel" class="form-control" id="fPhone" placeholder="+56 9 XXXX XXXX" required />
             </div>
           </div>
-          <div class="form-row">
+
+          <!-- ─── Sección 3: Envío ─── -->
+          <div class="form-section">
+            <div class="form-section-title" data-es>🌎 Envío</div>
+            <div class="form-section-title" data-en>🌎 Shipping</div>
+
             <div class="form-group">
-              <label class="form-label" data-es>Año</label>
-              <label class="form-label" data-en>Year</label>
-              <input type="number" class="form-control" placeholder="2020" min="1980" max="2026" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" data-es>Color preferido</label>
-              <label class="form-label" data-en>Preferred Color</label>
-              <select class="form-control" required>
-                <option value="" data-es>Seleccionar</option>
-                <option value="" data-en>Select</option>
-                <option data-es>Gris</option>
-                <option data-en>Gray</option>
-                <option data-es>Beige / Teak</option>
-                <option data-en>Beige / Teak</option>
-                <option data-es>Negro</option>
-                <option data-en>Black</option>
-                <option data-es>Otro / Consultar</option>
-                <option data-en>Other / Ask</option>
+              <label class="form-label" data-es>País de envío</label>
+              <label class="form-label" data-en>Shipping country</label>
+              <select class="form-control" id="fCountry" onchange="onCountryChange()" required>
+                <option value="" data-es>Selecciona tu país</option>
+                <option value="" data-en>Select your country</option>
+                <option value="Chile">Chile</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Uruguay">Uruguay</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Perú">Perú / Peru</option>
+                <option value="México">México / Mexico</option>
+                <option value="Brasil">Brasil / Brazil</option>
+                <option value="United States">United States</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="España">España / Spain</option>
+                <option value="Australia">Australia</option>
+                <option value="New Zealand">New Zealand</option>
+                <option value="Otro" data-es>Otro</option>
+                <option value="Otro" data-en>Other</option>
               </select>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" data-es>Nombre</label>
-              <label class="form-label" data-en>First Name</label>
-              <input type="text" class="form-control" placeholder="Tu nombre" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" data-es>Apellido</label>
-              <label class="form-label" data-en>Last Name</label>
-              <input type="text" class="form-control" placeholder="Tu apellido" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" placeholder="tu@email.com" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" data-es>Teléfono / WhatsApp</label>
-            <label class="form-label" data-en>Phone / WhatsApp</label>
-            <input type="tel" class="form-control" placeholder="+56 9 XXXX XXXX" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" data-es>País de envío</label>
-            <label class="form-label" data-en>Shipping Country</label>
-            <select class="form-control" required>
-              <option value="" data-es>Selecciona tu país</option>
-              <option value="" data-en>Select your country</option>
-              <option>Chile</option><option>Argentina</option><option>Uruguay</option>
-              <option>Colombia</option><option>Perú</option><option>México</option>
-              <option>Brasil</option><option>United States</option><option>United Kingdom</option>
-              <option>Australia</option><option>New Zealand</option><option data-es>Otro</option><option data-en>Other</option>
-            </select>
-          </div>
-          <button type="submit" class="submit-btn" data-es>🚀 Enviar Cotización Gratuita</button>
-          <button type="submit" class="submit-btn" data-en>🚀 Send Free Quote Request</button>
+
+          <button type="submit" class="submit-btn">
+            <span data-es>🚀 Enviar Cotización por WhatsApp</span>
+            <span data-en>🚀 Send Quote via WhatsApp</span>
+          </button>
           <p class="form-note" data-es>Te responderemos en menos de 24 horas hábiles 🌊</p>
           <p class="form-note" data-en>We'll respond within 24 business hours 🌊</p>
         </form>
@@ -2599,8 +2694,8 @@
           <div class="success-icon">✅</div>
           <h3 class="subheading" data-es>¡Cotización Enviada!</h3>
           <h3 class="subheading" data-en>Quote Request Sent!</h3>
-          <p style="color:var(--text);margin-top:12px;" data-es>Te contactaremos en menos de 24 horas con el precio y disponibilidad para tu embarcación.</p>
-          <p style="color:var(--text);margin-top:12px;" data-en>We'll contact you within 24 hours with pricing and availability for your vessel.</p>
+          <p style="color:var(--text);margin-top:12px;" data-es>Te abrimos WhatsApp con el detalle. Te contactaremos en menos de 24 horas con el precio final y disponibilidad para tu embarcación.</p>
+          <p style="color:var(--text);margin-top:12px;" data-en>We've opened WhatsApp with your details. We'll contact you within 24 hours with final pricing and availability for your vessel.</p>
         </div>
       </div>
     </div>
@@ -2996,54 +3091,159 @@
     document.getElementById('pay-' + tab).classList.add('active');
   }
 
-  // ─── PRICE CALCULATOR ───
+  // ─── PRICE CALCULATOR + CURRENCY ───
+  // Reference FX rates: approx CLP per 1 unit of foreign currency (updated periodically).
+  // Used only for an on-page estimate; the final price is confirmed in the quote reply.
+  const currencyMap = {
+    CLP: {symbol:'$',  code:'CLP', thousands:'.', rate: 1,      name:'Peso Chileno'},
+    USD: {symbol:'$',  code:'USD', thousands:',', rate: 970,    name:'US Dollar'},
+    EUR: {symbol:'€',  code:'EUR', thousands:'.', rate: 1050,   name:'Euro'},
+    ARS: {symbol:'$',  code:'ARS', thousands:'.', rate: 0.90,   name:'Peso Argentino'},
+    MXN: {symbol:'$',  code:'MXN', thousands:',', rate: 55,     name:'Peso Mexicano'},
+    BRL: {symbol:'R$', code:'BRL', thousands:'.', rate: 180,    name:'Real'},
+    UYU: {symbol:'$U', code:'UYU', thousands:'.', rate: 24,     name:'Peso Uruguayo'},
+    PEN: {symbol:'S/', code:'PEN', thousands:',', rate: 260,    name:'Sol'},
+    COP: {symbol:'$',  code:'COP', thousands:'.', rate: 0.25,   name:'Peso Colombiano'},
+    GBP: {symbol:'£',  code:'GBP', thousands:',', rate: 1230,   name:'Libra'}
+  };
+
+  const countryToCurrency = {
+    'Chile':'CLP', 'Argentina':'ARS', 'Uruguay':'UYU', 'Colombia':'COP',
+    'Perú':'PEN', 'México':'MXN', 'Brasil':'BRL',
+    'United States':'USD', 'United Kingdom':'GBP', 'España':'EUR',
+    'Australia':'USD', 'New Zealand':'USD'
+  };
+
   const prices = {
     14: 626988, 15: 742925, 16: 787930, 17: 836085,
     18: 887611, 19: 942744, 20: 1001736, 21: 1064858,
     22: 1132398, 23: 1204665, 24: 1281992, 25: 1364731,
     26: 1453263, 27: 1588589, 28: 1737488, 29: 1901193, 30: 2081312
   };
+
+  let userPickedCurrency = false;  // if user manually picked currency, stop auto-switching by country
+
+  function formatMoney(amountCLP, code) {
+    const c = currencyMap[code] || currencyMap.CLP;
+    const converted = Math.round(amountCLP / c.rate);
+    const str = converted.toString().replace(/\B(?=(\d{3})+(?!\d))/g, c.thousands);
+    return c.symbol + str;
+  }
+
   function updatePrice() {
     const sel = document.getElementById('sizeSelect');
-    const val = sel.value;
+    const curSel = document.getElementById('currencySelect');
     const display = document.getElementById('priceDisplay');
     const priceEl = document.getElementById('priceValue');
-    if (!val || val === '') { display.classList.remove('visible'); return; }
-    const [size, price] = val.split('|');
+    const subEl = document.getElementById('priceSub');
+    const val = sel.value;
+    const code = curSel.value || 'CLP';
+
+    if (!val) { display.classList.remove('visible'); return; }
+
+    const [size, priceStr] = val.split('|');
     if (size === 'otro') {
-      priceEl.textContent = 'A consultar';
+      priceEl.textContent = 'A consultar / Quote on request';
+      subEl.textContent = '';
       display.classList.add('visible');
+      return;
+    }
+
+    const clp = parseInt(priceStr) || 0;
+    priceEl.textContent = code + ' ' + formatMoney(clp, code);
+
+    if (code === 'CLP') {
+      subEl.textContent = '';
     } else {
-      const p = parseInt(price);
-      priceEl.textContent = 'CLP ' + p.toLocaleString('es-CL');
-      display.classList.add('visible');
+      const c = currencyMap[code];
+      const rateLabel = c.rate >= 1
+        ? '1 ' + code + ' ≈ ' + c.rate.toLocaleString('es-CL') + ' CLP'
+        : '1 CLP ≈ ' + (1 / c.rate).toFixed(2) + ' ' + code;
+      subEl.textContent = 'Ref: ' + rateLabel;
+    }
+    display.classList.add('visible');
+  }
+
+  function onCountryChange() {
+    if (userPickedCurrency) return;
+    const country = document.getElementById('fCountry').value;
+    const code = countryToCurrency[country];
+    if (code) {
+      document.getElementById('currencySelect').value = code;
+      updatePrice();
     }
   }
 
-    // ─── FORM SUBMIT ───
+  // Mark currency as user-picked on manual change (not triggered programmatically)
+  document.getElementById('currencySelect').addEventListener('change', function() {
+    userPickedCurrency = true;
+  });
+
+  // ─── Auto-detect currency from browser locale on page load ───
+  (function detectCurrency() {
+    try {
+      const langs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'es-CL'];
+      for (const l of langs) {
+        const country = String(l).toUpperCase().split(/[-_]/)[1];
+        const map = {'CL':'CLP','US':'USD','CA':'USD','MX':'MXN','AR':'ARS','UY':'UYU',
+                     'PE':'PEN','CO':'COP','BR':'BRL','GB':'GBP','UK':'GBP',
+                     'ES':'EUR','FR':'EUR','DE':'EUR','IT':'EUR','PT':'EUR','NL':'EUR',
+                     'BE':'EUR','IE':'EUR','AT':'EUR','FI':'EUR','GR':'EUR'};
+        if (country && map[country]) {
+          document.getElementById('currencySelect').value = map[country];
+          return;
+        }
+      }
+    } catch (e) { /* fallback to CLP already selected */ }
+  })();
+
+  // ─── FORM SUBMIT → open WhatsApp with the quote prefilled ───
+  const WA_NUMBER = '56940211459';
   document.getElementById('quoteForm').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    const sizeVal = document.getElementById('sizeSelect').value || '';
+    const [sz, rawClp] = sizeVal.split('|');
+    const code = document.getElementById('currencySelect').value || 'CLP';
+    const priceClp = parseInt(rawClp) || 0;
+    const priceStr = (sz && sz !== 'otro')
+      ? code + ' ' + formatMoney(priceClp, code)
+      : 'A consultar';
+
+    const fields = {
+      size:    sz === 'otro' ? 'Otro / A consultar' : (sz ? sz + ' pies / feet' : '—'),
+      brand:   document.getElementById('fBrand').value.trim(),
+      model:   document.getElementById('fModel').value.trim(),
+      year:    document.getElementById('fYear').value.trim(),
+      color:   document.getElementById('fColor').value,
+      first:   document.getElementById('fFirst').value.trim(),
+      last:    document.getElementById('fLast').value.trim(),
+      email:   document.getElementById('fEmail').value.trim(),
+      phone:   document.getElementById('fPhone').value.trim(),
+      country: document.getElementById('fCountry').value
+    };
+
+    const msg =
+      'Hola! Quiero cotizar un piso DECKEVA 🌊\n\n' +
+      '— EMBARCACIÓN —\n' +
+      '• Tamaño: ' + fields.size + '\n' +
+      '• Marca / Modelo: ' + fields.brand + ' ' + fields.model + '\n' +
+      '• Año: ' + fields.year + '\n' +
+      '• Color: ' + fields.color + '\n' +
+      '• Precio referencial: ' + priceStr + '\n\n' +
+      '— CONTACTO —\n' +
+      '• Nombre: ' + fields.first + ' ' + fields.last + '\n' +
+      '• Email: ' + fields.email + '\n' +
+      '• Teléfono: ' + fields.phone + '\n\n' +
+      '— ENVÍO —\n' +
+      '• País: ' + fields.country + '\n';
+
+    const url = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank', 'noopener');
+
     this.style.display = 'none';
     document.getElementById('successMessage').classList.add('visible');
   });
-
-  // ─── PRICE CALCULATOR ───
-  function updatePrice() {
-    const sel = document.getElementById('sizeSelect');
-    const val = sel.value;
-    const display = document.getElementById('priceDisplay');
-    const priceEl = document.getElementById('priceValue');
-    if (!val || val === '') { display.classList.remove('visible'); return; }
-    const [size, price] = val.split('|');
-    if (size === 'otro') {
-      priceEl.textContent = 'A consultar / Quote on request';
-      display.classList.add('visible');
-    } else {
-      const p = parseInt(price);
-      priceEl.textContent = 'CLP ' + p.toLocaleString('es-CL');
-      display.classList.add('visible');
-    }
-  }
 
   // ─── SCROLL FADE IN ───
   const observer = new IntersectionObserver((entries) => {
