@@ -48,12 +48,12 @@
     "tool": [ { "@type": "HowToTool", "name": "Celular con cámara" } ],
     "step": [
       { "@type": "HowToStep", "position": 1, "name": "Limpia la zona", "text": "Retira cualquier piso o adhesivo viejo. La superficie debe estar visible y seca." },
-      { "@type": "HowToStep", "position": 2, "name": "Identifica las piezas", "text": "Anota cada zona: cubierta, escalones, asientos, tapas de compartimentos." },
-      { "@type": "HowToStep", "position": 3, "name": "Haz un molde 1:1", "text": "Apoya cartón o papel kraft sobre cada pieza y marca los bordes. Corta el molde." },
-      { "@type": "HowToStep", "position": 4, "name": "Rotula cada molde", "text": "Escribe el nombre de la pieza y una flecha indicando la proa." },
-      { "@type": "HowToStep", "position": 5, "name": "Verifica con medidas", "text": "Toma largo y ancho en 3 puntos de cada pieza." },
-      { "@type": "HowToStep", "position": 6, "name": "Fotografía todo", "text": "Cada molde, cada pieza en la lancha y la lancha completa desde varios ángulos." },
-      { "@type": "HowToStep", "position": 7, "name": "Anota en centímetros", "text": "No mezcles unidades. Mantén todo en cm." }
+      { "@type": "HowToStep", "position": 2, "name": "Identifica las piezas", "text": "Anota cada zona que vas a forrar: cubierta, escalones, asientos, tapas de compartimentos." },
+      { "@type": "HowToStep", "position": 3, "name": "Dibuja el patrón 1:1", "text": "Apoya cartón o papel kraft sobre cada pieza y marca los bordes exactos. Corta el molde siguiendo la línea." },
+      { "@type": "HowToStep", "position": 4, "name": "Rotula cada molde", "text": "Escribe el nombre de la pieza y dibuja una flecha indicando la proa." },
+      { "@type": "HowToStep", "position": 5, "name": "Anota las medidas sobre el dibujo", "text": "Con huincha o regla, mide cada lado y vértice y escribe las medidas en cm directamente sobre el cartón, al lado del borde correspondiente." },
+      { "@type": "HowToStep", "position": 6, "name": "Fotografía cada molde", "text": "Con buena luz, perpendicular y sin sombras sobre los números, para que el dibujo y las medidas se lean claramente." },
+      { "@type": "HowToStep", "position": 7, "name": "Foto general", "text": "Una foto de toda la lancha y cada pieza en su lugar, para tener el contexto." }
     ],
     "video": {
       "@type": "VideoObject",
@@ -801,39 +801,65 @@
     .send-card .btn { width: 100%; justify-content: center; }
     @media (max-width: 880px) { .send-grid { grid-template-columns: 1fr; } }
 
-    .format-box {
-      margin-top: 28px;
-      padding: 22px 24px;
+    /* Photo guide (reemplaza el antiguo "formato sugerido") */
+    .photo-guide {
+      margin-top: 32px;
+      padding: 26px 28px 22px;
       border-radius: var(--r-lg);
-      background: rgba(10, 22, 40, 0.6);
-      border: 1px dashed rgba(255,255,255,0.12);
-      font-family: 'Space Mono', monospace;
+      background:
+        radial-gradient(ellipse at top left, rgba(245,166,35,0.08), transparent 60%),
+        rgba(10, 22, 40, 0.55);
+      border: 1px solid rgba(245,166,35,0.22);
+    }
+    .photo-guide-head { margin-bottom: 18px; }
+    .pg-label {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .pg-sub {
+      display: block;
+      color: var(--text);
+      font-size: 14.5px;
+    }
+    .photo-tips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 22px;
+    }
+    .photo-tip {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 0;
+    }
+    .photo-tip .pt-ic {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(245,166,35,0.15);
+      color: var(--gold-light);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .photo-tip h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--white);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+    .photo-tip p {
       font-size: 13.5px;
       color: var(--text);
-      line-height: 1.9;
-      white-space: pre-wrap;
-      overflow-x: auto;
+      line-height: 1.55;
     }
-    .format-label {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 10px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .format-label .copy-small {
-      margin-left: auto;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px; letter-spacing: 1px;
-      padding: 4px 10px; border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--white);
-      cursor: pointer;
-      transition: background .2s ease, border-color .2s ease;
-    }
-    .format-label .copy-small:hover { background: rgba(26,155,227,0.15); border-color: var(--ocean-bright); }
-    .format-label .copy-small.ok { color: var(--gold-light); border-color: var(--gold); }
+    @media (max-width: 880px) { .photo-tips { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .photo-tips { grid-template-columns: 1fr; } }
 
     /* ─── INLINE MINI CTA ─── */
     .mini-cta {
@@ -1238,11 +1264,11 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
           </div>
           <h3>Por WhatsApp</h3>
-          <p>La forma más rápida. Envía las fotos y la lista de medidas directo al chat.</p>
+          <p>La forma más rápida. Envía las fotos directo al chat.</p>
           <ul>
-            <li>Foto de cada molde de cartón</li>
+            <li>Una foto por molde, con las medidas anotadas sobre el dibujo</li>
             <li>Foto general de la lancha</li>
-            <li>Lista de medidas en cm (puedes copiar el formato de la derecha)</li>
+            <li>Cualquier detalle adicional (escotillas, curvas, zonas especiales)</li>
           </ul>
           <div class="action">
             <a class="btn btn-primary" style="background:#25d366;box-shadow:0 10px 26px rgba(37,211,102,0.35);color:#0a1628;" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20vengo%20de%20la%20gu%C3%ADa%20y%20quiero%20enviarles%20mis%20medidas." target="_blank" rel="noopener">
@@ -1257,39 +1283,82 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
           <h3>Por correo</h3>
-          <p>Ideal si tienes muchas fotos o piezas, o prefieres dejarlo por escrito.</p>
+          <p>Ideal si tienes muchas piezas o prefieres dejarlo por escrito.</p>
           <ul>
             <li>Asunto: "Medidas + [modelo de lancha]"</li>
-            <li>Adjunta todas las fotos (moldes + lancha)</li>
-            <li>Incluye la lista de medidas y tus datos de contacto</li>
+            <li>Adjunta las fotos de cada molde con medidas anotadas</li>
+            <li>Incluye tus datos de contacto</li>
           </ul>
           <div class="action">
-            <a class="btn btn-ghost" href="mailto:contacto@deckeva.cl?subject=Medidas%20de%20mi%20lancha%20-%20DECKEVA&body=Hola%2C%0A%0AAdjunto%20las%20fotos%20y%20medidas%20de%20mi%20lancha.%0A%0ADatos%3A%0A-%20Modelo%2Feslora%3A%20%0A-%20Mi%20nombre%3A%20%0A-%20Tel%C3%A9fono%3A%20%0A-%20Ciudad%2Fpa%C3%ADs%3A%20%0A%0AMedidas%20(en%20cm)%3A%0A%0APieza%201%20%7C%20Cubierta%20proa%20%7C%20largo%3A%20___%20%7C%20ancho%3A%20___%0APieza%202%20%7C%20Cubierta%20popa%20%7C%20largo%3A%20___%20%7C%20ancho%3A%20___%0APieza%203%20%7C%20Escal%C3%B3n%20%7C%20largo%3A%20___%20%7C%20ancho%3A%20___%0A%0AGracias.">
+            <a class="btn btn-ghost" href="mailto:contacto@deckeva.cl?subject=Medidas%20de%20mi%20lancha%20-%20DECKEVA&body=Hola%2C%0A%0AAdjunto%20las%20fotos%20de%20los%20moldes%20con%20las%20medidas%20anotadas%20sobre%20el%20dibujo.%0A%0ADatos%3A%0A-%20Modelo%20%2F%20eslora%20de%20la%20lancha%3A%20%0A-%20Mi%20nombre%3A%20%0A-%20Tel%C3%A9fono%3A%20%0A-%20Ciudad%20%2F%20pa%C3%ADs%3A%20%0A%0ANotas%20adicionales%20(escotillas%2C%20curvas%2C%20color%20que%20quiero%2C%20etc.)%3A%0A%0AGracias.">
               Escribir un correo
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Formato sugerido -->
-      <div class="format-box">
-        <div class="format-label">
-          Formato sugerido
-          <button type="button" class="copy-small" id="copyFormat" aria-label="Copiar formato">Copiar</button>
-        </div><!-- format content -->
-<span id="formatText">Modelo / eslora de la lancha: ___
-Mi nombre: ___
-Teléfono: ___
-Ciudad / país: ___
-
-MEDIDAS (en cm)
- 1 · Cubierta proa     · largo: ___ · ancho: ___
- 2 · Cubierta popa     · largo: ___ · ancho: ___
- 3 · Escalón(es)       · largo: ___ · ancho: ___
- 4 · Asiento(s)        · largo: ___ · ancho: ___
- 5 · Tapa compartimento · largo: ___ · ancho: ___
-
-Notas: (curvas, escotillas, etc.)</span>
+      <!-- Cómo sacar buenas fotos -->
+      <div class="photo-guide">
+        <div class="photo-guide-head">
+          <span class="pg-label">Cómo sacar buenas fotos</span>
+          <span class="pg-sub">Esto es lo más importante: si se ven bien, no hay que volver a medir.</span>
+        </div>
+        <div class="photo-tips">
+          <div class="photo-tip">
+            <div class="pt-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            <div>
+              <h4>Buena luz</h4>
+              <p>De día o con una lámpara fuerte. Evita fotos oscuras o contra-luz.</p>
+            </div>
+          </div>
+          <div class="photo-tip">
+            <div class="pt-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+            </div>
+            <div>
+              <h4>Desde arriba</h4>
+              <p>Perpendicular al molde, no en ángulo. El dibujo y los números deben verse planos.</p>
+            </div>
+          </div>
+          <div class="photo-tip">
+            <div class="pt-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <h4>Números legibles</h4>
+              <p>Marcador grueso y oscuro. Números grandes, sin tapar el borde del dibujo.</p>
+            </div>
+          </div>
+          <div class="photo-tip">
+            <div class="pt-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <div>
+              <h4>Molde completo</h4>
+              <p>Que el molde salga entero en la foto, con un poco de margen alrededor. Nada cortado.</p>
+            </div>
+          </div>
+          <div class="photo-tip">
+            <div class="pt-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div>
+              <h4>Enfoque nítido</h4>
+              <p>Toca la pantalla para enfocar antes de disparar. Si sale borrosa, repítela.</p>
+            </div>
+          </div>
+          <div class="photo-tip">
+            <div class="pt-ic" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div>
+              <h4>Una foto por molde</h4>
+              <p>Además, una foto general de la lancha completa para que veamos el contexto.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1613,34 +1682,6 @@ Notas: (curvas, escotillas, etc.)</span>
 
       var yearEl = document.getElementById('year');
       if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-      // ─── "Copiar formato sugerido" ───
-      var copyFmt = document.getElementById('copyFormat');
-      var fmtText = document.getElementById('formatText');
-      if (copyFmt && fmtText) {
-        copyFmt.addEventListener('click', function () {
-          var text = fmtText.textContent || '';
-          var finish = function () {
-            copyFmt.classList.add('ok');
-            copyFmt.textContent = '✓ Copiado';
-            setTimeout(function () {
-              copyFmt.classList.remove('ok');
-              copyFmt.textContent = 'Copiar';
-            }, 2000);
-          };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(finish).catch(finish);
-          } else {
-            var t = document.createElement('textarea');
-            t.value = text;
-            document.body.appendChild(t);
-            t.select();
-            try { document.execCommand('copy'); } catch (e) {}
-            document.body.removeChild(t);
-            finish();
-          }
-        });
-      }
 
       // ─── Back-to-top + ToC scroll spy ───
       var toTop = document.getElementById('toTop');
