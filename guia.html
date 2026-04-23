@@ -40,20 +40,24 @@
     "totalTime": "PT1H",
     "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
     "supply": [
-      { "@type": "HowToSupply", "name": "Huincha o cinta métrica (mínimo 3m)" },
-      { "@type": "HowToSupply", "name": "Cartón grande o papel kraft" },
-      { "@type": "HowToSupply", "name": "Lápiz y marcador permanente" },
-      { "@type": "HowToSupply", "name": "Cúter o tijera" }
+      { "@type": "HowToSupply", "name": "Rollo de plástico transparente" },
+      { "@type": "HowToSupply", "name": "Marcador permanente" }
     ],
-    "tool": [ { "@type": "HowToTool", "name": "Celular con cámara" } ],
+    "tool": [
+      { "@type": "HowToTool", "name": "Tijera" },
+      { "@type": "HowToTool", "name": "Huincha o cinta métrica (mínimo 3 m)" },
+      { "@type": "HowToTool", "name": "Celular con cámara" }
+    ],
     "step": [
       { "@type": "HowToStep", "position": 1, "name": "Limpia la zona", "text": "Retira cualquier piso o adhesivo viejo. La superficie debe estar visible y seca." },
-      { "@type": "HowToStep", "position": 2, "name": "Identifica las piezas", "text": "Anota cada zona que vas a forrar: cubierta, escalones, asientos, tapas de compartimentos." },
-      { "@type": "HowToStep", "position": 3, "name": "Dibuja el patrón 1:1", "text": "Apoya cartón o papel kraft sobre cada pieza y marca los bordes exactos. Corta el molde siguiendo la línea." },
-      { "@type": "HowToStep", "position": 4, "name": "Rotula cada molde", "text": "Escribe el nombre de la pieza y dibuja una flecha indicando la proa." },
-      { "@type": "HowToStep", "position": 5, "name": "Anota las medidas sobre el dibujo", "text": "Con huincha o regla, mide cada lado y vértice y escribe las medidas en cm directamente sobre el cartón, al lado del borde correspondiente." },
-      { "@type": "HowToStep", "position": 6, "name": "Fotografía cada molde", "text": "Con buena luz, perpendicular y sin sombras sobre los números, para que el dibujo y las medidas se lean claramente." },
-      { "@type": "HowToStep", "position": 7, "name": "Foto general", "text": "Una foto de toda la lancha y cada pieza en su lugar, para tener el contexto." }
+      { "@type": "HowToStep", "position": 2, "name": "Identifica las piezas", "text": "Ubica cada zona que vas a forrar: cubierta, escalones, asientos, tapas de compartimentos." },
+      { "@type": "HowToStep", "position": 3, "name": "Dibuja sobre plástico transparente", "text": "Desenrolla plástico transparente sobre la pieza y dibuja los bordes con marcador permanente." },
+      { "@type": "HowToStep", "position": 4, "name": "Corta cada figura con tijera", "text": "Sigue la línea dibujada. Corta una pieza a la vez, sin apuro." },
+      { "@type": "HowToStep", "position": 5, "name": "Rotula cada pieza", "text": "Escribe el nombre de la pieza y dibuja una flecha indicando la proa." },
+      { "@type": "HowToStep", "position": 6, "name": "Lleva las piezas a casa", "text": "Encuentra un lugar cómodo, con buena luz y superficie plana para medir con calma." },
+      { "@type": "HowToStep", "position": 7, "name": "Mide y anota sobre la pieza", "text": "Con la huincha, toma la mayor cantidad posible de medidas (cada lado, diagonal y vértice) y escríbelas en cm directamente sobre el plástico." },
+      { "@type": "HowToStep", "position": 8, "name": "Fotografía cada pieza", "text": "Con buena luz, perpendicular y sin sombras, para que el dibujo y las medidas se lean claramente." },
+      { "@type": "HowToStep", "position": 9, "name": "Foto general", "text": "Una foto de toda la lancha y de cada pieza en su lugar, para tener el contexto." }
     ],
     "video": {
       "@type": "VideoObject",
@@ -112,7 +116,8 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "¿Cuánto me demoro tomando las medidas?", "acceptedAnswer": { "@type": "Answer", "text": "Una lancha pequeña toma alrededor de 30–45 minutos. Una mediana con asientos, escalones y tapas, entre 1 y 2 horas. La parte que más toma es hacer los moldes de cartón." } },
+      { "@type": "Question", "name": "¿Cuánto me demoro tomando las medidas?", "acceptedAnswer": { "@type": "Answer", "text": "Se divide en dos: dibujar y cortar las piezas en la lancha (30-60 min para una lancha pequeña, 1-2 h para una mediana) y luego medir en casa con calma (otros 30-60 min)." } },
+      { "@type": "Question", "name": "¿Dónde consigo el plástico transparente?", "acceptedAnswer": { "@type": "Answer", "text": "Se vende por rollo (también llamado nylon transparente o plástico cristal) en ferreterías, tiendas de telas o mercados. Con 2 a 3 metros lineales alcanza para una lancha pequeña o mediana." } },
       { "@type": "Question", "name": "¿Qué pasa si me equivoco en una medida?", "acceptedAnswer": { "@type": "Answer", "text": "Revisamos tus medidas y fotos antes de cortar. Si vemos algo inconsistente, te escribimos para aclararlo antes de fabricar." } },
       { "@type": "Question", "name": "¿Cuánto demora la fabricación?", "acceptedAnswer": { "@type": "Answer", "text": "Entre 5 y 15 días hábiles desde que aprobamos las medidas y el pago, según la cantidad de piezas y la carga del taller." } },
       { "@type": "Question", "name": "¿Puedo elegir el color y el diseño?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Tenemos varios colores en stock (negro, gris, beige, azul, combinaciones) y patrones de corte (liso, imitación teca, hexagonal)." } },
@@ -1096,8 +1101,9 @@
       <span class="eyebrow">Guía para el cliente</span>
       <h1>Cómo <span class="accent">medir</span> e <span class="accent">instalar</span><br/>tu piso DECKEVA.</h1>
       <p class="lead">
-        Dos videos cortos y una lista clara. Toma las medidas, nosotros fabricamos tu piso a la medida,
-        y luego lo instalas tú siguiendo la segunda guía. Así de simple.
+        Dos videos cortos y una lista clara. Dibujas y cortas cada pieza en plástico transparente sobre tu lancha,
+        después en casa le tomas las medidas con calma, nos las envías y fabricamos tu piso a la medida.
+        Luego lo instalas tú siguiendo la segunda guía. Así de simple.
       </p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#paso-1">
@@ -1120,7 +1126,7 @@
           <div class="step-num">01 / PASO 1</div>
           <div class="step-title">Tomas las medidas</div>
           <span class="step-who you">Tú</span>
-          <p class="step-desc">Con una huincha, cartón y tu celular. Te guiamos en un video.</p>
+          <p class="step-desc">Dibujas las piezas en plástico transparente, las cortas y las mides en casa con calma. Te guiamos en un video.</p>
         </div>
         <div class="step">
           <div class="step-num">02 / FABRICACIÓN</div>
@@ -1171,10 +1177,10 @@
         <div class="card">
           <h3>Qué necesitas <span class="pill">5 cosas</span></h3>
           <ul class="check-list" data-checklist="medir">
-            <li><label><input type="checkbox" value="m1"><span>Huincha o cinta métrica (mínimo 3m)</span></label></li>
-            <li><label><input type="checkbox" value="m2"><span>Cartón grande o papel kraft para moldes</span></label></li>
-            <li><label><input type="checkbox" value="m3"><span>Lápiz y marcador permanente</span></label></li>
-            <li><label><input type="checkbox" value="m4"><span>Cúter o tijera</span></label></li>
+            <li><label><input type="checkbox" value="m1"><span>Rollo de plástico transparente (el que se vende por metro en ferreterías o tiendas de telas)</span></label></li>
+            <li><label><input type="checkbox" value="m2"><span>Marcador permanente (punta fina y punta gruesa si tienes)</span></label></li>
+            <li><label><input type="checkbox" value="m3"><span>Tijera</span></label></li>
+            <li><label><input type="checkbox" value="m4"><span>Huincha o cinta métrica (mínimo 3 m)</span></label></li>
             <li><label><input type="checkbox" value="m5"><span>Celular con cámara para fotografiar</span></label></li>
           </ul>
           <div class="checklist-progress" aria-live="polite">
@@ -1191,12 +1197,14 @@
           </h3>
           <ol class="steps-ordered">
             <li><strong>Limpia la zona.</strong> Retira cualquier piso o adhesivo viejo. La superficie debe estar visible y seca.</li>
-            <li><strong>Identifica las piezas.</strong> Anota cada zona que vas a forrar: cubierta, escalones, asientos, tapas de compartimentos.</li>
-            <li><strong>Dibuja el patrón 1:1.</strong> Apoya cartón o papel kraft sobre cada pieza y marca los bordes exactos con lápiz. Corta el molde siguiendo la línea.</li>
-            <li><strong>Rotula cada molde.</strong> Escribe el nombre de la pieza ("proa", "popa", "escalón izq.") y dibuja una flecha indicando la proa.</li>
-            <li><strong>Anota las medidas sobre el dibujo.</strong> Con huincha o regla, mide cada lado y cada vértice, y escribe los valores directamente sobre el cartón, al lado de cada borde. No necesitas hacer listas aparte — el dibujo con las cotas es suficiente.</li>
-            <li><strong>Fotografía cada molde.</strong> Con buena luz (de día o lámpara fuerte), sin sombras sobre los números, y desde arriba para que el dibujo y las medidas se lean claramente. Una foto por molde.</li>
-            <li><strong>Foto general.</strong> Una foto de toda la lancha y otra de cada pieza en su lugar, para que podamos ver el contexto.</li>
+            <li><strong>Identifica las piezas.</strong> Ubica cada zona que vas a forrar: cubierta, escalones, asientos, tapas de compartimentos.</li>
+            <li><strong>Dibuja sobre plástico transparente.</strong> Desenrolla el plástico sobre la pieza, ajústalo al contorno y dibuja los bordes exactos con marcador permanente. El plástico se adapta mejor que el cartón a las curvas y permite ver la pieza por debajo.</li>
+            <li><strong>Corta cada figura con tijera.</strong> Sigue la línea que dibujaste. Corta una pieza a la vez, sin apuro.</li>
+            <li><strong>Rotula cada pieza.</strong> Escribe el nombre ("proa", "popa", "escalón izq.", "asiento der.") y dibuja una flecha indicando hacia dónde va la proa.</li>
+            <li><strong>Lleva las piezas a casa.</strong> Encuentra un lugar cómodo, con buena luz y superficie plana. Es mucho más preciso medir con calma en casa que encima de la lancha apurado.</li>
+            <li><strong>Mide y anota sobre la pieza.</strong> Con la huincha, toma <strong>la mayor cantidad posible de medidas</strong> (cada lado, cada diagonal, cada vértice a vértice) y escríbelas directamente sobre el plástico al lado de cada tramo. Mientras más medidas nos envíes, más precisa queda la pieza final.</li>
+            <li><strong>Fotografía cada pieza.</strong> Con buena luz, desde arriba (perpendicular) y sin sombras sobre los números, para que el dibujo y las medidas se lean claramente. Una foto por pieza.</li>
+            <li><strong>Foto general.</strong> Una foto de toda la lancha y, si puedes, de cada pieza en su lugar, para que podamos ver el contexto.</li>
           </ol>
         </div>
       </div>
@@ -1212,11 +1220,12 @@
         <div>
           <h4>Tips importantes</h4>
           <ul>
-            <li><strong>Las medidas van sobre el dibujo.</strong> No necesitas hacer listas aparte: escribe cada medida justo al lado del borde o vértice al que corresponde.</li>
+            <li><strong>Cuantas más medidas, mejor.</strong> No te quedes con largo y ancho: anota cada lado, cada diagonal y cada vértice. Así garantizamos precisión.</li>
+            <li><strong>Las medidas van sobre la pieza.</strong> No necesitas hacer listas aparte: escribe cada número justo al lado del tramo o vértice al que corresponde.</li>
             <li><strong>Todo en centímetros.</strong> No mezcles unidades (no mm, no metros, no pulgadas).</li>
-            <li>Si una pieza tiene escotilla o tapa, <strong>no la cortes tú</strong>: dibújala en el molde y la cortamos nosotros.</li>
+            <li>Primero dibuja y corta en la lancha, <strong>después mide en casa</strong> con calma. Es mucho más preciso y rápido que medir apurado en la lancha.</li>
+            <li>Si una pieza tiene escotilla o tapa, <strong>no la cortes tú</strong>: dibújala sobre la pieza y la cortamos nosotros.</li>
             <li>Prefiere 1 mm de más que 1 mm de menos. Los bordes contra paredes y asientos calzan mejor con holgura mínima.</li>
-            <li>Para curvaturas suaves, une varios moldes de cartón con cinta adhesiva.</li>
           </ul>
         </div>
       </div>
@@ -1226,10 +1235,10 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
         <div>
-          <strong>La calidad de la foto lo es todo.</strong> Toma las fotos de los moldes con las medidas anotadas
-          con buena luz, perpendicular (desde arriba) y sin sombras sobre los números. Si no podemos leer una
-          cota, tenemos que pedirte que repitas la foto o la medida — así que vale la pena hacerlas bien la
-          primera vez.
+          <strong>La calidad de la foto lo es todo.</strong> Toma las fotos de cada pieza de plástico con las
+          medidas anotadas, con buena luz, perpendicular (desde arriba) y sin sombras sobre los números. Si no
+          podemos leer una cota, tenemos que pedirte que repitas la foto o la medida — así que vale la pena
+          hacerlas bien la primera vez.
         </div>
       </div>
 
@@ -1266,7 +1275,7 @@
           <h3>Por WhatsApp</h3>
           <p>La forma más rápida. Envía las fotos directo al chat.</p>
           <ul>
-            <li>Una foto por molde, con las medidas anotadas sobre el dibujo</li>
+            <li>Una foto por pieza de plástico, con las medidas anotadas sobre ella</li>
             <li>Foto general de la lancha</li>
             <li>Cualquier detalle adicional (escotillas, curvas, zonas especiales)</li>
           </ul>
@@ -1286,11 +1295,11 @@
           <p>Ideal si tienes muchas piezas o prefieres dejarlo por escrito.</p>
           <ul>
             <li>Asunto: "Medidas + [modelo de lancha]"</li>
-            <li>Adjunta las fotos de cada molde con medidas anotadas</li>
+            <li>Adjunta las fotos de cada pieza con medidas anotadas</li>
             <li>Incluye tus datos de contacto</li>
           </ul>
           <div class="action">
-            <a class="btn btn-ghost" href="mailto:contacto@deckeva.cl?subject=Medidas%20de%20mi%20lancha%20-%20DECKEVA&body=Hola%2C%0A%0AAdjunto%20las%20fotos%20de%20los%20moldes%20con%20las%20medidas%20anotadas%20sobre%20el%20dibujo.%0A%0ADatos%3A%0A-%20Modelo%20%2F%20eslora%20de%20la%20lancha%3A%20%0A-%20Mi%20nombre%3A%20%0A-%20Tel%C3%A9fono%3A%20%0A-%20Ciudad%20%2F%20pa%C3%ADs%3A%20%0A%0ANotas%20adicionales%20(escotillas%2C%20curvas%2C%20color%20que%20quiero%2C%20etc.)%3A%0A%0AGracias.">
+            <a class="btn btn-ghost" href="mailto:contacto@deckeva.cl?subject=Medidas%20de%20mi%20lancha%20-%20DECKEVA&body=Hola%2C%0A%0AAdjunto%20las%20fotos%20de%20cada%20pieza%20de%20pl%C3%A1stico%20con%20las%20medidas%20anotadas%20sobre%20ella.%0A%0ADatos%3A%0A-%20Modelo%20%2F%20eslora%20de%20la%20lancha%3A%20%0A-%20Mi%20nombre%3A%20%0A-%20Tel%C3%A9fono%3A%20%0A-%20Ciudad%20%2F%20pa%C3%ADs%3A%20%0A%0ANotas%20adicionales%20(escotillas%2C%20curvas%2C%20color%20que%20quiero%2C%20etc.)%3A%0A%0AGracias.">
               Escribir un correo
             </a>
           </div>
@@ -1319,7 +1328,7 @@
             </div>
             <div>
               <h4>Desde arriba</h4>
-              <p>Perpendicular al molde, no en ángulo. El dibujo y los números deben verse planos.</p>
+              <p>Perpendicular a la pieza, no en ángulo. El dibujo y los números deben verse planos.</p>
             </div>
           </div>
           <div class="photo-tip">
@@ -1336,8 +1345,8 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </div>
             <div>
-              <h4>Molde completo</h4>
-              <p>Que el molde salga entero en la foto, con un poco de margen alrededor. Nada cortado.</p>
+              <h4>Pieza completa</h4>
+              <p>Que la pieza salga entera en la foto, con un poco de margen alrededor. Nada cortado.</p>
             </div>
           </div>
           <div class="photo-tip">
@@ -1354,7 +1363,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
             </div>
             <div>
-              <h4>Una foto por molde</h4>
+              <h4>Una foto por pieza</h4>
               <p>Además, una foto general de la lancha completa para que veamos el contexto.</p>
             </div>
           </div>
@@ -1486,8 +1495,22 @@
             <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
           </summary>
           <div class="faq-answer">
-            <p>Una lancha pequeña toma alrededor de 30–45 minutos. Una mediana con asientos, escalones y tapas,
-            entre 1 y 2 horas. La parte que más toma es hacer los moldes de cartón; vale la pena hacerla con calma.</p>
+            <p>El proceso se divide en dos: <strong>dibujar y cortar las piezas en la lancha</strong> (30–60 minutos
+            para una lancha pequeña; 1–2 horas para una mediana) y después <strong>medir en casa con calma</strong>
+            (otros 30–60 minutos). Lo bueno es que la parte lenta y precisa la haces cómodo en tu casa, no apurado
+            sobre la lancha.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Dónde consigo el plástico transparente?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Se vende por rollo (a veces llamado "nylon transparente" o "plástico cristal") en ferreterías,
+            tiendas de telas o mercados. Pide un grosor medio, suficientemente rígido para dibujar encima pero
+            flexible para adaptarse a las curvas. Con 2 o 3 metros lineales suele alcanzar para una lancha
+            pequeña o mediana.</p>
           </div>
         </details>
 
