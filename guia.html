@@ -641,6 +641,105 @@
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
     }
 
+    /* ─── TABLE OF CONTENTS (desktop side nav) ─── */
+    .toc {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      z-index: 40;
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 18px 16px;
+      background: rgba(10, 22, 40, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .toc.on { opacity: 1; pointer-events: auto; }
+    .toc a {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+      text-decoration: none;
+      padding: 6px 8px;
+      border-radius: 8px;
+      transition: color .2s ease, background .2s ease;
+    }
+    .toc a .dotm {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      transition: background .2s ease, box-shadow .2s ease;
+      flex-shrink: 0;
+    }
+    .toc a:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+    .toc a.active { color: var(--white); }
+    .toc a.active .dotm { background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+    @media (max-width: 1199px) { .toc { display: none; } }
+
+    /* ─── BACK TO TOP ─── */
+    .to-top {
+      position: fixed;
+      right: 22px; bottom: 92px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(10,22,40,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--white);
+      display: grid; place-items: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease, background .2s ease, border-color .2s ease;
+      z-index: 55;
+    }
+    .to-top.on { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .to-top:hover { background: rgba(26,155,227,0.2); border-color: rgba(26,155,227,0.55); }
+    .to-top svg { width: 20px; height: 20px; }
+    @media (max-width: 760px) {
+      .to-top { right: 14px; bottom: 78px; width: 40px; height: 40px; }
+    }
+
+    /* ─── WARNING / INFO BOX ─── */
+    .callout {
+      margin: 20px 0 0;
+      padding: 18px 20px;
+      border-radius: var(--r);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      font-size: 14.5px;
+    }
+    .callout.warn {
+      background: linear-gradient(135deg, rgba(255, 100, 100, 0.08), rgba(255, 100, 100, 0.02));
+      border: 1px solid rgba(255, 100, 100, 0.28);
+      color: var(--text);
+    }
+    .callout.info {
+      background: linear-gradient(135deg, rgba(26,155,227,0.08), rgba(26,155,227,0.02));
+      border: 1px solid rgba(26,155,227,0.28);
+      color: var(--text);
+    }
+    .callout .ic {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .callout.warn .ic { background: rgba(255, 100, 100, 0.15); color: #ff8a8a; }
+    .callout.info .ic { background: rgba(26,155,227,0.18); color: var(--ocean-bright); }
+    .callout strong { color: var(--white); font-weight: 600; }
+    @media (max-width: 560px) { .callout { grid-template-columns: 1fr; } }
+
     /* ─── FLOATING WHATSAPP ─── */
     .wa-float {
       position: fixed;
@@ -678,7 +777,7 @@
 <body>
 
   <!-- ─── HEADER ─── -->
-  <header class="site-header">
+  <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="https://www.deckeva.com/" aria-label="Volver a deckeva.com">
         <span class="dot" aria-hidden="true"></span>
@@ -817,6 +916,17 @@
           </ul>
         </div>
       </div>
+
+      <div class="callout warn" role="note">
+        <div class="ic" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <strong>Importante:</strong> antes de cortar cualquier pieza de cartón, toma una foto de los moldes completos
+          junto con la lancha. Si tenemos dudas con alguna medida, esa foto nos permite resolverla sin que tengas
+          que volver a medir.
+        </div>
+      </div>
     </div>
   </section>
 
@@ -904,6 +1014,16 @@
           </ul>
         </div>
       </div>
+
+      <div class="callout info" role="note">
+        <div class="ic" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div>
+          <strong>Tiempo estimado:</strong> una lancha pequeña toma entre 1 y 2 horas; una mediana con asientos, escalones
+          y tapas puede tardar 3 a 4 horas. Reserva el tiempo de una sola vez — si partes, mejor termines.
+        </div>
+      </div>
     </div>
   </section>
 
@@ -966,6 +1086,19 @@
     </div>
   </footer>
 
+  <!-- ─── TABLE OF CONTENTS (desktop) ─── -->
+  <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+    <a href="#top" data-toc="top"><span class="dotm"></span>Inicio</a>
+    <a href="#paso-1" data-toc="paso-1"><span class="dotm"></span>Paso 1 · Medir</a>
+    <a href="#paso-final" data-toc="paso-final"><span class="dotm"></span>Paso Final · Instalar</a>
+    <a href="#compartir" data-toc="compartir"><span class="dotm"></span>Compartir</a>
+  </nav>
+
+  <!-- ─── BACK TO TOP ─── -->
+  <button class="to-top" id="toTop" type="button" aria-label="Volver arriba">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
   <!-- ─── FLOATING WHATSAPP ─── -->
   <a class="wa-float" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20vengo%20de%20la%20gu%C3%ADa%20y%20tengo%20una%20consulta." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
@@ -1013,6 +1146,44 @@
 
       var yearEl = document.getElementById('year');
       if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+      // ─── Back-to-top + ToC scroll spy ───
+      var toTop = document.getElementById('toTop');
+      var toc = document.getElementById('toc');
+      var tocLinks = toc ? Array.prototype.slice.call(toc.querySelectorAll('a[data-toc]')) : [];
+      var sectionMap = {
+        'top': document.getElementById('top'),
+        'paso-1': document.getElementById('paso-1'),
+        'paso-final': document.getElementById('paso-final'),
+        'compartir': document.getElementById('compartir')
+      };
+
+      if (toTop) {
+        toTop.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      var onScroll = function () {
+        var y = window.scrollY || window.pageYOffset;
+        if (toTop) toTop.classList.toggle('on', y > 600);
+        if (toc) toc.classList.toggle('on', y > 400);
+
+        // scroll spy: find last section whose top <= y + 160
+        if (tocLinks.length) {
+          var activeKey = 'top';
+          var threshold = y + 180;
+          Object.keys(sectionMap).forEach(function (k) {
+            var el = sectionMap[k];
+            if (el && el.offsetTop <= threshold) activeKey = k;
+          });
+          tocLinks.forEach(function (a) {
+            a.classList.toggle('active', a.getAttribute('data-toc') === activeKey);
+          });
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
 
       // ─── Checklists interactivos (persistencia en localStorage) ───
       var storageAvailable = (function () {
