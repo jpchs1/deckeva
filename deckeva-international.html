@@ -3363,24 +3363,80 @@
   }
 
   function buildWhatsAppText(quoteNumber, pdfUrl, fields, priceStr, code, priceClp) {
-    const ivaClp = Math.round((priceClp || 0) * 0.19);
+    const isES = String(navigator.language || 'es').toLowerCase().startsWith('es');
+    const ivaClp   = Math.round((priceClp || 0) * 0.19);
     const totalClp = (priceClp || 0) + ivaClp;
-    return 'Hola! Te envío mi cotización DECKEVA 🌊\n\n' +
-      '📋 N° ' + quoteNumber + '\n' +
-      (pdfUrl ? ('📎 PDF: ' + pdfUrl + '\n\n') : '\n') +
-      '— EMBARCACIÓN —\n' +
-      '• Tamaño: ' + (fields.size === 'otro' ? 'Otro / A consultar' : (fields.size ? fields.size + ' ft' : '—')) + '\n' +
-      '• Marca / Modelo: ' + (fields.brand + ' ' + fields.model).trim() + '\n' +
-      '• Año: ' + fields.year + '\n' +
-      '• Color: ' + fields.color + '\n\n' +
-      '— PRECIO —\n' +
-      '• Subtotal: ' + priceStr + '\n' +
-      '• IVA 19%: ' + (priceClp ? (code + ' ' + formatMoney(ivaClp, code)) : '—') + '\n' +
-      '• Total: ' + (priceClp ? (code + ' ' + formatMoney(totalClp, code)) : '—') + '\n\n' +
-      '— MIS DATOS —\n' +
-      '• ' + (fields.first + ' ' + fields.last).trim() + '\n' +
-      '• ' + fields.email + ' · ' + fields.phone + '\n' +
-      '• Envío a: ' + fields.country + '\n';
+    const subStr   = priceClp ? (code + ' ' + formatMoney(priceClp, code))   : '—';
+    const ivaStr   = priceClp ? (code + ' ' + formatMoney(ivaClp,   code))   : '—';
+    const totalStr = priceClp ? (code + ' ' + formatMoney(totalClp, code))   : '—';
+
+    const sizeTxt = fields.size === 'otro'
+      ? (isES ? 'A consultar' : 'To be confirmed')
+      : (fields.size ? (fields.size + ' ft') : '—');
+    const brandModel = (fields.brand + ' ' + fields.model).trim() || '—';
+    const fullName   = (fields.first + ' ' + fields.last).trim() || '—';
+
+    const line = (ok, txt) => ok ? txt : null;
+    // WhatsApp native formatting: *bold*, _italic_. Emojis anchor each line.
+    const lines = isES ? [
+      '¡Hola DECKEVA! 👋',
+      '',
+      'Te comparto los datos para mi cotización de piso EVA 🌊',
+      '',
+      '🧾 *Cotización N° ' + quoteNumber + '*',
+      line(pdfUrl, '📎 ' + pdfUrl),
+      '',
+      '⚓ *MI EMBARCACIÓN*',
+      '📐 Tamaño: *' + sizeTxt + '*',
+      '🏷️ ' + brandModel,
+      line(fields.year,  '📅 Año: ' + fields.year),
+      line(fields.color, '🎨 Color: ' + fields.color),
+      '',
+      '💰 *PRECIO (referencial)*',
+      '   Subtotal: ' + subStr,
+      '   IVA 19%: ' + ivaStr,
+      '   *TOTAL: ' + totalStr + '*',
+      '',
+      '📝 *MIS DATOS*',
+      '👤 ' + fullName,
+      '📧 ' + (fields.email || '—'),
+      '📱 ' + (fields.phone || '—'),
+      '🌎 Envío a: *' + (fields.country || '—') + '*',
+      '',
+      '📐🛠️ _Entiendo que la toma de medidas y la instalación las coordino con un técnico de mi confianza (ref USD $120 c/u). Ustedes me envían los videos paso a paso + soporte 24/7 ✅_',
+      '',
+      '¡Quedo atento/a a su respuesta! 🙌'
+    ] : [
+      'Hi DECKEVA! 👋',
+      '',
+      'Sharing the details for my EVA flooring quote 🌊',
+      '',
+      '🧾 *Quote No. ' + quoteNumber + '*',
+      line(pdfUrl, '📎 ' + pdfUrl),
+      '',
+      '⚓ *MY VESSEL*',
+      '📐 Size: *' + sizeTxt + '*',
+      '🏷️ ' + brandModel,
+      line(fields.year,  '📅 Year: ' + fields.year),
+      line(fields.color, '🎨 Color: ' + fields.color),
+      '',
+      '💰 *PRICE (reference)*',
+      '   Subtotal: ' + subStr,
+      '   VAT 19%: ' + ivaStr,
+      '   *TOTAL: ' + totalStr + '*',
+      '',
+      '📝 *MY DETAILS*',
+      '👤 ' + fullName,
+      '📧 ' + (fields.email || '—'),
+      '📱 ' + (fields.phone || '—'),
+      '🌎 Shipping to: *' + (fields.country || '—') + '*',
+      '',
+      '📐🛠️ _I understand that measurement and installation are arranged with my own technician (ref USD $120 each). You provide step-by-step videos + 24/7 support ✅_',
+      '',
+      'Looking forward to your reply! 🙌'
+    ];
+
+    return lines.filter(l => l !== null).join('\n');
   }
 
   window.submitQuote = async function(mode) {
