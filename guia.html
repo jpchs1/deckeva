@@ -167,6 +167,10 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; font-size: 16px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
       background: var(--navy);
@@ -1719,6 +1723,44 @@ Notas: (curvas, escotillas, etc.)</span>
         update();
       });
 
+      // ─── Analytics helper (dispatches to GA4/GTM or dataLayer if present) ───
+      var trackEvent = function (name, params) {
+        params = params || {};
+        params.page_location = pageUrl;
+        try {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', name, params);
+          } else if (window.dataLayer && typeof window.dataLayer.push === 'function') {
+            window.dataLayer.push(Object.assign({ event: name }, params));
+          }
+        } catch (e) {}
+      };
+
+      // Track share clicks
+      if (wa) wa.addEventListener('click', function () { trackEvent('share', { method: 'whatsapp', content_type: 'guide' }); });
+      if (mail) mail.addEventListener('click', function () { trackEvent('share', { method: 'email', content_type: 'guide' }); });
+      if (copyBtn) copyBtn.addEventListener('click', function () { trackEvent('share', { method: 'copy_link', content_type: 'guide' }); });
+
+      // Track inline CTAs and WA floating
+      document.querySelectorAll('a[href*="wa.me"]').forEach(function (a) {
+        a.addEventListener('click', function () {
+          trackEvent('whatsapp_click', { location: a.closest('section, footer, .wa-float') ? (a.closest('section[id]') ? a.closest('section[id]').id : 'floating_or_footer') : 'unknown' });
+        });
+      });
+
+      // Track scroll-depth milestones (25 / 50 / 75 / 100)
+      var milestones = { 25: false, 50: false, 75: false, 100: false };
+      window.addEventListener('scroll', function () {
+        var doc = document.documentElement;
+        var scrolled = (window.scrollY + window.innerHeight) / doc.scrollHeight * 100;
+        Object.keys(milestones).forEach(function (m) {
+          if (!milestones[m] && scrolled >= Number(m)) {
+            milestones[m] = true;
+            trackEvent('scroll_depth', { percent: Number(m) });
+          }
+        });
+      }, { passive: true });
+
       // ─── Video facades: thumbnail + click-to-play ───
       var facades = document.querySelectorAll('.video-facade');
       facades.forEach(function (btn) {
@@ -1745,6 +1787,7 @@ Notas: (curvas, escotillas, etc.)</span>
           iframe.setAttribute('frameborder', '0');
           var wrap = btn.parentElement;
           wrap.replaceChild(iframe, btn);
+          trackEvent('video_play', { video_id: id, video_title: btn.getAttribute('data-title') || '' });
         }, { once: true });
       });
     })();
