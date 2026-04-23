@@ -725,6 +725,64 @@
     .format-label .copy-small:hover { background: rgba(26,155,227,0.15); border-color: var(--ocean-bright); }
     .format-label .copy-small.ok { color: var(--gold-light); border-color: var(--gold); }
 
+    /* ─── FAQ ─── */
+    .faq {
+      padding: 90px 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .faq-list {
+      display: flex; flex-direction: column;
+      gap: 10px;
+      max-width: 820px;
+      margin: 30px auto 0;
+    }
+    .faq-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .faq-item[open] {
+      border-color: rgba(26,155,227,0.35);
+      background: rgba(26,155,227,0.04);
+    }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--white);
+      letter-spacing: 0.3px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary:focus-visible { outline: 2px solid var(--ocean-bright); outline-offset: -2px; }
+    .faq-item .caret {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+      transition: transform .25s ease, background .2s ease;
+    }
+    .faq-item[open] .caret {
+      transform: rotate(180deg);
+      background: rgba(26,155,227,0.2);
+    }
+    .faq-item .caret svg { width: 14px; height: 14px; color: var(--white); }
+    .faq-answer {
+      padding: 0 24px 22px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .faq-answer p + p { margin-top: 10px; }
+    .faq-answer a { color: var(--ocean-bright); text-decoration: underline; text-underline-offset: 2px; }
+
     /* ─── TABLE OF CONTENTS (desktop side nav) ─── */
     .toc {
       position: fixed;
@@ -1186,6 +1244,93 @@ Notas: (curvas, escotillas, etc.)</span>
     </div>
   </section>
 
+  <!-- ─── FAQ ─── -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Preguntas frecuentes</span>
+      </div>
+      <h2 class="section-title" style="text-align:center;">¿Tienes dudas antes de partir?</h2>
+      <div class="faq-list">
+
+        <details class="faq-item">
+          <summary>¿Cuánto me demoro tomando las medidas?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Una lancha pequeña toma alrededor de 30–45 minutos. Una mediana con asientos, escalones y tapas,
+            entre 1 y 2 horas. La parte que más toma es hacer los moldes de cartón; vale la pena hacerla con calma.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Qué pasa si me equivoco en una medida?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Revisamos tus medidas y fotos antes de cortar. Si vemos algo raro o inconsistente, te escribimos
+            para aclararlo antes de fabricar. Por eso las fotos son tan importantes: nos permiten verificar sin
+            que tengas que volver a medir.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Cuánto demora la fabricación?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Entre 5 y 15 días hábiles desde que aprobamos las medidas y el pago, según la cantidad de piezas
+            y la carga del taller. Te confirmamos el tiempo exacto en la cotización.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Puedo elegir el color y el diseño?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Sí. Tenemos varios colores en stock (negro, gris, beige, azul, combinaciones) y patrones de corte
+            (liso, imitación teca, hexagonal). Te mostramos las opciones cuando revisemos tus medidas.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Necesito alguien que me ayude a instalarlo?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Para piezas chicas puedes solo. Para piezas grandes o con curvatura, un segundo par de manos ayuda
+            mucho: uno sostiene la pieza sin que toque el piso mientras el otro va retirando el backing 3M de a poco
+            y presionando. El secador también es mucho más fácil de usar entre dos.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿El piso se puede retirar después?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Sí, aunque requiere paciencia. Calentando suavemente con secador y tirando de a poco desde una
+            esquina se despega sin dañar el gelcoat. Los restos de adhesivo se limpian con alcohol isopropílico
+            o removedor de adhesivos 3M.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>¿Cuánto dura el piso DECKEVA?
+            <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="faq-answer">
+            <p>En uso normal, 7 a 10 años. El EVA es resistente a UV, agua salada y combustibles. Lo que acorta
+            la vida útil es el roce contra objetos puntiagudos (anclas, herramientas) — cuida esos puntos y te
+            dura como el primer día.</p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ─── SHARE ─── -->
   <section class="share" id="compartir">
     <div class="container">
@@ -1233,7 +1378,9 @@ Notas: (curvas, escotillas, etc.)</span>
           <h5>En esta guía</h5>
           <ul>
             <li><a href="#paso-1">Paso 1 · Toma de medidas</a></li>
+            <li><a href="#enviar">Enviar tus medidas</a></li>
             <li><a href="#paso-final">Paso Final · Instalación</a></li>
+            <li><a href="#faq">Preguntas frecuentes</a></li>
             <li><a href="#compartir">Compartir esta guía</a></li>
           </ul>
         </div>
@@ -1251,6 +1398,7 @@ Notas: (curvas, escotillas, etc.)</span>
     <a href="#paso-1" data-toc="paso-1"><span class="dotm"></span>Paso 1 · Medir</a>
     <a href="#enviar" data-toc="enviar"><span class="dotm"></span>Enviar medidas</a>
     <a href="#paso-final" data-toc="paso-final"><span class="dotm"></span>Paso Final · Instalar</a>
+    <a href="#faq" data-toc="faq"><span class="dotm"></span>FAQ</a>
     <a href="#compartir" data-toc="compartir"><span class="dotm"></span>Compartir</a>
   </nav>
 
@@ -1344,6 +1492,7 @@ Notas: (curvas, escotillas, etc.)</span>
         'paso-1': document.getElementById('paso-1'),
         'enviar': document.getElementById('enviar'),
         'paso-final': document.getElementById('paso-final'),
+        'faq': document.getElementById('faq'),
         'compartir': document.getElementById('compartir')
       };
 
