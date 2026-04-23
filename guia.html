@@ -725,6 +725,31 @@
     .format-label .copy-small:hover { background: rgba(26,155,227,0.15); border-color: var(--ocean-bright); }
     .format-label .copy-small.ok { color: var(--gold-light); border-color: var(--gold); }
 
+    /* ─── INLINE MINI CTA ─── */
+    .mini-cta {
+      margin-top: 28px;
+      padding: 20px 24px;
+      border-radius: var(--r-lg);
+      background: linear-gradient(135deg, rgba(26,155,227,0.14), rgba(14,107,168,0.10));
+      border: 1px solid rgba(26,155,227,0.28);
+      display: flex; align-items: center; gap: 20px;
+      flex-wrap: wrap;
+    }
+    .mini-cta .mc-text {
+      flex: 1; min-width: 220px;
+      color: var(--text);
+      font-size: 15px;
+    }
+    .mini-cta .mc-text strong { color: var(--white); }
+    .mini-cta .mc-actions {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .mini-cta .btn { padding: 11px 20px; font-size: 13.5px; }
+    @media (max-width: 560px) {
+      .mini-cta .mc-actions { width: 100%; }
+      .mini-cta .btn { flex: 1; }
+    }
+
     /* ─── FAQ ─── */
     .faq {
       padding: 90px 0;
@@ -1069,6 +1094,16 @@
           que volver a medir.
         </div>
       </div>
+
+      <div class="mini-cta" role="group" aria-label="Llamado a acción">
+        <div class="mc-text">
+          <strong>¿Ya tienes tus medidas listas?</strong><br/>
+          Te damos la cotización y tiempo de fabricación el mismo día.
+        </div>
+        <div class="mc-actions">
+          <a class="btn btn-primary" href="#enviar">Enviar mis medidas</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1239,6 +1274,18 @@ Notas: (curvas, escotillas, etc.)</span>
         <div>
           <strong>Tiempo estimado:</strong> una lancha pequeña toma entre 1 y 2 horas; una mediana con asientos, escalones
           y tapas puede tardar 3 a 4 horas. Reserva el tiempo de una sola vez — si partes, mejor termines.
+        </div>
+      </div>
+
+      <div class="mini-cta" role="group" aria-label="Soporte durante instalación">
+        <div class="mc-text">
+          <strong>¿Dudas durante la instalación?</strong><br/>
+          Escríbenos por WhatsApp y te respondemos en el momento.
+        </div>
+        <div class="mc-actions">
+          <a class="btn btn-primary" style="background:#25d366;box-shadow:0 10px 26px rgba(37,211,102,0.35);color:#0a1628;" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20estoy%20instalando%20mi%20piso%20y%20tengo%20una%20duda." target="_blank" rel="noopener">
+            Abrir WhatsApp
+          </a>
         </div>
       </div>
     </div>
