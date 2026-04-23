@@ -641,6 +641,90 @@
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
     }
 
+    /* ─── "ENVIAR MEDIDAS" SECTION ─── */
+    .send {
+      padding: 70px 0;
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .send-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .send-card {
+      background: linear-gradient(180deg, rgba(26,58,92,0.35), rgba(17,34,64,0.35));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-lg);
+      padding: 28px 28px 24px;
+      display: flex; flex-direction: column;
+    }
+    .send-card .method-ic {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: grid; place-items: center;
+      margin-bottom: 16px;
+    }
+    .send-card.wa .method-ic { background: rgba(37,211,102,0.15); color: #25d366; }
+    .send-card.mail .method-ic { background: rgba(245,166,35,0.15); color: var(--gold-light); }
+    .send-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 22px; color: var(--white);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+    .send-card p { color: var(--text); font-size: 15px; margin-bottom: 18px; }
+    .send-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+    .send-card ul li {
+      font-size: 14.5px; color: var(--text);
+      padding-left: 22px; position: relative;
+    }
+    .send-card ul li::before {
+      content: "✓";
+      position: absolute; left: 0; top: 0;
+      font-weight: 700; color: var(--ocean-bright);
+    }
+    .send-card .action { margin-top: auto; }
+    .send-card .btn { width: 100%; justify-content: center; }
+    @media (max-width: 880px) { .send-grid { grid-template-columns: 1fr; } }
+
+    .format-box {
+      margin-top: 28px;
+      padding: 22px 24px;
+      border-radius: var(--r-lg);
+      background: rgba(10, 22, 40, 0.6);
+      border: 1px dashed rgba(255,255,255,0.12);
+      font-family: 'Space Mono', monospace;
+      font-size: 13.5px;
+      color: var(--text);
+      line-height: 1.9;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .format-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .format-label .copy-small {
+      margin-left: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--white);
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .format-label .copy-small:hover { background: rgba(26,155,227,0.15); border-color: var(--ocean-bright); }
+    .format-label .copy-small.ok { color: var(--gold-light); border-color: var(--gold); }
+
     /* ─── TABLE OF CONTENTS (desktop side nav) ─── */
     .toc {
       position: fixed;
@@ -930,6 +1014,81 @@
     </div>
   </section>
 
+  <!-- ─── ENVIAR MEDIDAS ─── -->
+  <section class="send" id="enviar">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Paso 1.5</span>
+      </div>
+      <h2 class="section-title" style="margin-bottom:14px;">Envíanos tus medidas</h2>
+      <p class="section-sub">
+        Elige el canal que más te acomode. Revisamos las medidas dentro del día y te confirmamos la cotización
+        junto con el tiempo de fabricación.
+      </p>
+
+      <div class="send-grid">
+        <!-- WhatsApp -->
+        <div class="send-card wa">
+          <div class="method-ic" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          </div>
+          <h3>Por WhatsApp</h3>
+          <p>La forma más rápida. Envía las fotos y la lista de medidas directo al chat.</p>
+          <ul>
+            <li>Foto de cada molde de cartón</li>
+            <li>Foto general de la lancha</li>
+            <li>Lista de medidas en cm (puedes copiar el formato de la derecha)</li>
+          </ul>
+          <div class="action">
+            <a class="btn btn-primary" style="background:#25d366;box-shadow:0 10px 26px rgba(37,211,102,0.35);color:#0a1628;" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20vengo%20de%20la%20gu%C3%ADa%20y%20quiero%20enviarles%20mis%20medidas." target="_blank" rel="noopener">
+              Escribir por WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Mail -->
+        <div class="send-card mail">
+          <div class="method-ic" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <h3>Por correo</h3>
+          <p>Ideal si tienes muchas fotos o piezas, o prefieres dejarlo por escrito.</p>
+          <ul>
+            <li>Asunto: "Medidas + [modelo de lancha]"</li>
+            <li>Adjunta todas las fotos (moldes + lancha)</li>
+            <li>Incluye la lista de medidas y tus datos de contacto</li>
+          </ul>
+          <div class="action">
+            <a class="btn btn-ghost" href="mailto:contacto@deckeva.cl?subject=Medidas%20de%20mi%20lancha%20-%20DECKEVA&body=Hola%2C%0A%0AAdjunto%20las%20fotos%20y%20medidas%20de%20mi%20lancha.%0A%0ADatos%3A%0A-%20Modelo%2Feslora%3A%20%0A-%20Mi%20nombre%3A%20%0A-%20Tel%C3%A9fono%3A%20%0A-%20Ciudad%2Fpa%C3%ADs%3A%20%0A%0AMedidas%20(en%20cm)%3A%0A%0APieza%201%20%7C%20Cubierta%20proa%20%7C%20largo%3A%20___%20%7C%20ancho%3A%20___%0APieza%202%20%7C%20Cubierta%20popa%20%7C%20largo%3A%20___%20%7C%20ancho%3A%20___%0APieza%203%20%7C%20Escal%C3%B3n%20%7C%20largo%3A%20___%20%7C%20ancho%3A%20___%0A%0AGracias.">
+              Escribir un correo
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formato sugerido -->
+      <div class="format-box">
+        <div class="format-label">
+          Formato sugerido
+          <button type="button" class="copy-small" id="copyFormat" aria-label="Copiar formato">Copiar</button>
+        </div><!-- format content -->
+<span id="formatText">Modelo / eslora de la lancha: ___
+Mi nombre: ___
+Teléfono: ___
+Ciudad / país: ___
+
+MEDIDAS (en cm)
+ 1 · Cubierta proa     · largo: ___ · ancho: ___
+ 2 · Cubierta popa     · largo: ___ · ancho: ___
+ 3 · Escalón(es)       · largo: ___ · ancho: ___
+ 4 · Asiento(s)        · largo: ___ · ancho: ___
+ 5 · Tapa compartimento · largo: ___ · ancho: ___
+
+Notas: (curvas, escotillas, etc.)</span>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── PASO FINAL · INSTALACIÓN ─── -->
   <section id="paso-final" class="section">
     <div class="container">
@@ -1090,6 +1249,7 @@
   <nav class="toc" id="toc" aria-label="Tabla de contenidos">
     <a href="#top" data-toc="top"><span class="dotm"></span>Inicio</a>
     <a href="#paso-1" data-toc="paso-1"><span class="dotm"></span>Paso 1 · Medir</a>
+    <a href="#enviar" data-toc="enviar"><span class="dotm"></span>Enviar medidas</a>
     <a href="#paso-final" data-toc="paso-final"><span class="dotm"></span>Paso Final · Instalar</a>
     <a href="#compartir" data-toc="compartir"><span class="dotm"></span>Compartir</a>
   </nav>
@@ -1147,6 +1307,34 @@
       var yearEl = document.getElementById('year');
       if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+      // ─── "Copiar formato sugerido" ───
+      var copyFmt = document.getElementById('copyFormat');
+      var fmtText = document.getElementById('formatText');
+      if (copyFmt && fmtText) {
+        copyFmt.addEventListener('click', function () {
+          var text = fmtText.textContent || '';
+          var finish = function () {
+            copyFmt.classList.add('ok');
+            copyFmt.textContent = '✓ Copiado';
+            setTimeout(function () {
+              copyFmt.classList.remove('ok');
+              copyFmt.textContent = 'Copiar';
+            }, 2000);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(finish).catch(finish);
+          } else {
+            var t = document.createElement('textarea');
+            t.value = text;
+            document.body.appendChild(t);
+            t.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(t);
+            finish();
+          }
+        });
+      }
+
       // ─── Back-to-top + ToC scroll spy ───
       var toTop = document.getElementById('toTop');
       var toc = document.getElementById('toc');
@@ -1154,6 +1342,7 @@
       var sectionMap = {
         'top': document.getElementById('top'),
         'paso-1': document.getElementById('paso-1'),
+        'enviar': document.getElementById('enviar'),
         'paso-final': document.getElementById('paso-final'),
         'compartir': document.getElementById('compartir')
       };
