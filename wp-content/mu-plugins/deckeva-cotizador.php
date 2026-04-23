@@ -56,6 +56,21 @@ class Deckeva_Cotizador {
         return $code . ' ' . $c['symbol'] . number_format($converted, 0, ',', $c['thousands']);
     }
 
+    /* Render the "≈ USD $..." reference line when the selected currency is
+       neither CLP (Chilean clients) nor USD (already USD). Returns the
+       appropriate HTML for each surface: 'pdf' (a small paragraph in the
+       pricing box) or 'email' (a table row spanning two columns). */
+    private function usd_ref_line($total_clp, $currency_code, $surface = 'pdf') {
+        if ($currency_code === 'CLP' || $currency_code === 'USD') return '';
+        $usd = $this->get_currency('USD');
+        $total_usd = (int) round(((float)$total_clp) / (float)$usd['rate']);
+        $usd_str = 'USD ' . $usd['symbol'] . number_format($total_usd, 0, ',', $usd['thousands']);
+        if ($surface === 'email') {
+            return '<tr><td colspan="2" style="padding:0 16px 10px;text-align:right;font-size:12px;color:#6b7280;font-style:italic;">≈ <strong style="color:#1a2a3a;font-style:normal;">' . esc_html($usd_str) . '</strong></td></tr>';
+        }
+        return '<p style="margin:4px 0 0;font-size:11px;color:#555;text-align:right;font-style:italic;">≈ <strong style="color:#1a2a3a;font-style:normal;">' . esc_html($usd_str) . '</strong></p>';
+    }
+
     public function __construct() {
         $this->logo_url = $this->site_url . '/wp-content/uploads/2024/08/WhatsApp-Image-2023-08-03-at-11.27.49-AM.jpeg.webp';
         add_action('init', [$this, 'intercept_route'], 1);
@@ -472,6 +487,7 @@ td { padding: 4px 10px; vertical-align: top; }
   <div class="price-row"><span>Base / Subtotal</span><span>' . esc_html($fm($price_clp)) . '</span></div>
   <div class="price-row"><span>IVA / VAT 19%</span><span>' . esc_html($fm($iva_clp)) . '</span></div>
   <div class="price-row total"><span>TOTAL</span><span>' . esc_html($fm($total_clp)) . '</span></div>
+  ' . ($this->usd_ref_line($total_clp, $currency_code, 'pdf')) . '
   ' . ($rate_str ? '<p style="margin:6px 0 0;font-size:10px;color:#888;">Reference rate / Tipo de cambio ref: ' . esc_html($rate_str) . '</p>' : '') . '
   <p style="margin:4px 0 0;font-size:10px;color:#888;">* Precio referencial / Reference quote · Final confirmation upon order.</p>
 </div>
@@ -536,6 +552,7 @@ td { padding: 4px 10px; vertical-align: top; }
 <tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">IVA / VAT 19%</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($iva_clp)) . '</td></tr>
 <tr><td colspan="2" style="padding:6px 16px;"><div style="border-top:2px dashed #e5e7eb;"></div></td></tr>
 <tr><td style="padding:12px 16px;font-size:16px;color:#1a2a3a;font-weight:800;">TOTAL</td><td style="padding:12px 16px;text-align:right;"><span style="background:#e8a735;color:#fff;padding:6px 16px;border-radius:8px;font-size:16px;font-weight:800;">' . esc_html($fm($total_clp)) . '</span></td></tr>
+' . $this->usd_ref_line($total_clp, $currency_code, 'email') . '
 </table>
 </td></tr>
 <tr><td style="padding:16px 36px 10px;">
