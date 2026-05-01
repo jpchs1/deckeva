@@ -5,5 +5,7 @@ deployment:
     - /bin/cp deckeva-international.html /home/wwimpo/deckeva.com/index.html
     - /bin/mkdir -p /home/wwimpo/deckeva.com/guia
     - /bin/cp guia/index.html /home/wwimpo/deckeva.com/guia/index.html
+    - /bin/mkdir -p /home/wwimpo/deckeva.com/wiretransfers
+    - /bin/cp wiretransfers/index.html /home/wwimpo/deckeva.com/wiretransfers/index.html
     - /bin/cp wp-content/themes/dt-the7-child/functions.php /home/wwimpo/deckeva.cl/wp-content/themes/dt-the7-child/functions.php 2>/dev/null || true
     - /bin/cp -R wp-content/mu-plugins /home/wwimpo/deckeva.cl/wp-content/ 2>/dev/null || true
