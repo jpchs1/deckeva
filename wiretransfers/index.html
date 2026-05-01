@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Wire Transfer Payment | DECKEVA — Pago Internacional via Wire</title>
+  <meta name="description" content="Datos bancarios para realizar el pago a DECKEVA mediante Wire Transfer (transferencia bancaria internacional). Cuentas GrabrFi y Payoneer en USA." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="author" content="DECKEVA" />
+  <link rel="canonical" href="https://www.deckeva.com/wiretransfers/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DECKEVA" />
+  <meta property="og:title" content="DECKEVA — Wire Transfer Payment Details" />
+  <meta property="og:description" content="Bank details for international clients paying DECKEVA via Wire Transfer." />
+  <meta property="og:url" content="https://www.deckeva.com/wiretransfers/" />
+  <meta property="og:image" content="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg" />
+  <meta property="og:locale" content="es_CL" />
+
+  <!-- Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://deckeva.com/wp-content/uploads/2023/08/cropped-deckeva-favicon-32x32.png" sizes="32x32" />
+
+  <style>
+    :root {
+      --navy: #0a1628;
+      --navy-mid: #112240;
+      --navy-light: #1a3a5c;
+      --ocean: #0e6ba8;
+      --ocean-bright: #1a9be3;
+      --foam: #e8f4f8;
+      --gold: #f5a623;
+      --gold-light: #ffc04d;
+      --white: #ffffff;
+      --text: #ccd6f6;
+      --text-muted: #8899aa;
+      --r: 10px;
+      --r-lg: 18px;
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.25);
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --max: 1120px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--ocean-bright); text-decoration: none; transition: color .2s ease; }
+    a:hover { color: var(--gold-light); }
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 22px; }
+
+    /* HEADER */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10, 22, 40, 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+    }
+    .brand {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800; letter-spacing: 3px;
+      color: var(--white); font-size: 22px;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .brand .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 14px var(--gold);
+    }
+    .brand:hover { color: var(--foam); }
+    .header-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .header-link:hover { color: var(--gold-light); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      padding: 70px 0 40px;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(26, 155, 227, 0.18), transparent 55%),
+        radial-gradient(ellipse at 80% 100%, rgba(245, 166, 35, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+      overflow: hidden;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold);
+      padding: 6px 12px;
+      border: 1px solid rgba(245, 166, 35, 0.35);
+      border-radius: 999px;
+      background: rgba(245, 166, 35, 0.06);
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(34px, 5.4vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+      color: var(--white);
+      margin-bottom: 18px;
+      text-wrap: balance;
+    }
+    .hero h1 .accent { color: var(--ocean-bright); }
+    .hero p.lead {
+      max-width: 720px;
+      font-size: 17px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .hero p.lead.en {
+      color: var(--text-muted);
+      font-size: 15.5px;
+      font-style: italic;
+    }
+
+    /* SECTION */
+    .section {
+      padding: 60px 0 90px;
+      background: var(--navy-mid);
+    }
+
+    /* OPTION CARDS */
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 26px;
+    }
+    .option {
+      background: linear-gradient(180deg, rgba(26, 58, 92, 0.55), rgba(17, 34, 64, 0.55));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-lg);
+      padding: 30px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .option-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .option-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold);
+      padding: 4px 10px;
+      border: 1px solid rgba(245,166,35,0.35);
+      border-radius: 999px;
+      background: rgba(245,166,35,0.06);
+    }
+    .option h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 32px;
+      color: var(--white);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .option-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      margin-top: 2px;
+    }
+
+    /* FIELD ROWS */
+    .fields { display: grid; gap: 10px; margin-bottom: 18px; }
+    .field {
+      display: grid;
+      grid-template-columns: 180px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 11px 14px;
+      background: rgba(10, 22, 40, 0.55);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--r);
+      transition: border-color .2s ease;
+    }
+    .field:hover { border-color: rgba(26,155,227,0.25); }
+    .field-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .field-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      color: var(--white);
+      word-break: break-word;
+    }
+    .field-value.address {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .copy-btn {
+      background: rgba(26,155,227,0.12);
+      border: 1px solid rgba(26,155,227,0.35);
+      color: var(--ocean-bright);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, border-color .2s ease;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: rgba(26,155,227,0.25); color: var(--white); }
+    .copy-btn.copied {
+      background: rgba(245,166,35,0.18);
+      border-color: rgba(245,166,35,0.55);
+      color: var(--gold-light);
+    }
+
+    /* INSTRUCTIONS */
+    .instructions {
+      margin-top: 18px;
+      padding: 18px 18px;
+      background: rgba(245, 166, 35, 0.06);
+      border-left: 3px solid var(--gold);
+      border-radius: 6px;
+    }
+    .instructions h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--gold-light);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .instructions ul {
+      list-style: none;
+      display: grid; gap: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .instructions li {
+      padding-left: 18px;
+      position: relative;
+    }
+    .instructions li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .instructions code {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--gold-light);
+      background: rgba(0,0,0,0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* NOTE BOX */
+    .note {
+      max-width: var(--max);
+      margin: 36px auto 0;
+      padding: 22px 24px;
+      background: linear-gradient(135deg, rgba(26,155,227,0.08), rgba(26,155,227,0.03));
+      border: 1px solid rgba(26,155,227,0.25);
+      border-radius: var(--r-lg);
+      color: var(--text);
+      font-size: 15px;
+    }
+    .note strong { color: var(--white); }
+
+    /* CTA / CONTACT */
+    .contact {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .contact h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--white);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .contact p {
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      font-size: 14px;
+      cursor: pointer; border: 0;
+      transition: transform .15s ease, box-shadow .2s ease, color .2s ease;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--ocean-bright), var(--ocean));
+      color: var(--white);
+      box-shadow: 0 10px 26px rgba(26, 155, 227, 0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(26,155,227,0.45); color: #fff; }
+    .btn svg { width: 18px; height: 18px; }
+
+    /* FOOTER */
+    .site-footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 36px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .site-footer .container {
+      display: flex; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      .field {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .field-label { font-size: 10.5px; }
+      .copy-btn { justify-self: flex-start; padding: 6px 10px; font-size: 10.5px; }
+      .options { grid-template-columns: 1fr; }
+      .option { padding: 26px 22px; }
+      .option h2 { font-size: 26px; }
+      .hero { padding: 50px 0 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="https://www.deckeva.com/" aria-label="Volver a deckeva.com">
+        <span class="dot" aria-hidden="true"></span>
+        DECKEVA
+      </a>
+      <a class="header-link" href="https://www.deckeva.com/">← Volver al sitio</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">Pago internacional · Wire Transfer</span>
+      <h1>Datos para pagar con <span class="accent">Wire Transfer</span></h1>
+      <p class="lead">
+        Si prefieres realizar tu pago mediante transferencia bancaria internacional (Wire Transfer / ACH),
+        elige una de las dos opciones a continuación. Ambas cuentas reciben pagos en USD desde cualquier país.
+      </p>
+      <p class="lead en">
+        If you prefer to pay via international wire transfer (Wire / ACH),
+        choose one of the two options below. Both accounts receive USD payments from anywhere in the world.
+      </p>
+    </div>
+  </section>
+
+  <!-- OPTIONS -->
+  <section class="section">
+    <div class="container">
+
+      <div class="options">
+
+        <!-- OPTION 1 — GRABRFI -->
+        <article class="option" id="grabrfi">
+          <div class="option-head">
+            <div>
+              <h2>GrabrFi</h2>
+              <p class="option-sub">Opción 1 · Regent Bank (USA)</p>
+            </div>
+            <span class="option-tag">ACH · Wire</span>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <span class="field-label">Routing (ACH)</span>
+              <span class="field-value" data-copy="103913434">103913434</span>
+              <button class="copy-btn" type="button" data-target="103913434" aria-label="Copiar Routing ACH">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Routing (Wire)</span>
+              <span class="field-value" data-copy="103913434">103913434</span>
+              <button class="copy-btn" type="button" data-target="103913434" aria-label="Copiar Routing Wire">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Account number</span>
+              <span class="field-value" data-copy="123304917701">123304917701</span>
+              <button class="copy-btn" type="button" data-target="123304917701" aria-label="Copiar número de cuenta">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Account type</span>
+              <span class="field-value" data-copy="Checking">Checking</span>
+              <button class="copy-btn" type="button" data-target="Checking" aria-label="Copiar tipo de cuenta">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Beneficiary</span>
+              <span class="field-value" data-copy="JUAN PABLO CHAPARRO SOUMASTRE">JUAN PABLO CHAPARRO SOUMASTRE</span>
+              <button class="copy-btn" type="button" data-target="JUAN PABLO CHAPARRO SOUMASTRE" aria-label="Copiar nombre del beneficiario">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Bank name</span>
+              <span class="field-value" data-copy="Regent Bank">Regent Bank</span>
+              <button class="copy-btn" type="button" data-target="Regent Bank" aria-label="Copiar nombre del banco">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Bank address</span>
+              <span class="field-value address" data-copy="7136 S. Yale Ave., Tulsa, OK 74136, USA">7136 S. Yale Ave., Tulsa, OK 74136, USA</span>
+              <button class="copy-btn" type="button" data-target="7136 S. Yale Ave., Tulsa, OK 74136, USA" aria-label="Copiar dirección del banco">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Beneficiary address</span>
+              <span class="field-value address" data-copy="CAM. DE LA FRAGUA 2333, LO BARNECHEA, SANTIAGO METROPOLITAN REGION 7690000, CL">CAM. DE LA FRAGUA 2333, LO BARNECHEA, SANTIAGO METROPOLITAN REGION 7690000, CL</span>
+              <button class="copy-btn" type="button" data-target="CAM. DE LA FRAGUA 2333, LO BARNECHEA, SANTIAGO METROPOLITAN REGION 7690000, CL" aria-label="Copiar dirección del beneficiario">Copiar</button>
+            </div>
+          </div>
+
+          <div class="instructions">
+            <h3>Instrucciones para Wire Transfer</h3>
+            <ul>
+              <li>La dirección del remitente y del destinatario deben ser <strong>direcciones físicas</strong>. No se admiten apartados de correos (PO Box).</li>
+              <li>Añade la palabra <code>GrabrFi</code> a la nota o descripción de la transferencia.</li>
+              <li>Ejemplo de descripción: <code>GrabrFi: payment for invoice #123 — DECKEVA flooring</code></li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- OPTION 2 — PAYONEER -->
+        <article class="option" id="payoneer">
+          <div class="option-head">
+            <div>
+              <h2>Payoneer</h2>
+              <p class="option-sub">Opción 2 · Citibank (USA)</p>
+            </div>
+            <span class="option-tag">Wire · SWIFT</span>
+          </div>
+
+          <div class="fields">
+            <div class="field">
+              <span class="field-label">Routing (ABA)</span>
+              <span class="field-value" data-copy="031100209">031100209</span>
+              <button class="copy-btn" type="button" data-target="031100209" aria-label="Copiar Routing ABA">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">SWIFT code</span>
+              <span class="field-value" data-copy="CITIUS33">CITIUS33</span>
+              <button class="copy-btn" type="button" data-target="CITIUS33" aria-label="Copiar SWIFT">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Account number</span>
+              <span class="field-value" data-copy="70580450001096549">70580450001096549</span>
+              <button class="copy-btn" type="button" data-target="70580450001096549" aria-label="Copiar número de cuenta">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Account type</span>
+              <span class="field-value" data-copy="Checking">Checking</span>
+              <button class="copy-btn" type="button" data-target="Checking" aria-label="Copiar tipo de cuenta">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Beneficiary</span>
+              <span class="field-value" data-copy="Juan Pablo Chaparro Soumastre">Juan Pablo Chaparro Soumastre</span>
+              <button class="copy-btn" type="button" data-target="Juan Pablo Chaparro Soumastre" aria-label="Copiar nombre del beneficiario">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Bank name</span>
+              <span class="field-value" data-copy="Citibank">Citibank</span>
+              <button class="copy-btn" type="button" data-target="Citibank" aria-label="Copiar nombre del banco">Copiar</button>
+            </div>
+            <div class="field">
+              <span class="field-label">Bank address</span>
+              <span class="field-value address" data-copy="111 Wall Street, New York, NY 10043, USA">111 Wall Street, New York, NY 10043, USA</span>
+              <button class="copy-btn" type="button" data-target="111 Wall Street, New York, NY 10043, USA" aria-label="Copiar dirección del banco">Copiar</button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- NOTE -->
+      <div class="note">
+        <strong>Importante:</strong> Una vez realizada la transferencia, envíanos el comprobante por correo o WhatsApp para
+        confirmar el pago y avanzar con la fabricación de tu pedido. Las transferencias internacionales pueden tardar
+        entre 1 y 3 días hábiles en acreditarse.
+        <br/><br/>
+        <strong>Important:</strong> Once the transfer is sent, please share the receipt with us by email or WhatsApp so
+        we can confirm the payment and move forward with your order. International wires typically take 1–3 business
+        days to clear.
+      </div>
+
+      <!-- CONTACT -->
+      <div class="contact">
+        <h3>¿Dudas? / Questions?</h3>
+        <p>Escríbenos para confirmar tu pago o aclarar cualquier dato.</p>
+        <a class="btn btn-primary" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20realic%C3%A9%20una%20transferencia%20por%20Wire%20Transfer." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          WhatsApp +56 9 4021 1459
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="year"></span> DECKEVA · Pisos Náuticos de Goma EVA</span>
+      <span><a href="https://www.deckeva.com/">www.deckeva.com</a> · <a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.querySelectorAll('.copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.getAttribute('data-target') || '';
+        var done = function () {
+          var original = btn.textContent;
+          btn.textContent = 'Copiado ✓';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+          }, 1600);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function () {
+            fallbackCopy(text);
+            done();
+          });
+        } else {
+          fallbackCopy(text);
+          done();
+        }
+      });
+    });
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'absolute';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  </script>
+
+</body>
+</html>
