@@ -482,7 +482,7 @@
     }
     .btn-primary {
       background: var(--gold);
-      color: var(--navy);
+      color: var(--text-dark);
     }
     .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(245,166,35,0.4); }
     .btn-outline {
@@ -973,7 +973,7 @@
       outline: none; border-color: var(--gold);
       background: rgba(245,166,35,0.15);
     }
-    .form-currency-select option { background: var(--navy-mid); color: #fff; }
+    .form-currency-select option { background: var(--navy-mid); color: var(--text); }
     .form-section {
       padding: 22px 0 6px;
       border-top: 1px solid rgba(15,23,42,0.06);
@@ -997,7 +997,7 @@
       width: 100%; padding: 14px 16px;
       background: rgba(15,23,42,0.05);
       border: 1px solid rgba(15,23,42,0.1);
-      border-radius: var(--r); color: white;
+      border-radius: var(--r); color: var(--text);
       font-family: 'DM Sans', sans-serif; font-size: 15px;
       transition: all 0.2s;
       -webkit-appearance: none;
@@ -1075,7 +1075,7 @@
       color: var(--gold); font-weight: 700;
     }
     .install-table td { color: var(--text); }
-    .install-table td strong { color: #fff; font-weight: 700; }
+    .install-table td strong { color: var(--text-dark); font-weight: 700; }
     .install-notice ul {
       list-style: none; padding: 0; margin: 10px 0 0;
       display: flex; flex-direction: column; gap: 6px;
@@ -1091,7 +1091,7 @@
     .submit-btn.email:hover { background: #4c99ff; }
     .submit-btn.whatsapp { background: #25d366; color: #fff; }
     .submit-btn.whatsapp:hover { background: #34e178; }
-    .submit-btn.both     { background: var(--gold); color: var(--navy); }
+    .submit-btn.both     { background: var(--gold); color: var(--text-dark); }
     .submit-btn[disabled] { opacity: .55; cursor: wait; transform: none !important; }
     .submit-btn .btn-label { display: block; font-size: 14px; }
     .submit-btn .btn-sub   { display: block; font-size: 10px; font-weight: 500; opacity: .9; margin-top: 2px; letter-spacing: 1px; }
@@ -1107,7 +1107,7 @@
     .submit-btn {
       width: 100%; padding: 18px;
       background: var(--gold);
-      color: var(--navy);
+      color: var(--text-dark);
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 18px; font-weight: 700;
       letter-spacing: 1px; text-transform: uppercase;
@@ -1669,9 +1669,7 @@
     }
 
     /* =========================================================
-       LIGHT THEME — ajustes finos
-       Casos donde el color no se podía resolver vía variable
-       (texto blanco contextual, banner staging, etc.)
+       LIGHT THEME — overrides contextuales + UI/UX polish
        ========================================================= */
 
     /* Banner staging arriba */
@@ -1687,51 +1685,259 @@
     body { padding-top: 30px; }
     nav { top: 30px !important; }
 
-    /* Texto blanco hardcoded → texto oscuro (solo donde aplica sobre fondos claros) */
-    .hero-title .line1 { color: var(--text-dark); }
-    .nav-links a, .nav-links a:hover { color: var(--text); }
-    .nav-links a:hover { color: var(--ocean); }
-    .contact-link, .contact-link:hover { color: var(--text); }
-    .contact-link:hover { color: var(--ocean); }
-    .tcb-val, .tcb-link, .tcb-link:hover { color: var(--text-dark); }
-    .tcb-link:hover { color: var(--ocean); }
-
-    /* Footer: títulos oscuros, links grises, hover azul */
-    .footer-links a, .footer-bottom a { color: var(--gray); }
-    .footer-links a:hover, .footer-bottom a:hover { color: var(--ocean); }
-
-    /* Hero overlay claro */
-    .hero { background: linear-gradient(180deg, #ffffff 0%, var(--foam) 60%, #f0f6fb 100%) !important; }
-    .hero-bg { opacity: 0.55; }
-    .hero-grid-overlay { opacity: 0.4; }
-
-    /* Inputs: asegurar contraste */
-    input, textarea, select { color: var(--text) !important; background: #ffffff !important; }
-    input::placeholder, textarea::placeholder { color: var(--gray); }
-    .form-control option, select option { background: #ffffff !important; color: var(--text) !important; }
-
-    /* Sombras suaves para cards */
-    .feature-card, .pay-card, .country-card, .testimonial-card,
-    .ls1-card, .ls2-item, .lifestyle-card, .timeline-event,
-    .tl-card, .faq-item, .gallery-card, .blog-card, .quote-card {
-      box-shadow: var(--shadow-sm);
+    /* ────────── HERO: imagen nítida con overlay legible ────────── */
+    .hero {
+      background: #f6f8fb;
     }
+    .hero-bg { opacity: 1 !important; }   /* imagen a full nitidez */
+    .hero-slide::after {
+      /* overlay claro: opaco a la izquierda donde va el texto, transparente a la derecha mostrando la foto */
+      background: linear-gradient(95deg,
+        rgba(255,255,255,0.92) 0%,
+        rgba(255,255,255,0.75) 28%,
+        rgba(255,255,255,0.35) 55%,
+        rgba(255,255,255,0.10) 100%) !important;
+    }
+    .hero-grid-overlay {
+      opacity: 0.35 !important;
+      mask-image: linear-gradient(95deg, #000 0%, #000 30%, transparent 70%);
+      -webkit-mask-image: linear-gradient(95deg, #000 0%, #000 30%, transparent 70%);
+    }
+    .hero-title .line1 { color: var(--text-dark); }
+    .hero-title .line2 { color: var(--gold); }
+    .hero-title .line3 { color: var(--ocean); }
+    .hero-desc { color: var(--text); }
+    .hero-stat-num { color: var(--ocean); }
+    .hero-stats { border-top: 1px solid rgba(15,23,42,0.12); }
 
-    /* Texto sobre botones de acento — fuerza blanco */
-    .btn-primary, .btn-ocean, .submit-btn.email, .submit-btn.whatsapp,
-    .lang-btn.active, .pay-tab.active, .social-btn:hover,
-    .timeline-marker, .tl-marker { color: #fff !important; }
-    .btn-primary { color: #fff !important; }
-
-    /* Botón outline: borde oscuro suave en lugar de blanco translúcido */
-    .btn-outline { color: var(--text-dark); border-color: rgba(15,23,42,0.25); }
-    .btn-outline:hover { border-color: var(--text-dark); background: rgba(15,23,42,0.04); color: var(--text-dark); }
-
-    /* Hamburger en oscuro */
+    /* ────────── NAV ────────── */
+    nav { background: rgba(255,255,255,0.90) !important; backdrop-filter: blur(12px); border-bottom: 1px solid rgba(15,23,42,0.06) !important; }
+    nav.scrolled { background: rgba(255,255,255,0.96) !important; box-shadow: 0 1px 6px rgba(15,23,42,0.04); }
+    .nav-links a { color: var(--text); font-weight: 500; }
+    .nav-links a:hover { color: var(--ocean); }
     .hamburger span, .hamburger span::before, .hamburger span::after { background: var(--text-dark); }
 
-    /* Algunos display/heading hardcodeados → oscuros */
-    h1, h2, h3, h4, h5 { color: var(--text-dark); }
+    /* ────────── BOTONES ────────── */
+    .btn-primary { color: var(--text-dark) !important; box-shadow: 0 4px 14px rgba(245,166,35,0.28); }
+    .btn-primary:hover { box-shadow: 0 8px 22px rgba(245,166,35,0.36); }
+    .btn-ocean { color: #fff !important; box-shadow: 0 4px 14px rgba(14,107,168,0.28); }
+    .btn-ocean:hover { box-shadow: 0 8px 22px rgba(14,107,168,0.36); }
+    .btn-outline { color: var(--text-dark); border: 2px solid rgba(15,23,42,0.25); }
+    .btn-outline:hover { border-color: var(--text-dark); background: rgba(15,23,42,0.04); color: var(--text-dark); }
+
+    /* ────────── TIPOGRAFÍA ────────── */
+    h1, h2, h3, h4, h5, .heading, .display { color: var(--text-dark); }
+    .section-tag { color: var(--ocean) !important; }
+
+    /* ────────── CARDS (features, country, pay, testimonial, etc) ────────── */
+    .feature-card,
+    .testimonial-card,
+    .ls1-card,
+    .ls2-item,
+    .lifestyle-card,
+    .timeline-event,
+    .tl-card,
+    .faq-item,
+    .gallery-card,
+    .blog-card,
+    .quote-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.07) !important;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 4px 14px rgba(15,23,42,0.05);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .feature-card:hover,
+    .testimonial-card:hover,
+    .ls1-card:hover,
+    .lifestyle-card:hover,
+    .gallery-card:hover,
+    .blog-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(14,107,168,0.10);
+      border-color: rgba(14,107,168,0.18) !important;
+    }
+
+    /* Feature icon: caja con tinte ocean fuerte */
+    .feature-icon {
+      background: rgba(14,107,168,0.10) !important;
+      color: var(--ocean);
+    }
+    .feature-card:hover .feature-icon {
+      background: var(--ocean) !important;
+      color: #fff;
+    }
+
+    /* ────────── STEPS / TIMELINE ────────── */
+    .step-num { color: var(--ocean) !important; opacity: 0.18; }
+    .step:hover .step-num { opacity: 0.45; }
+    .step::after { background: rgba(15,23,42,0.06) !important; }
+
+    .timeline-marker, .tl-marker {
+      background: linear-gradient(135deg, var(--gold), var(--ocean)) !important;
+      color: #fff !important;
+      box-shadow: 0 4px 12px rgba(14,107,168,0.18);
+    }
+    .tl-line { background: linear-gradient(to bottom, rgba(245,166,35,0.35), rgba(14,107,168,0.20)) !important; }
+
+    /* ────────── COUNTRY GRID (envíos) ────────── */
+    .country-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.08) !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.03);
+      transition: all 0.25s;
+    }
+    .country-card:hover {
+      background: var(--foam) !important;
+      border-color: rgba(14,107,168,0.30) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(14,107,168,0.12);
+    }
+    .country-name { color: var(--text); font-weight: 600; }
+
+    /* ────────── PAYMENT TABS ────────── */
+    .payment-tabs { padding: 4px; background: rgba(15,23,42,0.04); border-radius: 10px; display: inline-flex; gap: 2px; }
+    .pay-tab {
+      background: transparent !important;
+      border: none !important;
+      color: var(--gray) !important;
+      padding: 10px 20px;
+    }
+    .pay-tab.active {
+      background: #ffffff !important;
+      color: var(--text-dark) !important;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+    }
+    .pay-tab:not(.active):hover { background: rgba(255,255,255,0.5) !important; color: var(--text-dark) !important; }
+    .pay-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.08) !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.03);
+    }
+    .pay-card:hover {
+      border-color: rgba(14,107,168,0.30) !important;
+      background: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(14,107,168,0.10);
+    }
+
+    /* ────────── FORMULARIO COTIZACIÓN ────────── */
+    .form-control, .form-currency-select,
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"],
+    textarea, select {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.15) !important;
+      color: var(--text) !important;
+      font-size: 15px;
+    }
+    .form-control:focus, input:focus, textarea:focus, select:focus {
+      border-color: var(--ocean) !important;
+      box-shadow: 0 0 0 3px rgba(14,107,168,0.12);
+      background: #ffffff !important;
+    }
+    .form-control::placeholder, input::placeholder, textarea::placeholder { color: var(--gray); opacity: 1; }
+    .form-control option, select option { background: #fff !important; color: var(--text) !important; }
+    .form-label { color: var(--gray); }
+
+    /* Quote info heading */
+    .quote-info h3 { color: var(--text-dark); }
+
+    /* Submit buttons: text always white o text-dark según fondo */
+    .submit-btn { font-weight: 700; }
+    .submit-btn.email, .submit-btn.whatsapp { color: #fff !important; }
+    .submit-btn.both, .submit-btn { color: var(--text-dark) !important; }
+    .submit-btn.email { color: #fff !important; }
+    .submit-btn.whatsapp { color: #fff !important; }
+
+    /* Price display & install notice */
+    .price-display { background: rgba(245,166,35,0.10) !important; border-color: rgba(245,166,35,0.35) !important; }
+    .install-notice { background: rgba(14,107,168,0.05) !important; border-color: rgba(14,107,168,0.18) !important; }
+    .install-notice .install-title { color: var(--ocean); }
+    .install-notice ul li::before { color: var(--ocean); }
+
+    /* ────────── TESTIMONIOS ────────── */
+    .testimonial-card { padding: 28px; }
+    .testimonial-text { color: var(--text); font-style: italic; }
+    .testimonial-author { color: var(--text-dark); }
+
+    /* ────────── GALERÍA ────────── */
+    .gallery-card img { transition: transform 0.4s ease; }
+    .gallery-card:hover img { transform: scale(1.04); }
+
+    /* ────────── BLOG / FAQ ────────── */
+    .blog-card { padding: 0; overflow: hidden; }
+    .blog-title { color: var(--text-dark); }
+    .blog-excerpt { color: var(--gray); }
+    .faq-question { color: var(--text-dark); font-weight: 600; }
+    .faq-answer { color: var(--text); }
+
+    /* ────────── SECCIONES (fondos diferenciados) ────────── */
+    .how-bg { background: var(--navy-mid) !important; }
+    .shipping-bg { background: linear-gradient(180deg, var(--foam) 0%, #ffffff 100%) !important; }
+    .payment-section { background: var(--navy-mid) !important; }
+    .lifestyle-section { background: var(--navy) !important; }
+    .ls1-section, .ls2-section { background: var(--navy) !important; }
+    .quote-section { background: linear-gradient(180deg, #ffffff 0%, var(--navy) 100%) !important; }
+    .faq-section { background: var(--navy-mid) !important; }
+    .timeline-section { background: var(--navy) !important; }
+
+    /* ────────── FOOTER ────────── */
+    footer {
+      background: var(--navy-mid) !important;
+      border-top: 1px solid rgba(15,23,42,0.08) !important;
+      color: var(--text);
+    }
+    footer * { color: inherit; }
+    .footer-logo { color: var(--text-dark) !important; }
+    .footer-heading { color: var(--text-dark) !important; font-weight: 700; }
+    .footer-desc { color: var(--gray) !important; }
+    .footer-links a, .footer-bottom a { color: var(--gray) !important; }
+    .footer-links a:hover, .footer-bottom a:hover { color: var(--ocean) !important; }
+    .social-btn {
+      background: rgba(15,23,42,0.05) !important;
+      border: 1px solid rgba(15,23,42,0.08) !important;
+      color: var(--text-dark) !important;
+      transition: all 0.2s;
+    }
+    .social-btn:hover {
+      background: var(--ocean) !important;
+      color: #fff !important;
+      border-color: var(--ocean) !important;
+      transform: translateY(-2px);
+    }
+    .footer-bottom { border-top: 1px solid rgba(15,23,42,0.08) !important; color: var(--gray) !important; }
+    .footer-bottom * { color: var(--gray) !important; }
+
+    /* Cross-domain backlinks (functions.php) — adaptarlo al light */
+    #cross-domain-links {
+      background: #ffffff !important;
+      border-top: 1px solid rgba(15,23,42,0.08) !important;
+    }
+    #cross-domain-links p { color: var(--gray) !important; }
+    #cross-domain-links a { color: var(--ocean) !important; }
+
+    /* WhatsApp float — sin cambios, mantiene su verde */
+    .whatsapp-float { box-shadow: 0 6px 20px rgba(37,211,102,0.35); }
+
+    /* ────────── TRUST STRIP ────────── */
+    .trust-strip { background: var(--navy-mid) !important; border-top: 1px solid rgba(15,23,42,0.06); border-bottom: 1px solid rgba(15,23,42,0.06); }
+
+    /* Timeline contact box */
+    .tcb-link, .tcb-link:hover { color: var(--ocean); }
+    .tcb-val { color: var(--text-dark); }
+    .timeline-contact-box { background: linear-gradient(135deg, var(--foam) 0%, #ffffff 100%) !important; }
+
+    /* Mobile menu */
+    .mobile-menu { background: #ffffff !important; }
+    .mobile-menu a { color: var(--text-dark) !important; border-bottom: 1px solid rgba(15,23,42,0.05); }
+    .mobile-menu a:hover { color: var(--ocean) !important; }
+
+    /* Hero badge dot */
+    .hero-badge { background: rgba(255,255,255,0.7); border: 1px solid rgba(14,107,168,0.20); backdrop-filter: blur(6px); }
+    .hero-badge span { color: var(--ocean); }
+
+    /* Asegurar que el contact-link se vea */
+    .contact-link, .contact-link:hover { color: var(--text); }
+    .contact-link:hover { color: var(--ocean); }
   </style>
 
 </head>
