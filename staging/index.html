@@ -412,7 +412,7 @@
       --gold-light: #ffc04d;
       --white: #ffffff;
       --off-white: #f5f7fa;
-      --gray: #5b6b7e;           /* texto secundario (más oscuro que antes) */
+      --gray: #475569;           /* texto secundario más legible sobre claro */
       --text: #1a2744;           /* texto principal ahora oscuro sobre claro */
       --text-dark: #f6f8fb;
       --success: #00b87a;
@@ -2168,7 +2168,7 @@
       background: #ffffff !important;
     }
     .form-control:hover:not(:focus) { border-color: rgba(15,23,42,0.25) !important; }
-    .form-control::placeholder { color: rgba(15,23,42,0.35); }
+    .form-control::placeholder { color: rgba(15,23,42,0.55); }
     .form-group { margin-bottom: 16px !important; }
     .form-row { gap: 14px !important; }
 
@@ -2394,10 +2394,51 @@
       align-items: center; justify-content: center;
       margin: 0 auto 16px !important;
     }
+
+    /* ───── Refuerzos de contraste en formulario ───── */
+    .form-label { color: var(--text-dark) !important; font-weight: 600 !important; }
+    .form-currency-label { color: var(--text) !important; font-weight: 600 !important; }
+    .form-section-title { color: var(--text-dark) !important; }
+    .form-control { color: var(--text-dark) !important; }
+    .form-control::placeholder,
+    input::placeholder,
+    textarea::placeholder { color: rgba(15,23,42,0.50) !important; opacity: 1 !important; }
+    .price-sub { color: var(--gray) !important; }
+    .price-line { color: var(--text-dark) !important; }
+    .price-line.total .label { color: var(--text) !important; }
+    .install-notice p { color: var(--text-dark) !important; }
+    .install-notice ul li { color: var(--text-dark) !important; }
+    .install-table td { color: var(--text-dark) !important; }
+    .submit-btn .btn-sub { opacity: 1 !important; color: inherit; }
+    .submit-btn.email .btn-sub,
+    .submit-btn.whatsapp .btn-sub { color: var(--gray); }
+    .submit-btn.both .btn-sub { color: rgba(10,22,40,0.75); }
+    .form-note { color: var(--text) !important; font-weight: 500; }
+    .info-list li { color: var(--text-dark) !important; }
+    .contact-link { color: var(--text-dark) !important; }
+    .quote-info p { color: var(--text) !important; }
+
+    /* ───── Chile-first: notices condicionales por país ───── */
+    .install-notice--international,
+    .install-notice--chile { display: none; }
+
+    /* Chile (positivo, verde) */
+    .install-notice--chile {
+      background: linear-gradient(180deg, rgba(0,184,122,0.08), rgba(0,184,122,0.03)) !important;
+      border: 1px solid rgba(0,184,122,0.25) !important;
+      border-left: 4px solid var(--success) !important;
+    }
+    .install-notice--chile .install-title { color: #00855a !important; }
+    .install-notice--chile ul li::before { color: var(--success) !important; }
+
+    /* Default: ningún país elegido → mostrar bloque Chile (audiencia principal) */
+    body[data-quote-country=""] .install-notice--chile,
+    body[data-quote-country="Chile"] .install-notice--chile { display: block; }
+    body[data-quote-country]:not([data-quote-country=""]):not([data-quote-country="Chile"]) .install-notice--international { display: block; }
   </style>
 
 </head>
-<body>
+<body data-quote-country="">
 
 <!-- WhatsApp Float -->
 <a href="https://wa.me/56940211459?text=Hola!%20Quiero%20cotizar%20un%20piso%20DECKEVA%20para%20mi%20embarcación" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
@@ -3497,8 +3538,24 @@
             </div>
           </div>
 
-          <!-- ─── Aviso Toma de Medidas & Instalación ─── -->
-          <div class="install-notice">
+          <!-- ─── Aviso CHILE: servicio en terreno disponible ─── -->
+          <div class="install-notice install-notice--chile">
+            <div class="install-title" data-es>📐 Toma de Medidas &amp; 🛠️ Instalación — Disponible en Chile</div>
+            <div class="install-title" data-en>📐 Measurement &amp; 🛠️ Installation — Available in Chile</div>
+
+            <p data-es>Para envíos dentro de Chile contamos con <strong>servicio profesional de toma de medidas en terreno e instalación</strong>. Coordinamos la visita con nuestro equipo una vez confirmada tu cotización.</p>
+            <p data-en>For shipments within Chile we offer <strong>professional on-site measurement and installation</strong>. We schedule the visit with our team once your quote is confirmed.</p>
+
+            <ul>
+              <li><span data-es>📐 <strong>Toma de medidas en terreno</strong> con nuestro técnico (incluye traslado dentro de la Región Metropolitana).</span><span data-en>📐 <strong>On-site measurement</strong> by our technician (includes travel within the Santiago Metropolitan Region).</span></li>
+              <li><span data-es>🛠️ <strong>Instalación profesional</strong> realizada por nuestro equipo en tu embarcación.</span><span data-en>🛠️ <strong>Professional installation</strong> performed by our team on your vessel.</span></li>
+              <li><span data-es>📞 <strong>Coordinación y soporte</strong> 24/7 por WhatsApp y teléfono (+56 9 4021 1459).</span><span data-en>📞 <strong>Coordination and support</strong> 24/7 via WhatsApp and phone (+56 9 4021 1459).</span></li>
+              <li><span data-es>💰 Costo y disponibilidad se confirman junto con tu cotización según ubicación y tamaño de embarcación.</span><span data-en>💰 Cost and availability confirmed with your quote based on location and vessel size.</span></li>
+            </ul>
+          </div>
+
+          <!-- ─── Aviso INTERNACIONAL: cliente debe coordinar ─── -->
+          <div class="install-notice install-notice--international">
             <div class="install-title" data-es>📐 Toma de Medidas &amp; 🛠️ Instalación — Importante</div>
             <div class="install-title" data-en>📐 Measurement &amp; 🛠️ Installation — Important</div>
 
@@ -4062,12 +4119,16 @@
   }
 
   function onCountryChange() {
-    if (userPickedCurrency) return;
     const country = document.getElementById('fCountry').value;
-    const code = countryToCurrency[country];
-    if (code) {
-      document.getElementById('currencySelect').value = code;
-      updatePrice();
+    // Toggle install-notice según país (Chile-first)
+    document.body.setAttribute('data-quote-country', country || '');
+    // Solo cambiar la moneda si el usuario no la fijó manualmente
+    if (!userPickedCurrency) {
+      const code = countryToCurrency[country];
+      if (code) {
+        document.getElementById('currencySelect').value = code;
+        updatePrice();
+      }
     }
   }
 
