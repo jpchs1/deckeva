@@ -2425,6 +2425,183 @@
     /* Subtexto del botón "Both" sobre gold: usar dark con buen contraste */
     .submit-btn.both .btn-sub { color: rgba(10,22,40,0.75) !important; opacity: 1 !important; }
 
+    /* ════════════════════════════════════════════════════════════
+       SECCIÓN BLOG — REDISEÑO COMPLETO con fotos reales
+       ════════════════════════════════════════════════════════════ */
+    #blog {
+      background: linear-gradient(180deg, #ffffff 0%, var(--foam) 100%) !important;
+      padding: 100px 0 !important;
+    }
+    .blog-section-header {
+      text-align: center;
+      max-width: 660px;
+      margin: 0 auto 56px;
+    }
+    .blog-section-header .section-tag {
+      display: inline-block;
+      background: rgba(14,107,168,0.10);
+      color: var(--ocean) !important;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 11px; letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+    .blog-section-header .heading {
+      font-size: clamp(32px, 4vw, 44px) !important;
+      color: var(--text-dark) !important;
+      margin-bottom: 14px;
+    }
+    .blog-section-sub {
+      color: var(--gray);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    .blog-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 28px !important;
+      margin-top: 0 !important;
+    }
+    @media (max-width: 900px) { .blog-grid { grid-template-columns: 1fr 1fr !important; } }
+    @media (max-width: 640px) { .blog-grid { grid-template-columns: 1fr !important; } }
+
+    .blog-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.06) !important;
+      border-radius: 18px !important;
+      overflow: hidden !important;
+      text-decoration: none !important;
+      color: inherit !important;
+      display: flex !important;
+      flex-direction: column !important;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.05), 0 12px 32px rgba(15,23,42,0.04) !important;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+    }
+    .blog-card:hover {
+      transform: translateY(-6px) !important;
+      box-shadow: 0 8px 16px rgba(14,107,168,0.08), 0 24px 48px rgba(14,107,168,0.14) !important;
+      border-color: rgba(14,107,168,0.18) !important;
+    }
+
+    .blog-img {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: var(--navy-light);
+    }
+    .blog-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(.2,.8,.2,1);
+    }
+    .blog-card:hover .blog-img img { transform: scale(1.07); }
+    /* Gradiente sutil para contraste del tag */
+    .blog-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0.18) 0%, rgba(15,23,42,0) 35%);
+      pointer-events: none;
+    }
+
+    .blog-tag {
+      position: absolute !important;
+      top: 14px; left: 14px;
+      background: rgba(255,255,255,0.95) !important;
+      color: var(--ocean) !important;
+      padding: 6px 12px !important;
+      border-radius: 100px !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.5px !important;
+      text-transform: uppercase !important;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 8px rgba(15,23,42,0.10);
+      z-index: 2;
+      margin: 0 !important;
+    }
+
+    .blog-content {
+      padding: 24px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 10px !important;
+      flex-grow: 1;
+    }
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .blog-meta-dot { color: rgba(15,23,42,0.25); }
+    .blog-title {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 19px !important;
+      font-weight: 700 !important;
+      line-height: 1.3 !important;
+      color: var(--text-dark) !important;
+      letter-spacing: -0.3px;
+      transition: color 0.2s ease;
+      text-transform: none !important;
+      margin: 0 !important;
+    }
+    .blog-card:hover .blog-title { color: var(--ocean) !important; }
+    .blog-excerpt {
+      color: var(--gray) !important;
+      font-size: 14px !important;
+      line-height: 1.6 !important;
+      flex-grow: 1;
+      margin: 0 !important;
+    }
+    .blog-read-more {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      color: var(--ocean) !important;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      margin-top: 6px;
+    }
+    .blog-read-more::after {
+      content: '→';
+      transition: transform 0.25s ease;
+    }
+    .blog-card:hover .blog-read-more::after { transform: translateX(4px); }
+
+    .blog-footer {
+      margin-top: 48px;
+      text-align: center;
+    }
+    .blog-all-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.12);
+      border-radius: 100px;
+      color: var(--text-dark);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+    }
+    .blog-all-link:hover {
+      background: var(--ocean);
+      color: #fff;
+      border-color: var(--ocean);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(14,107,168,0.20);
+    }
+    .blog-all-link .arrow { transition: transform 0.25s ease; }
+    .blog-all-link:hover .arrow { transform: translateX(4px); }
+
     /* ───── Chile-first: notices condicionales por país ───── */
     .install-notice--international,
     .install-notice--chile { display: none; }
@@ -3639,167 +3816,97 @@
 </section>
 
 <!-- BLOG -->
-<section class="section-sm how-bg" id="blog">
+<section class="section how-bg" id="blog">
   <div class="container">
-    <div class="section-tag" data-es>✦ Blog</div>
-    <div class="section-tag" data-en>✦ Blog</div>
-    <h2 class="heading" data-es>Aprende sobre pisos marinos</h2>
-    <h2 class="heading" data-en>Learn about marine flooring</h2>
+    <div class="blog-section-header">
+      <div class="section-tag" data-es>✦ Blog &amp; Recursos</div>
+      <div class="section-tag" data-en>✦ Blog &amp; Resources</div>
+      <h2 class="heading" data-es>Aprende sobre pisos marinos</h2>
+      <h2 class="heading" data-en>Learn about marine flooring</h2>
+      <p class="blog-section-sub" data-es>Guías, consejos y comparativas para que elijas el mejor piso para tu embarcación.</p>
+      <p class="blog-section-sub" data-en>Guides, tips and comparisons to help you choose the best floor for your vessel.</p>
+    </div>
     <div class="blog-grid">
+
       <a href="https://deckeva.com/que-es-sea-dek/" class="blog-card fade-in" target="_blank" rel="noopener">
         <div class="blog-img">
-          <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
-            <defs>
-              <linearGradient id="blog1bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a2a4a"/><stop offset="100%" stop-color="#1a5080"/></linearGradient>
-              <linearGradient id="blog1eva" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0a060"/><stop offset="100%" stop-color="#806030"/></linearGradient>
-            </defs>
-            <rect width="400" height="180" fill="url(#blog1bg)"/>
-            <!-- Sea / water -->
-            <rect x="0" y="110" width="400" height="70" fill="#0a3060" opacity="0.7"/>
-            <ellipse cx="200" cy="112" rx="200" ry="8" fill="#2080b0" opacity="0.3"/>
-            <!-- Boat side view -->
-            <path d="M60,108 Q200,96 340,108 L332,122 Q200,128 68,122 Z" fill="#e0e0e8"/>
-            <!-- EVA deck -->
-            <path d="M65,102 Q200,92 335,102 L333,110 Q200,116 67,110 Z" fill="url(#blog1eva)"/>
-            <!-- Teak lines -->
-            <line x1="70" y1="94" x2="330" y2="104" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="70" y1="98" x2="330" y2="108" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="70" y1="102" x2="330" y2="112" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <!-- Windshield -->
-            <path d="M155,84 L245,84 L250,102 L150,102 Z" fill="#3a80b0" opacity="0.6"/>
-            <!-- Label -->
-            <rect x="0" y="0" width="400" height="28" fill="#0a1828" opacity="0.8"/>
-            <text x="200" y="18" font-family="monospace" font-size="10" fill="#f5a623" text-anchor="middle" letter-spacing="2">SEA DEK vs DECKEVA</text>
-            <!-- Comparison badge -->
-            <rect x="150" y="108" width="100" height="10" rx="3" fill="#f5a623" opacity="0.95"/>
-            <text x="200" y="115.5" font-family="monospace" font-size="5.5" font-weight="bold" fill="#0a1628" text-anchor="middle">DECKEVA WINS ✓</text>
-          </svg>
+          <span class="blog-tag" data-es>Guía</span>
+          <span class="blog-tag" data-en>Guide</span>
+          <img src="https://deckeva.com/wp-content/uploads/2023/08/Pisos-Sea-Dek-para-barcos.jpg"
+               alt="Comparativa Sea Dek vs DECKEVA"
+               loading="lazy" />
         </div>
         <div class="blog-content">
-          <div class="blog-tag" data-es>Guía</div>
-          <div class="blog-tag" data-en>Guide</div>
-          <div class="blog-title" data-es>¿Qué es Sea Dek?</div>
-          <div class="blog-title" data-en>What is Sea Dek?</div>
-          <p class="blog-excerpt" data-es>Sea Dek es una marca de pisos marinos hechos de materiales sintéticos. Conoce sus características y cómo se compara con DECKEVA.</p>
-          <p class="blog-excerpt" data-en>Sea Dek is a brand of marine flooring made from synthetic materials. Learn about its characteristics and how it compares with DECKEVA.</p>
+          <div class="blog-meta">
+            <span class="blog-meta-item">📖 4 min</span>
+            <span class="blog-meta-dot">·</span>
+            <span class="blog-meta-item" data-es>Comparativa</span>
+            <span class="blog-meta-item" data-en>Comparison</span>
+          </div>
+          <h3 class="blog-title" data-es>¿Qué es Sea Dek y cómo se compara con DECKEVA?</h3>
+          <h3 class="blog-title" data-en>What is Sea Dek and how does it compare to DECKEVA?</h3>
+          <p class="blog-excerpt" data-es>Sea Dek es una marca de pisos marinos hechos de materiales sintéticos. Conoce sus características y por qué cada vez más navegantes eligen DECKEVA.</p>
+          <p class="blog-excerpt" data-en>Sea Dek is a brand of marine flooring made from synthetic materials. Learn its features and why more boaters are choosing DECKEVA.</p>
+          <span class="blog-read-more" data-es>Leer artículo</span>
+          <span class="blog-read-more" data-en>Read article</span>
         </div>
       </a>
+
       <a href="https://deckeva.com/por-que-elegir-pisos-de-goma-eva-para-mi-lancha/" class="blog-card fade-in fade-in-delay-1" target="_blank" rel="noopener">
         <div class="blog-img">
-          <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
-            <defs>
-              <linearGradient id="blog2bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e2a1a"/><stop offset="100%" stop-color="#1a5a30"/></linearGradient>
-              <linearGradient id="blog2eva" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#aaaaaa"/><stop offset="100%" stop-color="#666666"/></linearGradient>
-            </defs>
-            <rect width="400" height="180" fill="url(#blog2bg)"/>
-            <!-- Header bar -->
-            <rect x="0" y="0" width="400" height="28" fill="#0a1a10" opacity="0.8"/>
-            <text x="200" y="18" font-family="monospace" font-size="10" fill="#00c878" text-anchor="middle" letter-spacing="2">¿POR QUÉ GOMA EVA?</text>
-            <!-- EVA material illustration -->
-            <!-- Cell structure -->
-            <g transform="translate(40, 50)">
-              <!-- Closed cells diagram -->
-              <rect x="0" y="0" width="80" height="100" rx="4" fill="#1a4a28" stroke="#2a6a38" stroke-width="1"/>
-              <text x="40" y="-8" font-family="monospace" font-size="8" fill="#00c878" text-anchor="middle">CELDA CERRADA</text>
-              <!-- Cells -->
-              <circle cx="20" cy="25" r="14" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="48" cy="18" r="11" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="65" cy="32" r="10" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="15" cy="52" r="12" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="42" cy="48" r="14" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="67" cy="55" r="10" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="25" cy="80" r="11" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <circle cx="55" cy="78" r="13" fill="none" stroke="#4aca88" stroke-width="2"/>
-              <!-- Cell fill -->
-              <circle cx="20" cy="25" r="12" fill="#00c878" opacity="0.12"/>
-              <circle cx="42" cy="48" r="12" fill="#00c878" opacity="0.12"/>
-              <circle cx="55" cy="78" r="11" fill="#00c878" opacity="0.12"/>
-            </g>
-            <!-- Benefits list -->
-            <g transform="translate(155, 50)">
-              <text x="0" y="0" font-family="sans-serif" font-size="11" fill="#00c878">✓</text>
-              <text x="16" y="0" font-family="sans-serif" font-size="10" fill="#cceecc">Antideslizante</text>
-              <text x="0" y="22" font-family="sans-serif" font-size="11" fill="#00c878">✓</text>
-              <text x="16" y="22" font-family="sans-serif" font-size="10" fill="#cceecc">Absorbe impactos</text>
-              <text x="0" y="44" font-family="sans-serif" font-size="11" fill="#00c878">✓</text>
-              <text x="16" y="44" font-family="sans-serif" font-size="10" fill="#cceecc">UV Resistente</text>
-              <text x="0" y="66" font-family="sans-serif" font-size="11" fill="#00c878">✓</text>
-              <text x="16" y="66" font-family="sans-serif" font-size="10" fill="#cceecc">Fácil instalación</text>
-              <text x="0" y="88" font-family="sans-serif" font-size="11" fill="#00c878">✓</text>
-              <text x="16" y="88" font-family="sans-serif" font-size="10" fill="#cceecc">A medida</text>
-              <text x="0" y="110" font-family="sans-serif" font-size="11" fill="#00c878">✓</text>
-              <text x="16" y="110" font-family="sans-serif" font-size="10" fill="#cceecc">Reduce ruido</text>
-            </g>
-            <!-- Bottom bar -->
-            <rect x="0" y="160" width="400" height="20" fill="#0a1a10" opacity="0.7"/>
-            <text x="200" y="173" font-family="monospace" font-size="8" fill="#f5a623" text-anchor="middle">DECKEVA — PREMIUM EVA MARINE DECKING</text>
-          </svg>
+          <span class="blog-tag" data-es>Consejos</span>
+          <span class="blog-tag" data-en>Tips</span>
+          <img src="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg"
+               alt="Pisos de goma EVA para lanchas"
+               loading="lazy" />
         </div>
         <div class="blog-content">
-          <div class="blog-tag" data-es>Consejos</div>
-          <div class="blog-tag" data-en>Tips</div>
-          <div class="blog-title" data-es>¿Por qué elegir pisos de Goma Eva para tu lancha?</div>
-          <div class="blog-title" data-en>Why choose EVA foam flooring for your boat?</div>
-          <p class="blog-excerpt" data-es>Los pisos de goma eva son una excelente opción para lanchas por su durabilidad, comodidad y antideslizante superior.</p>
-          <p class="blog-excerpt" data-en>EVA foam flooring is an excellent choice for boats due to their durability, comfort and superior non-slip properties.</p>
+          <div class="blog-meta">
+            <span class="blog-meta-item">📖 5 min</span>
+            <span class="blog-meta-dot">·</span>
+            <span class="blog-meta-item" data-es>Material</span>
+            <span class="blog-meta-item" data-en>Material</span>
+          </div>
+          <h3 class="blog-title" data-es>¿Por qué elegir pisos de Goma EVA para tu lancha?</h3>
+          <h3 class="blog-title" data-en>Why choose EVA foam flooring for your boat?</h3>
+          <p class="blog-excerpt" data-es>Los pisos de Goma EVA son una excelente opción por su durabilidad, comodidad bajo el sol, antideslizante superior y look premium estilo teak.</p>
+          <p class="blog-excerpt" data-en>EVA foam flooring is an excellent choice for its durability, comfort under the sun, superior non-slip grip and premium teak-style look.</p>
+          <span class="blog-read-more" data-es>Leer artículo</span>
+          <span class="blog-read-more" data-en>Read article</span>
         </div>
       </a>
+
       <a href="https://deckeva.com/por-que-necesitas-un-piso-antideslizante-para-tu-lancha/" class="blog-card fade-in fade-in-delay-2" target="_blank" rel="noopener">
         <div class="blog-img">
-          <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
-            <defs>
-              <linearGradient id="blog3bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2a0a0a"/><stop offset="100%" stop-color="#4a1a1a"/></linearGradient>
-              <linearGradient id="blog3ok" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0a060"/><stop offset="100%" stop-color="#806030"/></linearGradient>
-              <linearGradient id="blog3bad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a4a4a"/><stop offset="100%" stop-color="#2a2a2a"/></linearGradient>
-            </defs>
-            <rect width="400" height="180" fill="url(#blog3bg)"/>
-            <rect x="0" y="0" width="400" height="28" fill="#1a0808" opacity="0.85"/>
-            <text x="200" y="18" font-family="monospace" font-size="9.5" fill="#ff6060" text-anchor="middle" letter-spacing="2">PISO ANTIDESLIZANTE = SEGURIDAD</text>
-            <!-- Left: WITHOUT EVA (danger) -->
-            <rect x="20" y="38" width="170" height="120" rx="6" fill="#1a0a0a" stroke="#ff4040" stroke-width="1.5" opacity="0.8"/>
-            <text x="105" y="56" font-family="sans-serif" font-size="9" fill="#ff6060" text-anchor="middle">❌ SIN EVA</text>
-            <!-- slippery surface -->
-            <rect x="30" y="62" width="150" height="20" rx="3" fill="#333333"/>
-            <text x="105" y="75" font-family="monospace" font-size="7" fill="#888" text-anchor="middle">SUPERFICIE LISA</text>
-            <!-- Danger icon -->
-            <text x="105" y="110" font-size="30" text-anchor="middle">⚠️</text>
-            <text x="105" y="138" font-family="sans-serif" font-size="8" fill="#ff8080" text-anchor="middle">Riesgo de caída</text>
-            <text x="105" y="150" font-family="sans-serif" font-size="8" fill="#ff6060" text-anchor="middle">Peligroso mojado</text>
-            <!-- Right: WITH EVA (safe) -->
-            <rect x="210" y="38" width="170" height="120" rx="6" fill="#0a1a0a" stroke="#00c878" stroke-width="1.5" opacity="0.8"/>
-            <text x="295" y="56" font-family="sans-serif" font-size="9" fill="#00c878" text-anchor="middle">✓ CON DECKEVA</text>
-            <!-- EVA surface -->
-            <rect x="220" y="62" width="150" height="20" rx="3" fill="url(#blog3ok)"/>
-            <!-- EVA texture -->
-            <line x1="225" y1="62" x2="225" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="237" y1="62" x2="237" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="249" y1="62" x2="249" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="261" y1="62" x2="261" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="273" y1="62" x2="273" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="285" y1="62" x2="285" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="297" y1="62" x2="297" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="309" y1="62" x2="309" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="321" y1="62" x2="321" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="333" y1="62" x2="333" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="345" y1="62" x2="345" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <line x1="357" y1="62" x2="357" y2="82" stroke="#5a3000" stroke-width="1.5" opacity="0.5"/>
-            <text x="295" y="75" font-family="monospace" font-size="7" fill="#0a0a00" text-anchor="middle">EVA ANTIDESLIZANTE</text>
-            <!-- Safe icon -->
-            <text x="295" y="110" font-size="30" text-anchor="middle">🛡️</text>
-            <text x="295" y="138" font-family="sans-serif" font-size="8" fill="#80ffb0" text-anchor="middle">Máxima seguridad</text>
-            <text x="295" y="150" font-family="sans-serif" font-size="8" fill="#00c878" text-anchor="middle">Seguro incluso mojado</text>
-            <!-- Arrow between -->
-            <text x="198" y="102" font-size="18" text-anchor="middle" fill="#f5a623">→</text>
-          </svg>
+          <span class="blog-tag" data-es>Seguridad</span>
+          <span class="blog-tag" data-en>Safety</span>
+          <img src="https://deckeva.com/wp-content/uploads/2023/08/1_5.jpg"
+               alt="Piso antideslizante instalado en lancha"
+               loading="lazy" />
         </div>
         <div class="blog-content">
-          <div class="blog-tag" data-es>Seguridad</div>
-          <div class="blog-tag" data-en>Safety</div>
-          <div class="blog-title" data-es>¿Por qué necesitas un piso antideslizante?</div>
-          <div class="blog-title" data-en>Why you need a non-slip boat floor?</div>
-          <p class="blog-excerpt" data-es>Los pisos antideslizantes para lanchas mejoran la seguridad de tu embarcación y previenen accidentes.</p>
-          <p class="blog-excerpt" data-en>Non-slip boat flooring improves safety on your vessel and prevents accidents on deck.</p>
+          <div class="blog-meta">
+            <span class="blog-meta-item">📖 3 min</span>
+            <span class="blog-meta-dot">·</span>
+            <span class="blog-meta-item" data-es>Seguridad</span>
+            <span class="blog-meta-item" data-en>Safety</span>
+          </div>
+          <h3 class="blog-title" data-es>¿Por qué necesitas un piso antideslizante en tu lancha?</h3>
+          <h3 class="blog-title" data-en>Why you need a non-slip floor on your boat?</h3>
+          <p class="blog-excerpt" data-es>Los pisos antideslizantes para lanchas mejoran la seguridad a bordo y previenen accidentes, incluso con el piso mojado o descalzo.</p>
+          <p class="blog-excerpt" data-en>Non-slip boat flooring improves onboard safety and prevents accidents, even when the deck is wet or you are barefoot.</p>
+          <span class="blog-read-more" data-es>Leer artículo</span>
+          <span class="blog-read-more" data-en>Read article</span>
         </div>
+      </a>
+
+    </div>
+
+    <div class="blog-footer">
+      <a href="https://deckeva.com/blog/" class="blog-all-link" target="_blank" rel="noopener">
+        <span data-es>Ver todos los artículos</span>
+        <span data-en>See all articles</span>
+        <span class="arrow">→</span>
       </a>
     </div>
   </div>
