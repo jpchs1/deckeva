@@ -3438,6 +3438,291 @@
     /* Override: ocultar grid antiguo si quedó algún resto */
     .testimonials-grid { display: none !important; }
 
+    /* ════════════════════════════════════════════════════════════
+       SECCIÓN MEDIOS DE PAGO — REDISEÑO PREMIUM
+       ════════════════════════════════════════════════════════════ */
+    .payment-section {
+      background: linear-gradient(180deg, var(--foam) 0%, #ffffff 100%) !important;
+      padding: 110px 0 !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .payment-section::before {
+      content: '';
+      position: absolute; top: -160px; right: -160px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,107,168,0.10), transparent 70%);
+      pointer-events: none;
+    }
+    .payment-section::after {
+      content: '';
+      position: absolute; bottom: -180px; left: -160px;
+      width: 460px; height: 460px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,184,122,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .payment-section > .container { position: relative; z-index: 1; }
+
+    /* Header */
+    .pay-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 40px;
+    }
+    .pay-header .section-tag {
+      display: inline-block;
+      background: rgba(14,107,168,0.10);
+      color: var(--ocean) !important;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 11px; letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .pay-header .heading {
+      font-size: clamp(34px, 4.2vw, 52px) !important;
+      line-height: 1.05 !important;
+      color: var(--text-dark) !important;
+      margin-bottom: 16px;
+    }
+    .pay-sub {
+      font-size: 17px;
+      color: var(--gray);
+      line-height: 1.65;
+      margin-bottom: 28px !important;
+    }
+
+    .pay-trust {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .pay-trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dark);
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    }
+    .pay-trust-icon { font-size: 14px; line-height: 1; }
+
+    /* Tabs como segment control */
+    .pay-tabs-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .payment-tabs {
+      display: inline-flex !important;
+      gap: 4px !important;
+      padding: 6px !important;
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.08) !important;
+      border-radius: 14px !important;
+      box-shadow: 0 4px 14px rgba(15,23,42,0.04);
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+    .pay-tab {
+      background: transparent !important;
+      border: 0 !important;
+      color: var(--gray) !important;
+      padding: 11px 22px !important;
+      border-radius: 10px !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0 !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    .pay-tab:hover:not(.active) {
+      background: rgba(15,23,42,0.04) !important;
+      color: var(--text-dark) !important;
+    }
+    .pay-tab.active {
+      background: linear-gradient(135deg, var(--ocean), #1281c8) !important;
+      color: #fff !important;
+      box-shadow: 0 4px 14px rgba(14,107,168,0.30);
+    }
+    .pay-tab-flag {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* Panels y cards */
+    .pay-panel {
+      animation: payFade 0.4s ease;
+    }
+    .pay-panel.active {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 20px !important;
+    }
+    @keyframes payFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 900px) { .pay-panel.active { grid-template-columns: 1fr 1fr !important; } }
+    @media (max-width: 640px) { .pay-panel.active { grid-template-columns: 1fr !important; } }
+
+    .pay-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.08) !important;
+      border-radius: 16px !important;
+      padding: 24px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+      align-items: stretch !important;
+      text-align: left !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 8px 24px rgba(15,23,42,0.05) !important;
+      transition: all 0.25s ease !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .pay-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--card-accent, var(--ocean));
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .pay-card:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 4px 14px rgba(14,107,168,0.10), 0 18px 40px rgba(14,107,168,0.10) !important;
+      border-color: rgba(14,107,168,0.20) !important;
+      background: #ffffff !important;
+    }
+    .pay-card:hover::before { opacity: 1; }
+
+    /* Brand-specific accent */
+    .pay-card[data-brand="webpay"]   { --card-accent: #e31837; }
+    .pay-card[data-brand="mp"]       { --card-accent: #009ee3; }
+    .pay-card[data-brand="paypal"]   { --card-accent: #003087; }
+    .pay-card[data-brand="stripe"]   { --card-accent: #635bff; }
+    .pay-card[data-brand="payu"]     { --card-accent: #f8a11c; }
+    .pay-card[data-brand="wire"]     { --card-accent: #475569; }
+
+    .pay-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .pay-brand {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .pay-brand--webpay  { background: rgba(227,24,55,0.10);  color: #c10b29; }
+    .pay-brand--mp      { background: rgba(0,158,227,0.10);  color: #0086c1; }
+    .pay-brand--paypal  { background: rgba(0,48,135,0.10);   color: #003087; }
+    .pay-brand--stripe  { background: rgba(99,91,255,0.10);  color: #4d44e5; }
+    .pay-brand--payu    { background: rgba(248,161,28,0.10); color: #c97e09; }
+    .pay-brand--wire    { background: rgba(15,23,42,0.06);   color: var(--text-dark); }
+
+    .pay-secure {
+      width: 28px; height: 28px;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      background: rgba(0,184,122,0.12);
+      color: var(--success);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .pay-card .pay-name {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      color: var(--text-dark) !important;
+      letter-spacing: -0.2px;
+      margin: 4px 0 2px !important;
+      text-align: left !important;
+    }
+    .pay-card .pay-desc {
+      font-size: 14px !important;
+      color: var(--gray) !important;
+      line-height: 1.55 !important;
+      margin: 0 !important;
+      text-align: left !important;
+    }
+    .pay-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(15,23,42,0.06);
+    }
+    .pay-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: rgba(15,23,42,0.04);
+      color: var(--text-dark);
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .pay-chip--time {
+      background: rgba(14,107,168,0.08);
+      color: var(--ocean);
+    }
+
+    /* Footer note */
+    .pay-footer-note {
+      margin-top: 32px;
+      padding: 18px 22px;
+      background: rgba(14,107,168,0.05);
+      border: 1px solid rgba(14,107,168,0.18);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .pay-footer-icon {
+      width: 38px; height: 38px;
+      flex-shrink: 0;
+      background: var(--ocean);
+      color: #fff;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(14,107,168,0.30);
+    }
+    .pay-footer-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .pay-footer-text strong { color: var(--text-dark); }
+
     /* ───── Chile-first: notices condicionales por país ───── */
     .install-notice--international,
     .install-notice--chile { display: none; }
@@ -4090,97 +4375,227 @@
 <!-- PAYMENT -->
 <section class="section payment-section" id="pagos">
   <div class="container">
-    <div class="section-tag" data-es>✦ Medios de Pago</div>
-    <div class="section-tag" data-en>✦ Payment Methods</div>
-    <h2 class="heading" data-es>Pagamos como tú prefieras</h2>
-    <h2 class="heading" data-en>Pay your way</h2>
-    <p style="color:var(--text);font-size:16px;margin-top:14px;" data-es>
-      Aceptamos múltiples métodos de pago según tu país de origen. Seguro, rápido y sin complicaciones.
-    </p>
-    <p style="color:var(--text);font-size:16px;margin-top:14px;" data-en>
-      We accept multiple payment methods depending on your country. Secure, fast and hassle-free.
-    </p>
-    <div class="payment-tabs fade-in">
-      <button class="pay-tab active" onclick="showPayTab('chile')">🇨🇱 Chile</button>
-      <button class="pay-tab" onclick="showPayTab('latam')">🌎 LATAM</button>
-      <button class="pay-tab" onclick="showPayTab('usa')">🇺🇸 USA</button>
-      <button class="pay-tab" onclick="showPayTab('international')">🌍 <span data-es>Internacional</span><span data-en>International</span></button>
+
+    <div class="pay-header">
+      <span class="section-tag" data-es>✦ Medios de Pago</span>
+      <span class="section-tag" data-en>✦ Payment Methods</span>
+      <h2 class="heading" data-es>Pagás como<br/><em style="color:var(--ocean);font-style:normal;">tú prefieras</em></h2>
+      <h2 class="heading" data-en>Pay your<br/><em style="color:var(--ocean);font-style:normal;">way</em></h2>
+      <p class="pay-sub" data-es>Aceptamos múltiples métodos según tu país. Pagos 100% seguros, encriptados y sin complicaciones.</p>
+      <p class="pay-sub" data-en>We accept multiple methods depending on your country. 100% secure, encrypted and hassle-free payments.</p>
+
+      <div class="pay-trust">
+        <div class="pay-trust-item"><span class="pay-trust-icon">🔒</span><span>SSL 256-bit</span></div>
+        <div class="pay-trust-item"><span class="pay-trust-icon">✅</span><span>PCI DSS</span></div>
+        <div class="pay-trust-item"><span class="pay-trust-icon">🛡️</span><span data-es>Buyer Protection</span><span data-en>Buyer Protection</span></div>
+        <div class="pay-trust-item"><span class="pay-trust-icon">⚡</span><span data-es>Pagos verificados</span><span data-en>Verified payments</span></div>
+      </div>
     </div>
+
+    <div class="pay-tabs-wrap">
+      <div class="payment-tabs" role="tablist">
+        <button class="pay-tab active" type="button" data-tab="chile" onclick="showPayTab('chile')">
+          <span class="pay-tab-flag">🇨🇱</span><span>Chile</span>
+        </button>
+        <button class="pay-tab" type="button" data-tab="latam" onclick="showPayTab('latam')">
+          <span class="pay-tab-flag">🌎</span><span>LATAM</span>
+        </button>
+        <button class="pay-tab" type="button" data-tab="usa" onclick="showPayTab('usa')">
+          <span class="pay-tab-flag">🇺🇸</span><span>USA</span>
+        </button>
+        <button class="pay-tab" type="button" data-tab="international" onclick="showPayTab('international')">
+          <span class="pay-tab-flag">🌍</span><span data-es>Internacional</span><span data-en>International</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── CHILE ── -->
     <div class="pay-panel active" id="pay-chile">
-      <div class="pay-card">
-        <div class="pay-icon">💳</div>
-        <div class="pay-name">Webpay Plus</div>
-        <p class="pay-desc" data-es>Pago con tarjeta de crédito y débito chilena. Transbank.</p>
-        <p class="pay-desc" data-en>Chilean credit & debit card payments via Transbank.</p>
+      <div class="pay-card" data-brand="webpay">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--webpay">Webpay Plus</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Tarjeta chilena</div>
+        <div class="pay-name" data-en>Chilean card</div>
+        <p class="pay-desc" data-es>Crédito o débito chileno vía Transbank. Pago instantáneo y seguro.</p>
+        <p class="pay-desc" data-en>Chilean credit or debit card via Transbank. Instant secure payment.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">CLP</span>
+          <span class="pay-chip pay-chip--time">⚡ <span data-es>Instantáneo</span><span data-en>Instant</span></span>
+        </div>
       </div>
-      <div class="pay-card">
-        <div class="pay-icon">🛒</div>
-        <div class="pay-name">MercadoPago</div>
-        <p class="pay-desc" data-es>Tarjeta, transferencia y efectivo en Chile.</p>
-        <p class="pay-desc" data-en>Card, bank transfer and cash in Chile.</p>
+      <div class="pay-card" data-brand="mp">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--mp">MercadoPago</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Múltiples opciones</div>
+        <div class="pay-name" data-en>Multiple options</div>
+        <p class="pay-desc" data-es>Tarjeta, transferencia y efectivo en Chile. Cuotas sin interés con bancos.</p>
+        <p class="pay-desc" data-en>Card, bank transfer and cash in Chile. Interest-free installments with banks.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">CLP</span>
+          <span class="pay-chip pay-chip--time">⚡ <span data-es>Instantáneo</span><span data-en>Instant</span></span>
+        </div>
+      </div>
+      <div class="pay-card" data-brand="wire">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--wire" data-es>Transferencia</span>
+          <span class="pay-brand pay-brand--wire" data-en>Bank transfer</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Banco local</div>
+        <div class="pay-name" data-en>Local bank</div>
+        <p class="pay-desc" data-es>Transferencia directa a cuenta bancaria chilena. Sin comisiones extras.</p>
+        <p class="pay-desc" data-en>Direct bank transfer to Chilean account. No extra fees.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">CLP</span>
+          <span class="pay-chip pay-chip--time">⏱ 1–2h</span>
+        </div>
       </div>
     </div>
+
+    <!-- ── LATAM ── -->
     <div class="pay-panel" id="pay-latam">
-      <div class="pay-card">
-        <div class="pay-icon">🛒</div>
-        <div class="pay-name">MercadoPago</div>
+      <div class="pay-card" data-brand="mp">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--mp">MercadoPago</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Regional</div>
+        <div class="pay-name" data-en>Regional</div>
         <p class="pay-desc" data-es>Disponible en Argentina, Colombia, México, Brasil, Perú, Uruguay y más.</p>
         <p class="pay-desc" data-en>Available in Argentina, Colombia, Mexico, Brazil, Peru, Uruguay and more.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">ARS</span><span class="pay-chip">MXN</span><span class="pay-chip">BRL</span><span class="pay-chip">COP</span><span class="pay-chip">+</span>
+        </div>
       </div>
-      <div class="pay-card">
-        <div class="pay-icon">💰</div>
-        <div class="pay-name">PayU</div>
-        <p class="pay-desc" data-es>Pasarela de pago líder en LATAM. Tarjeta, PSE, OXXO y más.</p>
-        <p class="pay-desc" data-en>Leading LATAM payment gateway. Card, PSE, OXXO and more.</p>
+      <div class="pay-card" data-brand="payu">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--payu">PayU</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Métodos locales</div>
+        <div class="pay-name" data-en>Local methods</div>
+        <p class="pay-desc" data-es>Tarjeta + PSE (CO), OXXO (MX), boleto (BR), efectivo y más.</p>
+        <p class="pay-desc" data-en>Card + PSE (CO), OXXO (MX), boleto (BR), cash and more.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">PSE</span><span class="pay-chip">OXXO</span><span class="pay-chip">Boleto</span><span class="pay-chip">Pix</span>
+        </div>
+      </div>
+      <div class="pay-card" data-brand="paypal">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--paypal">PayPal</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Global con protección</div>
+        <div class="pay-name" data-en>Global with protection</div>
+        <p class="pay-desc" data-es>Aceptado en toda LATAM. Compra segura con buyer protection.</p>
+        <p class="pay-desc" data-en>Accepted across LATAM. Secure with buyer protection.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">USD</span><span class="pay-chip">EUR</span><span class="pay-chip">+</span>
+        </div>
       </div>
     </div>
+
+    <!-- ── USA ── -->
     <div class="pay-panel" id="pay-usa">
-      <div class="pay-card">
-        <div class="pay-icon">🏦</div>
-        <div class="pay-name">Wire Transfer (USA)</div>
-        <p class="pay-desc" data-es>Transferencia bancaria directa. ACH / SWIFT. Sin comisiones extras.</p>
-        <p class="pay-desc" data-en>Direct bank wire transfer. ACH / SWIFT. No extra fees.</p>
+      <div class="pay-card" data-brand="wire">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--wire">Wire Transfer</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name">ACH / SWIFT</div>
+        <p class="pay-desc" data-es>Transferencia bancaria directa desde USA. Sin comisiones extras.</p>
+        <p class="pay-desc" data-en>Direct bank wire transfer from the USA. No extra fees.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">USD</span>
+          <span class="pay-chip pay-chip--time">⏱ 1–3 <span data-es>días</span><span data-en>days</span></span>
+        </div>
       </div>
-      <div class="pay-card">
-        <div class="pay-icon">🅿️</div>
-        <div class="pay-name">PayPal</div>
-        <p class="pay-desc" data-es>Pago seguro a nivel internacional con buyer protection.</p>
-        <p class="pay-desc" data-en>Secure international payment with buyer protection.</p>
+      <div class="pay-card" data-brand="paypal">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--paypal">PayPal</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Pago internacional</div>
+        <div class="pay-name" data-en>International payment</div>
+        <p class="pay-desc" data-es>Buyer protection y soporte global. Comisión estándar PayPal.</p>
+        <p class="pay-desc" data-en>Buyer protection and global support. Standard PayPal fees.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">USD</span>
+          <span class="pay-chip pay-chip--time">⚡ <span data-es>Instantáneo</span><span data-en>Instant</span></span>
+        </div>
       </div>
-      <div class="pay-card">
-        <div class="pay-icon">💜</div>
-        <div class="pay-name">Stripe</div>
-        <p class="pay-desc" data-es>Tarjeta de crédito internacional. Visa, Mastercard, Amex.</p>
-        <p class="pay-desc" data-en>International credit card. Visa, Mastercard, Amex.</p>
+      <div class="pay-card" data-brand="stripe">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--stripe">Stripe</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Tarjeta internacional</div>
+        <div class="pay-name" data-en>International card</div>
+        <p class="pay-desc" data-es>Visa, Mastercard y Amex en USD. Apple Pay y Google Pay disponibles.</p>
+        <p class="pay-desc" data-en>Visa, Mastercard and Amex in USD. Apple Pay and Google Pay available.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">Visa</span><span class="pay-chip">MC</span><span class="pay-chip">Amex</span><span class="pay-chip">Apple Pay</span>
+        </div>
       </div>
     </div>
+
+    <!-- ── INTERNACIONAL ── -->
     <div class="pay-panel" id="pay-international">
-      <div class="pay-card">
-        <div class="pay-icon">🅿️</div>
-        <div class="pay-name">PayPal</div>
-        <p class="pay-desc" data-es>Aceptado globalmente. Compra segura con protección al comprador.</p>
-        <p class="pay-desc" data-en>Accepted globally. Secure with buyer protection.</p>
+      <div class="pay-card" data-brand="paypal">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--paypal">PayPal</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Aceptado en 200+ países</div>
+        <div class="pay-name" data-en>Accepted in 200+ countries</div>
+        <p class="pay-desc" data-es>Pago global seguro con protección al comprador. Soporte en múltiples idiomas.</p>
+        <p class="pay-desc" data-en>Global secure payment with buyer protection. Support in multiple languages.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">USD</span><span class="pay-chip">EUR</span><span class="pay-chip">GBP</span><span class="pay-chip">+</span>
+        </div>
       </div>
-      <div class="pay-card">
-        <div class="pay-icon">💜</div>
-        <div class="pay-name">Stripe</div>
-        <p class="pay-desc" data-es>Tarjeta de crédito de cualquier país. 135+ monedas.</p>
-        <p class="pay-desc" data-en>Credit card from any country. 135+ currencies.</p>
+      <div class="pay-card" data-brand="stripe">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--stripe">Stripe</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Tarjeta de cualquier país</div>
+        <div class="pay-name" data-en>Card from any country</div>
+        <p class="pay-desc" data-es>Procesamos pagos en 135+ monedas. Visa, Mastercard, Amex, Apple Pay y más.</p>
+        <p class="pay-desc" data-en>We process payments in 135+ currencies. Visa, Mastercard, Amex, Apple Pay and more.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">135+ <span data-es>monedas</span><span data-en>currencies</span></span>
+        </div>
       </div>
-      <div class="pay-card">
-        <div class="pay-icon">🏦</div>
-        <div class="pay-name">Wire Transfer</div>
-        <p class="pay-desc" data-es>Transferencia SWIFT internacional disponible.</p>
-        <p class="pay-desc" data-en>International SWIFT wire transfer available.</p>
+      <div class="pay-card" data-brand="wire">
+        <div class="pay-card-top">
+          <span class="pay-brand pay-brand--wire">SWIFT</span>
+          <span class="pay-secure" title="Pago seguro">🔒</span>
+        </div>
+        <div class="pay-name" data-es>Transferencia internacional</div>
+        <div class="pay-name" data-en>International wire</div>
+        <p class="pay-desc" data-es>Wire transfer SWIFT disponible. Tasa preferencial para órdenes grandes.</p>
+        <p class="pay-desc" data-en>SWIFT wire transfer available. Preferential rates for large orders.</p>
+        <div class="pay-meta">
+          <span class="pay-chip">USD</span><span class="pay-chip">EUR</span>
+          <span class="pay-chip pay-chip--time">⏱ 1–5 <span data-es>días</span><span data-en>days</span></span>
+        </div>
       </div>
     </div>
-    <p style="color:var(--gray);font-size:13px;margin-top:20px;font-family:'Space Mono',monospace;" data-es>
-      🔒 Todas las transacciones son 100% seguras y encriptadas. Consulta tu método de pago al momento de cotizar.
-    </p>
-    <p style="color:var(--gray);font-size:13px;margin-top:20px;font-family:'Space Mono',monospace;" data-en>
-      🔒 All transactions are 100% secure and encrypted. Confirm your payment method when requesting a quote.
-    </p>
+
+    <!-- Footer note -->
+    <div class="pay-footer-note">
+      <span class="pay-footer-icon">🔒</span>
+      <span class="pay-footer-text" data-es>Todas las transacciones son <strong>100% seguras y encriptadas</strong>. El método final se coordina junto con tu cotización según tu país y método preferido.</span>
+      <span class="pay-footer-text" data-en>All transactions are <strong>100% secure and encrypted</strong>. The final method is coordinated with your quote based on your country and preferred option.</span>
+    </div>
+
   </div>
+</section>
 </section>
 
 <!-- TESTIMONIALS -->
