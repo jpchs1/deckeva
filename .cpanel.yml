@@ -8,5 +8,9 @@ deployment:
     - /bin/cp wiretransfers/index.html /home/wwimpo/deckeva.com/wiretransfers/index.html
     - /bin/mkdir -p /home/wwimpo/deckeva.com/pago
     - /bin/cp pago/index.html /home/wwimpo/deckeva.com/pago/index.html
+    - /bin/mkdir -p /home/wwimpo/deckeva.com/staging
+    - /bin/cp staging/index.html /home/wwimpo/deckeva.com/staging/index.html
+    - /bin/cp staging/.htaccess /home/wwimpo/deckeva.com/staging/.htaccess
+    - /bin/cp staging/robots.txt /home/wwimpo/deckeva.com/staging/robots.txt
     - /bin/cp wp-content/themes/dt-the7-child/functions.php /home/wwimpo/deckeva.cl/wp-content/themes/dt-the7-child/functions.php 2>/dev/null || true
     - /bin/cp -R wp-content/mu-plugins /home/wwimpo/deckeva.cl/wp-content/ 2>/dev/null || true
