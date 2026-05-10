@@ -3883,59 +3883,94 @@
       background: #ffffff !important;
       border: 1px solid rgba(15,23,42,0.08) !important;
       border-radius: 14px !important;
-      padding: 18px !important;
-      transition: all 0.25s ease !important;
+      padding: 0 !important;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
       text-align: left !important;
       box-shadow: 0 1px 3px rgba(15,23,42,0.04);
       display: flex;
       flex-direction: column;
-      gap: 8px;
       position: relative;
       overflow: hidden;
+      min-height: 180px;
     }
-    .country-card::before {
+    /* Bandera de fondo: se carga vía custom prop --flag-bg en el inline style */
+    .cc-flag-fill {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 95px;
+      background-image: var(--flag-bg);
+      background-size: cover;
+      background-position: center;
+      filter: saturate(1.05) contrast(1.02);
+    }
+    .cc-flag-fill::after {
+      /* fade del fondo de la bandera al área blanca de contenido */
       content: '';
-      position: absolute; top: 0; left: 0;
-      width: 3px; height: 100%;
-      background: var(--ocean);
-      transform: scaleY(0);
-      transform-origin: top;
-      transition: transform 0.25s ease;
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 28px;
+      background: linear-gradient(180deg, transparent, #ffffff);
     }
     .country-card:hover {
       transform: translateY(-3px) !important;
       border-color: rgba(14,107,168,0.30) !important;
-      box-shadow: 0 8px 22px rgba(14,107,168,0.12) !important;
+      box-shadow: 0 10px 26px rgba(14,107,168,0.14) !important;
       background: #ffffff !important;
     }
-    .country-card:hover::before { transform: scaleY(1); }
+    .country-card:hover .cc-flag-fill { filter: saturate(1.15) contrast(1.05); }
 
     .cc-top {
+      position: relative;
+      z-index: 2;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .cc-flag {
-      font-size: 30px;
-      line-height: 1;
-      display: inline-block;
+    .cc-flag-badge {
+      width: 30px; height: 22px;
+      background: #ffffff;
+      border-radius: 5px;
+      padding: 2px 3px;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.20);
+      overflow: hidden;
+    }
+    .cc-flag-badge img {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
     }
     .cc-status {
-      width: 8px; height: 8px;
+      width: 9px; height: 9px;
       border-radius: 50%;
       background: var(--success);
-      box-shadow: 0 0 0 4px rgba(0,184,122,0.15);
+      box-shadow: 0 0 0 4px rgba(0,184,122,0.20), 0 0 0 5px rgba(255,255,255,0.6);
       animation: pulseDot 2s ease-in-out infinite;
     }
     @keyframes pulseDot {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(0,184,122,0.15); }
-      50%      { box-shadow: 0 0 0 7px rgba(0,184,122,0.05); }
+      0%, 100% { box-shadow: 0 0 0 4px rgba(0,184,122,0.20), 0 0 0 5px rgba(255,255,255,0.6); }
+      50%      { box-shadow: 0 0 0 7px rgba(0,184,122,0.05), 0 0 0 8px rgba(255,255,255,0.4); }
+    }
+    .cc-body {
+      position: relative;
+      z-index: 2;
+      padding: 8px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      margin-top: auto;
+      background: #ffffff;
     }
     .cc-name {
       font-family: 'DM Sans', sans-serif !important;
-      font-size: 15px !important;
+      font-size: 16px !important;
       font-weight: 700 !important;
       color: var(--text-dark) !important;
+      letter-spacing: -0.2px;
     }
     .cc-meta {
       display: flex;
@@ -5184,232 +5219,289 @@
     </div>
 
     <div class="countries-grid" id="countriesGrid">
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/cl.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇨🇱</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/cl.svg" alt="Chile" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Chile</div>
-        <div class="cc-name" data-en>Chile</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2–5 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">Chilexpress</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Chile</div>
+          <div class="cc-name" data-en>Chile</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2–5 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">Chilexpress</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/ar.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇦🇷</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/ar.svg" alt="Argentina" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Argentina</div>
-        <div class="cc-name" data-en>Argentina</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Argentina</div>
+          <div class="cc-name" data-en>Argentina</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/uy.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇺🇾</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/uy.svg" alt="Uruguay" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Uruguay</div>
-        <div class="cc-name" data-en>Uruguay</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Uruguay</div>
+          <div class="cc-name" data-en>Uruguay</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/co.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇨🇴</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/co.svg" alt="Colombia" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Colombia</div>
-        <div class="cc-name" data-en>Colombia</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Colombia</div>
+          <div class="cc-name" data-en>Colombia</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/pe.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇵🇪</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/pe.svg" alt="Peru" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Perú</div>
-        <div class="cc-name" data-en>Peru</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Perú</div>
+          <div class="cc-name" data-en>Peru</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/br.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇧🇷</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/br.svg" alt="Brazil" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Brasil</div>
-        <div class="cc-name" data-en>Brazil</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–12 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Brasil</div>
+          <div class="cc-name" data-en>Brazil</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–12 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/ec.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇪🇨</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/ec.svg" alt="Ecuador" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Ecuador</div>
-        <div class="cc-name" data-en>Ecuador</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Ecuador</div>
+          <div class="cc-name" data-en>Ecuador</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="sa">
+      <div class="country-card" data-region="sa" style="--flag-bg:url('https://flagcdn.com/py.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇵🇾</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/py.svg" alt="Paraguay" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Paraguay</div>
-        <div class="cc-name" data-en>Paraguay</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Paraguay</div>
+          <div class="cc-name" data-en>Paraguay</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="na">
+      <div class="country-card" data-region="na" style="--flag-bg:url('https://flagcdn.com/us.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇺🇸</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/us.svg" alt="USA" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>USA</div>
-        <div class="cc-name" data-en>USA</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–10 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">FedEx · DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>USA</div>
+          <div class="cc-name" data-en>USA</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–10 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">FedEx · DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="na">
+      <div class="country-card" data-region="na" style="--flag-bg:url('https://flagcdn.com/mx.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇲🇽</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/mx.svg" alt="Mexico" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>México</div>
-        <div class="cc-name" data-en>Mexico</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–12 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">FedEx · DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>México</div>
+          <div class="cc-name" data-en>Mexico</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–12 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">FedEx · DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="na">
+      <div class="country-card" data-region="na" style="--flag-bg:url('https://flagcdn.com/ca.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇨🇦</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/ca.svg" alt="Canada" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Canadá</div>
-        <div class="cc-name" data-en>Canada</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–12 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Canadá</div>
+          <div class="cc-name" data-en>Canada</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–12 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="eu">
+      <div class="country-card" data-region="eu" style="--flag-bg:url('https://flagcdn.com/gb.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇬🇧</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/gb.svg" alt="United Kingdom" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Reino Unido</div>
-        <div class="cc-name" data-en>United Kingdom</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Reino Unido</div>
+          <div class="cc-name" data-en>United Kingdom</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="eu">
+      <div class="country-card" data-region="eu" style="--flag-bg:url('https://flagcdn.com/es.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇪🇸</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/es.svg" alt="Spain" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>España</div>
-        <div class="cc-name" data-en>Spain</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>España</div>
+          <div class="cc-name" data-en>Spain</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="eu">
+      <div class="country-card" data-region="eu" style="--flag-bg:url('https://flagcdn.com/fr.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇫🇷</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/fr.svg" alt="France" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Francia</div>
-        <div class="cc-name" data-en>France</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Francia</div>
+          <div class="cc-name" data-en>France</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="eu">
+      <div class="country-card" data-region="eu" style="--flag-bg:url('https://flagcdn.com/de.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇩🇪</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/de.svg" alt="Germany" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Alemania</div>
-        <div class="cc-name" data-en>Germany</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Alemania</div>
+          <div class="cc-name" data-en>Germany</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="eu">
+      <div class="country-card" data-region="eu" style="--flag-bg:url('https://flagcdn.com/it.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇮🇹</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/it.svg" alt="Italy" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Italia</div>
-        <div class="cc-name" data-en>Italy</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Italia</div>
+          <div class="cc-name" data-en>Italy</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="eu">
+      <div class="country-card" data-region="eu" style="--flag-bg:url('https://flagcdn.com/pt.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇵🇹</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/pt.svg" alt="Portugal" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Portugal</div>
-        <div class="cc-name" data-en>Portugal</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Portugal</div>
+          <div class="cc-name" data-en>Portugal</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="oc">
+      <div class="country-card" data-region="oc" style="--flag-bg:url('https://flagcdn.com/au.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇦🇺</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/au.svg" alt="Australia" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Australia</div>
-        <div class="cc-name" data-en>Australia</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10–15 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Australia</div>
+          <div class="cc-name" data-en>Australia</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10–15 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
-      <div class="country-card" data-region="oc">
+      <div class="country-card" data-region="oc" style="--flag-bg:url('https://flagcdn.com/nz.svg')">
+        <div class="cc-flag-fill" aria-hidden="true"></div>
         <div class="cc-top">
-          <span class="cc-flag">🇳🇿</span>
+          <span class="cc-flag-badge"><img src="https://flagcdn.com/nz.svg" alt="New Zealand" loading="lazy" width="22" height="14" /></span>
           <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
         </div>
-        <div class="cc-name" data-es>Nueva Zelanda</div>
-        <div class="cc-name" data-en>New Zealand</div>
-        <div class="cc-meta">
-          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10–15 <span data-es>días</span><span data-en>days</span></span>
-          <span class="cc-courier">DHL · FedEx</span>
+        <div class="cc-body">
+          <div class="cc-name" data-es>Nueva Zelanda</div>
+          <div class="cc-name" data-en>New Zealand</div>
+          <div class="cc-meta">
+            <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10–15 <span data-es>días</span><span data-en>days</span></span>
+            <span class="cc-courier">DHL · FedEx</span>
+          </div>
         </div>
       </div>
     </div>
