@@ -3723,6 +3723,344 @@
     }
     .pay-footer-text strong { color: var(--text-dark); }
 
+    /* ════════════════════════════════════════════════════════════
+       SECCIÓN COBERTURA GLOBAL — REDISEÑO PREMIUM
+       ════════════════════════════════════════════════════════════ */
+    .shipping-bg {
+      background: linear-gradient(180deg, #ffffff 0%, var(--foam) 100%) !important;
+      padding: 110px 0 !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .shipping-bg::before {
+      content: '';
+      position: absolute; top: -200px; left: -150px;
+      width: 540px; height: 540px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,107,168,0.10), transparent 70%);
+      pointer-events: none;
+    }
+    .shipping-bg::after {
+      content: '';
+      position: absolute; bottom: -180px; right: -150px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,166,35,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .shipping-bg > .container { position: relative; z-index: 1; }
+
+    /* Header */
+    .ship-header {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 44px;
+    }
+    .ship-header .section-tag {
+      display: inline-block;
+      background: rgba(14,107,168,0.10);
+      color: var(--ocean) !important;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 11px; letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .ship-header .heading {
+      font-size: clamp(34px, 4.2vw, 52px) !important;
+      line-height: 1.05 !important;
+      color: var(--text-dark) !important;
+      margin-bottom: 16px;
+    }
+    .ship-sub {
+      font-size: 17px;
+      color: var(--gray);
+      line-height: 1.65;
+      margin: 0 auto 32px !important;
+      max-width: 640px;
+    }
+
+    /* Stats row */
+    .ship-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) { .ship-stats { grid-template-columns: 1fr 1fr; } }
+    .ship-stat {
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 14px;
+      padding: 16px 12px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+      text-align: center;
+    }
+    .ship-stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(22px, 2.6vw, 30px);
+      font-weight: 800;
+      color: var(--ocean);
+      line-height: 1;
+    }
+    .ship-stat-suffix {
+      font-size: 14px;
+      color: var(--gray);
+      font-weight: 600;
+    }
+    .ship-stat-label {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    /* Region tabs */
+    .ship-tabs-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .ship-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 6px;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(15,23,42,0.04);
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+    .ship-tab {
+      background: transparent;
+      border: 0;
+      color: var(--gray);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .ship-tab:hover:not(.active) { background: rgba(15,23,42,0.04); color: var(--text-dark); }
+    .ship-tab.active {
+      background: linear-gradient(135deg, var(--ocean), #1281c8);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(14,107,168,0.30);
+    }
+    .ship-tab-count {
+      background: rgba(15,23,42,0.10);
+      color: inherit;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 100px;
+      min-width: 22px;
+      text-align: center;
+    }
+    .ship-tab.active .ship-tab-count {
+      background: rgba(255,255,255,0.30);
+      color: #fff;
+    }
+
+    /* Countries grid */
+    .countries-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 14px !important;
+      margin-top: 0 !important;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 900px) { .countries-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+    @media (max-width: 640px) { .countries-grid { grid-template-columns: 1fr 1fr !important; } }
+
+    .country-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.08) !important;
+      border-radius: 14px !important;
+      padding: 18px !important;
+      transition: all 0.25s ease !important;
+      text-align: left !important;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .country-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--ocean);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.25s ease;
+    }
+    .country-card:hover {
+      transform: translateY(-3px) !important;
+      border-color: rgba(14,107,168,0.30) !important;
+      box-shadow: 0 8px 22px rgba(14,107,168,0.12) !important;
+      background: #ffffff !important;
+    }
+    .country-card:hover::before { transform: scaleY(1); }
+
+    .cc-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cc-flag {
+      font-size: 30px;
+      line-height: 1;
+      display: inline-block;
+    }
+    .cc-status {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 4px rgba(0,184,122,0.15);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(0,184,122,0.15); }
+      50%      { box-shadow: 0 0 0 7px rgba(0,184,122,0.05); }
+    }
+    .cc-name {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 15px !important;
+      font-weight: 700 !important;
+      color: var(--text-dark) !important;
+    }
+    .cc-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px solid rgba(15,23,42,0.06);
+    }
+    .cc-days {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ocean);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .cc-days svg { flex-shrink: 0; }
+    .cc-courier {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    /* Couriers strip */
+    .ship-couriers {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 20px 0;
+      margin-bottom: 28px;
+      border-top: 1px solid rgba(15,23,42,0.08);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+    }
+    .ship-couriers-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .ship-couriers-list { display: inline-flex; gap: 10px; flex-wrap: wrap; }
+    .courier-badge {
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+    }
+    .courier-badge--dhl    { color: #d40511; }
+    .courier-badge--fedex  { color: #4d148c; }
+    .courier-badge--chilex { color: #ff5800; }
+    .courier-badge--ups    { color: #6b3a08; }
+
+    /* CTA bottom */
+    .ship-cta {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(14,107,168,0.06), rgba(14,107,168,0.02));
+      border: 1px solid rgba(14,107,168,0.18);
+      border-radius: 16px;
+    }
+    @media (max-width: 700px) {
+      .ship-cta { grid-template-columns: 1fr; text-align: center; gap: 14px; }
+      .ship-cta-icon { margin: 0 auto; }
+    }
+    .ship-cta-icon {
+      width: 56px; height: 56px;
+      background: var(--ocean);
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 6px 16px rgba(14,107,168,0.30);
+      color: #fff;
+    }
+    .ship-cta-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .ship-cta-sub {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.55;
+    }
+    .ship-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      background: #25d366;
+      color: #fff !important;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37,211,102,0.30);
+      white-space: nowrap;
+    }
+    .ship-cta-btn:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(37,211,102,0.40);
+    }
+
+    /* Override viejas reglas que pisaban .country-flag/.country-name */
+    .country-flag, .country-name { display: none !important; }
+
     /* ───── Chile-first: notices condicionales por país ───── */
     .install-notice--international,
     .install-notice--chile { display: none; }
@@ -4336,40 +4674,322 @@
 <!-- SHIPPING -->
 <section class="section shipping-bg" id="envios">
   <div class="container">
-    <div class="section-tag" data-es>✦ Cobertura Global</div>
-    <div class="section-tag" data-en>✦ Global Coverage</div>
-    <h2 class="heading" data-es>Enviamos a Todo el Mundo</h2>
-    <h2 class="heading" data-en>We Ship Worldwide</h2>
-    <p class="fade-in" style="color:var(--text);font-size:17px;max-width:600px;margin-top:16px;" data-es>
-      Desde Chile exportamos nuestros pisos a toda la región LATAM, USA, Europa y más. Si tu país no aparece en la lista, contáctanos directamente.
-    </p>
-    <p class="fade-in" style="color:var(--text);font-size:17px;max-width:600px;margin-top:16px;" data-en>
-      From Chile we export our flooring throughout LATAM, the USA, Europe and beyond. If your country isn't listed, contact us directly.
-    </p>
-    <div class="countries-grid">
-      <div class="country-card fade-in"><span class="country-flag">🇨🇱</span><div class="country-name">Chile</div></div>
-      <div class="country-card fade-in fade-in-delay-1"><span class="country-flag">🇦🇷</span><div class="country-name">Argentina</div></div>
-      <div class="country-card fade-in fade-in-delay-2"><span class="country-flag">🇺🇾</span><div class="country-name">Uruguay</div></div>
-      <div class="country-card fade-in fade-in-delay-3"><span class="country-flag">🇨🇴</span><div class="country-name">Colombia</div></div>
-      <div class="country-card fade-in"><span class="country-flag">🇵🇪</span><div class="country-name">Perú</div></div>
-      <div class="country-card fade-in fade-in-delay-1"><span class="country-flag">🇲🇽</span><div class="country-name">México</div></div>
-      <div class="country-card fade-in fade-in-delay-2"><span class="country-flag">🇧🇷</span><div class="country-name">Brasil</div></div>
-      <div class="country-card fade-in fade-in-delay-3"><span class="country-flag">🇺🇸</span><div class="country-name">USA</div></div>
-      <div class="country-card fade-in"><span class="country-flag">🇬🇧</span><div class="country-name">UK</div></div>
-      <div class="country-card fade-in fade-in-delay-1"><span class="country-flag">🇦🇺</span><div class="country-name">Australia</div></div>
-      <div class="country-card fade-in fade-in-delay-2"><span class="country-flag">🇳🇿</span><div class="country-name">New Zealand</div></div>
-      <div class="country-card fade-in fade-in-delay-3"><span class="country-flag">🌍</span>
-        <div class="country-name" data-es>+Más países</div>
-        <div class="country-name" data-en>+More countries</div>
+
+    <div class="ship-header">
+      <span class="section-tag" data-es>✦ Cobertura Global</span>
+      <span class="section-tag" data-en>✦ Global Coverage</span>
+      <h2 class="heading" data-es>Enviamos<br/><em style="color:var(--ocean);font-style:normal;">a todo el mundo</em></h2>
+      <h2 class="heading" data-en>We ship<br/><em style="color:var(--ocean);font-style:normal;">worldwide</em></h2>
+      <p class="ship-sub" data-es>Desde Chile exportamos pisos DECKEVA a 19+ países en 4 continentes. Trabajamos con DHL, FedEx y Chilexpress para que tu pedido llegue rápido y seguro.</p>
+      <p class="ship-sub" data-en>From Chile we export DECKEVA decking to 19+ countries on 4 continents. We work with DHL, FedEx and Chilexpress so your order arrives fast and safe.</p>
+
+      <div class="ship-stats">
+        <div class="ship-stat">
+          <div class="ship-stat-num">19+</div>
+          <div class="ship-stat-label" data-es>Países activos</div>
+          <div class="ship-stat-label" data-en>Active countries</div>
+        </div>
+        <div class="ship-stat">
+          <div class="ship-stat-num">2–15<span class="ship-stat-suffix"> días</span></div>
+          <div class="ship-stat-label" data-es>Tiempo de entrega</div>
+          <div class="ship-stat-label" data-en>Delivery time</div>
+        </div>
+        <div class="ship-stat">
+          <div class="ship-stat-num">500+</div>
+          <div class="ship-stat-label" data-es>Envíos completados</div>
+          <div class="ship-stat-label" data-en>Shipments completed</div>
+        </div>
+        <div class="ship-stat">
+          <div class="ship-stat-num">100%</div>
+          <div class="ship-stat-label" data-es>Tracking incluido</div>
+          <div class="ship-stat-label" data-en>Tracking included</div>
+        </div>
       </div>
     </div>
-    <p class="shipping-note fade-in" data-es>
-      ¿Tu país no está en la lista? Escríbenos a <a href="/cdn-cgi/l/email-protection#365559584257554259765253555d5340571855595b"><span class="__cf_email__" data-cfemail="ed8e8283998c8e9982ad89888e86889b8cc38e8280">[email&#160;protected]</span></a> y evaluamos el envío.
-    </p>
-    <p class="shipping-note fade-in" data-en>
-      Don't see your country? Email us at <a href="/cdn-cgi/l/email-protection#99faf6f7edf8faedf6d9fdfcfaf2fceff8b7faf6f4"><span class="__cf_email__" data-cfemail="89eae6e7fde8eafde6c9edeceae2ecffe8a7eae6e4">[email&#160;protected]</span></a> and we'll evaluate shipping options.
-    </p>
+
+    <div class="ship-tabs-wrap">
+      <div class="ship-tabs" role="tablist">
+        <button class="ship-tab active" type="button" data-region="all" onclick="filterCountries('all')">
+          🌍 <span data-es>Todos</span><span data-en>All</span>
+          <span class="ship-tab-count">19</span>
+        </button>
+        <button class="ship-tab" type="button" data-region="sa" onclick="filterCountries('sa')">
+          <span data-es>Sudamérica</span><span data-en>South America</span>
+          <span class="ship-tab-count">8</span>
+        </button>
+        <button class="ship-tab" type="button" data-region="na" onclick="filterCountries('na')">
+          <span data-es>Norteamérica</span><span data-en>North America</span>
+          <span class="ship-tab-count">3</span>
+        </button>
+        <button class="ship-tab" type="button" data-region="eu" onclick="filterCountries('eu')">
+          <span data-es>Europa</span><span data-en>Europe</span>
+          <span class="ship-tab-count">6</span>
+        </button>
+        <button class="ship-tab" type="button" data-region="oc" onclick="filterCountries('oc')">
+          <span data-es>Oceanía</span><span data-en>Oceania</span>
+          <span class="ship-tab-count">2</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="countries-grid" id="countriesGrid">
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇨🇱</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Chile</div>
+        <div class="cc-name" data-en>Chile</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2–5 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">Chilexpress</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇦🇷</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Argentina</div>
+        <div class="cc-name" data-en>Argentina</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇺🇾</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Uruguay</div>
+        <div class="cc-name" data-en>Uruguay</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇨🇴</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Colombia</div>
+        <div class="cc-name" data-en>Colombia</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇵🇪</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Perú</div>
+        <div class="cc-name" data-en>Peru</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–8 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇧🇷</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Brasil</div>
+        <div class="cc-name" data-en>Brazil</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–12 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇪🇨</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Ecuador</div>
+        <div class="cc-name" data-en>Ecuador</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="sa">
+        <div class="cc-top">
+          <span class="cc-flag">🇵🇾</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Paraguay</div>
+        <div class="cc-name" data-en>Paraguay</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–10 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="na">
+        <div class="cc-top">
+          <span class="cc-flag">🇺🇸</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>USA</div>
+        <div class="cc-name" data-en>USA</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5–10 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">FedEx · DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="na">
+        <div class="cc-top">
+          <span class="cc-flag">🇲🇽</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>México</div>
+        <div class="cc-name" data-en>Mexico</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7–12 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">FedEx · DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="na">
+        <div class="cc-top">
+          <span class="cc-flag">🇨🇦</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Canadá</div>
+        <div class="cc-name" data-en>Canada</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6–12 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="eu">
+        <div class="cc-top">
+          <span class="cc-flag">🇬🇧</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Reino Unido</div>
+        <div class="cc-name" data-en>United Kingdom</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="eu">
+        <div class="cc-top">
+          <span class="cc-flag">🇪🇸</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>España</div>
+        <div class="cc-name" data-en>Spain</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="eu">
+        <div class="cc-top">
+          <span class="cc-flag">🇫🇷</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Francia</div>
+        <div class="cc-name" data-en>France</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="eu">
+        <div class="cc-top">
+          <span class="cc-flag">🇩🇪</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Alemania</div>
+        <div class="cc-name" data-en>Germany</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="eu">
+        <div class="cc-top">
+          <span class="cc-flag">🇮🇹</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Italia</div>
+        <div class="cc-name" data-en>Italy</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="eu">
+        <div class="cc-top">
+          <span class="cc-flag">🇵🇹</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Portugal</div>
+        <div class="cc-name" data-en>Portugal</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8–14 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="oc">
+        <div class="cc-top">
+          <span class="cc-flag">🇦🇺</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Australia</div>
+        <div class="cc-name" data-en>Australia</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10–15 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+      <div class="country-card" data-region="oc">
+        <div class="cc-top">
+          <span class="cc-flag">🇳🇿</span>
+          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+        </div>
+        <div class="cc-name" data-es>Nueva Zelanda</div>
+        <div class="cc-name" data-en>New Zealand</div>
+        <div class="cc-meta">
+          <span class="cc-days"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10–15 <span data-es>días</span><span data-en>days</span></span>
+          <span class="cc-courier">DHL · FedEx</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ship-couriers">
+      <span class="ship-couriers-label" data-es>Trabajamos con</span>
+      <span class="ship-couriers-label" data-en>We work with</span>
+      <div class="ship-couriers-list">
+        <span class="courier-badge courier-badge--dhl">DHL</span>
+        <span class="courier-badge courier-badge--fedex">FedEx</span>
+        <span class="courier-badge courier-badge--chilex">Chilexpress</span>
+        <span class="courier-badge courier-badge--ups">UPS</span>
+      </div>
+    </div>
+
+    <div class="ship-cta">
+      <div class="ship-cta-icon">📍</div>
+      <div class="ship-cta-text">
+        <div class="ship-cta-title" data-es>¿Tu país no está en la lista?</div>
+        <div class="ship-cta-title" data-en>Country not listed?</div>
+        <div class="ship-cta-sub" data-es>Evaluamos envíos a casi cualquier destino. Escríbenos y te cotizamos sin compromiso.</div>
+        <div class="ship-cta-sub" data-en>We evaluate shipping to almost any destination. Drop us a line and we'll quote you with no commitment.</div>
+      </div>
+      <a href="https://wa.me/56940211459?text=Hola!%20Quiero%20cotizar%20env%C3%ADo%20a%20mi%20pa%C3%ADs" target="_blank" rel="noopener" class="ship-cta-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        <span data-es>Cotizar envío</span><span data-en>Quote shipping</span>
+      </a>
+    </div>
+
   </div>
+</section>
 </section>
 
 <!-- PAYMENT -->
@@ -6446,6 +7066,17 @@
       }, {threshold: 0.2}).observe(track);
     } else { start(); }
   })();
+
+
+  // ───── Filtro de países por región ─────
+  function filterCountries(region) {
+    document.querySelectorAll('.country-card').forEach(c => {
+      c.style.display = (region === 'all' || c.dataset.region === region) ? '' : 'none';
+    });
+    document.querySelectorAll('.ship-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.region === region);
+    });
+  }
 
 </script>
 </body>
