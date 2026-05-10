@@ -2395,28 +2395,13 @@
       margin: 0 auto 16px !important;
     }
 
-    /* ───── Refuerzos de contraste en formulario ───── */
-    .form-label { color: var(--text-dark) !important; font-weight: 600 !important; }
-    .form-currency-label { color: var(--text) !important; font-weight: 600 !important; }
-    .form-section-title { color: var(--text-dark) !important; }
-    .form-control { color: var(--text-dark) !important; }
+    /* ───── Fixes mínimos de contraste ───── */
+    /* Placeholders más visibles (antes estaban casi transparentes) */
     .form-control::placeholder,
     input::placeholder,
-    textarea::placeholder { color: rgba(15,23,42,0.50) !important; opacity: 1 !important; }
-    .price-sub { color: var(--gray) !important; }
-    .price-line { color: var(--text-dark) !important; }
-    .price-line.total .label { color: var(--text) !important; }
-    .install-notice p { color: var(--text-dark) !important; }
-    .install-notice ul li { color: var(--text-dark) !important; }
-    .install-table td { color: var(--text-dark) !important; }
-    .submit-btn .btn-sub { opacity: 1 !important; color: inherit; }
-    .submit-btn.email .btn-sub,
-    .submit-btn.whatsapp .btn-sub { color: var(--gray); }
-    .submit-btn.both .btn-sub { color: rgba(10,22,40,0.75); }
-    .form-note { color: var(--text) !important; font-weight: 500; }
-    .info-list li { color: var(--text-dark) !important; }
-    .contact-link { color: var(--text-dark) !important; }
-    .quote-info p { color: var(--text) !important; }
+    textarea::placeholder { color: rgba(15,23,42,0.55) !important; opacity: 1 !important; }
+    /* Subtexto del botón "Both" sobre gold: usar dark con buen contraste */
+    .submit-btn.both .btn-sub { color: rgba(10,22,40,0.75) !important; opacity: 1 !important; }
 
     /* ───── Chile-first: notices condicionales por país ───── */
     .install-notice--international,
