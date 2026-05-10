@@ -2602,6 +2602,233 @@
     .blog-all-link .arrow { transition: transform 0.25s ease; }
     .blog-all-link:hover .arrow { transform: translateX(4px); }
 
+    /* ════════════════════════════════════════════════════════════
+       SECCIÓN FAQ — REDISEÑO COMPLETO con accordion suave
+       ════════════════════════════════════════════════════════════ */
+    .faq-section {
+      background: linear-gradient(180deg, var(--foam) 0%, #ffffff 100%) !important;
+      padding: 110px 0 !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .faq-section::before {
+      content: '';
+      position: absolute; top: -150px; right: -150px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,107,168,0.08), transparent 70%);
+      z-index: 0;
+    }
+
+    .faq-wrap {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 60px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 980px) {
+      .faq-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .faq-section { padding: 80px 0 !important; }
+    }
+
+    /* ───── Aside (columna izquierda) ───── */
+    .faq-aside { position: sticky; top: 100px; }
+    @media (max-width: 980px) { .faq-aside { position: static; } }
+    .faq-aside .section-tag {
+      display: inline-block;
+      background: rgba(14,107,168,0.10);
+      color: var(--ocean) !important;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 11px; letter-spacing: 1.5px;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+    .faq-aside .heading {
+      font-size: clamp(34px, 4vw, 48px) !important;
+      line-height: 1.05 !important;
+      color: var(--text-dark) !important;
+      margin-bottom: 18px;
+    }
+    .faq-aside-sub {
+      color: var(--gray);
+      font-size: 16px;
+      line-height: 1.65;
+      margin-bottom: 32px;
+      max-width: 420px;
+    }
+
+    .faq-help-card {
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.05);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      max-width: 420px;
+    }
+    .faq-help-icon {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(14,107,168,0.12), rgba(14,107,168,0.06));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .faq-help-body { flex: 1; min-width: 0; }
+    .faq-help-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .faq-help-text {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .faq-help-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .faq-help-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .faq-help-btn--whatsapp { background: #25d366; color: #fff !important; }
+    .faq-help-btn--whatsapp:hover { background: #1ebe5d; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(37,211,102,0.30); }
+    .faq-help-btn--email { background: #ffffff; color: var(--text-dark) !important; border-color: rgba(15,23,42,0.15); }
+    .faq-help-btn--email:hover { border-color: var(--ocean); color: var(--ocean) !important; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(14,107,168,0.18); }
+
+    /* ───── FAQ Accordion (columna derecha) ───── */
+    .faq-grid {
+      display: flex !important;
+      flex-direction: column;
+      gap: 12px !important;
+      margin: 0 !important;
+    }
+
+    .faq-item {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,0.07) !important;
+      border-radius: 14px !important;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      padding: 0 !important;
+    }
+    .faq-item:hover {
+      border-color: rgba(14,107,168,0.25) !important;
+      box-shadow: 0 4px 16px rgba(14,107,168,0.08);
+    }
+    .faq-item.active {
+      border-color: rgba(14,107,168,0.40) !important;
+      box-shadow: 0 8px 28px rgba(14,107,168,0.10);
+      background: linear-gradient(180deg, rgba(14,107,168,0.025), #ffffff) !important;
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      padding: 22px 24px !important;
+      display: grid !important;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      color: var(--text-dark) !important;
+      line-height: 1.45 !important;
+      transition: color 0.2s ease;
+    }
+    .faq-question:hover { color: var(--ocean) !important; }
+
+    .faq-q-cat {
+      width: 38px; height: 38px;
+      background: rgba(14,107,168,0.10);
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+    .faq-item.active .faq-q-cat {
+      background: var(--ocean);
+      transform: scale(1.05);
+    }
+
+    .faq-q-text { flex: 1; min-width: 0; }
+
+    .faq-icon {
+      width: 28px; height: 28px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .faq-icon::before, .faq-icon::after {
+      content: '';
+      position: absolute;
+      background: var(--ocean);
+      border-radius: 2px;
+      top: 50%; left: 50%;
+    }
+    .faq-icon::before {
+      width: 14px; height: 2px;
+      transform: translate(-50%, -50%);
+    }
+    .faq-icon::after {
+      width: 2px; height: 14px;
+      transform: translate(-50%, -50%);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .faq-item.active .faq-icon::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+      opacity: 0;
+    }
+
+    /* Answer: smooth height transition con grid trick */
+    .faq-answer {
+      display: grid !important;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s cubic-bezier(.2,.8,.2,1);
+      max-height: none !important;
+      overflow: hidden !important;
+      padding: 0 !important;
+    }
+    .faq-item.active .faq-answer { grid-template-rows: 1fr; }
+    .faq-answer-inner {
+      min-height: 0;
+      overflow: hidden;
+      padding: 0 24px 22px 78px;
+    }
+    .faq-answer-inner p {
+      color: var(--text) !important;
+      font-size: 15px !important;
+      line-height: 1.7 !important;
+      margin: 0;
+    }
+    .faq-answer-inner p + p { margin-top: 10px; }
+    .faq-answer-inner strong { color: var(--text-dark); }
+
+    @media (max-width: 640px) {
+      .faq-question { padding: 18px 18px !important; font-size: 15px !important; gap: 12px; }
+      .faq-q-cat { width: 32px; height: 32px; font-size: 16px; border-radius: 8px; }
+      .faq-answer-inner { padding: 0 18px 18px 62px; font-size: 14px !important; }
+    }
+
     /* ───── Chile-first: notices condicionales por país ───── */
     .install-notice--international,
     .install-notice--chile { display: none; }
@@ -3916,72 +4143,174 @@
 <!-- FAQ SECTION -->
 <section class="section faq-section" id="faq">
   <div class="container">
-    <span class="section-tag" data-es>Preguntas Frecuentes</span>
-    <span class="section-tag" data-en>Frequently Asked Questions</span>
-    <h2 class="section-title" data-es>Lo que nuestros clientes quieren saber</h2>
-    <h2 class="section-title" data-en>What our customers want to know</h2>
-    <div class="faq-grid">
+    <div class="faq-wrap">
 
-      <div class="faq-item active">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
-          <span data-es>Que es un piso de Goma EVA para lanchas?</span>
-          <span data-en>What is EVA foam marine decking?</span>
-          <span class="faq-icon">+</span>
+      <aside class="faq-aside">
+        <span class="section-tag" data-es>✦ Preguntas Frecuentes</span>
+        <span class="section-tag" data-en>✦ Frequently Asked</span>
+        <h2 class="heading" data-es>Resolvemos<br/><em style="color:var(--ocean);font-style:normal;">tus dudas</em></h2>
+        <h2 class="heading" data-en>We answer<br/><em style="color:var(--ocean);font-style:normal;">your questions</em></h2>
+        <p class="faq-aside-sub" data-es>Las consultas más comunes sobre nuestros pisos EVA, envíos, instalación y garantías. Si no encuentras lo que buscas, escríbenos directamente.</p>
+        <p class="faq-aside-sub" data-en>The most common questions about our EVA decking, shipping, installation and warranties. If you don't find what you need, write to us directly.</p>
+
+        <div class="faq-help-card">
+          <div class="faq-help-icon">💬</div>
+          <div class="faq-help-body">
+            <div class="faq-help-title" data-es>¿No encuentras tu respuesta?</div>
+            <div class="faq-help-title" data-en>Can't find your answer?</div>
+            <p class="faq-help-text" data-es>Te respondemos en menos de 1 hora hábil por WhatsApp o email.</p>
+            <p class="faq-help-text" data-en>We reply in under 1 business hour via WhatsApp or email.</p>
+            <div class="faq-help-actions">
+              <a href="https://wa.me/56940211459?text=Hola!%20Tengo%20una%20consulta%20sobre%20DECKEVA" target="_blank" rel="noopener" class="faq-help-btn faq-help-btn--whatsapp">
+                <span>💬</span> WhatsApp
+              </a>
+              <a href="mailto:contacto@deckeva.cl" class="faq-help-btn faq-help-btn--email">
+                <span>✉️</span> <span data-es>Email</span><span data-en>Email</span>
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">
-          <p data-es>Los pisos de Goma EVA (Etileno-Vinil Acetato) son una solucion premium de pisos antideslizantes para lanchas, veleros y embarcaciones. Ofrecen agarre superior, comodidad, resistencia UV e instalacion facil con adhesivo 3M incluido. DECKEVA corta cada pieza a medida para tu embarcacion.</p>
-          <p data-en>EVA (Ethylene-Vinyl Acetate) foam marine decking is a premium non-slip flooring solution for boats, yachts, and watercraft. It provides superior grip, comfort, UV resistance, and easy installation with self-adhesive 3M backing. DECKEVA custom-cuts each piece to fit your specific vessel.</p>
+      </aside>
+
+      <div class="faq-grid">
+
+        <div class="faq-item active">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">⚓</span>
+            <span class="faq-q-text">
+              <span data-es>¿Qué es un piso de Goma EVA para lanchas?</span>
+              <span data-en>What is EVA foam marine decking?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>Los pisos de Goma EVA (Etileno-Vinil Acetato) son una solución premium de pisos antideslizantes para lanchas, veleros y embarcaciones. Ofrecen agarre superior, comodidad, resistencia UV e instalación fácil con adhesivo 3M incluido. DECKEVA corta cada pieza a medida para tu embarcación.</p>
+              <p data-en>EVA (Ethylene-Vinyl Acetate) foam marine decking is a premium non-slip flooring solution for boats, yachts, and watercraft. It provides superior grip, comfort, UV resistance, and easy installation with self-adhesive 3M backing. DECKEVA custom-cuts each piece to fit your specific vessel.</p>
+            </div>
+          </div>
         </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">🛠️</span>
+            <span class="faq-q-text">
+              <span data-es>¿Cómo se instala el piso EVA?</span>
+              <span data-en>How do I install EVA marine decking?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>La instalación es fácil: tu piso DECKEVA llega cortado a medida con adhesivo 3M pre-aplicado. Solo limpia la superficie de tu embarcación, retira el respaldo y presiona firmemente. Incluimos un video tutorial paso a paso y soporte por WhatsApp 24/7. En Chile además ofrecemos servicio de instalación profesional en terreno.</p>
+              <p data-en>Installation is easy: your custom-cut DECKEVA deck arrives ready to install with pre-applied 3M adhesive. Simply clean your boat surface, peel the backing, and press firmly. We include a step-by-step video tutorial and 24/7 WhatsApp support. In Chile we also offer professional on-site installation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">🌎</span>
+            <span class="faq-q-text">
+              <span data-es>¿Hacen envíos internacionales?</span>
+              <span data-en>Do you ship internationally?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>Sí. DECKEVA envía a todo el mundo. Despachamos regularmente a Chile, Argentina, Uruguay, Colombia, Perú, México, Brasil, USA, UK, Australia, Nueva Zelanda y muchos más países. Contáctanos para una cotización de envío internacional gratuita.</p>
+              <p data-en>Yes. DECKEVA ships worldwide. We regularly ship to Chile, Argentina, Uruguay, Colombia, Peru, Mexico, Brazil, USA, UK, Australia, New Zealand and many more countries. Contact us for a free international shipping quote.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">⏱️</span>
+            <span class="faq-q-text">
+              <span data-es>¿Cuánto tiempo demora la fabricación y el envío?</span>
+              <span data-en>How long does manufacturing and shipping take?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>Fabricamos cada piso a medida en aproximadamente <strong>10 a 15 días hábiles</strong> desde la confirmación del diseño y el pago. Los envíos dentro de Chile demoran 2 a 5 días hábiles; los envíos internacionales entre 5 y 15 días hábiles según el destino y el courier elegido.</p>
+              <p data-en>We custom-make each deck in approximately <strong>10 to 15 business days</strong> from design and payment confirmation. Shipping within Chile takes 2 to 5 business days; international shipping takes 5 to 15 business days depending on destination and courier.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">🔄</span>
+            <span class="faq-q-text">
+              <span data-es>¿Es DECKEVA una buena alternativa a SeaDek?</span>
+              <span data-en>Is DECKEVA a good alternative to SeaDek?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>Sí. DECKEVA ofrece pisos de Goma EVA premium comparables a SeaDek a precios competitivos. Nuestros pisos son hechos a medida, resistentes a UV, antideslizantes, y enviamos a todo el mundo con excelente servicio al cliente en español e inglés.</p>
+              <p data-en>Yes. DECKEVA offers premium EVA foam marine decking comparable to SeaDek at competitive prices. Our flooring is custom-made, UV resistant, non-slip, and ships worldwide with excellent customer service in both Spanish and English.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">🚤</span>
+            <span class="faq-q-text">
+              <span data-es>¿Qué tipos de embarcaciones pueden usar pisos DECKEVA?</span>
+              <span data-en>What types of boats can use DECKEVA flooring?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>Los pisos DECKEVA se fabrican a medida para cualquier embarcación: lanchas, veleros, yates, botes de pesca, motos de agua, pontones, consolas centrales y más. Cada pieza se corta con precisión para ajustarse a tu modelo y dimensiones específicas.</p>
+              <p data-en>DECKEVA flooring is custom-made for any vessel: speedboats, sailboats, yachts, fishing boats, jet skis, pontoon boats, center consoles, and more. Each piece is precision-cut to fit your specific boat model and dimensions.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">🧴</span>
+            <span class="faq-q-text">
+              <span data-es>¿Cómo se limpia y mantiene el piso DECKEVA?</span>
+              <span data-en>How do I clean and maintain DECKEVA decking?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>El mantenimiento es muy simple: agua dulce con jabón neutro y una esponja suave o cepillo de cerdas blandas. Para manchas más difíciles puedes usar limpiadores no abrasivos. Evita solventes fuertes, lavadoras a presión a corta distancia y cepillos metálicos. Bien cuidado, el piso conserva su aspecto durante años.</p>
+              <p data-en>Maintenance is very simple: fresh water with mild soap and a soft sponge or soft-bristle brush. For tougher stains use non-abrasive cleaners. Avoid strong solvents, close-range pressure washing and metal brushes. With proper care, the deck keeps its look for years.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" onclick="this.parentElement.classList.toggle('active')">
+            <span class="faq-q-cat" aria-hidden="true">💳</span>
+            <span class="faq-q-text">
+              <span data-es>¿Qué métodos de pago aceptan?</span>
+              <span data-en>What payment methods do you accept?</span>
+            </span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <p data-es>Aceptamos múltiples métodos según tu país: en Chile Webpay (tarjeta), MercadoPago y transferencia bancaria; en LATAM MercadoPago, PayU y PayPal; en USA wire transfer (ACH/SWIFT), PayPal y Stripe; internacional PayPal, Stripe y SWIFT. Coordinamos el método más conveniente al momento de cotizar.</p>
+              <p data-en>We accept multiple methods depending on your country: in Chile Webpay (card), MercadoPago and bank transfer; in LATAM MercadoPago, PayU and PayPal; in the USA wire transfer (ACH/SWIFT), PayPal and Stripe; international PayPal, Stripe and SWIFT. We coordinate the best method when quoting.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
-          <span data-es>Hacen envios internacionales?</span>
-          <span data-en>Do you ship internationally?</span>
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-answer">
-          <p data-es>Si! DECKEVA envia a todo el mundo. Enviamos regularmente a Chile, Argentina, Uruguay, Colombia, Peru, Mexico, Brasil, USA, UK, Australia, Nueva Zelanda y muchos mas paises. Contactanos para una cotizacion de envio internacional gratuita.</p>
-          <p data-en>Yes! DECKEVA ships worldwide. We regularly ship to Chile, Argentina, Uruguay, Colombia, Peru, Mexico, Brazil, USA, UK, Australia, New Zealand and many more countries. Contact us for a free international shipping quote.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
-          <span data-es>Como se instala el piso EVA?</span>
-          <span data-en>How do I install EVA marine decking?</span>
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-answer">
-          <p data-es>La instalacion es facil: tu piso DECKEVA llega cortado a medida con adhesivo 3M pre-aplicado. Solo limpia la superficie de tu embarcacion, retira el respaldo y presiona firmemente. Incluimos un video tutorial y soporte por WhatsApp para guiarte paso a paso.</p>
-          <p data-en>Installation is easy: your custom-cut DECKEVA deck arrives ready to install with pre-applied 3M adhesive. Simply clean your boat surface, peel the backing, and press firmly. We include a video tutorial and WhatsApp support for step-by-step guidance.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
-          <span data-es>Es DECKEVA una buena alternativa a SeaDek?</span>
-          <span data-en>Is DECKEVA a good alternative to SeaDek?</span>
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-answer">
-          <p data-es>Si, DECKEVA ofrece pisos de goma EVA premium comparables a SeaDek a precios competitivos. Nuestros pisos son hechos a medida, resistentes a UV, antideslizantes, y enviamos a todo el mundo con excelente servicio al cliente en espanol e ingles.</p>
-          <p data-en>Yes, DECKEVA offers premium EVA foam marine decking comparable to SeaDek at competitive prices. Our flooring is custom-made, UV resistant, non-slip, and ships worldwide with excellent customer service in both Spanish and English.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
-          <span data-es>Que tipos de embarcaciones pueden usar pisos DECKEVA?</span>
-          <span data-en>What types of boats can use DECKEVA flooring?</span>
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-answer">
-          <p data-es>Los pisos DECKEVA se fabrican a medida para cualquier embarcacion: lanchas, veleros, yates, botes de pesca, motos de agua, pontones, consolas centrales y mas. Cada pieza se corta con precision para ajustarse a tu modelo y dimensiones especificas.</p>
-          <p data-en>DECKEVA flooring is custom-made for any vessel: speedboats, sailboats, yachts, fishing boats, jet skis, pontoon boats, center consoles, and more. Each piece is precision-cut to fit your specific boat model and dimensions.</p>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
