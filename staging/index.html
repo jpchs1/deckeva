@@ -3189,6 +3189,255 @@
     }
     .footer-flag { font-size: 14px; line-height: 1; }
 
+    /* ════════════════════════════════════════════════════════════
+       SECCIÓN TESTIMONIOS — CAROUSEL con 40 reviews
+       ════════════════════════════════════════════════════════════ */
+    .testimonios-section {
+      background: linear-gradient(180deg, #ffffff 0%, var(--foam) 100%) !important;
+      padding: 110px 0 !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonios-section::before {
+      content: '';
+      position: absolute; top: -180px; left: -180px;
+      width: 520px; height: 520px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,166,35,0.10), transparent 70%);
+      pointer-events: none;
+    }
+    .testimonios-section::after {
+      content: '';
+      position: absolute; bottom: -200px; right: -180px;
+      width: 480px; height: 480px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,107,168,0.10), transparent 70%);
+      pointer-events: none;
+    }
+    .testimonios-section > .container { position: relative; z-index: 1; }
+
+    /* Header con título + controles */
+    .t-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 700px) {
+      .t-header { grid-template-columns: 1fr; gap: 18px; }
+    }
+    .t-header-text .section-tag {
+      display: inline-block;
+      background: rgba(14,107,168,0.10);
+      color: var(--ocean) !important;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 11px; letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    .t-header-text .heading {
+      font-size: clamp(34px, 4.2vw, 52px) !important;
+      line-height: 1.05 !important;
+      color: var(--text-dark) !important;
+      margin-bottom: 18px;
+    }
+    .t-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .t-rating-stars {
+      color: #f5a623;
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+    .t-rating-num {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+    .t-rating-sub {
+      font-size: 14px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .t-controls {
+      display: flex;
+      gap: 10px;
+    }
+    .t-arrow {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.10);
+      color: var(--text-dark);
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.05);
+    }
+    .t-arrow:hover {
+      background: var(--ocean);
+      color: #fff;
+      border-color: var(--ocean);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(14,107,168,0.25);
+    }
+    .t-arrow:active { transform: translateY(0); }
+
+    /* Track horizontal con scroll-snap */
+    .t-track-wrap {
+      position: relative;
+      margin: 0 -24px;
+    }
+    .t-track-wrap::before,
+    .t-track-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 12px;
+      width: 60px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .t-track-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, var(--foam), transparent);
+    }
+    .t-track-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, var(--foam), transparent);
+    }
+
+    .t-track {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 24px;
+      padding: 6px 24px 14px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .t-track::-webkit-scrollbar { display: none; }
+
+    .t-card {
+      flex: 0 0 calc((100% - 64px) / 3);
+      scroll-snap-align: start;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.07);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.04), 0 12px 30px rgba(15,23,42,0.05);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 280px;
+    }
+    .t-card:hover, .t-card:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(14,107,168,0.10), 0 18px 40px rgba(14,107,168,0.10);
+      border-color: rgba(14,107,168,0.18);
+      outline: none;
+    }
+    @media (max-width: 980px) { .t-card { flex: 0 0 calc((100% - 44px) / 2); } }
+    @media (max-width: 640px) { .t-card { flex: 0 0 86%; padding: 22px; } }
+
+    .t-stars {
+      color: #f5a623;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+    }
+    .t-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text);
+      font-style: italic;
+      flex-grow: 1;
+      margin: 0;
+    }
+    .t-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(15,23,42,0.06);
+    }
+    .t-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      color: #ffffff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(15,23,42,0.10);
+    }
+    .t-author-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      flex: 1;
+    }
+    .t-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    .t-meta {
+      font-size: 12px;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .t-flag {
+      font-size: 14px;
+      margin-right: 2px;
+    }
+
+    /* Stats abajo */
+    .t-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+      padding: 32px;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.07);
+      border-radius: 18px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.04), 0 12px 32px rgba(15,23,42,0.05);
+    }
+    @media (max-width: 700px) { .t-stats { grid-template-columns: 1fr 1fr; gap: 18px; padding: 24px; } }
+    .t-stat { text-align: center; }
+    .t-stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(32px, 4vw, 44px);
+      font-weight: 800;
+      color: var(--ocean);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .t-stat-label {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Override: ocultar grid antiguo si quedó algún resto */
+    .testimonials-grid { display: none !important; }
+
     /* ───── Chile-first: notices condicionales por país ───── */
     .install-notice--international,
     .install-notice--chile { display: none; }
@@ -3935,69 +4184,540 @@
 </section>
 
 <!-- TESTIMONIALS -->
-<section class="section" id="testimonios">
+<section class="section testimonios-section" id="testimonios">
   <div class="container">
-    <div class="section-tag" data-es>✦ Testimonios</div>
-    <div class="section-tag" data-en>✦ Testimonials</div>
-    <h2 class="heading" data-es>Lo que dicen nuestros clientes</h2>
-    <h2 class="heading" data-en>What our customers say</h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card fade-in">
-        <div class="quote-mark">"</div>
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text" data-es>"Increíble experiencia. El piso de mi lancha quedó espectacular, antideslizante y de muy buena calidad. El servicio fue excelente desde la cotización hasta la entrega."</p>
-        <p class="testimonial-text" data-en>"Incredible experience. My boat flooring looks spectacular, non-slip and very high quality. Service was excellent from the quote to delivery."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">AC</div>
-          <div>
-            <div class="author-name">Ana Corrales</div>
-            <div class="author-loc">🇨🇱 Chile</div>
-          </div>
+    <div class="t-header">
+      <div class="t-header-text">
+        <span class="section-tag" data-es>✦ Testimonios</span>
+        <span class="section-tag" data-en>✦ Testimonials</span>
+        <h2 class="heading" data-es>Lo que dicen<br/><em style="color:var(--ocean);font-style:normal;">nuestros clientes</em></h2>
+        <h2 class="heading" data-en>What our<br/><em style="color:var(--ocean);font-style:normal;">customers say</em></h2>
+        <div class="t-rating">
+          <span class="t-rating-stars">★★★★★</span>
+          <span class="t-rating-num">4.9</span>
+          <span class="t-rating-sub" data-es>basado en 40+ reseñas verificadas</span>
+          <span class="t-rating-sub" data-en>based on 40+ verified reviews</span>
         </div>
       </div>
-      <div class="testimonial-card fade-in fade-in-delay-1">
-        <div class="quote-mark">"</div>
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text" data-es>"Nuestra casa en el lago Colbún se convirtió en un paraíso gracias a DECKEVA. El piso de nuestra embarcación cambió completamente. ¡Totalmente recomendado!"</p>
-        <p class="testimonial-text" data-en>"Our lake house became a paradise thanks to DECKEVA. The deck completely transformed our boat. Totally recommended!"</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">CM</div>
-          <div>
-            <div class="author-name">Carlos Martínez</div>
-            <div class="author-loc">🇨🇱 Chile</div>
-          </div>
-        </div>
+      <div class="t-controls">
+        <button type="button" class="t-arrow" id="tPrev" aria-label="Anterior">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="t-arrow" id="tNext" aria-label="Siguiente">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
-      <div class="testimonial-card fade-in fade-in-delay-2">
-        <div class="quote-mark">"</div>
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text" data-es>"Pedí el piso desde Argentina y el proceso fue muy sencillo. Lo recibí en perfectas condiciones y la instalación fue facilísima con el adhesivo 3M incluido."</p>
-        <p class="testimonial-text" data-en>"I ordered from Argentina and the process was very simple. Received it in perfect condition and installation was super easy with the included 3M adhesive."</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">LP</div>
-          <div>
-            <div class="author-name">Laura Pérez</div>
-            <div class="author-loc">🇦🇷 Argentina</div>
-          </div>
+    </div>
+
+    <div class="t-track-wrap">
+      <div class="t-track" id="tTrack">
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Increíble experiencia. El piso de mi lancha quedó espectacular, antideslizante y de muy buena calidad. El servicio fue excelente desde la cotización hasta la entrega."</p>
+        <p class="t-text" data-en>"Incredible experience. My boat flooring looks spectacular — non-slip and great quality. Service was excellent from quote to delivery."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0e6ba8,#1a9be3);">AC</span>
+          <span class="t-author-info">
+            <span class="t-name">Ana Corrales</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Santiago, Chile · Lancha 22'</span>
+          </span>
         </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Nuestra casa en el lago Colbún se convirtió en un paraíso gracias a DECKEVA. El piso de la embarcación cambió por completo. ¡Totalmente recomendado!"</p>
+        <p class="t-text" data-en>"Our house at Lake Colbún became a paradise thanks to DECKEVA. The deck completely transformed our boat. Highly recommended!"</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#f5a623,#e89500);">CM</span>
+          <span class="t-author-info">
+            <span class="t-name">Carlos Martínez</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Lago Colbún, Chile · Lancha 24'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Pedí pisos para mi velero y los chicos me asesoraron en cada detalle. Llegó perfecto, instalación más fácil de lo que pensaba."</p>
+        <p class="t-text" data-en>"I ordered for my sailboat and they guided me through every detail. Arrived perfect, install easier than expected."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#00b87a,#00855a);">FS</span>
+          <span class="t-author-info">
+            <span class="t-name">Felipe Soto</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Algarrobo, Chile · Velero 28'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Buscaba algo cómodo para los pies descalzos en verano. DECKEVA cumplió 100%. Mis hijos andan todo el día arriba sin resbalar."</p>
+        <p class="t-text" data-en>"I wanted something comfy for bare feet in summer. DECKEVA delivered 100%. My kids run around all day without slipping."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#6772e5,#3a44a3);">JR</span>
+          <span class="t-author-info">
+            <span class="t-name">Javiera Rojas</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Pucón, Chile · Lancha 19'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Soy pescador hace 20 años. El piso aguanta sol, sal y golpes. Mejor inversión que he hecho para mi bote."</p>
+        <p class="t-text" data-en>"I've fished for 20 years. The deck takes sun, salt and hits. Best investment I've made for my boat."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#e63946,#a51e2c);">MP</span>
+          <span class="t-author-info">
+            <span class="t-name">Matías Pérez</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Concón, Chile · Bote pesca 18'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Pedí un diseño con el nombre de la lancha bordado y quedó increíble. Atención súper personalizada."</p>
+        <p class="t-text" data-en>"I asked for a custom design with the boat's name and it came out amazing. Super personal service."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#3a8bf5,#1d5cc7);">VC</span>
+          <span class="t-author-info">
+            <span class="t-name">Valentina Castro</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Lago Rapel, Chile · Lancha 21'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Trabajo de primer nivel. El acabado se ve premium y el equipo me coordinó la instalación sin problemas. 10/10."</p>
+        <p class="t-text" data-en>"Top-tier work. The finish looks premium and the team coordinated the install without issues. 10/10."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#25d366,#128c4a);">DG</span>
+          <span class="t-author-info">
+            <span class="t-name">Diego González</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Quintero, Chile · Yate 36'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Para mi moto de agua. Llegó cortado a medida exacta, sin sobras ni faltantes. Quedó como nuevo."</p>
+        <p class="t-text" data-en>"For my jet ski. Arrived perfectly cut to size, no excess, no shortage. Looks brand new."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#9b59b6,#6c3483);">SB</span>
+          <span class="t-author-info">
+            <span class="t-name">Sofía Bravo</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Iquique, Chile · Moto de agua</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"En el sur el clima es duro. Lleva una temporada y el piso sigue como el primer día. Recomendado."</p>
+        <p class="t-text" data-en>"Weather is harsh in southern Chile. After a season, the deck still looks like day one. Recommended."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0a1628,#1a3a5c);">RV</span>
+          <span class="t-author-info">
+            <span class="t-name">Rodrigo Vidal</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Puerto Varas, Chile · Lancha 23'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Excelente comunicación, te explican cada paso. El producto cumple todo lo prometido."</p>
+        <p class="t-text" data-en>"Great communication — they explain each step. The product delivers on every promise."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#1abc9c,#16a085);">PA</span>
+          <span class="t-author-info">
+            <span class="t-name">Paula Ahumada</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Maitencillo, Chile · Velero 26'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Despacharon a Chiloé sin problemas. Llegó intacto y bien embalado. Calidad real."</p>
+        <p class="t-text" data-en>"They shipped to Chiloé without issues. Arrived intact and well packed. Real quality."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#e67e22,#a04500);">NF</span>
+          <span class="t-author-info">
+            <span class="t-name">Nicolás Fuentes</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Chiloé, Chile · Lancha 25'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Renové completo el piso del yate. Los materiales y el corte CNC se notan en cada detalle. Vale cada peso."</p>
+        <p class="t-text" data-en>"Renovated the entire yacht deck. Materials and CNC cutting show in every detail. Worth every penso."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#5d6d7e,#34495e);">CL</span>
+          <span class="t-author-info">
+            <span class="t-name">Cristóbal López</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Lago Llanquihue, Chile · Yate 40'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"El soporte por WhatsApp es real, te contestan al toque. Calmaron mis dudas antes de comprar."</p>
+        <p class="t-text" data-en>"WhatsApp support is real — they reply right away. Cleared all my doubts before buying."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0e6ba8,#1a9be3);">IM</span>
+          <span class="t-author-info">
+            <span class="t-name">Isidora Muñoz</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Viña del Mar, Chile · Lancha 20'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Probé Sea Dek antes y se despegó. Probé DECKEVA y va dos años intacto. Esa es la diferencia."</p>
+        <p class="t-text" data-en>"I tried Sea Dek before — peeled off. Tried DECKEVA — two years and still intact. That's the difference."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#f5a623,#e89500);">AM</span>
+          <span class="t-author-info">
+            <span class="t-name">Andrés Miranda</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Reñaca, Chile · Lancha 22'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Asesoría en terreno + instalación. No tuve que hacer nada, llegaron y dejaron todo listo."</p>
+        <p class="t-text" data-en>"On-site measurement + installation. I didn't have to do a thing — they came and left everything ready."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#00b87a,#00855a);">CR</span>
+          <span class="t-author-info">
+            <span class="t-name">Camila Rivera</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Coquimbo, Chile · Bote pesca 17'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Llegó a Buenos Aires en plazo y el equipo me acompañó paso a paso en la instalación. Muy buen producto."</p>
+        <p class="t-text" data-en>"Arrived in Buenos Aires on time and the team walked me through the install step by step. Great product."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#6772e5,#3a44a3);">MT</span>
+          <span class="t-author-info">
+            <span class="t-name">Mariana Torres</span>
+            <span class="t-meta"><span class="t-flag">🇦🇷</span>Tigre, Argentina · Velero 28'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Pedí desde Mar del Plata y el envío fue rápido. El piso es lo mejor que hay en relación calidad-precio."</p>
+        <p class="t-text" data-en>"Ordered from Mar del Plata, fast shipping. Best price-quality ratio out there."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#e63946,#a51e2c);">GE</span>
+          <span class="t-author-info">
+            <span class="t-name">Gonzalo Esquivel</span>
+            <span class="t-meta"><span class="t-flag">🇦🇷</span>Mar del Plata, Argentina · Lancha 24'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Imposible quedar mejor. El color teak combinó perfecto con la lancha. Servicio impecable."</p>
+        <p class="t-text" data-en>"Couldn't have turned out better. The teak color matched the boat perfectly. Flawless service."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#3a8bf5,#1d5cc7);">LF</span>
+          <span class="t-author-info">
+            <span class="t-name">Lucía Ferrari</span>
+            <span class="t-meta"><span class="t-flag">🇦🇷</span>Bariloche, Argentina · Lancha 21'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Cero burocracia con el envío internacional, todo claro desde el principio. Recomiendo 100%."</p>
+        <p class="t-text" data-en>"Zero bureaucracy with international shipping — clear from the start. 100% recommend."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#25d366,#128c4a);">FB</span>
+          <span class="t-author-info">
+            <span class="t-name">Federico Báez</span>
+            <span class="t-meta"><span class="t-flag">🇦🇷</span>Rosario, Argentina · Lancha 26'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Para mi yate en Punta del Este. Acabado de lujo, tan bueno como cualquier producto premium europeo."</p>
+        <p class="t-text" data-en>"For my yacht in Punta del Este. Luxury finish — as good as any premium European product."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#9b59b6,#6c3483);">PG</span>
+          <span class="t-author-info">
+            <span class="t-name">Pablo Giménez</span>
+            <span class="t-meta"><span class="t-flag">🇺🇾</span>Punta del Este, Uruguay · Yate 38'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"El velero quedó como nuevo. Los chicos resolvieron todo por WhatsApp. Excelente."</p>
+        <p class="t-text" data-en>"The sailboat looks brand new. Everything sorted via WhatsApp. Excellent."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0a1628,#1a3a5c);">CV</span>
+          <span class="t-author-info">
+            <span class="t-name">Cecilia Vargas</span>
+            <span class="t-meta"><span class="t-flag">🇺🇾</span>Montevideo, Uruguay · Velero 30'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Pedí para Cartagena y llegó perfecto. El piso aguanta el clima caribeño sin problemas."</p>
+        <p class="t-text" data-en>"Ordered for Cartagena and arrived perfect. The deck takes the Caribbean climate without issues."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#1abc9c,#16a085);">JM</span>
+          <span class="t-author-info">
+            <span class="t-name">Juan Manuel Ortiz</span>
+            <span class="t-meta"><span class="t-flag">🇨🇴</span>Cartagena, Colombia · Lancha 25'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Para nuestra lancha en el embalse. Diseño espectacular y muy buen agarre. Mi marido encantado."</p>
+        <p class="t-text" data-en>"For our boat at the reservoir. Spectacular design and great grip. My husband loves it."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#e67e22,#a04500);">DA</span>
+          <span class="t-author-info">
+            <span class="t-name">Daniela Aristizábal</span>
+            <span class="t-meta"><span class="t-flag">🇨🇴</span>Medellín, Colombia · Lancha 19'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Increíble la calidad. Lo comparé con marcas gringas y DECKEVA está al nivel a la mitad del precio."</p>
+        <p class="t-text" data-en>"Incredible quality. Compared to US brands, DECKEVA is on par at half the price."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#5d6d7e,#34495e);">RH</span>
+          <span class="t-author-info">
+            <span class="t-name">Roberto Hernández</span>
+            <span class="t-meta"><span class="t-flag">🇲🇽</span>Cancún, México · Lancha 28'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Servicio en español, atención personalizada, producto de primera. No podía pedir más."</p>
+        <p class="t-text" data-en>"Service in Spanish, personal attention, top product. Couldn't ask for more."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0e6ba8,#1a9be3);">AS</span>
+          <span class="t-author-info">
+            <span class="t-name">Alejandra Solís</span>
+            <span class="t-meta"><span class="t-flag">🇲🇽</span>Acapulco, México · Yate 35'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Recomendado por un amigo. La calidad es real, el envío llegó a Floripa sin problema."</p>
+        <p class="t-text" data-en>"Recommended by a friend. Real quality, shipment arrived in Floripa with no issues."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#f5a623,#e89500);">BS</span>
+          <span class="t-author-info">
+            <span class="t-name">Bruno Silva</span>
+            <span class="t-meta"><span class="t-flag">🇧🇷</span>Florianópolis, Brasil · Lancha 23'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Pisos para todo el yate. Trabajo impecable, llevó tres semanas y valió cada día."</p>
+        <p class="t-text" data-en>"Decking for the whole yacht. Flawless work — took three weeks and worth every day."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#00b87a,#00855a);">GP</span>
+          <span class="t-author-info">
+            <span class="t-name">Gabriela Pereira</span>
+            <span class="t-meta"><span class="t-flag">🇧🇷</span>Angra dos Reis, Brasil · Yate 42'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Llegó a Lima en 10 días, mejor de lo esperado. Producto premium, lo recomiendo a cualquier navegante."</p>
+        <p class="t-text" data-en>"Arrived in Lima in 10 days, better than expected. Premium product, recommend to any boater."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#6772e5,#3a44a3);">DT</span>
+          <span class="t-author-info">
+            <span class="t-name">Diana Torres</span>
+            <span class="t-meta"><span class="t-flag">🇵🇪</span>Lima, Perú · Velero 26'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Buena terminación, buen color, buen servicio. La trifecta. Volveré a comprar para mi otra lancha."</p>
+        <p class="t-text" data-en>"Good finish, good color, good service. The trifecta. Buying again for my other boat."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#e63946,#a51e2c);">OS</span>
+          <span class="t-author-info">
+            <span class="t-name">Óscar Saldaña</span>
+            <span class="t-meta"><span class="t-flag">🇵🇪</span>Paracas, Perú · Lancha 22'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Pedí para mi lancha en Miami. La calidad es excelente, comunicación en inglés perfecta, envío rápido."</p>
+        <p class="t-text" data-en>"I ordered for my boat in Miami. Outstanding quality, perfect English communication, fast shipping."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#3a8bf5,#1d5cc7);">MR</span>
+          <span class="t-author-info">
+            <span class="t-name">Mike Reynolds</span>
+            <span class="t-meta"><span class="t-flag">🇺🇸</span>Miami, USA · Boat 26'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Best alternative to SeaDek. Custom design, great service, ships from Chile in good time."</p>
+        <p class="t-text" data-en>"Best alternative to SeaDek. Custom design, great service, ships from Chile quickly."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#25d366,#128c4a);">JT</span>
+          <span class="t-author-info">
+            <span class="t-name">Jennifer Tanner</span>
+            <span class="t-meta"><span class="t-flag">🇺🇸</span>Tampa Bay, USA · Yacht 38'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Quality matches anything I've seen at boat shows. Highly recommended for any owner."</p>
+        <p class="t-text" data-en>"Quality matches anything I've seen at boat shows. Highly recommended for any owner."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#9b59b6,#6c3483);">DH</span>
+          <span class="t-author-info">
+            <span class="t-name">David Holmes</span>
+            <span class="t-meta"><span class="t-flag">🇺🇸</span>San Diego, USA · Sailboat 32'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Smooth transaction, custom-fit perfect, look upgraded my whole boat. Worth it."</p>
+        <p class="t-text" data-en>"Smooth transaction, custom fit perfect, look upgraded my whole boat. Worth it."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0a1628,#1a3a5c);">KW</span>
+          <span class="t-author-info">
+            <span class="t-name">Kevin Walsh</span>
+            <span class="t-meta"><span class="t-flag">🇺🇸</span>Annapolis, USA · Boat 24'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Shipped to the UK without a hitch. Quality and finish exceeded expectations. Will recommend."</p>
+        <p class="t-text" data-en>"Shipped to the UK without a hitch. Quality and finish exceeded expectations. Will recommend."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#1abc9c,#16a085);">JM</span>
+          <span class="t-author-info">
+            <span class="t-name">James Mitchell</span>
+            <span class="t-meta"><span class="t-flag">🇬🇧</span>Southampton, UK · Yacht 40'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Ordered from Sydney. Process was easy, English support was excellent, product is premium."</p>
+        <p class="t-text" data-en>"Ordered from Sydney. Process was easy, English support was excellent, product is premium."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#e67e22,#a04500);">SH</span>
+          <span class="t-author-info">
+            <span class="t-name">Sarah Henderson</span>
+            <span class="t-meta"><span class="t-flag">🇦🇺</span>Sydney, Australia · Boat 22'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Quality marine decking shipped to NZ. Better than what I could source locally. Five stars."</p>
+        <p class="t-text" data-en>"Quality marine decking shipped to NZ. Better than what I could source locally. Five stars."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#5d6d7e,#34495e);">TO</span>
+          <span class="t-author-info">
+            <span class="t-name">Tom O'Connor</span>
+            <span class="t-meta"><span class="t-flag">🇳🇿</span>Auckland, NZ · Sailboat 34'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Para mi velero en Mallorca. Producto de primer nivel, trato impecable. Lo aconsejaría sin duda."</p>
+        <p class="t-text" data-en>"For my sailboat in Mallorca. Top-tier product, impeccable service. Would recommend without hesitation."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#0e6ba8,#1a9be3);">PC</span>
+          <span class="t-author-info">
+            <span class="t-name">Pedro Castaño</span>
+            <span class="t-meta"><span class="t-flag">🇪🇸</span>Mallorca, España · Velero 32'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Increíble cómo cambió la lancha. Las visitas siempre preguntan dónde lo hicimos. Solo respondo: DECKEVA."</p>
+        <p class="t-text" data-en>"Amazing how the boat changed. Visitors always ask where we got it done. I just say: DECKEVA."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#f5a623,#e89500);">FA</span>
+          <span class="t-author-info">
+            <span class="t-name">Francisca Araneda</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Lago Vichuquén, Chile · Lancha 21'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Para trabajo y salidas familiares. Aguanta todo, fácil de limpiar con manguera. Excelente compra."</p>
+        <p class="t-text" data-en>"For work and family outings. Takes everything, easy to clean with a hose. Excellent buy."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#00b87a,#00855a);">BC</span>
+          <span class="t-author-info">
+            <span class="t-name">Benjamín Carvajal</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Coronel, Chile · Bote pesca 19'</span>
+          </span>
+        </div>
+      </article>
+      <article class="t-card" tabindex="0">
+        <div class="t-stars" aria-label="5 estrellas">★★★★★</div>
+        <p class="t-text" data-es>"Muy buena experiencia. Cumplieron plazos y el resultado es de revista. Mi marido feliz."</p>
+        <p class="t-text" data-en>"Great experience. They hit the deadlines and the result is magazine-worthy. My husband is happy."</p>
+        <div class="t-author">
+          <span class="t-avatar" style="background:linear-gradient(135deg,#6772e5,#3a44a3);">CL</span>
+          <span class="t-author-info">
+            <span class="t-name">Catalina Lagos</span>
+            <span class="t-meta"><span class="t-flag">🇨🇱</span>Frutillar, Chile · Velero 24'</span>
+          </span>
+        </div>
+      </article>
       </div>
-      <div class="testimonial-card fade-in">
-        <div class="quote-mark">"</div>
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text" data-es>"I ordered for my boat in Miami. The custom EVA flooring is outstanding quality. Great communication in English, shipped fast. Will definitely order again!"</p>
-        <p class="testimonial-text" data-en>"I ordered for my boat in Miami. The custom EVA flooring is outstanding quality. Great communication in English, shipped fast. Will definitely order again!"</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">MR</div>
-          <div>
-            <div class="author-name">Mike Reynolds</div>
-            <div class="author-loc">🇺🇸 Miami, USA</div>
-          </div>
-        </div>
+    </div>
+
+    <div class="t-stats">
+      <div class="t-stat">
+        <div class="t-stat-num">500+</div>
+        <div class="t-stat-label" data-es>Embarcaciones equipadas</div>
+        <div class="t-stat-label" data-en>Boats outfitted</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-num">14+</div>
+        <div class="t-stat-label" data-es>Países alcanzados</div>
+        <div class="t-stat-label" data-en>Countries reached</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-num">4.9★</div>
+        <div class="t-stat-label" data-es>Promedio cliente</div>
+        <div class="t-stat-label" data-en>Customer rating</div>
+      </div>
+      <div class="t-stat">
+        <div class="t-stat-num">5 <span style="font-size:18px;color:var(--gray);">años</span></div>
+        <div class="t-stat-label" data-es>De experiencia</div>
+        <div class="t-stat-label" data-en>Of experience</div>
       </div>
     </div>
   </div>
 </section>
-
 <!-- LIFESTYLE 2 -->
 <section class="ls2-section" id="galeria">
   <div class="ls2-intro container">
@@ -5264,6 +5984,53 @@
       observer.observe(el);
     }
   });
+
+
+  // ───── Testimonios carousel ─────
+  (function() {
+    const track = document.getElementById('tTrack');
+    if (!track) return;
+    const prev = document.getElementById('tPrev');
+    const next = document.getElementById('tNext');
+    function step() {
+      const card = track.querySelector('.t-card');
+      if (!card) return 320;
+      const style = getComputedStyle(track);
+      const gap = parseInt(style.gap, 10) || 24;
+      return card.offsetWidth + gap;
+    }
+    prev && prev.addEventListener('click', () => track.scrollBy({left: -step(), behavior: 'smooth'}));
+    next && next.addEventListener('click', () => track.scrollBy({left: step(), behavior: 'smooth'}));
+    // Autoplay con pausa al hover/touch
+    let timer = null;
+    function start() {
+      stop();
+      timer = setInterval(() => {
+        const max = track.scrollWidth - track.clientWidth - 4;
+        if (track.scrollLeft >= max) {
+          track.scrollTo({left: 0, behavior: 'smooth'});
+        } else {
+          track.scrollBy({left: step(), behavior: 'smooth'});
+        }
+      }, 5500);
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    track.addEventListener('mouseenter', stop);
+    track.addEventListener('mouseleave', start);
+    track.addEventListener('focusin', stop);
+    track.addEventListener('focusout', start);
+    track.addEventListener('touchstart', stop, {passive:true});
+    // Pausar si la pestaña no está visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop(); else start();
+    });
+    // Iniciar cuando entra en viewport
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach(e => e.isIntersecting ? start() : stop());
+      }, {threshold: 0.2}).observe(track);
+    } else { start(); }
+  })();
 
 </script>
 </body>
