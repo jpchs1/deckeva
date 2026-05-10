@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="googlebot" content="noindex, nofollow" />
+
+  <title>DECKEVA · Staging Light Layout</title>
+  <meta name="description" content="Staging preview – light layout for deckeva.com. No indexing." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fafafa;
+      --surface:#ffffff;
+      --ink:#0f1720;
+      --ink-soft:#475569;
+      --muted:#94a3b8;
+      --line:#e5e7eb;
+      --accent:#0f766e;
+      --accent-soft:#ccfbf1;
+      --warn:#b45309;
+      --radius:10px;
+      --shadow:0 1px 2px rgba(15,23,32,.04), 0 1px 4px rgba(15,23,32,.04);
+      --max:1120px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      font-size:16px;
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%;display:block}
+    .container{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+    /* Staging banner */
+    .stg-banner{
+      background:#fff7ed;
+      border-bottom:1px solid #fed7aa;
+      color:var(--warn);
+      font-size:13px;
+      padding:8px 16px;
+      text-align:center;
+      font-weight:500;
+    }
+    .stg-banner strong{font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+
+    /* Nav */
+    header.nav{
+      position:sticky;top:0;z-index:50;
+      background:rgba(250,250,250,.85);
+      backdrop-filter:saturate(180%) blur(10px);
+      -webkit-backdrop-filter:saturate(180%) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{font-weight:700;font-size:18px;letter-spacing:.5px;color:var(--ink)}
+    .logo span{color:var(--accent)}
+    nav ul{display:flex;gap:28px;list-style:none}
+    nav ul a{color:var(--ink-soft);font-size:14px;font-weight:500}
+    nav ul a:hover{color:var(--ink);text-decoration:none}
+    .nav-actions{display:flex;align-items:center;gap:14px}
+    .lang{display:flex;gap:2px;font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px}
+    .lang button{background:none;border:0;padding:4px 8px;border-radius:4px;cursor:pointer;color:var(--ink-soft);font-family:inherit;font-weight:500}
+    .lang button.on{background:var(--ink);color:#fff}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:9px 16px;border-radius:8px;font-weight:500;font-size:14px;
+      border:1px solid transparent;cursor:pointer;transition:all .15s ease;
+      font-family:inherit;
+    }
+    .btn-primary{background:var(--ink);color:#fff}
+    .btn-primary:hover{background:#1e293b;text-decoration:none}
+    .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+    .btn-ghost:hover{background:var(--surface);text-decoration:none}
+    .hamburger{display:none;background:none;border:0;cursor:pointer;width:36px;height:36px;align-items:center;justify-content:center}
+    .hamburger span{display:block;width:18px;height:1.5px;background:var(--ink);position:relative}
+    .hamburger span::before,.hamburger span::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:var(--ink)}
+    .hamburger span::before{top:-6px}
+    .hamburger span::after{top:6px}
+
+    /* Hero */
+    .hero{padding:96px 0 80px;position:relative;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;font-weight:600;letter-spacing:.6px;
+      color:var(--accent);text-transform:uppercase;
+      background:var(--accent-soft);padding:6px 12px;border-radius:999px;
+      margin-bottom:20px;
+    }
+    h1{font-size:56px;line-height:1.05;letter-spacing:-1.5px;font-weight:700;margin-bottom:20px}
+    h1 em{font-style:normal;color:var(--accent)}
+    .hero p.lead{font-size:18px;color:var(--ink-soft);max-width:520px;margin-bottom:32px}
+    .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+    .hero-stats{display:flex;gap:36px;margin-top:48px}
+    .stat .n{font-size:24px;font-weight:700;color:var(--ink)}
+    .stat .l{font-size:13px;color:var(--ink-soft);margin-top:2px}
+    .hero-card{
+      background:var(--surface);border:1px solid var(--line);
+      border-radius:16px;padding:24px;box-shadow:var(--shadow);
+      aspect-ratio:4/5;
+      background-image:
+        linear-gradient(180deg,rgba(15,23,32,0) 60%,rgba(15,23,32,.5) 100%),
+        url('https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg');
+      background-size:cover;background-position:center;
+      display:flex;align-items:flex-end;color:#fff;
+    }
+    .hero-card .tag{font-size:12px;letter-spacing:.6px;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+    .hero-card .name{font-size:18px;font-weight:600}
+
+    /* Sections */
+    section{padding:80px 0;border-top:1px solid var(--line)}
+    .section-head{max-width:680px;margin-bottom:48px}
+    .section-head h2{font-size:36px;line-height:1.15;letter-spacing:-.8px;font-weight:700;margin-bottom:12px}
+    .section-head p{font-size:17px;color:var(--ink-soft)}
+
+    /* Features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{
+      background:var(--surface);border:1px solid var(--line);
+      border-radius:var(--radius);padding:24px;transition:all .2s ease;
+    }
+    .card:hover{border-color:#cbd5e1;transform:translateY(-2px)}
+    .card .icon{
+      width:36px;height:36px;border-radius:8px;
+      background:var(--accent-soft);color:var(--accent);
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;margin-bottom:16px;
+    }
+    .card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+    .card p{font-size:14px;color:var(--ink-soft);line-height:1.55}
+
+    /* Process / Timeline */
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:step}
+    .step{position:relative;padding-top:28px}
+    .step::before{
+      counter-increment:step;content:counter(step,decimal-leading-zero);
+      position:absolute;top:0;left:0;
+      font-size:12px;font-weight:600;color:var(--accent);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    }
+    .step h3{font-size:16px;font-weight:600;margin-bottom:6px}
+    .step p{font-size:14px;color:var(--ink-soft)}
+
+    /* Shipping */
+    .countries{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+    .country{
+      background:var(--surface);border:1px solid var(--line);
+      border-radius:8px;padding:14px 12px;text-align:center;
+      font-size:13px;font-weight:500;color:var(--ink-soft);
+    }
+    .country .flag{font-size:22px;margin-bottom:6px;line-height:1}
+
+    /* Payment */
+    .pay-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;border-bottom:1px solid var(--line);padding-bottom:0}
+    .pay-tab{
+      background:none;border:0;padding:10px 16px;cursor:pointer;
+      font-family:inherit;font-size:14px;color:var(--ink-soft);
+      border-bottom:2px solid transparent;font-weight:500;
+    }
+    .pay-tab.on{color:var(--ink);border-bottom-color:var(--accent)}
+    .pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .pay-panel{display:none}
+    .pay-panel.on{display:grid}
+    .pay-method{
+      background:var(--surface);border:1px solid var(--line);
+      border-radius:var(--radius);padding:18px;
+    }
+    .pay-method .pm{font-size:13px;font-weight:600;margin-bottom:4px}
+    .pay-method .pd{font-size:13px;color:var(--ink-soft)}
+
+    /* Testimonials */
+    .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .quote{
+      background:var(--surface);border:1px solid var(--line);
+      border-radius:var(--radius);padding:24px;
+    }
+    .quote p{font-size:15px;color:var(--ink);margin-bottom:16px;line-height:1.6}
+    .quote .who{font-size:13px;color:var(--ink-soft)}
+    .quote .who strong{display:block;color:var(--ink);font-weight:600}
+
+    /* CTA + Form */
+    .cta{
+      background:var(--ink);color:#fff;border-radius:14px;
+      padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;
+    }
+    .cta h2{font-size:32px;letter-spacing:-.6px;line-height:1.2;font-weight:700;margin-bottom:12px}
+    .cta p{color:#cbd5e1;margin-bottom:24px}
+    .cta .contact-row{font-size:14px;color:#cbd5e1;margin-bottom:8px}
+    .cta .contact-row a{color:#fff;text-decoration:underline}
+    form .field{margin-bottom:14px}
+    form label{display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:500}
+    form input,form select,form textarea{
+      width:100%;padding:10px 12px;border-radius:8px;
+      border:1px solid #334155;background:#1e293b;color:#fff;
+      font-family:inherit;font-size:14px;
+    }
+    form input:focus,form select:focus,form textarea:focus{outline:none;border-color:var(--accent)}
+    form textarea{resize:vertical;min-height:80px}
+    form .submit{background:var(--accent);color:#fff;border:0;padding:12px 20px;border-radius:8px;font-weight:500;cursor:pointer;font-family:inherit;font-size:14px;width:100%}
+    form .submit:hover{background:#0d5d56}
+
+    /* Footer */
+    footer{padding:64px 0 40px;background:var(--surface);border-top:1px solid var(--line)}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+    .footer-grid h4{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:14px;letter-spacing:.3px}
+    .footer-grid ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .footer-grid ul a{font-size:14px;color:var(--ink-soft)}
+    .footer-brand p{color:var(--ink-soft);font-size:14px;max-width:340px;margin-top:10px}
+    .footer-bottom{
+      display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+      padding-top:24px;border-top:1px solid var(--line);
+      font-size:13px;color:var(--muted);
+    }
+
+    /* Lang switching */
+    [data-en]{display:none}
+    html[data-lang="en"] [data-es]{display:none}
+    html[data-lang="en"] [data-en]{display:inline}
+    html[data-lang="en"] [data-en].block{display:block}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{padding:64px 0 56px}
+      .hero-grid{grid-template-columns:1fr;gap:40px}
+      h1{font-size:40px}
+      .features,.steps,.pay-grid,.pay-panel.on,.testimonials{grid-template-columns:1fr 1fr}
+      .countries{grid-template-columns:repeat(4,1fr)}
+      .cta{grid-template-columns:1fr;padding:32px}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      nav ul{display:none}
+      .hamburger{display:flex}
+      .nav-actions .btn{display:none}
+    }
+    @media (max-width:560px){
+      .features,.steps,.pay-grid,.pay-panel.on,.testimonials{grid-template-columns:1fr}
+      .countries{grid-template-columns:repeat(3,1fr)}
+      .hero-stats{flex-wrap:wrap;gap:20px}
+      .footer-grid{grid-template-columns:1fr}
+      h1{font-size:34px}
+      .section-head h2,.cta h2{font-size:28px}
+      section{padding:56px 0}
+    }
+  </style>
+</head>
+<body>
+
+<div class="stg-banner">
+  <strong>Staging</strong> ·
+  <span data-es>Vista previa de un layout más liviano. No indexable. </span>
+  <span data-en>Preview of a lighter layout. Not indexable. </span>
+  <a href="https://www.deckeva.com/" style="color:inherit;text-decoration:underline">deckeva.com →</a>
+</div>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="logo">DECK<span>EVA</span></a>
+    <nav>
+      <ul>
+        <li><a href="#caracteristicas" data-es>Características</a><a href="#caracteristicas" data-en>Features</a></li>
+        <li><a href="#proceso" data-es>Cómo trabajamos</a><a href="#proceso" data-en>How it works</a></li>
+        <li><a href="#envios" data-es>Envíos</a><a href="#envios" data-en>Shipping</a></li>
+        <li><a href="#pagos" data-es>Pagos</a><a href="#pagos" data-en>Payment</a></li>
+        <li><a href="#testimonios" data-es>Testimonios</a><a href="#testimonios" data-en>Reviews</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang" role="group" aria-label="Language">
+        <button class="on" onclick="setLang('es')">ES</button>
+        <button onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#cotizar" class="btn btn-primary">
+        <span data-es>Cotizar</span><span data-en>Get a quote</span>
+      </a>
+      <button class="hamburger" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero" style="border-top:0;padding-top:80px;">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">
+          <span data-es>Pisos EVA Náuticos · Hecho a Medida</span>
+          <span data-en>EVA Marine Decking · Made to Measure</span>
+        </span>
+        <h1>
+          <span data-es>Cubierta antideslizante,<br/><em>diseñada para tu embarcación.</em></span>
+          <span data-en>Non-slip decking,<br/><em>designed for your boat.</em></span>
+        </h1>
+        <p class="lead">
+          <span data-es>Pisos de Goma EVA premium fabricados a la medida exacta de tu lancha, velero o yate. Envíos a Chile, LATAM, USA y todo el mundo.</span>
+          <span data-en>Premium custom-cut EVA foam decking for your speedboat, sailboat or yacht. Shipping to Chile, LATAM, USA and worldwide.</span>
+        </p>
+        <div class="hero-cta">
+          <a href="#cotizar" class="btn btn-primary">
+            <span data-es>Cotizar gratis</span><span data-en>Free quote</span>
+          </a>
+          <a href="#proyectos" class="btn btn-ghost">
+            <span data-es>Ver proyectos</span><span data-en>See projects</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="n">500+</div><div class="l" data-es>Embarcaciones</div><div class="l" data-en>Boats fitted</div></div>
+          <div class="stat"><div class="n">14+</div><div class="l" data-es>Países</div><div class="l" data-en>Countries</div></div>
+          <div class="stat"><div class="n">4.9★</div><div class="l" data-es>Promedio cliente</div><div class="l" data-en>Customer rating</div></div>
+        </div>
+      </div>
+      <div class="hero-card" aria-hidden="true">
+        <div>
+          <div class="tag">DECKEVA · 6mm</div>
+          <div class="name" data-es>Lancha · Cubierta a medida</div>
+          <div class="name" data-en>Speedboat · Custom deck</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="caracteristicas">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-es>Por qué elegir DECKEVA</h2>
+        <h2 data-en>Why choose DECKEVA</h2>
+        <p data-es>Materiales premium, instalación sencilla y un diseño pensado para durar en el agua.</p>
+        <p data-en>Premium materials, easy installation and a design built to last on the water.</p>
+      </div>
+      <div class="features">
+        <div class="card">
+          <div class="icon">●</div>
+          <h3 data-es>Antideslizante</h3><h3 data-en>Non-slip</h3>
+          <p data-es>Textura cerrada que garantiza agarre incluso con el piso mojado, descalzo o con calzado náutico.</p>
+          <p data-en>Closed texture for grip even when wet, barefoot or in deck shoes.</p>
+        </div>
+        <div class="card">
+          <div class="icon">◆</div>
+          <h3 data-es>A medida exacta</h3><h3 data-en>Custom fit</h3>
+          <p data-es>Diseñamos cada pieza ajustada al milímetro a la cubierta de tu embarcación.</p>
+          <p data-en>Each piece is cut to fit your boat deck precisely.</p>
+        </div>
+        <div class="card">
+          <div class="icon">▲</div>
+          <h3 data-es>Resistente UV</h3><h3 data-en>UV resistant</h3>
+          <p data-es>Goma EVA premium que no se decolora ni se agrieta bajo el sol intenso.</p>
+          <p data-en>Premium EVA foam that won't fade or crack under intense sun.</p>
+        </div>
+        <div class="card">
+          <div class="icon">★</div>
+          <h3 data-es>Instalación 3M</h3><h3 data-en>3M adhesive</h3>
+          <p data-es>Adhesivo 3M de alta resistencia. Se instala sin herramientas, sin desorden.</p>
+          <p data-en>Heavy-duty 3M adhesive backing. Install with no tools, no mess.</p>
+        </div>
+        <div class="card">
+          <div class="icon">○</div>
+          <h3 data-es>Diseño personalizado</h3><h3 data-en>Custom design</h3>
+          <p data-es>Colores, patrones y logos a elección para que el resultado sea único.</p>
+          <p data-en>Colors, patterns and logos to your taste for a unique result.</p>
+        </div>
+        <div class="card">
+          <div class="icon">✚</div>
+          <h3 data-es>Confort a bordo</h3><h3 data-en>Comfort onboard</h3>
+          <p data-es>6mm de espesor: reduce ruido, vibraciones y cansancio en navegación.</p>
+          <p data-en>6mm thickness: reduces noise, vibration and onboard fatigue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-es>Cómo trabajamos</h2>
+        <h2 data-en>How we work</h2>
+        <p data-es>Un proceso simple, transparente y guiado de principio a fin.</p>
+        <p data-en>A simple, transparent process guided end to end.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3 data-es>Cotizas</h3><h3 data-en>Quote</h3>
+          <p data-es>Envías tu modelo, medidas y fotos. Te respondemos en menos de 24 horas.</p>
+          <p data-en>Send model, measurements and photos. We reply in under 24 hours.</p>
+        </div>
+        <div class="step">
+          <h3 data-es>Diseñamos</h3><h3 data-en>We design</h3>
+          <p data-es>Te enviamos un mockup digital con colores, patrón y diseño final para aprobar.</p>
+          <p data-en>We send a digital mockup with colors, pattern and final design to approve.</p>
+        </div>
+        <div class="step">
+          <h3 data-es>Fabricamos</h3><h3 data-en>We craft</h3>
+          <p data-es>Cortamos tu piso con maquinaria CNC para máxima precisión y terminación.</p>
+          <p data-en>We cut your decking with CNC machinery for maximum precision and finish.</p>
+        </div>
+        <div class="step">
+          <h3 data-es>Enviamos</h3><h3 data-en>We ship</h3>
+          <p data-es>Despachamos a tu puerta. Incluye guía de instalación paso a paso.</p>
+          <p data-en>Door-to-door shipping. Includes step-by-step installation guide.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-es>Proyectos recientes</h2>
+        <h2 data-en>Recent projects</h2>
+        <p data-es>Una selección de embarcaciones equipadas con cubiertas DECKEVA.</p>
+        <p data-en>A selection of boats outfitted with DECKEVA decks.</p>
+      </div>
+      <div class="features">
+        <div class="card">
+          <div class="icon">⚓</div>
+          <h3 data-es>Lancha deportiva 24'</h3><h3 data-en>24' Sport boat</h3>
+          <p data-es>Cubierta completa en tono teak con líneas en negro. Cliente: Santiago, Chile.</p>
+          <p data-en>Full deck in teak tone with black accents. Customer: Santiago, Chile.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⛵</div>
+          <h3 data-es>Velero 32'</h3><h3 data-en>32' Sailboat</h3>
+          <p data-es>Pisos bañera y cubierta de proa con logo bordado. Cliente: Buenos Aires, Argentina.</p>
+          <p data-en>Cockpit & bow decking with embroidered logo. Customer: Buenos Aires, Argentina.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🛥</div>
+          <h3 data-es>Yate 42'</h3><h3 data-en>42' Yacht</h3>
+          <p data-es>Cubierta completa premium con diseño personalizado. Cliente: Miami, USA.</p>
+          <p data-en>Full premium deck with custom design. Customer: Miami, USA.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="envios">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-es>Enviamos a todo el mundo</h2>
+        <h2 data-en>We ship worldwide</h2>
+        <p data-es>Despachamos desde Chile a toda LATAM, USA, Europa, Oceanía y más. Si tu país no aparece, escríbenos.</p>
+        <p data-en>Shipping from Chile to LATAM, USA, Europe, Oceania and beyond. Country not listed? Get in touch.</p>
+      </div>
+      <div class="countries">
+        <div class="country"><div class="flag">🇨🇱</div>Chile</div>
+        <div class="country"><div class="flag">🇦🇷</div>Argentina</div>
+        <div class="country"><div class="flag">🇺🇾</div>Uruguay</div>
+        <div class="country"><div class="flag">🇨🇴</div>Colombia</div>
+        <div class="country"><div class="flag">🇵🇪</div>Perú</div>
+        <div class="country"><div class="flag">🇲🇽</div>México</div>
+        <div class="country"><div class="flag">🇧🇷</div>Brasil</div>
+        <div class="country"><div class="flag">🇺🇸</div>USA</div>
+        <div class="country"><div class="flag">🇬🇧</div>UK</div>
+        <div class="country"><div class="flag">🇦🇺</div>Australia</div>
+        <div class="country"><div class="flag">🇳🇿</div>New Zealand</div>
+        <div class="country"><div class="flag">🌍</div><span data-es>+Más</span><span data-en>+More</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pagos">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-es>Medios de pago</h2>
+        <h2 data-en>Payment methods</h2>
+        <p data-es>Elige el método que prefieras según tu país. Pagos 100% seguros y encriptados.</p>
+        <p data-en>Pick the method you prefer by country. 100% secure encrypted payments.</p>
+      </div>
+      <div class="pay-tabs" role="tablist">
+        <button class="pay-tab on" data-tab="chile" onclick="showPay('chile')">🇨🇱 Chile</button>
+        <button class="pay-tab" data-tab="latam" onclick="showPay('latam')">🌎 LATAM</button>
+        <button class="pay-tab" data-tab="usa" onclick="showPay('usa')">🇺🇸 USA</button>
+        <button class="pay-tab" data-tab="intl" onclick="showPay('intl')">🌍 <span data-es>Internacional</span><span data-en>International</span></button>
+      </div>
+
+      <div class="pay-panel pay-grid on" id="pay-chile">
+        <div class="pay-method"><div class="pm">Webpay Plus</div><div class="pd" data-es>Tarjeta crédito/débito chilena · Transbank.</div><div class="pd" data-en>Chilean credit/debit card · Transbank.</div></div>
+        <div class="pay-method"><div class="pm">MercadoPago</div><div class="pd" data-es>Tarjeta, transferencia y efectivo.</div><div class="pd" data-en>Card, transfer and cash.</div></div>
+        <div class="pay-method"><div class="pm" data-es>Transferencia</div><div class="pm" data-en>Bank transfer</div><div class="pd" data-es>Cuenta bancaria local en CLP.</div><div class="pd" data-en>Local CLP bank account.</div></div>
+      </div>
+      <div class="pay-panel pay-grid" id="pay-latam">
+        <div class="pay-method"><div class="pm">MercadoPago</div><div class="pd" data-es>AR, CO, MX, BR, PE, UY y más.</div><div class="pd" data-en>AR, CO, MX, BR, PE, UY and more.</div></div>
+        <div class="pay-method"><div class="pm">PayU</div><div class="pd" data-es>Tarjeta, PSE, OXXO, etc.</div><div class="pd" data-en>Card, PSE, OXXO and more.</div></div>
+        <div class="pay-method"><div class="pm">PayPal</div><div class="pd" data-es>Aceptado en toda LATAM.</div><div class="pd" data-en>Accepted across LATAM.</div></div>
+      </div>
+      <div class="pay-panel pay-grid" id="pay-usa">
+        <div class="pay-method"><div class="pm">Wire Transfer</div><div class="pd" data-es>ACH / SWIFT. Sin comisiones.</div><div class="pd" data-en>ACH / SWIFT. No extra fees.</div></div>
+        <div class="pay-method"><div class="pm">PayPal</div><div class="pd" data-es>Pago internacional con buyer protection.</div><div class="pd" data-en>International payment with buyer protection.</div></div>
+        <div class="pay-method"><div class="pm">Stripe</div><div class="pd" data-es>Visa, Mastercard, Amex.</div><div class="pd" data-en>Visa, Mastercard, Amex.</div></div>
+      </div>
+      <div class="pay-panel pay-grid" id="pay-intl">
+        <div class="pay-method"><div class="pm">PayPal</div><div class="pd" data-es>Aceptado a nivel global.</div><div class="pd" data-en>Globally accepted.</div></div>
+        <div class="pay-method"><div class="pm">Stripe</div><div class="pd" data-es>Tarjeta de crédito internacional · 135+ monedas.</div><div class="pd" data-en>International credit card · 135+ currencies.</div></div>
+        <div class="pay-method"><div class="pm">SWIFT</div><div class="pd" data-es>Transferencia internacional bancaria.</div><div class="pd" data-en>International bank wire transfer.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonios">
+    <div class="container">
+      <div class="section-head">
+        <h2 data-es>Clientes que recomiendan DECKEVA</h2>
+        <h2 data-en>Customers who recommend DECKEVA</h2>
+        <p data-es>Cientos de embarcaciones equipadas. Una calidad que se nota.</p>
+        <p data-en>Hundreds of boats outfitted. Quality you can feel.</p>
+      </div>
+      <div class="testimonials">
+        <div class="quote">
+          <p data-es>"Excelente terminación. El piso encajó perfecto y le dio un look totalmente nuevo a la lancha."</p>
+          <p data-en>"Outstanding finish. The deck fit perfectly and gave the boat a brand-new look."</p>
+          <div class="who"><strong>Diego R.</strong> <span data-es>Lancha 22', Santiago</span><span data-en>22' boat, Santiago</span></div>
+        </div>
+        <div class="quote">
+          <p data-es>"Llegó a Buenos Aires en plazo y el equipo me acompañó paso a paso en la instalación."</p>
+          <p data-en>"Arrived in Buenos Aires on time and the team walked me through the install step by step."</p>
+          <div class="who"><strong>Mariana T.</strong> <span data-es>Velero 28', Argentina</span><span data-en>28' sailboat, Argentina</span></div>
+        </div>
+        <div class="quote">
+          <p data-es>"Best value vs. SeaDek. Custom design and great service. Highly recommended for any owner."</p>
+          <p data-en>"Best value vs. SeaDek. Custom design and great service. Highly recommended for any owner."</p>
+          <div class="who"><strong>James K.</strong> <span data-es>Yate 38', Miami USA</span><span data-en>38' yacht, Miami USA</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cotizar">
+    <div class="container">
+      <div class="cta">
+        <div>
+          <h2 data-es>Cuéntanos sobre tu embarcación</h2>
+          <h2 data-en>Tell us about your boat</h2>
+          <p data-es>Respondemos en menos de 24 horas con un mockup digital y un presupuesto detallado.</p>
+          <p data-en>We reply in under 24 hours with a digital mockup and a detailed quote.</p>
+          <div class="contact-row">📞 <a href="tel:+56940211459">+56 9 4021 1459</a></div>
+          <div class="contact-row">✉️ <a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></div>
+          <div class="contact-row">💬 <a href="https://wa.me/56940211459" target="_blank" rel="noopener">WhatsApp</a></div>
+          <div class="contact-row">📍 Lo Barnechea, Santiago, Chile</div>
+        </div>
+        <form onsubmit="return submitQuote(event)">
+          <div class="field">
+            <label data-es>Nombre</label><label data-en>Name</label>
+            <input type="text" name="name" required />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" required />
+          </div>
+          <div class="field">
+            <label data-es>País</label><label data-en>Country</label>
+            <input type="text" name="country" placeholder="Chile / USA / ..." required />
+          </div>
+          <div class="field">
+            <label data-es>Tipo de embarcación</label><label data-en>Boat type</label>
+            <select name="boat">
+              <option data-es>Lancha</option><option data-en>Speedboat</option>
+              <option data-es>Velero</option><option data-en>Sailboat</option>
+              <option data-es>Yate</option><option data-en>Yacht</option>
+              <option data-es>Moto de agua</option><option data-en>Jet ski</option>
+              <option data-es>Otro</option><option data-en>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-es>Mensaje (medidas, fotos, etc.)</label>
+            <label data-en>Message (sizes, photos, etc.)</label>
+            <textarea name="message" rows="3"></textarea>
+          </div>
+          <button type="submit" class="submit">
+            <span data-es>Enviar cotización</span><span data-en>Send request</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">DECK<span>EVA</span></div>
+        <p data-es>Pisos de Goma EVA antideslizante para lanchas, veleros y embarcaciones. Hechos a medida. Envíos al mundo.</p>
+        <p data-en>Non-slip EVA foam decking for boats, yachts and watercraft. Custom made. Worldwide shipping.</p>
+      </div>
+      <div>
+        <h4 data-es>Producto</h4><h4 data-en>Product</h4>
+        <ul>
+          <li><a href="#caracteristicas" data-es>Características</a><a href="#caracteristicas" data-en>Features</a></li>
+          <li><a href="#proceso" data-es>Cómo trabajamos</a><a href="#proceso" data-en>How it works</a></li>
+          <li><a href="#proyectos" data-es>Proyectos</a><a href="#proyectos" data-en>Projects</a></li>
+          <li><a href="#cotizar" data-es>Cotizar</a><a href="#cotizar" data-en>Get quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-es>Empresa</h4><h4 data-en>Company</h4>
+        <ul>
+          <li><a href="https://www.deckeva.cl/" target="_blank" rel="noopener">Deckeva Chile</a></li>
+          <li><a href="https://www.imporlan.cl/" target="_blank" rel="noopener" data-es>Imporlan · Lanchas</a><a href="https://www.imporlan.cl/" target="_blank" rel="noopener" data-en>Imporlan · Boats</a></li>
+          <li><a href="https://www.muelleflotante.cl/" target="_blank" rel="noopener" data-es>Muelles flotantes</a><a href="https://www.muelleflotante.cl/" target="_blank" rel="noopener" data-en>Floating docks</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-es>Contacto</h4><h4 data-en>Contact</h4>
+        <ul>
+          <li><a href="tel:+56940211459">+56 9 4021 1459</a></li>
+          <li><a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></li>
+          <li><a href="https://wa.me/56940211459" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li>Lo Barnechea, Santiago · Chile</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 DECKEVA · <span data-es>Todos los derechos reservados.</span><span data-en>All rights reserved.</span></div>
+      <div><a href="https://www.deckeva.com/" style="color:var(--ink-soft)">deckeva.com</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function setLang(l){
+    document.documentElement.setAttribute('data-lang', l);
+    document.querySelectorAll('.lang button').forEach(b => b.classList.remove('on'));
+    document.querySelector('.lang button[onclick*="'+l+'"]').classList.add('on');
+    try{ localStorage.setItem('deckeva.lang', l); }catch(e){}
+  }
+  function showPay(id){
+    document.querySelectorAll('.pay-tab').forEach(t => t.classList.toggle('on', t.dataset.tab === id));
+    document.querySelectorAll('.pay-panel').forEach(p => p.classList.toggle('on', p.id === 'pay-' + id));
+  }
+  function submitQuote(e){
+    e.preventDefault();
+    const lang = document.documentElement.getAttribute('data-lang');
+    alert(lang === 'en'
+      ? 'Thanks! On the live site this would submit your quote. (Staging preview)'
+      : '¡Gracias! En el sitio real esto enviaría tu cotización. (Vista staging)');
+    return false;
+  }
+  try{
+    const saved = localStorage.getItem('deckeva.lang');
+    if(saved && saved !== 'es') setLang(saved);
+  }catch(e){}
+</script>
+
+</body>
+</html>
