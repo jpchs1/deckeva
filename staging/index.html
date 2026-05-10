@@ -414,7 +414,7 @@
       --off-white: #f5f7fa;
       --gray: #475569;           /* texto secundario más legible sobre claro */
       --text: #1a2744;           /* texto principal ahora oscuro sobre claro */
-      --text-dark: #f6f8fb;
+      --text-dark: #0a1628;       /* texto fuerte (negro azulado) para títulos */
       --success: #00b87a;
       --warning: #d68a00;
       --r: 8px;
@@ -2331,10 +2331,32 @@
       font-weight: 500;
       margin-top: 3px !important;
     }
-    .submit-btn.email { background: #ffffff !important; color: var(--text-dark) !important; border: 1px solid rgba(15,23,42,0.15); }
-    .submit-btn.email:hover { background: #f8fafc !important; border-color: var(--ocean) !important; color: var(--ocean) !important; }
-    .submit-btn.whatsapp { background: #ffffff !important; color: var(--text-dark) !important; border: 1px solid rgba(15,23,42,0.15); }
-    .submit-btn.whatsapp:hover { background: #f8fafc !important; border-color: #25d366 !important; color: #128c4a !important; }
+    .submit-btn.email {
+      background: #ffffff !important;
+      color: var(--text-dark) !important;
+      border: 2px solid rgba(14,107,168,0.30) !important;
+      box-shadow: 0 2px 6px rgba(14,107,168,0.08), inset 4px 0 0 0 var(--ocean);
+    }
+    .submit-btn.email:hover {
+      background: rgba(14,107,168,0.05) !important;
+      border-color: var(--ocean) !important;
+      color: var(--ocean) !important;
+      box-shadow: 0 8px 20px rgba(14,107,168,0.18), inset 4px 0 0 0 var(--ocean);
+    }
+    .submit-btn.whatsapp {
+      background: #ffffff !important;
+      color: var(--text-dark) !important;
+      border: 2px solid rgba(37,211,102,0.35) !important;
+      box-shadow: 0 2px 6px rgba(37,211,102,0.08), inset 4px 0 0 0 #25d366;
+    }
+    .submit-btn.whatsapp:hover {
+      background: rgba(37,211,102,0.06) !important;
+      border-color: #25d366 !important;
+      color: #128c4a !important;
+      box-shadow: 0 8px 20px rgba(37,211,102,0.20), inset 4px 0 0 0 #25d366;
+    }
+    .submit-btn.email .btn-sub,
+    .submit-btn.whatsapp .btn-sub { color: var(--gray) !important; opacity: 1 !important; }
     .submit-btn.both {
       background: linear-gradient(135deg, var(--gold) 0%, #e89500 100%) !important;
       color: var(--text-dark) !important;
