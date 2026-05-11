@@ -11140,29 +11140,54 @@
     trigger.setAttribute('aria-expanded', isOpen);
   }
 
+  // Cookie helpers — bulletproof multi-domain cleanup
   function clearGoogleTranslateCookies() {
-    const domains = ['', '.' + location.hostname, location.hostname];
-    domains.forEach(function(d) {
-      document.cookie = 'googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;' + (d ? 'domain=' + d + ';' : '');
+    var host = location.hostname;
+    var bare = host.replace(/^www\./, '');
+    var hosts = ['', host, '.' + host, bare, '.' + bare];
+    var paths = ['/', ''];
+    var expired = ';expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    hosts.forEach(function(h) {
+      paths.forEach(function(p) {
+        document.cookie = 'googtrans=' + expired + ';path=' + (p || '/') + (h ? ';domain=' + h : '');
+      });
     });
   }
 
+  function setGoogleTranslateCookie(target) {
+    clearGoogleTranslateCookies();
+    var host = location.hostname;
+    var bare = host.replace(/^www\./, '');
+    var value = '/es/' + target;
+    var maxAge = ';max-age=2592000;path=/';
+    // Set on multiple variants so GT picks it up regardless of host setup
+    document.cookie = 'googtrans=' + value + maxAge;
+    document.cookie = 'googtrans=' + value + maxAge + ';domain=' + host;
+    document.cookie = 'googtrans=' + value + maxAge + ';domain=.' + bare;
+  }
+
+  function gtIsActive() {
+    return document.body.classList.contains('translated-ltr') ||
+           document.body.classList.contains('translated-rtl') ||
+           document.cookie.indexOf('googtrans=') !== -1;
+  }
+
   function changeLang(code, label, flag) {
-    // Close menu
-    const dd = document.getElementById('langDropdown');
+    // Close menu + update UI
+    var dd = document.getElementById('langDropdown');
     if (dd) {
-      dd.querySelector('.lang-menu')?.classList.remove('open');
-      dd.querySelector('.lang-trigger')?.setAttribute('aria-expanded', 'false');
+      var menu = dd.querySelector('.lang-menu');
+      if (menu) menu.classList.remove('open');
+      var trig = dd.querySelector('.lang-trigger');
+      if (trig) trig.setAttribute('aria-expanded', 'false');
     }
-    // Update trigger pill
-    const trigger = document.querySelector('.lang-trigger');
+    var trigger = document.querySelector('.lang-trigger');
     if (trigger) {
-      const flagEl = trigger.querySelector('.lang-flag-current');
-      const labEl = trigger.querySelector('.lang-label-current');
-      if (flagEl) flagEl.textContent = flag;
-      if (labEl)  labEl.textContent  = label;
+      var fe = trigger.querySelector('.lang-flag-current');
+      var le = trigger.querySelector('.lang-label-current');
+      if (fe) fe.textContent = flag;
+      if (le) le.textContent = label;
     }
-    // Mark active option
     document.querySelectorAll('.lang-menu button').forEach(function(b) {
       b.classList.toggle('active', b.getAttribute('data-lang') === code);
     });
@@ -11171,40 +11196,22 @@
     localStorage.setItem('deckeva-lang-source', 'user');
 
     if (code === 'es' || code === 'en') {
-      // Native instant lang
-      clearGoogleTranslateCookies();
-      if (typeof setLang === 'function') {
-        applyLang ? applyLang(code) : setLang(code);
-      } else {
-        document.documentElement.setAttribute('data-lang', code);
+      // Native instant ES/EN
+      if (gtIsActive()) {
+        // GT was running — clear cookies and reload
+        clearGoogleTranslateCookies();
+        // Force reload bypass cache
+        location.reload();
+        return;
       }
-      // If page was translated by GT, reload to clear
-      if (document.body.classList.contains('translated-ltr') ||
-          document.body.classList.contains('translated-rtl')) {
-        setTimeout(function(){ location.reload(); }, 50);
-      }
+      // Just swap data-lang (no GT involvement)
+      if (typeof applyLang === 'function') applyLang(code);
+      else document.documentElement.setAttribute('data-lang', code);
     } else {
-      // Use Google Translate for non-native languages
-      // Base lang stays as ES (page native). GT translates from there.
-      if (typeof applyLang === 'function') applyLang('es');
-      else document.documentElement.setAttribute('data-lang', 'es');
-      // Trigger GT via the hidden combo box
-      let attempts = 0;
-      const tryTranslate = function() {
-        const sel = document.querySelector('select.goog-te-combo');
-        if (sel) {
-          sel.value = code;
-          sel.dispatchEvent(new Event('change'));
-        } else if (attempts++ < 20) {
-          setTimeout(tryTranslate, 150);
-        } else {
-          // Last resort: cookie + reload
-          document.cookie = 'googtrans=/es/' + code + ';path=/;';
-          document.cookie = 'googtrans=/es/' + code + ';path=/;domain=' + location.hostname + ';';
-          location.reload();
-        }
-      };
-      tryTranslate();
+      // Bulletproof GT approach: set cookie + reload
+      // (the in-place combo-box approach was flaky across multi-switches)
+      setGoogleTranslateCookie(code);
+      location.reload();
     }
   }
 
