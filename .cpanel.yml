@@ -1,10 +1,12 @@
 deployment:
   tasks:
     # ── deckeva.com production root (NEW: light layout, international variant) ──
+    # IMPORTANTE: en este servidor el DirectoryIndex prefiere
+    # "deckeva-international.html" sobre "index.html" (legacy config). Por eso
+    # copiamos el mismo contenido nuevo a AMBOS archivos para que la raiz
+    # (/) y /index.html y /deckeva-international.html sirvan todos lo mismo.
     - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/index.html
-    # Legacy: mantener deckeva-international.html sirviendo el viejo file en caso
-    # de backlinks externos que apunten directo a esa URL.
-    - /bin/cp deckeva-international.html /home/wwimpo/deckeva.com/deckeva-international.html
+    - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/deckeva-international.html
 
     # ── Subpaths existentes ──
     - /bin/mkdir -p /home/wwimpo/deckeva.com/guia
