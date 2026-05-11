@@ -33,6 +33,11 @@ deployment:
     - /bin/mkdir -p /home/wwimpo/deckeva.cl/preview-2026
     - /bin/cp staging/index-cl.html /home/wwimpo/deckeva.cl/preview-2026/index.html
 
-    # ── deckeva.cl (WordPress) — mantener intacto, solo functions.php y mu-plugins ──
+    # ── deckeva.cl (WordPress) — sincroniza functions.php y mu-plugins ──
     - /bin/cp wp-content/themes/dt-the7-child/functions.php /home/wwimpo/deckeva.cl/wp-content/themes/dt-the7-child/functions.php 2>/dev/null || true
     - /bin/cp -R wp-content/mu-plugins /home/wwimpo/deckeva.cl/wp-content/ 2>/dev/null || true
+
+    # ── deckeva.cl HOME estática (variante Chile-local) ──
+    # Reemplaza el index render de WordPress en la home /. WP sigue rindiendo
+    # /wp-admin/, /blog/*, /category/*, etc. via mod_rewrite. Solo / cambia.
+    - /bin/cp staging/index-cl.html /home/wwimpo/deckeva.cl/index.html
