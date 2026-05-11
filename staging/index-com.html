@@ -5844,6 +5844,349 @@
       nav#navbar { top: 32px !important; }
     }
 
+
+    /* ════════════════════════════════════════════════════════════
+       HERO V3 — FULL-BLEED CINEMATIC
+       ════════════════════════════════════════════════════════════ */
+
+    /* Override viejas reglas */
+    .hero-v3 .hero-bg,
+    .hero-v3 .hero-grid-overlay,
+    .hero-v3 > svg,
+    .hero-v3 .hero-scroll { display: none !important; }
+
+    .hero-v3 {
+      position: relative;
+      min-height: 88vh;
+      min-height: 88dvh;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: #0a1628;
+      color: #ffffff;
+    }
+    @media (max-width: 980px) { .hero-v3 { min-height: 80vh; min-height: 80dvh; } }
+    @media (max-width: 640px) { .hero-v3 { min-height: 78vh; min-height: 78dvh; } }
+
+    /* ── Background ── */
+    .hero-v3-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .hero-v3-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+      transform: scale(1.04);
+      animation: heroV3Zoom 14s ease-out forwards;
+    }
+    @keyframes heroV3Zoom {
+      from { transform: scale(1.10); }
+      to   { transform: scale(1.00); }
+    }
+    .hero-v3-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg,
+          rgba(10,22,40,0.92) 0%,
+          rgba(10,22,40,0.78) 30%,
+          rgba(10,22,40,0.40) 55%,
+          rgba(10,22,40,0.10) 80%,
+          rgba(10,22,40,0.00) 100%),
+        linear-gradient(180deg,
+          rgba(10,22,40,0.30) 0%,
+          rgba(10,22,40,0.00) 30%,
+          rgba(10,22,40,0.00) 60%,
+          rgba(10,22,40,0.65) 100%);
+    }
+    @media (max-width: 980px) {
+      .hero-v3-overlay {
+        background:
+          linear-gradient(180deg,
+            rgba(10,22,40,0.75) 0%,
+            rgba(10,22,40,0.55) 35%,
+            rgba(10,22,40,0.35) 60%,
+            rgba(10,22,40,0.85) 100%);
+      }
+      .hero-v3-img { object-position: center 35%; }
+    }
+    .hero-v3-grain {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      background-image:
+        radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px);
+      background-size: 3px 3px;
+    }
+
+    /* ── Content ── */
+    .hero-v3-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      padding-top: 80px !important;
+      padding-bottom: 80px !important;
+    }
+    @media (max-width: 980px) { .hero-v3-content { max-width: 100%; text-align: center; padding-top: 60px !important; padding-bottom: 60px !important; } }
+    @media (max-width: 640px) { .hero-v3-content { padding-top: 40px !important; padding-bottom: 120px !important; } }
+
+    /* Eyebrow */
+    .hero-v3-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      margin-bottom: 28px;
+    }
+    .hero-v3-eyebrow-dot {
+      width: 7px; height: 7px;
+      background: #1bb3a3;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(27,179,163,0.30);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+
+    /* Title */
+    .hero-v3-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(48px, 7vw, 96px);
+      line-height: 0.95;
+      letter-spacing: -1.5px;
+      margin: 0 0 22px;
+      color: #ffffff;
+      text-transform: none;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.40);
+    }
+    .hero-v3-line-1 {
+      display: block;
+      color: #ffffff;
+    }
+    .hero-v3-line-2 {
+      display: block;
+      color: #1bb3a3;
+    }
+    .hero-v3-line-2 em {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 800;
+    }
+    @media (max-width: 640px) { .hero-v3-title { font-size: clamp(38px, 11vw, 56px); letter-spacing: -1px; } }
+
+    /* Desc */
+    .hero-v3-desc {
+      font-size: 19px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.88);
+      margin: 0 0 32px;
+      max-width: 560px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.30);
+    }
+    @media (max-width: 980px) { .hero-v3-desc { margin-left: auto; margin-right: auto; } }
+    @media (max-width: 640px) { .hero-v3-desc { font-size: 16px; margin-bottom: 24px; } }
+
+    /* CTA row */
+    .hero-v3-cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    @media (max-width: 980px) { .hero-v3-cta-row { justify-content: center; } }
+    @media (max-width: 640px) { .hero-v3-cta-row { flex-direction: column; gap: 10px; } }
+
+    .hero-v3-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-decoration: none;
+      border: 0;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .hero-v3-btn--primary {
+      background: linear-gradient(135deg, var(--gold) 0%, #e89500 100%);
+      color: var(--text-dark);
+      box-shadow: 0 12px 32px rgba(245,166,35,0.50);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-v3-btn--primary::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+    .hero-v3-btn--primary:hover::before { left: 100%; }
+    .hero-v3-btn--primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 40px rgba(245,166,35,0.60);
+    }
+    .hero-v3-btn .hv3b-arrow { transition: transform 0.25s ease; }
+    .hero-v3-btn--primary:hover .hv3b-arrow { transform: translateX(4px); }
+    .hero-v3-btn--ghost {
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.30);
+      backdrop-filter: blur(8px);
+    }
+    .hero-v3-btn--ghost:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.55); }
+    @media (max-width: 640px) {
+      .hero-v3-btn { width: 100%; justify-content: center; padding: 14px 22px; }
+    }
+
+    /* Trust line */
+    .hero-v3-trust {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+    .hv3t-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.85);
+      white-space: nowrap;
+    }
+    .hv3t-item strong { color: #ffffff; font-weight: 800; }
+    .hv3t-sep {
+      width: 1px; height: 14px;
+      background: rgba(255,255,255,0.18);
+    }
+    @media (max-width: 700px) {
+      .hero-v3-trust { gap: 8px; padding: 10px 14px; font-size: 11px; flex-wrap: wrap; justify-content: center; }
+      .hv3t-sep { display: none; }
+      .hv3t-item { padding: 0 6px; }
+    }
+
+    /* ── Floating spec card (right-bottom on desktop) ── */
+    .hero-v3-spec-card {
+      position: absolute;
+      right: max(40px, calc((100% - 1180px) / 2 + 24px));
+      bottom: 60px;
+      z-index: 2;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.30);
+      min-width: 300px;
+    }
+    @media (max-width: 1100px) { .hero-v3-spec-card { right: 24px; } }
+    @media (max-width: 980px) { .hero-v3-spec-card { display: none; } }
+
+    .hv3sc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      margin-bottom: 12px;
+    }
+    .hv3sc-item { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+    .hv3sc-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+    .hv3sc-num small {
+      font-size: 11px;
+      color: rgba(255,255,255,0.70);
+      font-weight: 600;
+      margin-left: 2px;
+    }
+    .hv3sc-lbl {
+      font-size: 10px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .hv3sc-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffffff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .hv3sc-bar-icon { font-size: 16px; }
+
+    /* ── Scroll cue ── */
+    .hero-v3-scroll-cue {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: scrollCueFloat 2.6s ease-in-out infinite;
+    }
+    @keyframes scrollCueFloat {
+      0%, 100% { transform: translate(-50%, 0); }
+      50%      { transform: translate(-50%, 6px); }
+    }
+    .hero-v3-scroll-cue:hover { color: #ffffff; }
+    .hv3sc-line {
+      animation: scrollLineDot 1.6s ease-in-out infinite;
+    }
+    @keyframes scrollLineDot {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50%      { transform: translateY(3px); opacity: 0.3; }
+    }
+    @media (max-width: 640px) {
+      .hero-v3-scroll-cue { bottom: 16px; font-size: 10px; }
+    }
+
+    /* Hide old hero-v2 markers if still present */
+    .hero-v2 .hero-bg,
+    .hero-v2 .hero-grid-overlay,
+    .hero-v2 .hero-scroll,
+    .hero-v2 > svg { display: none !important; }
+
   </style>
 
 
@@ -6602,113 +6945,100 @@
 
 <!-- HERO -->
 <main id="main-content">
-<section class="hero hero-v2">
-  <div class="hero-bg-soft" aria-hidden="true"></div>
-  <div class="container hero-grid-v2">
-
-    <div class="hero-text-col">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-dot"></span>
-        <span data-es>Envíos Internacionales · Fabricación a Medida</span>
-        <span data-en>Worldwide Shipping · Custom-Made in Chile</span>
-      </div>
-      <h1 class="hero-title-v2">
-        <span data-es>Pisos de <strong>Goma EVA</strong><br/>para tu <em>embarcación</em></span>
-        <span data-en>Premium <strong>EVA Marine</strong><br/>Decking, <em>Custom Made</em></span>
-      </h1>
-      <p class="hero-desc-v2" data-es>Pisos antideslizantes de Goma EVA fabricados a medida. Alta durabilidad, fácil instalación con adhesivo 3M, protección UV y diseños personalizados.</p>
-      <p class="hero-desc-v2" data-en>Custom EVA foam non-slip marine decking engineered for performance. UV-protected, easy 3M PSA installation, custom design for any boat.</p>
-
-      <div class="hero-cta-row">
-        <a href="#cotizar" class="hero-btn hero-btn--primary" onclick="verPrecio(event)">
-          💰 <span data-es>Ver Precio Ahora</span><span data-en>See Price Now</span>
-        </a>
-        <a href="#cotizar" class="hero-btn hero-btn--secondary">
-          <span data-es>Cotizar mi piso</span><span data-en>Get a free quote</span>
-        </a>
-        <a href="#proyectos" class="hero-btn hero-btn--ghost">
-          <span data-es>Ver proyectos</span><span data-en>View projects</span>
-        </a>
-      </div>
-      <p class="hero-microcopy">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        <span data-es>Calcula el valor exacto en segundos · sin compromiso</span>
-        <span data-en>Get the exact price in seconds · no commitment</span>
-      </p>
-
-      <div class="hero-trust-pills">
-        <span class="htp"><span class="htp-dot"></span><span data-es>500+ embarcaciones</span><span data-en>500+ boats fitted</span></span>
-        <span class="htp"><span class="htp-star">★</span> 4.9 <span data-es>de calificación</span><span data-en>rating</span></span>
-        <span class="htp"><span data-es>🇨🇱 Hecho en Chile · 14+ países</span><span data-en>🇨🇱 Made in Chile · 14+ countries</span></span>
-      </div>
-    </div>
-
-    <div class="hero-card-col">
-      <div class="hero-card">
-        <div class="hero-card-img">
-          <img src="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg"
-               alt="DECKEVA · Cubierta EVA con diseño teak premium"
-               fetchpriority="high" decoding="async" />
-          <span class="hero-card-tag" data-es>Diseño premium</span>
-          <span class="hero-card-tag" data-en>Premium design</span>
-        </div>
-        <div class="hero-card-specs">
-          <div class="hcs-item">
-            <span class="hcs-num">6<small>mm</small></span>
-            <span class="hcs-lbl" data-es>EVA premium</span>
-            <span class="hcs-lbl" data-en>Premium EVA</span>
-          </div>
-          <div class="hcs-divider"></div>
-          <div class="hcs-item">
-            <span class="hcs-num">3M</span>
-            <span class="hcs-lbl" data-es>Adhesivo PSA</span>
-            <span class="hcs-lbl" data-en>PSA adhesive</span>
-          </div>
-          <div class="hcs-divider"></div>
-          <div class="hcs-item">
-            <span class="hcs-num">UV+</span>
-            <span class="hcs-lbl" data-es>UV resistente</span>
-            <span class="hcs-lbl" data-en>UV resistant</span>
-          </div>
-        </div>
-      </div>
-      <!-- Floating badge -->
-      <div class="hero-floating-badge">
-        <div class="hfb-icon">🚀</div>
-        <div class="hfb-text">
-          <div class="hfb-line1" data-es>10–15 días hábiles</div>
-          <div class="hfb-line1" data-en>10–15 business days</div>
-          <div class="hfb-line2" data-es>de fabricación</div>
-          <div class="hfb-line2" data-en>manufacturing</div>
-        </div>
-      </div>
-    </div>
-
+<section class="hero hero-v3">
+  <!-- Full-bleed background image -->
+  <div class="hero-v3-bg" aria-hidden="true">
+    <img class="hero-v3-img hero-v3-img--main"
+         src="https://www.deckeva.com/staging/img/lifestyle/ls2-01.jpg"
+         srcset="https://www.deckeva.com/staging/img/lifestyle/ls2-01.jpg 1x, https://www.deckeva.com/staging/img/lifestyle/ls2-06.jpg 1.5x"
+         alt=""
+         fetchpriority="high" decoding="async" />
+    <div class="hero-v3-overlay"></div>
+    <div class="hero-v3-grain"></div>
   </div>
 
-  <!-- Stats row in a tight band below hero -->
-  <div class="container hero-stats-strip">
-    <div class="hss-item">
-      <span class="hss-num">500<small>+</small></span>
-      <span class="hss-label" data-es>Embarcaciones</span>
-      <span class="hss-label" data-en>Boats fitted</span>
+  <!-- Content overlaid -->
+  <div class="container hero-v3-content">
+
+    <div class="hero-v3-eyebrow">
+      <span class="hero-v3-eyebrow-dot"></span>
+      <span data-es>Envíos internacionales · Fabricación a medida</span>
+      <span data-en>Worldwide shipping · Custom-made in Chile</span>
     </div>
-    <div class="hss-item">
-      <span class="hss-num">14<small>+</small></span>
-      <span class="hss-label" data-es>Países de envío</span>
-      <span class="hss-label" data-en>Countries served</span>
+
+    <h1 class="hero-v3-title">
+      <span class="hero-v3-line-1" data-es>Pisos de Goma EVA</span>
+      <span class="hero-v3-line-1" data-en>Premium EVA Marine</span>
+      <span class="hero-v3-line-2" data-es>para tu <em>embarcación</em></span>
+      <span class="hero-v3-line-2" data-en>Decking, <em>Custom Made</em></span>
+    </h1>
+
+    <p class="hero-v3-desc" data-es>Pisos antideslizantes premium, fabricados a medida, con adhesivo 3M, resistente a UV. Desde Chile a 14+ países.</p>
+    <p class="hero-v3-desc" data-en>Premium non-slip decking custom-made for any boat. 3M adhesive, UV-resistant. From Chile to 14+ countries.</p>
+
+    <div class="hero-v3-cta-row">
+      <a href="#cotizar" class="hero-v3-btn hero-v3-btn--primary" onclick="verPrecio(event)">
+        <span class="hv3b-icon">💰</span>
+        <span data-es>Ver Precio Ahora</span><span data-en>See Price Now</span>
+        <span class="hv3b-arrow">→</span>
+      </a>
+      <a href="#cotizar" class="hero-v3-btn hero-v3-btn--ghost">
+        <span data-es>Cotizar mi piso</span><span data-en>Get a quote</span>
+      </a>
     </div>
-    <div class="hss-item">
-      <span class="hss-num">4.9<small>★</small></span>
-      <span class="hss-label" data-es>Reseñas verificadas</span>
-      <span class="hss-label" data-en>Verified reviews</span>
-    </div>
-    <div class="hss-item">
-      <span class="hss-num">100<small>%</small></span>
-      <span class="hss-label" data-es>Hecho a medida</span>
-      <span class="hss-label" data-en>Custom-made</span>
+
+    <div class="hero-v3-trust">
+      <div class="hv3t-item">
+        <strong>500+</strong>
+        <span data-es>embarcaciones</span><span data-en>boats fitted</span>
+      </div>
+      <div class="hv3t-sep"></div>
+      <div class="hv3t-item">
+        <strong>4.9 ★</strong>
+        <span data-es>reseñas verificadas</span><span data-en>verified reviews</span>
+      </div>
+      <div class="hv3t-sep"></div>
+      <div class="hv3t-item">
+        <strong>🇨🇱</strong>
+        <span data-es>hecho en Chile · 14+ países</span><span data-en>made in Chile · 14+ countries</span>
+      </div>
     </div>
   </div>
+
+  <!-- Floating spec card (bottom right on desktop) -->
+  <div class="hero-v3-spec-card">
+    <div class="hv3sc-row">
+      <div class="hv3sc-item">
+        <span class="hv3sc-num">6<small>mm</small></span>
+        <span class="hv3sc-lbl" data-es>EVA premium</span><span class="hv3sc-lbl" data-en>Premium EVA</span>
+      </div>
+      <div class="hv3sc-item">
+        <span class="hv3sc-num">3M</span>
+        <span class="hv3sc-lbl" data-es>Adhesivo PSA</span><span class="hv3sc-lbl" data-en>PSA adhesive</span>
+      </div>
+      <div class="hv3sc-item">
+        <span class="hv3sc-num">UV<small>+</small></span>
+        <span class="hv3sc-lbl" data-es>UV resistente</span><span class="hv3sc-lbl" data-en>UV resistant</span>
+      </div>
+    </div>
+    <div class="hv3sc-bar">
+      <span class="hv3sc-bar-icon">🚀</span>
+      <span data-es>10–15 días de fabricación</span>
+      <span data-en>10–15 day manufacturing</span>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <a href="#caracteristicas" class="hero-v3-scroll-cue" aria-label="Scroll down">
+    <span class="hv3sc-text" data-es>Conoce más</span>
+    <span class="hv3sc-text" data-en>Learn more</span>
+    <span class="hv3sc-icon">
+      <svg width="14" height="22" viewBox="0 0 14 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <rect x="1" y="1" width="12" height="20" rx="6"/>
+        <line class="hv3sc-line" x1="7" y1="6" x2="7" y2="11"/>
+      </svg>
+    </span>
+  </a>
 </section>
 
 <!-- TRUST STRIP -->
