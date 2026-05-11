@@ -5014,8 +5014,7 @@
     .install-notice--chile .install-title { color: #00855a !important; }
     .install-notice--chile ul li::before { color: var(--success) !important; }
 
-    /* Default: ningún país elegido → mostrar bloque Chile (audiencia principal) */
-    body[data-quote-country=""] .install-notice--chile,
+    /* Solo se muestra el aviso DESPUÉS de elegir país (no antes) */
     body[data-quote-country="Chile"] .install-notice--chile { display: block; }
 
     /* ════════════════════════════════════════════════════════════
