@@ -5474,6 +5474,358 @@
       }
     }
     body[data-quote-country]:not([data-quote-country=""]):not([data-quote-country="Chile"]) .install-notice--international { display: block; }
+
+    /* ════════════════════════════════════════════════════════════
+       HERO V2 — PRO desktop/mobile split layout
+       ════════════════════════════════════════════════════════════ */
+
+    /* Override viejas reglas del hero antiguo que ya no aplican */
+    .hero-v2 .hero-bg,
+    .hero-v2 .hero-grid-overlay,
+    .hero-v2 > svg,
+    .hero-v2 .hero-scroll { display: none !important; }
+
+    .hero-v2 {
+      min-height: auto !important;
+      padding: 96px 0 32px !important;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #ffffff 0%, var(--foam) 100%);
+    }
+    .hero-bg-soft {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(700px 380px at 12% 0%, rgba(14,107,168,0.10), transparent 60%),
+        radial-gradient(560px 320px at 88% 100%, rgba(22,163,163,0.10), transparent 60%);
+      z-index: 0;
+    }
+    .hero-grid-v2 {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 64px;
+      align-items: center;
+    }
+    @media (max-width: 980px) {
+      .hero-v2 { padding: 72px 0 24px !important; }
+      .hero-grid-v2 { grid-template-columns: 1fr; gap: 40px; }
+    }
+    @media (max-width: 640px) {
+      .hero-v2 { padding: 48px 0 16px !important; }
+      .hero-grid-v2 { gap: 28px; }
+    }
+
+    /* ── TEXT COLUMN ── */
+    .hero-text-col { display: flex; flex-direction: column; gap: 22px; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      background: rgba(14,107,168,0.10);
+      color: var(--ocean);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      align-self: flex-start;
+    }
+    .hero-eyebrow-dot {
+      width: 7px; height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(0,184,122,0.20);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+
+    .hero-title-v2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(40px, 5.4vw, 72px);
+      line-height: 0.98;
+      letter-spacing: -1px;
+      color: var(--text-dark);
+      margin: 0;
+      text-transform: none;
+    }
+    .hero-title-v2 strong { color: var(--ocean); font-weight: 800; }
+    .hero-title-v2 em {
+      color: var(--gold);
+      font-style: normal;
+      font-weight: 800;
+    }
+    @media (max-width: 640px) {
+      .hero-title-v2 { font-size: clamp(32px, 9vw, 42px); }
+    }
+
+    .hero-desc-v2 {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--gray);
+      max-width: 560px;
+      margin: 0;
+    }
+    @media (max-width: 640px) { .hero-desc-v2 { font-size: 15px; } }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .hero-btn--primary {
+      background: linear-gradient(135deg, var(--gold) 0%, #e89500 100%);
+      color: var(--text-dark);
+      box-shadow: 0 8px 24px rgba(245,166,35,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-btn--primary::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      transition: left 0.6s ease;
+    }
+    .hero-btn--primary:hover::before { left: 100%; }
+    .hero-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(245,166,35,0.50); }
+    .hero-btn--secondary {
+      background: var(--ocean); color: #fff;
+      box-shadow: 0 6px 18px rgba(14,107,168,0.30);
+    }
+    .hero-btn--secondary:hover { background: #0d5d92; transform: translateY(-2px); }
+    .hero-btn--ghost {
+      background: transparent; color: var(--text-dark);
+      border: 1.5px solid rgba(15,23,42,0.18);
+    }
+    .hero-btn--ghost:hover { border-color: var(--text-dark); background: rgba(15,23,42,0.03); }
+    @media (max-width: 640px) {
+      .hero-cta-row { flex-direction: column; }
+      .hero-btn { width: 100%; justify-content: center; padding: 13px 20px; }
+      .hero-btn--ghost { display: none; }
+    }
+
+    .hero-microcopy {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gray);
+      font-size: 13px;
+      margin: 4px 0 0;
+      font-weight: 500;
+    }
+    .hero-microcopy svg { color: var(--gold); flex-shrink: 0; }
+
+    .hero-trust-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .htp {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dark);
+      backdrop-filter: blur(4px);
+    }
+    .htp-dot {
+      width: 7px; height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+    }
+    .htp-star { color: #f5a623; }
+
+    /* ── CARD COLUMN (right side on desktop) ── */
+    .hero-card-col {
+      position: relative;
+    }
+    .hero-card {
+      background: #ffffff;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(15,23,42,0.06);
+      box-shadow:
+        0 4px 14px rgba(15,23,42,0.06),
+        0 32px 60px rgba(14,107,168,0.12);
+      position: relative;
+    }
+    .hero-card-img {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--navy-light);
+    }
+    .hero-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-card-tag {
+      position: absolute;
+      top: 16px; left: 16px;
+      background: rgba(255,255,255,0.95);
+      color: var(--ocean);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px rgba(15,23,42,0.15);
+    }
+    .hero-card-specs {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      padding: 20px 16px;
+      gap: 6px;
+    }
+    .hcs-item { text-align: center; display: flex; flex-direction: column; gap: 2px; }
+    .hcs-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--ocean);
+      line-height: 1;
+    }
+    .hcs-num small {
+      font-size: 14px;
+      color: var(--gray);
+      font-weight: 600;
+      margin-left: 2px;
+    }
+    .hcs-lbl {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .hcs-divider {
+      width: 1px; height: 32px;
+      background: rgba(15,23,42,0.08);
+    }
+
+    /* Floating badge (top right of card, only desktop) */
+    .hero-floating-badge {
+      position: absolute;
+      top: 18px;
+      right: -18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, var(--gold) 0%, #e89500 100%);
+      color: var(--text-dark);
+      border-radius: 14px;
+      box-shadow: 0 12px 24px rgba(245,166,35,0.35);
+      z-index: 2;
+      max-width: 200px;
+    }
+    .hfb-icon {
+      font-size: 22px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .hfb-text { font-family: 'DM Sans', sans-serif; line-height: 1.2; }
+    .hfb-line1 { font-size: 13px; font-weight: 800; }
+    .hfb-line2 { font-size: 11px; font-weight: 600; opacity: 0.8; }
+    @media (max-width: 980px) {
+      .hero-card-col { max-width: 480px; margin: 0 auto; width: 100%; }
+      .hero-floating-badge { right: 12px; }
+    }
+    @media (max-width: 640px) {
+      .hero-floating-badge { display: none; }
+      .hero-card { border-radius: 18px; }
+      .hero-card-specs { padding: 14px 10px; gap: 4px; }
+      .hcs-num { font-size: 22px; }
+      .hcs-num small { font-size: 12px; }
+      .hcs-lbl { font-size: 10px; }
+    }
+
+    /* ── STATS STRIP (below hero) ── */
+    .hero-stats-strip {
+      position: relative;
+      z-index: 1;
+      margin-top: 56px;
+      padding: 24px 28px !important;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.06);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(15,23,42,0.05);
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .hss-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      padding: 4px;
+      border-right: 1px solid rgba(15,23,42,0.06);
+    }
+    .hss-item:last-child { border-right: 0; }
+    .hss-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(28px, 3.6vw, 40px);
+      font-weight: 800;
+      color: var(--ocean);
+      line-height: 1;
+    }
+    .hss-num small {
+      font-size: 0.55em;
+      color: var(--gold);
+      font-weight: 800;
+      margin-left: 2px;
+    }
+    .hss-label {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    @media (max-width: 700px) {
+      .hero-stats-strip {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 18px;
+        margin-top: 28px;
+      }
+      .hss-item { border-right: 0; }
+      .hss-item:nth-child(odd) { border-right: 1px solid rgba(15,23,42,0.06); }
+      .hss-item:nth-child(3),
+      .hss-item:nth-child(4) { padding-top: 18px; border-top: 1px solid rgba(15,23,42,0.06); }
+    }
+
   </style>
 
 
@@ -6232,110 +6584,112 @@
 
 <!-- HERO -->
 <main id="main-content">
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-slide hero-slide-0 active"></div>
-    <div class="hero-slide hero-slide-1"></div>
-    <div class="hero-slide hero-slide-2"></div>
-    <div class="hero-slide hero-slide-3"></div>
-  </div>
-  <div class="hero-grid-overlay"></div>
-  <!-- Hero boat illustration -->
-  <svg style="position:absolute;right:0;bottom:0;width:55%;max-width:680px;z-index:1;opacity:0.18;pointer-events:none;" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="hboat" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4ab0e0"/><stop offset="100%" stop-color="#1a70a0"/></linearGradient>
-    </defs>
-    <!-- Large boat silhouette -->
-    <path d="M80,310 Q340,270 600,310 L585,345 Q340,360 95,345 Z" fill="url(#hboat)"/>
-    <path d="M90,312 Q340,274 590,312 L585,332 Q340,345 95,332 Z" fill="white" opacity="0.3"/>
-    <!-- EVA deck -->
-    <path d="M95,302 Q340,265 585,302 L582,314 Q340,328 98,314 Z" fill="#c8a040" opacity="0.8"/>
-    <!-- Teak lines -->
-    <line x1="100" y1="285" x2="580" y2="305" stroke="#5a3000" stroke-width="3" opacity="0.4"/>
-    <line x1="100" y1="293" x2="580" y2="313" stroke="#5a3000" stroke-width="3" opacity="0.4"/>
-    <line x1="100" y1="301" x2="580" y2="321" stroke="#5a3000" stroke-width="3" opacity="0.4"/>
-    <!-- Cabin -->
-    <rect x="230" y="240" width="220" height="68" rx="10" fill="#1a2a60" opacity="0.9"/>
-    <rect x="245" y="250" width="190" height="38" rx="6" fill="#2a60a0" opacity="0.5"/>
-    <!-- Windows -->
-    <rect x="260" y="256" width="30" height="24" rx="5" fill="#60c0f0" opacity="0.6"/>
-    <rect x="300" y="256" width="30" height="24" rx="5" fill="#60c0f0" opacity="0.6"/>
-    <rect x="340" y="256" width="30" height="24" rx="5" fill="#60c0f0" opacity="0.6"/>
-    <rect x="380" y="256" width="30" height="24" rx="5" fill="#60c0f0" opacity="0.6"/>
-    <!-- Antenna -->
-    <line x1="340" y1="240" x2="340" y2="190" stroke="white" stroke-width="2" opacity="0.6"/>
-    <circle cx="340" cy="186" r="5" fill="#f5a623" opacity="0.8"/>
-    <!-- Engine -->
-    <rect x="510" y="285" width="70" height="25" rx="6" fill="#b0b0b0" opacity="0.7"/>
-    <!-- Water wave -->
-    <path d="M0,370 Q170,355 340,368 Q510,381 680,365 L680,420 L0,420 Z" fill="#1a4070" opacity="0.5"/>
-    <path d="M0,380 Q170,367 340,378 Q510,389 680,376 L680,420 L0,420 Z" fill="#0a2040" opacity="0.7"/>
-  </svg>
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <div class="hero-badge-dot"></div>
-        <span data-es>🌊 Envíos Internacionales · Fabricación a Medida</span>
-        <span data-en>🌊 Worldwide Shipping · Custom Made</span>
+<section class="hero hero-v2">
+  <div class="hero-bg-soft" aria-hidden="true"></div>
+  <div class="container hero-grid-v2">
+
+    <div class="hero-text-col">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        <span data-es>Envíos Internacionales · Fabricación a Medida</span>
+        <span data-en>Worldwide Shipping · Custom-Made in Chile</span>
       </div>
-      <h1 class="display hero-title">
-        <span class="line1" data-es>PISOS DE</span>
-        <span class="line1" data-en>PREMIUM</span>
-        <span class="line2" data-es>GOMA EVA</span>
-        <span class="line2" data-en>EVA MARINE</span>
-        <span class="line3" data-es>Para Lanchas · Veleros · Embarcaciones</span>
-        <span class="line3" data-en>Boats · Yachts · Watercraft · Custom Made</span>
+      <h1 class="hero-title-v2">
+        <span data-es>Pisos de <strong>Goma EVA</strong><br/>para tu <em>embarcación</em></span>
+        <span data-en>Premium <strong>EVA Marine</strong><br/>Decking, <em>Custom Made</em></span>
       </h1>
-      <p class="hero-desc" data-es>
-        Pisos antideslizantes de Goma EVA fabricados a medida para tu embarcación. Alta durabilidad, fácil instalación con adhesivo 3M, protección UV y diseños personalizados. Desde Chile para el mundo.
-      </p>
-      <p class="hero-desc" data-en>
-        Custom EVA foam non-slip marine decking engineered for performance. UV-protected, shock-absorbing, easy 3M PSA installation. Designed and crafted in Chile, shipped worldwide.
-      </p>
-      <div class="hero-actions">
-        <a href="#cotizar" class="btn btn-primary btn-price" onclick="verPrecio(event)">
-          💰 <span data-es>Ver Precio Ahora</span>
-          <span data-en>See Price Now</span>
+      <p class="hero-desc-v2" data-es>Pisos antideslizantes de Goma EVA fabricados a medida. Alta durabilidad, fácil instalación con adhesivo 3M, protección UV y diseños personalizados.</p>
+      <p class="hero-desc-v2" data-en>Custom EVA foam non-slip marine decking engineered for performance. UV-protected, easy 3M PSA installation, custom design for any boat.</p>
+
+      <div class="hero-cta-row">
+        <a href="#cotizar" class="hero-btn hero-btn--primary" onclick="verPrecio(event)">
+          💰 <span data-es>Ver Precio Ahora</span><span data-en>See Price Now</span>
         </a>
-        <a href="#cotizar" class="btn btn-secondary-cta">
-          <span data-es>🚀 Cotizar Mi Piso</span>
-          <span data-en>🚀 Get My Free Quote</span>
+        <a href="#cotizar" class="hero-btn hero-btn--secondary">
+          <span data-es>Cotizar mi piso</span><span data-en>Get a free quote</span>
         </a>
-        <a href="#proyectos" class="btn btn-outline">
-          <span data-es>Ver Proyectos</span>
-          <span data-en>View Projects</span>
+        <a href="#proyectos" class="hero-btn hero-btn--ghost">
+          <span data-es>Ver proyectos</span><span data-en>View projects</span>
         </a>
       </div>
-      <p class="hero-price-hint" data-es>⚡ Calcula el valor exacto en segundos · sin compromiso</p>
-      <p class="hero-price-hint" data-en>⚡ Calculate the exact value in seconds · no commitment</p>
-      <div class="hero-stats">
-        <div>
-          <div class="hero-stat-num">500+</div>
-          <div class="hero-stat-label" data-es>Proyectos Realizados</div>
-          <div class="hero-stat-label" data-en>Projects Completed</div>
+      <p class="hero-microcopy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span data-es>Calcula el valor exacto en segundos · sin compromiso</span>
+        <span data-en>Get the exact price in seconds · no commitment</span>
+      </p>
+
+      <div class="hero-trust-pills">
+        <span class="htp"><span class="htp-dot"></span><span data-es>500+ embarcaciones</span><span data-en>500+ boats fitted</span></span>
+        <span class="htp"><span class="htp-star">★</span> 4.9 <span data-es>de calificación</span><span data-en>rating</span></span>
+        <span class="htp"><span data-es>🇨🇱 Hecho en Chile · 14+ países</span><span data-en>🇨🇱 Made in Chile · 14+ countries</span></span>
+      </div>
+    </div>
+
+    <div class="hero-card-col">
+      <div class="hero-card">
+        <div class="hero-card-img">
+          <img src="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg"
+               alt="DECKEVA · Cubierta EVA con diseño teak premium"
+               fetchpriority="high" decoding="async" />
+          <span class="hero-card-tag" data-es>Diseño premium</span>
+          <span class="hero-card-tag" data-en>Premium design</span>
         </div>
-        <div>
-          <div class="hero-stat-num">10+</div>
-          <div class="hero-stat-label" data-es>Países de Envío</div>
-          <div class="hero-stat-label" data-en>Countries Served</div>
+        <div class="hero-card-specs">
+          <div class="hcs-item">
+            <span class="hcs-num">6<small>mm</small></span>
+            <span class="hcs-lbl" data-es>EVA premium</span>
+            <span class="hcs-lbl" data-en>Premium EVA</span>
+          </div>
+          <div class="hcs-divider"></div>
+          <div class="hcs-item">
+            <span class="hcs-num">3M</span>
+            <span class="hcs-lbl" data-es>Adhesivo PSA</span>
+            <span class="hcs-lbl" data-en>PSA adhesive</span>
+          </div>
+          <div class="hcs-divider"></div>
+          <div class="hcs-item">
+            <span class="hcs-num">UV+</span>
+            <span class="hcs-lbl" data-es>UV resistente</span>
+            <span class="hcs-lbl" data-en>UV resistant</span>
+          </div>
         </div>
-        <div>
-          <div class="hero-stat-num">5★</div>
-          <div class="hero-stat-label" data-es>Calificación Clientes</div>
-          <div class="hero-stat-label" data-en>Customer Rating</div>
-        </div>
-        <div>
-          <div class="hero-stat-num">3M</div>
-          <div class="hero-stat-label" data-es>Adhesivo Premium</div>
-          <div class="hero-stat-label" data-en>PSA Adhesive</div>
+      </div>
+      <!-- Floating badge -->
+      <div class="hero-floating-badge">
+        <div class="hfb-icon">🚀</div>
+        <div class="hfb-text">
+          <div class="hfb-line1" data-es>10–15 días hábiles</div>
+          <div class="hfb-line1" data-en>10–15 business days</div>
+          <div class="hfb-line2" data-es>de fabricación</div>
+          <div class="hfb-line2" data-en>manufacturing</div>
         </div>
       </div>
     </div>
+
   </div>
-  <div class="hero-scroll">
-    <svg width="18" height="28" viewBox="0 0 18 28" fill="none"><rect x="1" y="1" width="16" height="26" rx="8" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="8" r="2.5" fill="currentColor"/></svg>
-    <span data-es>Scroll</span>
-    <span data-en>Scroll</span>
+
+  <!-- Stats row in a tight band below hero -->
+  <div class="container hero-stats-strip">
+    <div class="hss-item">
+      <span class="hss-num">500<small>+</small></span>
+      <span class="hss-label" data-es>Embarcaciones</span>
+      <span class="hss-label" data-en>Boats fitted</span>
+    </div>
+    <div class="hss-item">
+      <span class="hss-num">14<small>+</small></span>
+      <span class="hss-label" data-es>Países de envío</span>
+      <span class="hss-label" data-en>Countries served</span>
+    </div>
+    <div class="hss-item">
+      <span class="hss-num">4.9<small>★</small></span>
+      <span class="hss-label" data-es>Reseñas verificadas</span>
+      <span class="hss-label" data-en>Verified reviews</span>
+    </div>
+    <div class="hss-item">
+      <span class="hss-num">100<small>%</small></span>
+      <span class="hss-label" data-es>Hecho a medida</span>
+      <span class="hss-label" data-en>Custom-made</span>
+    </div>
   </div>
 </section>
 
