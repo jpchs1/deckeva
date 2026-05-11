@@ -5278,25 +5278,31 @@
       transition: transform 0.2s ease;
     }
     .nav-logo:hover { transform: translateY(-1px); text-decoration: none !important; }
-    .nav-logo-icon {
-      display: inline-flex;
-      width: 40px; height: 40px;
+
+    /* Brand mark SVG (compartido entre nav, footer, mobile menu) */
+    .brand-mark {
+      width: 46px;
+      height: 46px;
       flex-shrink: 0;
-      filter: drop-shadow(0 2px 4px rgba(15,23,42,0.10));
+      display: block;
+      filter: drop-shadow(0 2px 6px rgba(15,23,42,0.12));
+      transition: transform 0.3s ease;
     }
-    .nav-logo-icon svg { width: 100%; height: 100%; display: block; }
+    .nav-logo:hover .brand-mark { transform: rotate(-4deg) scale(1.05); }
+    .brand-mark--lg { width: 60px; height: 60px; }
+
     .nav-logo-text {
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 800;
-      font-size: 24px;
-      letter-spacing: 1.2px;
+      font-size: 28px;
+      letter-spacing: 1.5px;
       line-height: 1;
       display: inline-flex;
       align-items: center;
       color: var(--text-dark);
     }
-    .nlt-deck { color: #0f1d3a; }
-    .nlt-eva { color: #16a3a3; }
+    .nlt-deck { color: #0f2240; }
+    .nlt-eva  { color: #16a3a3; }
 
     /* Nav links: pill hover */
     .nav-links {
@@ -5386,6 +5392,41 @@
     .hamburger:hover { background: rgba(15,23,42,0.10); }
     .hamburger span { width: 18px; height: 2px; background: var(--text-dark); border-radius: 2px; }
 
+    /* Footer logo: igual lockup que el nav pero más grande */
+    .site-footer .footer-logo {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none !important;
+      margin-bottom: 18px !important;
+    }
+    .footer-logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      letter-spacing: 1.5px;
+      line-height: 1;
+      display: inline-flex;
+    }
+
+    /* Mobile menu brand header */
+    .mm-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+    }
+    .mm-brand .brand-mark { width: 48px; height: 48px; }
+    .mm-brand-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: 1.5px;
+      line-height: 1;
+    }
+
     /* Mobile menu refinado */
     .mobile-menu { background: rgba(255,255,255,0.98) !important; }
     .mobile-menu a {
@@ -5410,15 +5451,17 @@
       .nav-price-link { padding: 7px 12px !important; font-size: 12px !important; }
     }
     @media (max-width: 640px) {
-      .nav-logo-text { font-size: 20px !important; letter-spacing: 1px !important; }
-      .nav-logo-icon { width: 34px !important; height: 34px !important; }
+      .nav-logo-text { font-size: 22px !important; letter-spacing: 1.2px !important; }
+      .nav-logo .brand-mark { width: 38px !important; height: 38px !important; }
       .lang-switcher { display: none !important; }
       .nav-price-link { padding: 6px 10px !important; font-size: 11px !important; }
       .nav-inner { gap: 10px !important; }
+      .footer-logo-text { font-size: 28px !important; }
+      .site-footer .footer-logo .brand-mark--lg { width: 50px !important; height: 50px !important; }
     }
-    @media (max-width: 380px) {
-      .nav-logo-text .nlt-eva,
-      .nav-logo-text .nlt-deck { display: inline; }
+    @media (max-width: 420px) {
+      .nav-logo-text { font-size: 19px !important; letter-spacing: 1px !important; }
+      .nav-logo .brand-mark { width: 34px !important; height: 34px !important; }
       .nav-price-link { display: none !important; }
     }
 
@@ -5614,6 +5657,35 @@
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
+  <div class="mm-brand">
+    <svg class="brand-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:48px;height:48px;">
+      <defs>
+        <clipPath id="brandClipMobile"><circle cx="40" cy="40" r="36"/></clipPath>
+        <linearGradient id="brandWaveMobile" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1bb3a3"/><stop offset="100%" stop-color="#0e8e85"/>
+        </linearGradient>
+      </defs>
+      <path d="M 12 40 A 28 28 0 1 0 68 40" fill="none" stroke="#0f2240" stroke-width="3" stroke-linecap="round"/>
+      <g clip-path="url(#brandClipMobile)">
+        <path d="M -4 60 C 14 50 30 64 40 60 C 52 56 66 64 84 56 L 84 84 L -4 84 Z" fill="url(#brandWaveMobile)"/>
+        <path d="M -4 66 C 14 58 30 70 40 66 C 52 62 66 70 84 64 L 84 84 L -4 84 Z" fill="#16a3a3" opacity="0.55"/>
+      </g>
+      <path d="M 8 50 C 22 50 50 50 72 48 C 64 58 50 60 40 60 C 28 60 16 56 8 50 Z" fill="#0f2240"/>
+      <g fill="#c4ccd6">
+        <path d="M 14 50 L 18 50 L 17 56 L 14 56 Z"/>
+        <path d="M 20 50 L 26 50 L 25 57 L 20 57 Z"/>
+        <path d="M 28 50 L 35 50 L 34 58 L 27 58 Z"/>
+        <path d="M 37 50 L 45 50 L 44 58 L 35 58 Z"/>
+        <path d="M 47 50 L 55 50 L 54 57 L 45 57 Z"/>
+        <path d="M 57 49 L 64 49 L 62 55 L 55 55 Z"/>
+      </g>
+      <path d="M 18 50 C 24 38 36 30 50 32 C 60 33 66 40 70 47 L 65 47 C 60 40 50 36 42 38 C 32 40 26 47 24 50 Z" fill="#0f2240"/>
+      <path d="M 30 47 C 35 42 45 40 55 44" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.65"/>
+    </svg>
+    <span class="mm-brand-text">
+      <span class="nlt-deck">DECK</span><span class="nlt-eva">EVA</span>
+    </span>
+  </div>
   <a href="#caracteristicas" onclick="closeMobile()" data-es>Características</a>
   <a href="#caracteristicas" onclick="closeMobile()" data-en>Features</a>
   <a href="#como-trabajamos" onclick="closeMobile()" data-es>Cómo Trabajamos</a>
@@ -5631,35 +5703,43 @@
 <nav id="navbar">
   <div class="container nav-inner">
     <a href="#top" class="nav-logo" aria-label="DECKEVA · inicio">
-      <span class="nav-logo-icon" aria-hidden="true">
-        <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <clipPath id="navLogoClip"><circle cx="28" cy="28" r="25"/></clipPath>
-          </defs>
-          <!-- Aro -->
-          <circle cx="28" cy="28" r="25" fill="none" stroke="#0f1d3a" stroke-width="2.4"/>
-          <!-- Olas teal -->
-          <g clip-path="url(#navLogoClip)">
-            <path d="M-2 38 C 8 33 18 41 28 41 C 38 41 48 33 58 38 L 58 56 L -2 56 Z" fill="#16a3a3"/>
-            <path d="M-2 42 C 10 38 20 45 28 45 C 36 45 46 38 58 42 L 58 56 L -2 56 Z" fill="#1abc9c" opacity="0.65"/>
-          </g>
-          <!-- Casco -->
-          <path d="M9 32 L 47 32 L 43 39 L 13 39 Z" fill="#0f1d3a"/>
-          <!-- Strips EVA en el deck -->
-          <g fill="#cfd5db">
-            <rect x="14" y="33" width="3.5" height="3"/>
-            <rect x="19.5" y="33" width="3.5" height="3"/>
-            <rect x="25" y="33" width="3.5" height="3"/>
-            <rect x="30.5" y="33" width="3.5" height="3"/>
-            <rect x="36" y="33" width="3.5" height="3"/>
-            <rect x="41.5" y="33" width="2" height="3"/>
-          </g>
-          <!-- Cabina/superestructura -->
-          <path d="M17 26 L 22 21 Q 28 17.5 35 21 L 41 26 L 41 32 L 17 32 Z" fill="#0f1d3a"/>
-          <!-- Línea sutil del parabrisas -->
-          <path d="M20 26 Q 28 22 38 26" fill="none" stroke="#3a4a6b" stroke-width="0.7"/>
-        </svg>
-      </span>
+      <svg class="brand-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <clipPath id="brandClip"><circle cx="40" cy="40" r="36"/></clipPath>
+          <linearGradient id="brandWave" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1bb3a3"/>
+            <stop offset="100%" stop-color="#0e8e85"/>
+          </linearGradient>
+        </defs>
+        <!-- Aro circular abierto arriba (estilo del logo del usuario) -->
+        <path d="M 12 40
+                 A 28 28 0 1 0 68 40"
+              fill="none" stroke="#0f2240" stroke-width="3" stroke-linecap="round"/>
+        <!-- Olas teal abajo dentro del círculo -->
+        <g clip-path="url(#brandClip)">
+          <path d="M -4 60 C 14 50 30 64 40 60 C 52 56 66 64 84 56 L 84 84 L -4 84 Z"
+                fill="url(#brandWave)"/>
+          <path d="M -4 66 C 14 58 30 70 40 66 C 52 62 66 70 84 64 L 84 84 L -4 84 Z"
+                fill="#16a3a3" opacity="0.55"/>
+        </g>
+        <!-- Casco yate (proa larga estilo del logo) -->
+        <path d="M 8 50 C 22 50 50 50 72 48 C 64 58 50 60 40 60 C 28 60 16 56 8 50 Z"
+              fill="#0f2240"/>
+        <!-- Strips EVA grises sobre el deck (como el logo) -->
+        <g fill="#c4ccd6">
+          <path d="M 14 50 L 18 50 L 17 56 L 14 56 Z"/>
+          <path d="M 20 50 L 26 50 L 25 57 L 20 57 Z"/>
+          <path d="M 28 50 L 35 50 L 34 58 L 27 58 Z"/>
+          <path d="M 37 50 L 45 50 L 44 58 L 35 58 Z"/>
+          <path d="M 47 50 L 55 50 L 54 57 L 45 57 Z"/>
+          <path d="M 57 49 L 64 49 L 62 55 L 55 55 Z"/>
+        </g>
+        <!-- Cabina / superestructura yate -->
+        <path d="M 18 50 C 24 38 36 30 50 32 C 60 33 66 40 70 47 L 65 47 C 60 40 50 36 42 38 C 32 40 26 47 24 50 Z"
+              fill="#0f2240"/>
+        <!-- Línea blanca sutil del parabrisas/diseño -->
+        <path d="M 30 47 C 35 42 45 40 55 44" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.65"/>
+      </svg>
       <span class="nav-logo-text">
         <span class="nlt-deck">DECK</span><span class="nlt-eva">EVA</span>
       </span>
@@ -8258,7 +8338,35 @@
     <div class="footer-grid">
 
       <div class="footer-brand">
-        <a href="#top" class="footer-logo">DECK<span>EVA</span></a>
+        <a href="#top" class="footer-logo" aria-label="DECKEVA · inicio">
+          <svg class="brand-mark brand-mark--lg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <clipPath id="brandClipFooter"><circle cx="40" cy="40" r="36"/></clipPath>
+              <linearGradient id="brandWaveFooter" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1bb3a3"/><stop offset="100%" stop-color="#0e8e85"/>
+              </linearGradient>
+            </defs>
+            <path d="M 12 40 A 28 28 0 1 0 68 40" fill="none" stroke="#0f2240" stroke-width="3" stroke-linecap="round"/>
+            <g clip-path="url(#brandClipFooter)">
+              <path d="M -4 60 C 14 50 30 64 40 60 C 52 56 66 64 84 56 L 84 84 L -4 84 Z" fill="url(#brandWaveFooter)"/>
+              <path d="M -4 66 C 14 58 30 70 40 66 C 52 62 66 70 84 64 L 84 84 L -4 84 Z" fill="#16a3a3" opacity="0.55"/>
+            </g>
+            <path d="M 8 50 C 22 50 50 50 72 48 C 64 58 50 60 40 60 C 28 60 16 56 8 50 Z" fill="#0f2240"/>
+            <g fill="#c4ccd6">
+              <path d="M 14 50 L 18 50 L 17 56 L 14 56 Z"/>
+              <path d="M 20 50 L 26 50 L 25 57 L 20 57 Z"/>
+              <path d="M 28 50 L 35 50 L 34 58 L 27 58 Z"/>
+              <path d="M 37 50 L 45 50 L 44 58 L 35 58 Z"/>
+              <path d="M 47 50 L 55 50 L 54 57 L 45 57 Z"/>
+              <path d="M 57 49 L 64 49 L 62 55 L 55 55 Z"/>
+            </g>
+            <path d="M 18 50 C 24 38 36 30 50 32 C 60 33 66 40 70 47 L 65 47 C 60 40 50 36 42 38 C 32 40 26 47 24 50 Z" fill="#0f2240"/>
+            <path d="M 30 47 C 35 42 45 40 55 44" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.65"/>
+          </svg>
+          <span class="footer-logo-text">
+            <span class="nlt-deck">DECK</span><span class="nlt-eva">EVA</span>
+          </span>
+        </a>
         <p class="footer-desc" data-es>
           Pisos premium de Goma EVA antideslizante para lanchas, veleros y embarcaciones. Fabricados a medida en Chile, enviamos a todo el mundo.
         </p>
