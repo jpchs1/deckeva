@@ -5255,6 +5255,175 @@
     }
 
     /* ════════════════════════════════════════════════════════════
+       NAV PREMIUM — logo lockup SVG + UX mejorada
+       ════════════════════════════════════════════════════════════ */
+    nav#navbar {
+      padding: 14px 0 !important;
+      transition: padding 0.25s ease, background 0.25s ease, box-shadow 0.25s ease !important;
+    }
+    nav#navbar.scrolled { padding: 10px 0 !important; }
+    .nav-inner {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 24px !important;
+    }
+
+    /* Logo lockup: ícono SVG + texto DECKEVA */
+    .nav-logo {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      text-decoration: none !important;
+      color: var(--text-dark) !important;
+      transition: transform 0.2s ease;
+    }
+    .nav-logo:hover { transform: translateY(-1px); text-decoration: none !important; }
+    .nav-logo-icon {
+      display: inline-flex;
+      width: 40px; height: 40px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(15,23,42,0.10));
+    }
+    .nav-logo-icon svg { width: 100%; height: 100%; display: block; }
+    .nav-logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: 1.2px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      color: var(--text-dark);
+    }
+    .nlt-deck { color: #0f1d3a; }
+    .nlt-eva { color: #16a3a3; }
+
+    /* Nav links: pill hover */
+    .nav-links {
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .nav-links li { display: inline-block; }
+    .nav-links li a {
+      display: inline-flex !important;
+      align-items: center;
+      padding: 9px 14px !important;
+      border-radius: 100px !important;
+      color: var(--text) !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0 !important;
+      text-decoration: none !important;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .nav-links li a:hover {
+      background: rgba(14,107,168,0.08) !important;
+      color: var(--ocean) !important;
+    }
+
+    /* Right cluster */
+    .nav-right {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+    }
+    .lang-switcher {
+      display: inline-flex;
+      gap: 0;
+      background: rgba(15,23,42,0.05);
+      border-radius: 100px;
+      padding: 3px;
+    }
+    .lang-btn {
+      background: transparent !important;
+      border: 0 !important;
+      color: var(--gray) !important;
+      padding: 5px 12px !important;
+      border-radius: 100px !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.5px !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lang-btn:hover:not(.active) { color: var(--text-dark) !important; background: rgba(255,255,255,0.5) !important; }
+    .lang-btn.active {
+      background: #ffffff !important;
+      color: var(--text-dark) !important;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.10);
+    }
+
+    /* CTA cotizar refinado */
+    .nav-cta {
+      padding: 10px 18px !important;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.3px !important;
+      text-transform: none !important;
+      border-radius: 100px !important;
+      box-shadow: 0 4px 14px rgba(245,166,35,0.30) !important;
+    }
+    .nav-cta:hover { box-shadow: 0 8px 22px rgba(245,166,35,0.45) !important; transform: translateY(-1px); }
+
+    /* Hamburger refinado */
+    .hamburger {
+      display: none;
+      width: 38px; height: 38px;
+      align-items: center; justify-content: center;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.05);
+      border: 0;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .hamburger:hover { background: rgba(15,23,42,0.10); }
+    .hamburger span { width: 18px; height: 2px; background: var(--text-dark); border-radius: 2px; }
+
+    /* Mobile menu refinado */
+    .mobile-menu { background: rgba(255,255,255,0.98) !important; }
+    .mobile-menu a {
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 22px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      color: var(--text-dark) !important;
+      padding: 12px 24px !important;
+      border-radius: 12px !important;
+      border-bottom: 0 !important;
+      transition: background 0.2s ease;
+    }
+    .mobile-menu a:hover { background: rgba(14,107,168,0.08) !important; color: var(--ocean) !important; }
+
+    /* Responsive nav */
+    @media (max-width: 980px) {
+      .nav-links { display: none !important; }
+      .hamburger { display: inline-flex !important; }
+      .nav-cta { display: none !important; }
+      .nav-price-link { padding: 7px 12px !important; font-size: 12px !important; }
+    }
+    @media (max-width: 640px) {
+      .nav-logo-text { font-size: 20px !important; letter-spacing: 1px !important; }
+      .nav-logo-icon { width: 34px !important; height: 34px !important; }
+      .lang-switcher { display: none !important; }
+      .nav-price-link { padding: 6px 10px !important; font-size: 11px !important; }
+      .nav-inner { gap: 10px !important; }
+    }
+    @media (max-width: 380px) {
+      .nav-logo-text .nlt-eva,
+      .nav-logo-text .nlt-deck { display: inline; }
+      .nav-price-link { display: none !important; }
+    }
+
+    /* ════════════════════════════════════════════════════════════
        VER PRECIO — botones, sticky bar y highlight del selector
        ════════════════════════════════════════════════════════════ */
 
@@ -5462,7 +5631,40 @@
 <!-- NAV -->
 <nav id="navbar">
   <div class="container nav-inner">
-    <a href="#" class="nav-logo">DECK<span>EVA</span></a>
+    <a href="#top" class="nav-logo" aria-label="DECKEVA · inicio">
+      <span class="nav-logo-icon" aria-hidden="true">
+        <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="navLogoClip"><circle cx="28" cy="28" r="25"/></clipPath>
+          </defs>
+          <!-- Aro -->
+          <circle cx="28" cy="28" r="25" fill="none" stroke="#0f1d3a" stroke-width="2.4"/>
+          <!-- Olas teal -->
+          <g clip-path="url(#navLogoClip)">
+            <path d="M-2 38 C 8 33 18 41 28 41 C 38 41 48 33 58 38 L 58 56 L -2 56 Z" fill="#16a3a3"/>
+            <path d="M-2 42 C 10 38 20 45 28 45 C 36 45 46 38 58 42 L 58 56 L -2 56 Z" fill="#1abc9c" opacity="0.65"/>
+          </g>
+          <!-- Casco -->
+          <path d="M9 32 L 47 32 L 43 39 L 13 39 Z" fill="#0f1d3a"/>
+          <!-- Strips EVA en el deck -->
+          <g fill="#cfd5db">
+            <rect x="14" y="33" width="3.5" height="3"/>
+            <rect x="19.5" y="33" width="3.5" height="3"/>
+            <rect x="25" y="33" width="3.5" height="3"/>
+            <rect x="30.5" y="33" width="3.5" height="3"/>
+            <rect x="36" y="33" width="3.5" height="3"/>
+            <rect x="41.5" y="33" width="2" height="3"/>
+          </g>
+          <!-- Cabina/superestructura -->
+          <path d="M17 26 L 22 21 Q 28 17.5 35 21 L 41 26 L 41 32 L 17 32 Z" fill="#0f1d3a"/>
+          <!-- Línea sutil del parabrisas -->
+          <path d="M20 26 Q 28 22 38 26" fill="none" stroke="#3a4a6b" stroke-width="0.7"/>
+        </svg>
+      </span>
+      <span class="nav-logo-text">
+        <span class="nlt-deck">DECK</span><span class="nlt-eva">EVA</span>
+      </span>
+    </a>
     <ul class="nav-links">
       <li><a href="#caracteristicas" data-es>Características</a><a href="#caracteristicas" data-en>Features</a></li>
       <li><a href="#como-trabajamos" data-es>Cómo Trabajamos</a><a href="#como-trabajamos" data-en>How It Works</a></li>
