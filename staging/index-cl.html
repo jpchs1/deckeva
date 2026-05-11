@@ -6184,6 +6184,116 @@
     .hero-v2 .hero-scroll,
     .hero-v2 > svg { display: none !important; }
 
+
+    /* ════════════════════════════════════════════════════════════
+       LANG TRANSLATOR DROPDOWN (18 idiomas)
+       ════════════════════════════════════════════════════════════ */
+    .lang-dropdown { position: relative; display: inline-block; }
+    .lang-trigger {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      padding: 8px 14px !important;
+      background: rgba(15,23,42,0.05) !important;
+      border: 1px solid rgba(15,23,42,0.10) !important;
+      border-radius: 100px !important;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      color: var(--text-dark) !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      transition: all 0.2s ease;
+    }
+    .lang-trigger:hover { background: rgba(15,23,42,0.10) !important; }
+    .lang-trigger[aria-expanded="true"] { background: rgba(14,107,168,0.10) !important; border-color: rgba(14,107,168,0.20) !important; }
+    .lang-flag-current { font-size: 15px; line-height: 1; }
+    .lang-label-current { line-height: 1; }
+    .lang-trigger svg { transition: transform 0.2s ease; color: var(--gray); }
+    .lang-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: #ffffff;
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.12), 0 2px 8px rgba(15,23,42,0.06);
+      list-style: none;
+      margin: 0;
+      min-width: 200px;
+      max-height: 420px;
+      overflow-y: auto;
+      display: none;
+      z-index: 1100;
+    }
+    .lang-menu.open { display: block; animation: langMenuIn 0.15s ease; }
+    @keyframes langMenuIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .lang-menu-section {
+      padding: 8px 12px 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--gray);
+    }
+    .lang-menu li { margin: 0; }
+    .lang-menu li button {
+      display: block;
+      width: 100%;
+      padding: 8px 12px;
+      background: none;
+      border: 0;
+      text-align: left;
+      font: 500 13px/1.3 'DM Sans', sans-serif;
+      color: var(--text-dark);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-menu li button:hover {
+      background: rgba(14,107,168,0.08);
+      color: var(--ocean);
+    }
+    .lang-menu li button.active {
+      background: rgba(14,107,168,0.12);
+      color: var(--ocean);
+      font-weight: 700;
+    }
+
+    /* Scrollbar fino en el menú */
+    .lang-menu::-webkit-scrollbar { width: 6px; }
+    .lang-menu::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.20); border-radius: 3px; }
+
+    /* Ocultar Google Translate widget defaults */
+    #google_translate_element { display: none !important; }
+    .goog-te-banner-frame.skiptranslate,
+    .skiptranslate iframe { display: none !important; }
+    body { top: 0 !important; }
+    .goog-te-balloon-frame { display: none !important; }
+    .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+    .goog-text-highlight { background: transparent !important; box-shadow: none !important; }
+    font[style*="vertical-align"] { vertical-align: baseline !important; }
+    .goog-logo-link, .goog-te-gadget { color: transparent !important; }
+    .goog-te-gadget > span > a { display: none !important; }
+    .goog-te-gadget { font-size: 0 !important; }
+
+    /* Translator visible siempre (incluso en .cl) */
+    .lang-dropdown { display: inline-block !important; }
+
+    /* Responsive nav: en mobile el dropdown se ajusta */
+    @media (max-width: 640px) {
+      .lang-trigger { padding: 6px 10px !important; font-size: 11px !important; }
+      .lang-label-current { display: none; }
+      .lang-menu { min-width: 180px; right: -10px; max-height: 320px; }
+    }
+
   </style>
 
 
@@ -7313,10 +7423,37 @@
       <li><a href="#pagos" data-es>Pagos</a><a href="#pagos" data-en>Payment</a></li>
     </ul>
     <div class="nav-right">
-      <div class="lang-switcher" style="display:none">
-        <button class="lang-btn active" onclick="setLang('es')" style="display:none">ES</button>
-        <button class="lang-btn" onclick="setLang('en')" style="display:none">EN</button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-trigger" type="button" onclick="toggleLangMenu(event)" aria-haspopup="true" aria-expanded="false">
+          <span class="lang-flag-current">🌐</span>
+          <span class="lang-label-current">Español</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 3.5 L5 7 L8.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ul class="lang-menu" role="menu">
+          <li class="lang-menu-section">NATIVE</li>
+          <li><button class="active" onclick="changeLang('es','Español','🇪🇸')" data-lang="es">🇪🇸 Español</button></li>
+          <li><button onclick="changeLang('en','English','🇬🇧')" data-lang="en">🇬🇧 English</button></li>
+          <li class="lang-menu-section">TRANSLATE</li>
+          <li><button onclick="changeLang('pt','Português','🇧🇷')" data-lang="pt">🇧🇷 Português</button></li>
+          <li><button onclick="changeLang('fr','Français','🇫🇷')" data-lang="fr">🇫🇷 Français</button></li>
+          <li><button onclick="changeLang('de','Deutsch','🇩🇪')" data-lang="de">🇩🇪 Deutsch</button></li>
+          <li><button onclick="changeLang('it','Italiano','🇮🇹')" data-lang="it">🇮🇹 Italiano</button></li>
+          <li><button onclick="changeLang('nl','Nederlands','🇳🇱')" data-lang="nl">🇳🇱 Nederlands</button></li>
+          <li><button onclick="changeLang('pl','Polski','🇵🇱')" data-lang="pl">🇵🇱 Polski</button></li>
+          <li><button onclick="changeLang('sv','Svenska','🇸🇪')" data-lang="sv">🇸🇪 Svenska</button></li>
+          <li><button onclick="changeLang('ru','Русский','🇷🇺')" data-lang="ru">🇷🇺 Русский</button></li>
+          <li><button onclick="changeLang('zh-CN','中文','🇨🇳')" data-lang="zh-CN">🇨🇳 中文</button></li>
+          <li><button onclick="changeLang('ja','日本語','🇯🇵')" data-lang="ja">🇯🇵 日本語</button></li>
+          <li><button onclick="changeLang('ko','한국어','🇰🇷')" data-lang="ko">🇰🇷 한국어</button></li>
+          <li><button onclick="changeLang('ar','العربية','🇸🇦')" data-lang="ar">🇸🇦 العربية</button></li>
+          <li><button onclick="changeLang('hi','हिन्दी','🇮🇳')" data-lang="hi">🇮🇳 हिन्दी</button></li>
+          <li><button onclick="changeLang('tr','Türkçe','🇹🇷')" data-lang="tr">🇹🇷 Türkçe</button></li>
+          <li><button onclick="changeLang('el','Ελληνικά','🇬🇷')" data-lang="el">🇬🇷 Ελληνικά</button></li>
+          <li><button onclick="changeLang('he','עברית','🇮🇱')" data-lang="he">🇮🇱 עברית</button></li>
+        </ul>
       </div>
+      <!-- Google Translate (hidden) -->
+      <div id="google_translate_element" aria-hidden="true"></div>
       <a href="#cotizar" class="nav-price-link" onclick="verPrecio(event)">
         💰 <span data-es>Ver Precio</span><span data-en>See Price</span>
       </a>
@@ -10982,6 +11119,137 @@
     else if (e.key === 'ArrowRight') galNav(1);
   });
 
+
+  // ───── Translator dropdown + Google Translate ─────
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'es',
+      includedLanguages: 'en,es,pt,fr,de,it,nl,pl,sv,ru,zh-CN,ja,ko,ar,hi,tr,el,he',
+      autoDisplay: false,
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+
+  function toggleLangMenu(e) {
+    if (e) e.stopPropagation();
+    const dd = document.getElementById('langDropdown');
+    if (!dd) return;
+    const menu = dd.querySelector('.lang-menu');
+    const trigger = dd.querySelector('.lang-trigger');
+    const isOpen = menu.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', isOpen);
+  }
+
+  function clearGoogleTranslateCookies() {
+    const domains = ['', '.' + location.hostname, location.hostname];
+    domains.forEach(function(d) {
+      document.cookie = 'googtrans=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;' + (d ? 'domain=' + d + ';' : '');
+    });
+  }
+
+  function changeLang(code, label, flag) {
+    // Close menu
+    const dd = document.getElementById('langDropdown');
+    if (dd) {
+      dd.querySelector('.lang-menu')?.classList.remove('open');
+      dd.querySelector('.lang-trigger')?.setAttribute('aria-expanded', 'false');
+    }
+    // Update trigger pill
+    const trigger = document.querySelector('.lang-trigger');
+    if (trigger) {
+      const flagEl = trigger.querySelector('.lang-flag-current');
+      const labEl = trigger.querySelector('.lang-label-current');
+      if (flagEl) flagEl.textContent = flag;
+      if (labEl)  labEl.textContent  = label;
+    }
+    // Mark active option
+    document.querySelectorAll('.lang-menu button').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-lang') === code);
+    });
+
+    localStorage.setItem('deckeva-lang', code);
+    localStorage.setItem('deckeva-lang-source', 'user');
+
+    if (code === 'es' || code === 'en') {
+      // Native instant lang
+      clearGoogleTranslateCookies();
+      if (typeof setLang === 'function') {
+        applyLang ? applyLang(code) : setLang(code);
+      } else {
+        document.documentElement.setAttribute('data-lang', code);
+      }
+      // If page was translated by GT, reload to clear
+      if (document.body.classList.contains('translated-ltr') ||
+          document.body.classList.contains('translated-rtl')) {
+        setTimeout(function(){ location.reload(); }, 50);
+      }
+    } else {
+      // Use Google Translate for non-native languages
+      // Base lang stays as ES (page native). GT translates from there.
+      if (typeof applyLang === 'function') applyLang('es');
+      else document.documentElement.setAttribute('data-lang', 'es');
+      // Trigger GT via the hidden combo box
+      let attempts = 0;
+      const tryTranslate = function() {
+        const sel = document.querySelector('select.goog-te-combo');
+        if (sel) {
+          sel.value = code;
+          sel.dispatchEvent(new Event('change'));
+        } else if (attempts++ < 20) {
+          setTimeout(tryTranslate, 150);
+        } else {
+          // Last resort: cookie + reload
+          document.cookie = 'googtrans=/es/' + code + ';path=/;';
+          document.cookie = 'googtrans=/es/' + code + ';path=/;domain=' + location.hostname + ';';
+          location.reload();
+        }
+      };
+      tryTranslate();
+    }
+  }
+
+  // Close menu on outside click
+  document.addEventListener('click', function(e) {
+    const dd = document.getElementById('langDropdown');
+    if (dd && !dd.contains(e.target)) {
+      const menu = dd.querySelector('.lang-menu');
+      if (menu) menu.classList.remove('open');
+      dd.querySelector('.lang-trigger')?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close menu on ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const m = document.querySelector('.lang-menu.open');
+      if (m) {
+        m.classList.remove('open');
+        document.querySelector('.lang-trigger')?.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+
+  // Restore active state from current data-lang
+  document.addEventListener('DOMContentLoaded', function() {
+    const cur = document.documentElement.getAttribute('data-lang') || 'es';
+    document.querySelectorAll('.lang-menu button').forEach(function(b) {
+      if (b.getAttribute('data-lang') === cur) {
+        b.classList.add('active');
+        const flag = b.textContent.trim().split(' ')[0];
+        const label = b.textContent.trim().substring(flag.length).trim();
+        const trigger = document.querySelector('.lang-trigger');
+        if (trigger) {
+          trigger.querySelector('.lang-flag-current').textContent = flag;
+          trigger.querySelector('.lang-label-current').textContent = label;
+        }
+      } else {
+        b.classList.remove('active');
+      }
+    });
+  });
+
 </script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 </body>
 </html>
