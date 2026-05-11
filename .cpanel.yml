@@ -22,6 +22,11 @@ deployment:
     - /bin/cp staging/.htaccess /home/wwimpo/deckeva.com/staging/.htaccess
     - /bin/cp staging/robots.txt /home/wwimpo/deckeva.com/staging/robots.txt
 
+    # ── Imágenes lifestyle (galería ls2 "Tu Embarcación · Otra Dimensión") ──
+    # Compartidas entre .com y .cl, servidas desde deckeva.com como CDN.
+    - /bin/mkdir -p /home/wwimpo/deckeva.com/staging/img/lifestyle
+    - /bin/cp -R staging/img/lifestyle/. /home/wwimpo/deckeva.com/staging/img/lifestyle/
+
     # ── Previews production-ready (validación pública con cliente) ──
     - /bin/mkdir -p /home/wwimpo/deckeva.com/preview-2026
     - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/preview-2026/index.html
