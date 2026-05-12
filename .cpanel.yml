@@ -68,3 +68,15 @@ deployment:
     # ── Post ¿Por qué piso antideslizante? ──
     - /bin/mkdir -p /home/wwimpo/deckeva.cl/por-que-necesitas-un-piso-antideslizante-para-tu-lancha
     - /bin/cp staging/post-por-que-necesitas-un-piso-antideslizante-para-tu-lancha.html /home/wwimpo/deckeva.cl/por-que-necesitas-un-piso-antideslizante-para-tu-lancha/index.html
+
+    # ── Page Imporlan (landing del servicio Imporlan) ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/imporlan
+    - /bin/cp staging/page-imporlan.html /home/wwimpo/deckeva.cl/imporlan/index.html
+
+    # ── Page Blog (index de los 6 articulos) ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/blog
+    - /bin/cp staging/page-blog.html /home/wwimpo/deckeva.cl/blog/index.html
+
+    # ── Page Proyectos (galeria de proyectos realizados) ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/proyectos
+    - /bin/cp staging/page-proyectos.html /home/wwimpo/deckeva.cl/proyectos/index.html
