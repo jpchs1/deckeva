@@ -41,3 +41,10 @@ deployment:
     # Reemplaza el index render de WordPress en la home /. WP sigue rindiendo
     # /wp-admin/, /blog/*, /category/*, etc. via mod_rewrite. Solo / cambia.
     - /bin/cp staging/index-cl.html /home/wwimpo/deckeva.cl/index.html
+
+    # ── Post Imporlan: artículo estático que reemplaza el render WP ──
+    # URL: /conoce-imporlan-importacion-de-lanchas-y-embarcaciones-desde-usa-a-chile/
+    # Al poner index.html en ese path, mod_rewrite de WP no agarra (RewriteCond
+    # !-d se vuelve falso porque el dir EXISTE y tiene index.html).
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/conoce-imporlan-importacion-de-lanchas-y-embarcaciones-desde-usa-a-chile
+    - /bin/cp staging/post-imporlan.html /home/wwimpo/deckeva.cl/conoce-imporlan-importacion-de-lanchas-y-embarcaciones-desde-usa-a-chile/index.html
