@@ -48,3 +48,23 @@ deployment:
     # !-d se vuelve falso porque el dir EXISTE y tiene index.html).
     - /bin/mkdir -p /home/wwimpo/deckeva.cl/conoce-imporlan-importacion-de-lanchas-y-embarcaciones-desde-usa-a-chile
     - /bin/cp staging/post-imporlan.html /home/wwimpo/deckeva.cl/conoce-imporlan-importacion-de-lanchas-y-embarcaciones-desde-usa-a-chile/index.html
+
+    # ── Post Servicio Técnico Eléctrico Náutico ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/servicio-tecnico-electrico-nautico-para-lanchas-y-embarcaciones-deckeva-chile
+    - /bin/cp staging/post-servicio-tecnico-electrico-nautico-para-lanchas-y-embarcaciones-deckeva-chile.html /home/wwimpo/deckeva.cl/servicio-tecnico-electrico-nautico-para-lanchas-y-embarcaciones-deckeva-chile/index.html
+
+    # ── Post Remodelaciones / Restauración Lanchas Santiago ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/restauracion-de-lanchas-en-santiago-chile
+    - /bin/cp staging/post-restauracion-de-lanchas-en-santiago-chile.html /home/wwimpo/deckeva.cl/restauracion-de-lanchas-en-santiago-chile/index.html
+
+    # ── Post ¿Qué es Sea Dek? ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/que-es-sea-dek
+    - /bin/cp staging/post-que-es-sea-dek.html /home/wwimpo/deckeva.cl/que-es-sea-dek/index.html
+
+    # ── Post ¿Por qué elegir Goma EVA? ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/por-que-elegir-pisos-de-goma-eva-para-mi-lancha
+    - /bin/cp staging/post-por-que-elegir-pisos-de-goma-eva-para-mi-lancha.html /home/wwimpo/deckeva.cl/por-que-elegir-pisos-de-goma-eva-para-mi-lancha/index.html
+
+    # ── Post ¿Por qué piso antideslizante? ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/por-que-necesitas-un-piso-antideslizante-para-tu-lancha
+    - /bin/cp staging/post-por-que-necesitas-un-piso-antideslizante-para-tu-lancha.html /home/wwimpo/deckeva.cl/por-que-necesitas-un-piso-antideslizante-para-tu-lancha/index.html
