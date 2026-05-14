@@ -115,93 +115,24 @@ a:hover { color: var(--gold-light); }
 }
 
 /* =========================================================================
-   GOOGLE TRANSLATE WIDGET (styled to match navy/ocean theme)
+   CUSTOM LANGUAGE SWITCHER (con banderitas)
+   Google Translate corre por detras (widget hidden via .gt-hidden).
    ========================================================================= */
-.gtrans-widget {
-  position: relative;
-  min-width: 0;
-}
-.gtrans-widget .goog-te-gadget {
-  font-family: "Space Mono", monospace !important;
-  font-size: 11.5px !important;
-  color: var(--gold-light) !important;
-  line-height: 1 !important;
-}
-.gtrans-widget .goog-te-gadget-simple {
-  background: linear-gradient(135deg, rgba(245, 166, 35, 0.16), rgba(245, 166, 35, 0.08)) !important;
-  border: 1px solid rgba(245, 166, 35, 0.55) !important;
-  border-radius: 999px !important;
-  padding: 6px 14px !important;
-  font-family: "Space Mono", monospace !important;
-  font-size: 11.5px !important;
-  font-weight: 700 !important;
-  letter-spacing: 1.5px !important;
-  text-transform: uppercase !important;
-  color: var(--gold-light) !important;
-  cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-  display: inline-flex !important;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.10);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-.gtrans-widget .goog-te-gadget-simple:hover {
-  border-color: rgba(245, 166, 35, 0.95) !important;
-  background: linear-gradient(135deg, rgba(245, 166, 35, 0.28), rgba(245, 166, 35, 0.16)) !important;
-  color: #fff !important;
-  box-shadow: 0 6px 18px rgba(245, 166, 35, 0.25);
-}
-.gtrans-widget .goog-te-gadget-simple .goog-te-menu-value {
-  color: inherit !important;
-  font-family: inherit !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  margin: 0 !important;
-}
-.gtrans-widget .goog-te-gadget-simple .goog-te-menu-value span {
-  color: inherit !important;
-  border: none !important;
-  font-family: inherit !important;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  text-decoration: none !important;
-}
-.gtrans-widget .goog-te-gadget-simple .goog-te-menu-value > span:nth-child(3),
-.gtrans-widget .goog-te-gadget-simple .goog-te-menu-value > span:nth-child(2) {
-  color: var(--gold) !important;
-}
-.gtrans-widget .goog-te-gadget-simple img { display: none !important; }
-.gtrans-widget .goog-te-gadget > span > a,
-.gtrans-widget .goog-logo-link,
-.gtrans-widget .goog-te-gadget > span + span,
-.gtrans-widget .goog-te-gadget > span > span:last-child {
-  display: none !important;
-}
-.gtrans-widget .goog-te-gadget-icon {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffc04d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M2 12h20'/><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'/></svg>") !important;
-  background-size: contain !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-color: transparent !important;
-  width: 14px !important;
-  height: 14px !important;
-  margin-right: 4px !important;
+
+.gt-hidden,
+#google_translate_element {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
   border: 0 !important;
-  vertical-align: middle;
+  padding: 0 !important;
+  margin: -1px !important;
+  pointer-events: none;
 }
 
-/* Dropdown menu (the actual language picker that opens on click) — must NOT be hidden */
-.goog-te-menu-frame.skiptranslate {
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55) !important;
-  border-radius: 10px !important;
-  border: 1px solid rgba(245, 166, 35, 0.40) !important;
-  z-index: 99999 !important;
-  margin-top: 4px;
-}
-
-/* Hide ONLY the Google Translate top banner (NOT all .skiptranslate elements
-   — the dropdown menu also has that class). */
 body { top: 0 !important; }
 .goog-te-banner-frame,
 .goog-te-banner-frame.skiptranslate,
@@ -212,9 +143,138 @@ iframe.goog-te-banner-frame {
 .goog-tooltip, .goog-tooltip:hover { display: none !important; }
 .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
 
+.lang-switcher {
+  position: relative;
+}
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  background: linear-gradient(135deg, rgba(245, 166, 35, 0.16), rgba(245, 166, 35, 0.08));
+  border: 1px solid rgba(245, 166, 35, 0.55);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: "Space Mono", monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.10);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.lang-trigger:hover {
+  border-color: rgba(245, 166, 35, 0.95);
+  background: linear-gradient(135deg, rgba(245, 166, 35, 0.28), rgba(245, 166, 35, 0.16));
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(245, 166, 35, 0.25);
+}
+.lang-trigger:focus-visible {
+  outline: 2px solid rgba(245, 166, 35, 0.85);
+  outline-offset: 2px;
+}
+.lang-trigger .lang-flag {
+  width: 22px;
+  height: 16px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  object-fit: cover;
+  display: block;
+}
+.lang-trigger .lang-chevron {
+  width: 12px;
+  height: 12px;
+  color: var(--gold);
+  transition: transform 0.2s ease;
+}
+.lang-trigger[aria-expanded="true"] .lang-chevron {
+  transform: rotate(180deg);
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  min-width: 340px;
+  max-width: 380px;
+  padding: 8px;
+  background: rgba(10, 22, 40, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(245, 166, 35, 0.45);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  animation: lang-menu-in 0.18s ease;
+}
+@keyframes lang-menu-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.lang-menu[hidden] { display: none !important; }
+
+.lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.lang-item:hover {
+  background: linear-gradient(135deg, rgba(245, 166, 35, 0.20), rgba(245, 166, 35, 0.10));
+  color: var(--white);
+}
+.lang-item:focus-visible {
+  outline: 2px solid rgba(245, 166, 35, 0.75);
+  outline-offset: -2px;
+  background: rgba(245, 166, 35, 0.12);
+  color: var(--white);
+}
+.lang-item:active {
+  transform: scale(0.98);
+}
+.lang-item img {
+  width: 22px;
+  height: 16px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+.lang-item span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 540px) {
   .header-right { gap: 8px; }
-  .gtrans-widget .goog-te-gadget-simple { padding: 5px 10px !important; font-size: 10.5px !important; }
+  .lang-trigger { padding: 5px 10px 5px 6px; font-size: 10.5px; gap: 6px; }
+  .lang-trigger .lang-name { display: none; }
+  .lang-menu {
+    grid-template-columns: 1fr;
+    min-width: 220px;
+    max-width: 240px;
+    max-height: 70vh;
+    overflow-y: auto;
+    right: -8px;
+  }
   .header-link { display: none; }
 }
 
@@ -298,7 +358,6 @@ iframe.goog-te-banner-frame {
   font-style: italic;
 }
 
-/* Payment badges row */
 .pay-badges {
   display: flex;
   flex-wrap: wrap;
@@ -325,7 +384,6 @@ iframe.goog-te-banner-frame {
   height: 13px;
   color: var(--ocean-bright);
 }
-/* Pay badges with embedded brand logos */
 .pay-badge.logo {
   padding: 5px 10px;
   background: #ffffff;
@@ -347,9 +405,6 @@ iframe.goog-te-banner-frame {
 }
 .pay-badge.ssl svg { color: var(--success); }
 
-/* =========================================================================
-   SECTION + STEPPER
-   ========================================================================= */
 .section {
   padding: 56px 0 90px;
   background: var(--navy-mid);
@@ -448,9 +503,6 @@ iframe.goog-te-banner-frame {
   .step .step-text .step-title { font-size: 15px; }
 }
 
-/* =========================================================================
-   PAY SHELL (Form + Summary)
-   ========================================================================= */
 .pay-shell {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
@@ -486,14 +538,10 @@ iframe.goog-te-banner-frame {
   margin-bottom: 22px;
 }
 
-/* Summary card sticky on desktop */
 @media (min-width: 921px) {
   .card-summary { position: sticky; top: 88px; }
 }
 
-/* =========================================================================
-   FORM
-   ========================================================================= */
 .field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -572,7 +620,6 @@ iframe.goog-te-banner-frame {
 }
 .field-block.has-error .err { display: block; }
 
-/* Amount with currency prefix */
 .amount-wrap {
   position: relative;
   display: block;
@@ -628,9 +675,6 @@ iframe.goog-te-banner-frame {
   flex-shrink: 0;
 }
 
-/* =========================================================================
-   SUMMARY
-   ========================================================================= */
 .summary-row {
   display: flex;
   align-items: baseline;
@@ -677,9 +721,6 @@ iframe.goog-te-banner-frame {
   padding: 12px 0;
 }
 
-/* =========================================================================
-   METHOD CARDS
-   ========================================================================= */
 .methods-head {
   margin-bottom: 18px;
   display: flex;
@@ -758,7 +799,6 @@ iframe.goog-te-banner-frame {
   margin: 0;
 }
 
-/* Logo box (top of card) */
 .method-logo {
   position: relative;
   z-index: 1;
@@ -803,7 +843,6 @@ iframe.goog-te-banner-frame {
   z-index: 1;
 }
 
-/* Method title + sub */
 .method-meta {
   display: flex;
   flex-direction: column;
@@ -826,7 +865,6 @@ iframe.goog-te-banner-frame {
   line-height: 1.4;
 }
 
-/* Recommended badge (absolute top-left) */
 .method-badge {
   position: absolute;
   top: 10px;
@@ -847,7 +885,6 @@ iframe.goog-te-banner-frame {
   white-space: nowrap;
 }
 
-/* Features list */
 .method-features {
   list-style: none;
   display: flex;
@@ -876,7 +913,6 @@ iframe.goog-te-banner-frame {
   flex-shrink: 0;
 }
 
-/* Brand row (Visa, MC, etc.) */
 .method-brands {
   display: flex;
   align-items: center;
@@ -901,7 +937,6 @@ iframe.goog-te-banner-frame {
 }
 .brand-icon.brand-lg { height: 22px; }
 
-/* Selector circle (top-right) */
 .method-select {
   position: absolute;
   top: 14px;
@@ -934,15 +969,11 @@ iframe.goog-te-banner-frame {
   border-radius: 50%;
 }
 
-/* Focus-visible state for keyboard nav */
 .method input[type="radio"]:focus-visible ~ .method-select {
   border-color: var(--ocean-bright);
   box-shadow: 0 0 0 4px rgba(26, 155, 227, 0.32);
 }
 
-/* =========================================================================
-   PAY AREA (buttons of selected method)
-   ========================================================================= */
 .pay-area {
   background: linear-gradient(180deg, rgba(10, 22, 40, 0.55), rgba(17, 34, 64, 0.55));
   border: 1px solid var(--line);
@@ -995,7 +1026,6 @@ iframe.goog-te-banner-frame {
   text-align: center;
 }
 
-/* Big native pay buttons (Webpay / MP / fallback PayPal) */
 .btn-pay {
   display: inline-flex;
   align-items: center;
@@ -1026,9 +1056,6 @@ iframe.goog-te-banner-frame {
 .btn-pay.wp { background: linear-gradient(135deg, #ee2737, #b81e2b); box-shadow: 0 10px 26px rgba(238, 39, 55, 0.35); }
 .btn-pay.mp { background: linear-gradient(135deg, #009ee3, #0078a8); box-shadow: 0 10px 26px rgba(0, 158, 227, 0.35); }
 
-/* =========================================================================
-   STATUS
-   ========================================================================= */
 .status {
   margin-top: 16px;
   padding: 12px 14px;
@@ -1053,9 +1080,6 @@ iframe.goog-te-banner-frame {
   border: 1px solid rgba(26, 155, 227, 0.25);
 }
 
-/* =========================================================================
-   TRUST STRIP (4-col)
-   ========================================================================= */
 .trust-strip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1106,7 +1130,6 @@ iframe.goog-te-banner-frame {
   color: var(--ocean-bright);
 }
 
-/* Bottom row of accepted card brands (spans all 4 columns) */
 .trust-strip-brands {
   grid-column: 1 / -1;
   display: flex;
@@ -1130,9 +1153,6 @@ iframe.goog-te-banner-frame {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
 }
 
-/* =========================================================================
-   NOTE / CONTACT / FOOTER
-   ========================================================================= */
 .note {
   margin: 8px 0 26px;
   padding: 22px 24px;
@@ -1204,9 +1224,6 @@ iframe.goog-te-banner-frame {
   flex-wrap: wrap;
 }
 
-/* =========================================================================
-   RESPONSIVE TWEAKS
-   ========================================================================= */
 @media (max-width: 720px) {
   .hero { padding: 50px 0 28px; }
   .card { padding: 24px 20px; }
@@ -1215,7 +1232,6 @@ iframe.goog-te-banner-frame {
   .pay-area { padding: 22px 18px; }
 }
 
-/* PayPal containers wrap */
 .paypal-wrap {
   min-height: 50px;
 }
