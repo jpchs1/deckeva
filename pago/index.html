@@ -26,6 +26,7 @@
   <link rel="preconnect" href="https://www.paypal.com" crossorigin />
   <link rel="preconnect" href="https://www.paypalobjects.com" crossorigin />
   <link rel="preconnect" href="https://tourevo.cl" crossorigin />
+  <link rel="preconnect" href="https://translate.google.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Favicon -->
@@ -58,7 +59,10 @@
         <span class="dot" aria-hidden="true"></span>
         DECKEVA
       </a>
-      <a class="header-link" href="https://deckeva.cl/">&larr; Volver al sitio</a>
+      <div class="header-right">
+        <div id="google_translate_element" class="gtrans-widget" aria-label="Cambiar idioma / Change language"></div>
+        <a class="header-link" href="https://deckeva.cl/">&larr; Volver al sitio</a>
+      </div>
     </div>
   </header>
 
@@ -456,6 +460,19 @@
 
   <!-- App JS -->
   <script src="/pago/deckeva-pago.js"></script>
+
+  <!-- Google Translate Element (misma config que deckeva.cl / deckeva.com home) -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'es',
+        includedLanguages: 'en,es,pt,fr,de,it,nl,pl,sv,ru,zh-CN,ja,ko,ar,hi,tr,el,he',
+        autoDisplay: false,
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 
 </body>
 </html>
