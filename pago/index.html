@@ -78,13 +78,31 @@
       </p>
 
       <div class="pay-badges">
-        <span class="pay-badge">
+        <span class="pay-badge ssl">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           SSL 256-bit
         </span>
-        <span class="pay-badge brand-wp">Webpay Plus</span>
-        <span class="pay-badge brand-mp">Mercado Pago</span>
-        <span class="pay-badge brand-pp">PayPal</span>
+        <span class="pay-badge logo">
+          <svg class="brand-svg" viewBox="0 0 110 26" xmlns="http://www.w3.org/2000/svg" aria-label="Webpay Plus">
+            <text x="0" y="20" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="20" fill="#ee2737" letter-spacing="-0.5">webpay</text>
+            <text x="74" y="20" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="20" fill="#0a1628">Plus</text>
+          </svg>
+        </span>
+        <span class="pay-badge logo">
+          <svg class="brand-svg" viewBox="0 0 150 26" xmlns="http://www.w3.org/2000/svg" aria-label="Mercado Pago">
+            <circle cx="11" cy="13" r="11" fill="#009ee3"/>
+            <path d="M5 15 q6 7 12 0" stroke="#fff200" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <text x="28" y="18" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="14" fill="#003a5d">mercado</text>
+            <text x="86" y="18" font-family="Helvetica, Arial, sans-serif" font-weight="300" font-size="14" fill="#009ee3">pago</text>
+          </svg>
+        </span>
+        <span class="pay-badge logo">
+          <svg class="brand-svg" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
+            <text x="0" y="21" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.8">
+              <tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan>
+            </text>
+          </svg>
+        </span>
         <span class="pay-badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Pago encriptado
@@ -220,49 +238,97 @@
         <label class="method" for="m-webpay">
           <input type="radio" id="m-webpay" name="method" value="webpay" />
           <span class="method-select" aria-hidden="true"></span>
-          <div class="method-head">
-            <span class="method-icon wp">WP</span>
-            <span class="method-title">Webpay Plus</span>
+
+          <div class="method-logo wp" aria-hidden="true">
+            <svg class="brand-svg" viewBox="0 0 150 36" xmlns="http://www.w3.org/2000/svg" aria-label="Webpay Plus">
+              <text x="6" y="26" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="22" fill="#ee2737" letter-spacing="-0.5">webpay</text>
+              <text x="96" y="26" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="22" fill="#0a1628">Plus</text>
+            </svg>
           </div>
-          <p class="method-tagline">Debito y credito Chile · Transbank · CLP</p>
+
+          <div class="method-meta">
+            <span class="method-title">Webpay Plus</span>
+            <span class="method-sub">Debito y credito Chile &middot; Transbank &middot; CLP</span>
+          </div>
+
           <ul class="method-features">
-            <li>Redcompra, Visa, Mastercard, Amex</li>
             <li>3-D Secure incluido</li>
+            <li>Cuotas con o sin interes (segun banco)</li>
             <li>Boleta electronica disponible</li>
           </ul>
+
+          <div class="method-brands" aria-label="Tarjetas aceptadas">
+            <svg class="brand-icon" viewBox="0 0 50 22" xmlns="http://www.w3.org/2000/svg" aria-label="Redcompra"><rect width="50" height="22" rx="3" fill="#ee2737"/><text x="25" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#ffffff" text-anchor="middle">REDCOMPRA</text></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="22" rx="3" fill="#ffffff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
+          </div>
         </label>
 
         <!-- Mercado Pago -->
         <label class="method" for="m-mp">
           <input type="radio" id="m-mp" name="method" value="mercadopago" />
           <span class="method-select" aria-hidden="true"></span>
-          <div class="method-head">
-            <span class="method-icon mp">MP</span>
-            <span class="method-title">Mercado Pago</span>
+
+          <div class="method-logo mp" aria-hidden="true">
+            <svg class="brand-svg" viewBox="0 0 180 36" xmlns="http://www.w3.org/2000/svg" aria-label="Mercado Pago">
+              <circle cx="15" cy="18" r="14" fill="#009ee3"/>
+              <path d="M7 21 q8 9 16 0" stroke="#fff200" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <text x="36" y="24" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="18" fill="#003a5d">mercado</text>
+              <text x="113" y="24" font-family="Helvetica, Arial, sans-serif" font-weight="300" font-size="18" fill="#009ee3">pago</text>
+            </svg>
           </div>
-          <p class="method-tagline">Tarjetas y saldo Mercado Pago · CLP</p>
+
+          <div class="method-meta">
+            <span class="method-title">Mercado Pago</span>
+            <span class="method-sub">Tarjetas y saldo Mercado Pago &middot; CLP</span>
+          </div>
+
           <ul class="method-features">
             <li>Credito y debito nacionales</li>
             <li>Cuotas con o sin interes (segun banco)</li>
             <li>Saldo Mercado Pago</li>
           </ul>
+
+          <div class="method-brands" aria-label="Tarjetas aceptadas">
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="22" rx="3" fill="#ffffff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
+            <svg class="brand-icon" viewBox="0 0 50 22" xmlns="http://www.w3.org/2000/svg" aria-label="Saldo Mercado Pago"><rect width="50" height="22" rx="3" fill="#009ee3"/><text x="25" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#ffffff" text-anchor="middle">SALDO MP</text></svg>
+          </div>
         </label>
 
         <!-- PayPal -->
         <label class="method" for="m-pp">
           <input type="radio" id="m-pp" name="method" value="paypal" />
           <span class="method-select" aria-hidden="true"></span>
-          <div class="method-head">
-            <span class="method-icon pp">PP</span>
-            <span class="method-title">PayPal</span>
-            <span class="method-badge">Recomendado · Internacional</span>
+          <span class="method-badge">Recomendado &middot; Internacional</span>
+
+          <div class="method-logo pp" aria-hidden="true">
+            <svg class="brand-svg" viewBox="0 0 130 36" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
+              <text x="6" y="28" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="26" letter-spacing="-0.8">
+                <tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan>
+              </text>
+            </svg>
           </div>
-          <p class="method-tagline">Saldo PayPal y tarjeta internacional · USD</p>
+
+          <div class="method-meta">
+            <span class="method-title">PayPal</span>
+            <span class="method-sub">Saldo PayPal o tarjeta internacional &middot; USD</span>
+          </div>
+
           <ul class="method-features">
             <li>Conversion automatica a USD</li>
             <li>Proteccion al comprador PayPal</li>
-            <li>Visa · Mastercard · Amex · Discover</li>
+            <li>No requiere cuenta PayPal para pagar con tarjeta</li>
           </ul>
+
+          <div class="method-brands" aria-label="Tarjetas aceptadas">
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="22" rx="3" fill="#ffffff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
+            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Discover"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="4" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="7" fill="#191919">Discover</text><ellipse cx="29" cy="17" rx="6" ry="2.4" fill="#f47216"/></svg>
+          </div>
         </label>
 
       </div>
@@ -339,6 +405,16 @@
             <span class="trust-title">Soporte directo</span>
             <span class="trust-sub"><a href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20tengo%20una%20consulta%20sobre%20el%20pago." target="_blank" rel="noopener">WhatsApp +56 9 4021 1459</a></span>
           </div>
+        </div>
+
+        <div class="trust-strip-brands" aria-label="Tarjetas y medios aceptados">
+          <span class="trust-strip-label">Aceptamos</span>
+          <svg class="brand-icon brand-lg" viewBox="0 0 50 24" xmlns="http://www.w3.org/2000/svg" aria-label="Redcompra"><rect width="50" height="24" rx="3" fill="#ee2737"/><text x="25" y="16" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">REDCOMPRA</text></svg>
+          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="42" height="24" rx="3" fill="#ffffff"/><text x="21" y="17" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="12" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="42" height="24" rx="3" fill="#ffffff"/><circle cx="17" cy="12" r="7.2" fill="#eb001b"/><circle cx="25" cy="12" r="7.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="42" height="24" rx="3" fill="#006fcf"/><text x="21" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="11" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
+          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Discover"><rect width="42" height="24" rx="3" fill="#ffffff"/><text x="5" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="8" fill="#191919">Discover</text><ellipse cx="32" cy="19" rx="7" ry="2.8" fill="#f47216"/></svg>
+          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Diners Club"><rect width="42" height="24" rx="3" fill="#0079be"/><circle cx="21" cy="12" r="7" fill="#ffffff"/><circle cx="19" cy="12" r="3.5" fill="#0079be"/></svg>
         </div>
       </div>
 
