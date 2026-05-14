@@ -227,14 +227,25 @@
 
   // -------------------------------------------------------------------------
   // API CALLS (tourevo.cl/api/*)
+  // Tourevo lee `action` desde query string (?action=X), no del body.
   // -------------------------------------------------------------------------
   function apiPost(endpoint, payload) {
-    return fetch(CFG.apiBase + "/" + endpoint, {
+    payload = payload || {};
+    var action = payload.action || null;
+    var body = {};
+    for (var k in payload) {
+      if (k !== "action" && Object.prototype.hasOwnProperty.call(payload, k)) {
+        body[k] = payload[k];
+      }
+    }
+    var url = CFG.apiBase + "/" + endpoint;
+    if (action) url += (url.indexOf("?") === -1 ? "?" : "&") + "action=" + encodeURIComponent(action);
+    return fetch(url, {
       method: "POST",
       mode: "cors",
       credentials: "omit",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify(payload || {})
+      body: JSON.stringify(body)
     }).then(function (res) {
       if (!res.ok) return res.text().then(function (t) { throw new Error("HTTP " + res.status + ": " + t.slice(0, 200)); });
       return res.json();
@@ -274,9 +285,12 @@
     apiPost("webpay.php", {
       action: "create_transaction",
       amount: clp,
-      order_id: orderId,
+      buy_order: orderId,
       session_id: sessionId,
-      return_url: CFG.returnBase + "webpay-return.php"
+      return_url: CFG.returnBase + "webpay-return.php",
+      user_email: (emailInput.value || "").trim(),
+      payer_name: (nameInput.value || "").trim(),
+      description: safe(descInput.value, 200)
     }).then(function (data) {
       if (!data || !data.url || !data.token) {
         throw new Error("Respuesta invalida de Webpay (faltan url/token)");
@@ -357,28 +371,21 @@
     btnMP.classList.add("is-loading");
     btnMP.textContent = "Conectando con Mercado Pago…";
 
+    // Tourevo wrapper espera payload PLANO: amount + description + (opcionales).
     var payload = {
       action: "create_preference",
+      amount: clp,
+      description: safe(descInput.value, 200) || "Pago DECKEVA",
+      quantity: 1,
       external_reference: orderId,
-      items: [{
-        title: safe(descInput.value, 256) || "Pago DECKEVA",
-        quantity: 1,
-        unit_price: clp,
-        currency_id: "CLP"
-      }],
-      payer: {
-        name: safe(nameInput.value, 60),
-        email: safe(emailInput.value, 120),
-        phone: { number: safe(phoneInput.value.replace(/[^\d]/g, ""), 16) }
-      },
+      plan_name: "DECKEVA",
+      payer_email: safe(emailInput.value, 120),
+      payer_name: safe(nameInput.value, 60),
       back_urls: {
         success: CFG.returnBase + "?status=success&order=" + encodeURIComponent(orderId),
         failure: CFG.returnBase + "?status=failure&order=" + encodeURIComponent(orderId),
         pending: CFG.returnBase + "?status=pending&order=" + encodeURIComponent(orderId)
-      },
-      auto_return: "approved",
-      statement_descriptor: "DECKEVA",
-      metadata: { brand: "DECKEVA", order_id: orderId }
+      }
     };
 
     apiPost("mercadopago.php", payload)
