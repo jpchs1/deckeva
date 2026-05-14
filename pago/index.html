@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://www.paypalobjects.com" crossorigin />
   <link rel="preconnect" href="https://tourevo.cl" crossorigin />
   <link rel="preconnect" href="https://translate.google.com" crossorigin />
+  <link rel="preconnect" href="https://flagcdn.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Favicon -->
@@ -60,7 +61,35 @@
         DECKEVA
       </a>
       <div class="header-right">
-        <div id="google_translate_element" class="gtrans-widget" aria-label="Cambiar idioma / Change language"></div>
+        <div class="lang-switcher" id="langSwitcher">
+          <button type="button" class="lang-trigger" id="langTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Idioma / Language">
+            <img class="lang-flag" src="https://flagcdn.com/w40/cl.png" alt="" width="20" height="15" loading="lazy" />
+            <span class="lang-name">Español</span>
+            <svg class="lang-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 8 10 12 14 8"/></svg>
+          </button>
+          <div class="lang-menu" id="langMenu" role="listbox" hidden>
+            <button type="button" class="lang-item" data-lang="es"    data-flag="cl" role="option"><img src="https://flagcdn.com/w40/cl.png" alt="" width="22" height="16" loading="lazy" /><span>Español</span></button>
+            <button type="button" class="lang-item" data-lang="en"    data-flag="us" role="option"><img src="https://flagcdn.com/w40/us.png" alt="" width="22" height="16" loading="lazy" /><span>English</span></button>
+            <button type="button" class="lang-item" data-lang="pt"    data-flag="br" role="option"><img src="https://flagcdn.com/w40/br.png" alt="" width="22" height="16" loading="lazy" /><span>Português</span></button>
+            <button type="button" class="lang-item" data-lang="fr"    data-flag="fr" role="option"><img src="https://flagcdn.com/w40/fr.png" alt="" width="22" height="16" loading="lazy" /><span>Français</span></button>
+            <button type="button" class="lang-item" data-lang="de"    data-flag="de" role="option"><img src="https://flagcdn.com/w40/de.png" alt="" width="22" height="16" loading="lazy" /><span>Deutsch</span></button>
+            <button type="button" class="lang-item" data-lang="it"    data-flag="it" role="option"><img src="https://flagcdn.com/w40/it.png" alt="" width="22" height="16" loading="lazy" /><span>Italiano</span></button>
+            <button type="button" class="lang-item" data-lang="nl"    data-flag="nl" role="option"><img src="https://flagcdn.com/w40/nl.png" alt="" width="22" height="16" loading="lazy" /><span>Nederlands</span></button>
+            <button type="button" class="lang-item" data-lang="pl"    data-flag="pl" role="option"><img src="https://flagcdn.com/w40/pl.png" alt="" width="22" height="16" loading="lazy" /><span>Polski</span></button>
+            <button type="button" class="lang-item" data-lang="sv"    data-flag="se" role="option"><img src="https://flagcdn.com/w40/se.png" alt="" width="22" height="16" loading="lazy" /><span>Svenska</span></button>
+            <button type="button" class="lang-item" data-lang="ru"    data-flag="ru" role="option"><img src="https://flagcdn.com/w40/ru.png" alt="" width="22" height="16" loading="lazy" /><span>Русский</span></button>
+            <button type="button" class="lang-item" data-lang="zh-CN" data-flag="cn" role="option"><img src="https://flagcdn.com/w40/cn.png" alt="" width="22" height="16" loading="lazy" /><span>中文</span></button>
+            <button type="button" class="lang-item" data-lang="ja"    data-flag="jp" role="option"><img src="https://flagcdn.com/w40/jp.png" alt="" width="22" height="16" loading="lazy" /><span>日本語</span></button>
+            <button type="button" class="lang-item" data-lang="ko"    data-flag="kr" role="option"><img src="https://flagcdn.com/w40/kr.png" alt="" width="22" height="16" loading="lazy" /><span>한국어</span></button>
+            <button type="button" class="lang-item" data-lang="ar"    data-flag="sa" role="option"><img src="https://flagcdn.com/w40/sa.png" alt="" width="22" height="16" loading="lazy" /><span>العربية</span></button>
+            <button type="button" class="lang-item" data-lang="hi"    data-flag="in" role="option"><img src="https://flagcdn.com/w40/in.png" alt="" width="22" height="16" loading="lazy" /><span>हिन्दी</span></button>
+            <button type="button" class="lang-item" data-lang="tr"    data-flag="tr" role="option"><img src="https://flagcdn.com/w40/tr.png" alt="" width="22" height="16" loading="lazy" /><span>Türkçe</span></button>
+            <button type="button" class="lang-item" data-lang="el"    data-flag="gr" role="option"><img src="https://flagcdn.com/w40/gr.png" alt="" width="22" height="16" loading="lazy" /><span>Ελληνικά</span></button>
+            <button type="button" class="lang-item" data-lang="he"    data-flag="il" role="option"><img src="https://flagcdn.com/w40/il.png" alt="" width="22" height="16" loading="lazy" /><span>עברית</span></button>
+          </div>
+        </div>
+        <!-- Hidden Google Translate widget — drives the translation -->
+        <div id="google_translate_element" class="gt-hidden" aria-hidden="true"></div>
         <a class="header-link" href="https://deckeva.cl/">&larr; Volver al sitio</a>
       </div>
     </div>
@@ -461,7 +490,7 @@
   <!-- App JS -->
   <script src="/pago/deckeva-pago.js"></script>
 
-  <!-- Google Translate Element (misma config que deckeva.cl / deckeva.com home) -->
+  <!-- Google Translate Element (motor de traduccion, oculto) -->
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -473,6 +502,67 @@
     }
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+
+  <!-- Custom language switcher (con banderitas) — usa Google Translate por detras -->
+  <script>
+    (function () {
+      var trigger = document.getElementById('langTrigger');
+      var menu = document.getElementById('langMenu');
+      if (!trigger || !menu) return;
+
+      function closeMenu() {
+        menu.setAttribute('hidden', '');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+      function openMenu() {
+        menu.removeAttribute('hidden');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (menu.hasAttribute('hidden')) openMenu();
+        else closeMenu();
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!trigger.contains(e.target) && !menu.contains(e.target)) closeMenu();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+
+      menu.addEventListener('click', function (e) {
+        var item = e.target.closest('.lang-item');
+        if (!item) return;
+        var lang = item.getAttribute('data-lang');
+        var flag = item.getAttribute('data-flag');
+        var name = item.querySelector('span').textContent;
+
+        var tFlag = trigger.querySelector('.lang-flag');
+        var tName = trigger.querySelector('.lang-name');
+        if (tFlag) tFlag.src = 'https://flagcdn.com/w40/' + flag + '.png';
+        if (tName) tName.textContent = name;
+
+        triggerTranslation(lang);
+        closeMenu();
+      });
+
+      function triggerTranslation(lang) {
+        function tryNow(retries) {
+          var select = document.querySelector('#google_translate_element select.goog-te-combo');
+          if (select) {
+            select.value = (lang === 'es') ? '' : lang;
+            select.dispatchEvent(new Event('change'));
+            return;
+          }
+          if (retries > 0) setTimeout(function () { tryNow(retries - 1); }, 200);
+        }
+        tryNow(30);
+      }
+    })();
+  </script>
 
 </body>
 </html>
