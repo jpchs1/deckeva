@@ -13,8 +13,21 @@ deployment:
     - /bin/cp guia/index.html /home/wwimpo/deckeva.com/guia/index.html
     - /bin/mkdir -p /home/wwimpo/deckeva.com/wiretransfers
     - /bin/cp wiretransfers/index.html /home/wwimpo/deckeva.com/wiretransfers/index.html
+
+    # ── Portal de Pago (Webpay + Mercado Pago + PayPal) ──
+    # Se despliega en AMBOS dominios (.com y .cl) — el canonical es .cl pero el
+    # tráfico viene a ambos. webpay-return.php es el shim POST→GET que recibe
+    # el callback de Transbank y redirige al JS con ?webpay_token=...
     - /bin/mkdir -p /home/wwimpo/deckeva.com/pago
-    - /bin/cp pago/index.html /home/wwimpo/deckeva.com/pago/index.html
+    - /bin/cp pago/index.html           /home/wwimpo/deckeva.com/pago/index.html
+    - /bin/cp pago/deckeva-pago.css     /home/wwimpo/deckeva.com/pago/deckeva-pago.css
+    - /bin/cp pago/deckeva-pago.js      /home/wwimpo/deckeva.com/pago/deckeva-pago.js
+    - /bin/cp pago/webpay-return.php    /home/wwimpo/deckeva.com/pago/webpay-return.php
+    - /bin/mkdir -p /home/wwimpo/deckeva.cl/pago
+    - /bin/cp pago/index.html           /home/wwimpo/deckeva.cl/pago/index.html
+    - /bin/cp pago/deckeva-pago.css     /home/wwimpo/deckeva.cl/pago/deckeva-pago.css
+    - /bin/cp pago/deckeva-pago.js      /home/wwimpo/deckeva.cl/pago/deckeva-pago.js
+    - /bin/cp pago/webpay-return.php    /home/wwimpo/deckeva.cl/pago/webpay-return.php
 
     # ── Staging preview (no indexable, sigue activo para iteraciones) ──
     - /bin/mkdir -p /home/wwimpo/deckeva.com/staging

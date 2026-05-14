@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO -->
-  <title>Pago Online | DECKEVA — Pago seguro con PayPal (USD)</title>
-  <meta name="description" content="Portal de pago seguro DECKEVA · Pague su pedido de pisos náuticos de goma EVA mediante PayPal en USD. Conexión SSL, pago encriptado y procesamiento internacional." />
+  <title>Pago Online | DECKEVA — Webpay · Mercado Pago · PayPal</title>
+  <meta name="description" content="Portal de pago seguro DECKEVA · Webpay Plus, Mercado Pago y PayPal. Pague su pedido de pisos nauticos de goma EVA en CLP o USD con procesadores certificados." />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="author" content="DECKEVA" />
-  <link rel="canonical" href="https://www.deckeva.com/pago/" />
+  <link rel="canonical" href="https://deckeva.cl/pago/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="DECKEVA" />
-  <meta property="og:title" content="DECKEVA — Pago Online (PayPal · USD)" />
-  <meta property="og:description" content="Pague su pedido DECKEVA mediante PayPal · USD. Conexión SSL y procesamiento internacional." />
-  <meta property="og:url" content="https://www.deckeva.com/pago/" />
+  <meta property="og:title" content="DECKEVA — Pago Online (Webpay · Mercado Pago · PayPal)" />
+  <meta property="og:description" content="Pague su pedido DECKEVA por Webpay Plus, Mercado Pago o PayPal. Conexion SSL y procesadores certificados." />
+  <meta property="og:url" content="https://deckeva.cl/pago/" />
   <meta property="og:image" content="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg" />
   <meta property="og:locale" content="es_CL" />
 
@@ -25,570 +25,339 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://www.paypal.com" crossorigin />
   <link rel="preconnect" href="https://www.paypalobjects.com" crossorigin />
+  <link rel="preconnect" href="https://tourevo.cl" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Favicon -->
   <link rel="icon" href="https://deckeva.com/wp-content/uploads/2023/08/cropped-deckeva-favicon-32x32.png" sizes="32x32" />
 
-  <style>
-    :root {
-      --navy: #0a1628;
-      --navy-mid: #112240;
-      --navy-light: #1a3a5c;
-      --ocean: #0e6ba8;
-      --ocean-bright: #1a9be3;
-      --foam: #e8f4f8;
-      --gold: #f5a623;
-      --gold-light: #ffc04d;
-      --white: #ffffff;
-      --text: #ccd6f6;
-      --text-muted: #8899aa;
-      --danger: #ff6b6b;
-      --success: #4ade80;
-      --r: 10px;
-      --r-lg: 18px;
-      --shadow-sm: 0 4px 20px rgba(0,0,0,0.25);
-      --shadow: 0 20px 60px rgba(0,0,0,0.45);
-      --max: 1120px;
-    }
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/pago/deckeva-pago.css" />
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
-    body {
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--navy);
-      color: var(--text);
-      line-height: 1.65;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-    img { max-width: 100%; display: block; }
-    a { color: var(--ocean-bright); text-decoration: none; transition: color .2s ease; }
-    a:hover { color: var(--gold-light); }
-    .container { max-width: var(--max); margin: 0 auto; padding: 0 22px; }
-
-    /* HEADER */
-    .site-header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(10, 22, 40, 0.88);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .header-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 0;
-    }
-    .brand {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 800; letter-spacing: 3px;
-      color: var(--white); font-size: 22px;
-      text-decoration: none;
-      display: inline-flex; align-items: center; gap: 10px;
-    }
-    .brand .dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 14px var(--gold);
-    }
-    .brand:hover { color: var(--foam); }
-    .header-link {
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .header-link:hover { color: var(--gold-light); }
-
-    /* HERO */
-    .hero {
-      position: relative;
-      padding: 70px 0 40px;
-      background:
-        radial-gradient(ellipse at 20% 0%, rgba(26, 155, 227, 0.18), transparent 55%),
-        radial-gradient(ellipse at 80% 100%, rgba(245, 166, 35, 0.10), transparent 55%),
-        linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
-      overflow: hidden;
-    }
-    .eyebrow {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--gold);
-      padding: 6px 12px;
-      border: 1px solid rgba(245, 166, 35, 0.35);
-      border-radius: 999px;
-      background: rgba(245, 166, 35, 0.06);
-      margin-bottom: 22px;
-    }
-    .hero h1 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: clamp(34px, 5.4vw, 54px);
-      line-height: 1.05;
-      letter-spacing: -0.5px;
-      color: var(--white);
-      margin-bottom: 18px;
-      text-wrap: balance;
-    }
-    .hero h1 .accent { color: var(--ocean-bright); }
-    .hero p.lead {
-      max-width: 720px;
-      font-size: 17px;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-    .hero p.lead.en {
-      color: var(--text-muted);
-      font-size: 15.5px;
-      font-style: italic;
-    }
-
-    /* TRUST ROW */
-    .trust-row {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      margin-top: 22px;
-    }
-    .trust-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--text-muted);
-      padding: 6px 12px;
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.03);
-    }
-    .trust-pill svg { width: 13px; height: 13px; color: var(--ocean-bright); }
-
-    /* SECTION */
-    .section {
-      padding: 60px 0 90px;
-      background: var(--navy-mid);
-    }
-
-    /* PAY SHELL */
-    .pay-shell {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 26px;
-      align-items: start;
-    }
-    @media (max-width: 880px) {
-      .pay-shell { grid-template-columns: 1fr; }
-    }
-
-    .card {
-      background: linear-gradient(180deg, rgba(26, 58, 92, 0.55), rgba(17, 34, 64, 0.55));
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--r-lg);
-      padding: 30px 28px;
-      box-shadow: var(--shadow-sm);
-    }
-    .card h2 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 28px;
-      color: var(--white);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .card .card-sub {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 22px;
-    }
-
-    /* FORM */
-    .field-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 540px) {
-      .field-grid { grid-template-columns: 1fr; }
-    }
-    .field-block { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    .field-block.full { grid-column: 1 / -1; }
-    .field-block label {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-    .field-block label em {
-      color: var(--text-muted);
-      font-style: normal;
-      text-transform: none;
-      letter-spacing: 0.5px;
-    }
-    .field-block input,
-    .field-block textarea {
-      font-family: 'DM Sans', system-ui, sans-serif;
-      font-size: 15px;
-      color: var(--white);
-      background: rgba(10, 22, 40, 0.55);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--r);
-      padding: 12px 14px;
-      transition: border-color .2s ease, box-shadow .2s ease;
-      width: 100%;
-    }
-    .field-block input:focus,
-    .field-block textarea:focus {
-      outline: none;
-      border-color: rgba(26,155,227,0.55);
-      box-shadow: 0 0 0 3px rgba(26,155,227,0.15);
-    }
-    .field-block input::placeholder,
-    .field-block textarea::placeholder {
-      color: rgba(204, 214, 246, 0.35);
-    }
-    .field-block .hint {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-    .amount-wrap {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 0;
-      align-items: stretch;
-    }
-    .amount-wrap input {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      border-right: none;
-    }
-    .amount-wrap .amount-cur {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 0 16px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; letter-spacing: 2px;
-      color: var(--gold);
-      background: rgba(245, 166, 35, 0.08);
-      border: 1px solid rgba(245, 166, 35, 0.30);
-      border-left: none;
-      border-top-right-radius: var(--r);
-      border-bottom-right-radius: var(--r);
-      font-size: 14px;
-    }
-
-    .terms-row {
-      display: flex; align-items: flex-start; gap: 10px;
-      margin: 6px 0 4px;
-      font-size: 13px;
-      color: var(--text);
-    }
-    .terms-row input[type="checkbox"] {
-      margin-top: 4px;
-      accent-color: var(--gold);
-      width: 16px; height: 16px;
-      flex-shrink: 0;
-    }
-
-    /* SUMMARY (right side) */
-    .summary-row {
-      display: flex; align-items: baseline; justify-content: space-between;
-      gap: 14px; padding: 12px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.08);
-    }
-    .summary-row:last-of-type { border-bottom: none; }
-    .summary-row .lbl {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .summary-row .val {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; letter-spacing: 1px;
-      color: var(--white); font-size: 18px;
-    }
-    .summary-total .val {
-      color: var(--gold-light);
-      font-size: 30px;
-    }
-    .summary-empty {
-      font-size: 14px; color: var(--text-muted);
-      padding: 12px 0;
-    }
-
-    /* PAYPAL CONTAINER */
-    .paypal-wrap {
-      margin-top: 22px;
-      min-height: 50px;
-    }
-    .paypal-wrap.disabled { opacity: 0.45; pointer-events: none; }
-
-    /* STATUS MESSAGE */
-    .status {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: var(--r);
-      font-size: 14px;
-      display: none;
-    }
-    .status.show { display: block; }
-    .status.error {
-      color: var(--danger);
-      background: rgba(255,107,107,0.08);
-      border: 1px solid rgba(255,107,107,0.25);
-    }
-    .status.success {
-      color: var(--success);
-      background: rgba(74, 222, 128, 0.08);
-      border: 1px solid rgba(74, 222, 128, 0.25);
-    }
-    .status.info {
-      color: var(--ocean-bright);
-      background: rgba(26,155,227,0.08);
-      border: 1px solid rgba(26,155,227,0.25);
-    }
-
-    /* OTHER METHODS / NOTE */
-    .alt-row {
-      margin-top: 18px;
-      padding: 18px 18px;
-      background: rgba(245, 166, 35, 0.06);
-      border-left: 3px solid var(--gold);
-      border-radius: 6px;
-    }
-    .alt-row h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--gold-light);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .alt-row p { font-size: 14px; color: var(--text); }
-
-    .note {
-      max-width: var(--max);
-      margin: 36px auto 0;
-      padding: 22px 24px;
-      background: linear-gradient(135deg, rgba(26,155,227,0.08), rgba(26,155,227,0.03));
-      border: 1px solid rgba(26,155,227,0.25);
-      border-radius: var(--r-lg);
-      color: var(--text);
-      font-size: 15px;
-    }
-    .note strong { color: var(--white); }
-
-    /* CTA / CONTACT */
-    .contact { margin-top: 40px; text-align: center; }
-    .contact h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 26px;
-      color: var(--white);
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-    .contact p { color: var(--text-muted); margin-bottom: 22px; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 13px 26px;
-      border-radius: 999px;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-      font-size: 14px;
-      cursor: pointer; border: 0;
-      transition: transform .15s ease, box-shadow .2s ease, color .2s ease;
-      white-space: nowrap;
-      text-decoration: none;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--ocean-bright), var(--ocean));
-      color: var(--white);
-      box-shadow: 0 10px 26px rgba(26, 155, 227, 0.35);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(26,155,227,0.45); color: #fff; }
-    .btn svg { width: 18px; height: 18px; }
-
-    /* FOOTER */
-    .site-footer {
-      background: var(--navy);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      padding: 36px 0;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    .site-footer .container {
-      display: flex; justify-content: space-between;
-      gap: 16px; flex-wrap: wrap;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 720px) {
-      .hero { padding: 50px 0 28px; }
-      .card { padding: 26px 22px; }
-      .card h2 { font-size: 24px; }
-    }
-  </style>
+  <!-- Runtime config (sobreescribible por el host) -->
+  <script>
+    window.DECKEVA_USD_RATE = 850;
+    window.DECKEVA_CFG = {
+      apiBase: "https://tourevo.cl/api",
+      paypalClientId: "AdgtnNA-dGFfexjeWDSe9NVFdZQ2yqK9bhpQBc0oEIJ_kqEPuqA1ITQMXWtSodrHmkmwFTN2GTBEyGQA",
+      paypalCurrency: "USD",
+      paypalIntent: "capture",
+      paypalLocale: "es_CL",
+      brandName: "DECKEVA",
+      returnBase: "https://deckeva.cl/pago/",
+      whatsapp: "56940211459"
+    };
+  </script>
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <a class="brand" href="https://www.deckeva.com/" aria-label="Volver a deckeva.com">
+      <a class="brand" href="https://deckeva.cl/" aria-label="Volver a deckeva.cl">
         <span class="dot" aria-hidden="true"></span>
         DECKEVA
       </a>
-      <a class="header-link" href="https://www.deckeva.com/">← Volver al sitio</a>
+      <a class="header-link" href="https://deckeva.cl/">&larr; Volver al sitio</a>
     </div>
   </header>
 
   <!-- HERO -->
   <section class="hero">
     <div class="container">
-      <span class="eyebrow">Pago Online · PayPal · USD</span>
-      <h1>Pago seguro con <span class="accent">PayPal</span></h1>
+      <span class="eyebrow">Pago Online · Procesadores Certificados</span>
+      <h1>Pago seguro: <span class="accent">Webpay · Mercado Pago · PayPal</span></h1>
       <p class="lead">
-        Complete los datos de su pedido y realice el pago en USD a través de PayPal.
-        Tarjeta internacional o saldo PayPal — procesamiento directo, encriptado y con la
-        protección al comprador de PayPal.
+        Complete los datos de su pedido y elija el medio de pago que prefiera.
+        Webpay Plus y Mercado Pago en CLP para Chile, PayPal en USD para pagos internacionales.
+        Conexion SSL 256-bit y procesamiento directo del banco.
       </p>
       <p class="lead en">
-        Fill in your order details and pay in USD via PayPal. International cards or
-        PayPal balance — direct, encrypted processing with PayPal Buyer Protection.
+        Fill in your order details and choose your preferred payment method.
+        Webpay Plus and Mercado Pago in CLP for Chile, PayPal in USD for international payments.
       </p>
 
-      <div class="trust-row">
-        <span class="trust-pill">
+      <div class="pay-badges">
+        <span class="pay-badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Conexión SSL
+          SSL 256-bit
         </span>
-        <span class="trust-pill">
+        <span class="pay-badge brand-wp">Webpay Plus</span>
+        <span class="pay-badge brand-mp">Mercado Pago</span>
+        <span class="pay-badge brand-pp">PayPal</span>
+        <span class="pay-badge">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Pago encriptado
-        </span>
-        <span class="trust-pill">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-          PayPal Buyer Protection
         </span>
       </div>
     </div>
   </section>
 
-  <!-- PAY -->
+  <!-- PAY SECTION -->
   <section class="section" id="pay">
     <div class="container">
 
+      <!-- STEPPER -->
+      <div class="stepper" role="list">
+        <div class="step active" id="step-1" role="listitem">
+          <span class="step-num">1</span>
+          <span class="step-text">
+            <span class="step-label">Paso 1</span>
+            <span class="step-title">Tus datos</span>
+          </span>
+        </div>
+        <div class="step" id="step-2" role="listitem">
+          <span class="step-num">2</span>
+          <span class="step-text">
+            <span class="step-label">Paso 2</span>
+            <span class="step-title">Metodo</span>
+          </span>
+        </div>
+        <div class="step" id="step-3" role="listitem">
+          <span class="step-num">3</span>
+          <span class="step-text">
+            <span class="step-label">Paso 3</span>
+            <span class="step-title">Confirmar</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- FORM + SUMMARY -->
       <div class="pay-shell">
 
-        <!-- LEFT — DATOS DEL PEDIDO -->
+        <!-- LEFT — Datos -->
         <article class="card" id="payer-card">
           <h2>Datos del pago</h2>
-          <p class="card-sub">Esta información viaja al recibo de PayPal. Verifíquela antes de pagar.</p>
+          <p class="card-sub">Esta informacion viaja al recibo. Verifiquela antes de pagar.</p>
 
           <form id="pay-form" novalidate onsubmit="return false">
             <div class="field-grid">
               <div class="field-block">
                 <label for="payerName">Nombre completo *</label>
-                <input type="text" id="payerName" name="nombre" required autocomplete="name" placeholder="Ej: María Fernández" />
+                <input type="text" id="payerName" name="nombre" required autocomplete="name" placeholder="Ej: Maria Fernandez" />
+                <span class="err">Ingrese su nombre (minimo 2 letras).</span>
               </div>
               <div class="field-block">
-                <label for="payerEmail">Correo electrónico *</label>
+                <label for="payerEmail">Correo electronico *</label>
                 <input type="email" id="payerEmail" name="email" required autocomplete="email" placeholder="tu@correo.com" />
+                <span class="err">Ingrese un correo valido.</span>
               </div>
               <div class="field-block">
-                <label for="payerPhone">Teléfono <em>(opcional)</em></label>
+                <label for="payerPhone">Telefono <em>(opcional)</em></label>
                 <input type="tel" id="payerPhone" name="telefono" autocomplete="tel" placeholder="+56 9 ..." />
               </div>
               <div class="field-block">
-                <label for="bookingCode">N° de pedido / Cotización <em>(opcional)</em></label>
+                <label for="bookingCode">N&deg; de pedido / Cotizacion <em>(opcional)</em></label>
                 <input type="text" id="bookingCode" name="pedido" placeholder="DECK-2026-..." />
               </div>
             </div>
 
             <div class="field-block full">
-              <label for="amount">Monto a pagar *</label>
+              <label for="amount">Monto a pagar (CLP) *</label>
               <div class="amount-wrap">
-                <input type="number" id="amount" name="monto" required min="1" step="0.01" inputmode="decimal" placeholder="Ej: 250.00" />
-                <span class="amount-cur" aria-label="Moneda">USD</span>
+                <span class="amount-cur" aria-label="Moneda">CLP</span>
+                <input type="text" id="amount" name="monto" required inputmode="numeric" autocomplete="off" placeholder="250000" />
               </div>
-              <small class="hint">Mínimo USD 1.00. PayPal procesa el pago en dólares estadounidenses.</small>
+              <small class="hint">Monto en pesos chilenos. Para PayPal se convierte automaticamente a USD.</small>
+              <small class="amount-aux" id="amountAux"></small>
+              <span class="err">Ingrese un monto en CLP (minimo 1).</span>
             </div>
 
             <div class="field-block full">
-              <label for="description">Concepto / Descripción *</label>
-              <textarea id="description" name="concepto" rows="2" required placeholder="Ej: Pago pedido pisos EVA — 12 m² color teak"></textarea>
+              <label for="description">Concepto / Descripcion *</label>
+              <textarea id="description" name="concepto" rows="2" required placeholder="Ej: Pago pedido pisos EVA — 12 m2 color teak"></textarea>
+              <span class="err">Describa brevemente el concepto del pago (minimo 3 caracteres).</span>
             </div>
 
             <label class="terms-row">
               <input type="checkbox" id="acceptTerms" name="terminos" required />
-              <span>Acepto los <a href="#terms" id="open-terms">términos del servicio</a> y autorizo el cargo a través de PayPal.</span>
+              <span>Acepto los <a href="#terms">terminos del servicio</a> y autorizo el cargo a traves del procesador seleccionado.</span>
             </label>
           </form>
         </article>
 
-        <!-- RIGHT — RESUMEN + PAYPAL -->
-        <aside class="card" id="checkout-card">
+        <!-- RIGHT — Resumen -->
+        <aside class="card card-summary" id="checkout-card">
           <h2>Resumen del pago</h2>
-          <p class="card-sub">Total a cobrar mediante PayPal.</p>
+          <p class="card-sub">Total a cobrar segun el metodo seleccionado.</p>
 
           <div id="summary">
             <div id="summaryEmpty" class="summary-empty">
-              Ingrese el monto y los datos para habilitar el botón de pago.
+              Ingrese el monto y los datos para habilitar el pago.
             </div>
             <div id="summaryFilled" hidden>
               <div class="summary-row">
                 <span class="lbl">Cliente</span>
-                <span class="val" id="sumName">—</span>
+                <span class="val compact" id="sumName">—</span>
               </div>
               <div class="summary-row">
                 <span class="lbl">Concepto</span>
-                <span class="val" id="sumDesc" style="font-size:14px; font-weight:500; text-align:right; max-width:60%;">—</span>
+                <span class="val compact" id="sumDesc">—</span>
               </div>
               <div class="summary-row summary-total">
                 <span class="lbl">Total</span>
-                <span class="val" id="sumTotal">USD 0.00</span>
+                <span class="val" id="sumTotal">CLP 0</span>
+              </div>
+              <div class="summary-row summary-usd" id="sumUsdRow" hidden>
+                <span class="lbl">Equivalente</span>
+                <span class="val" id="sumUsd">USD 0.00</span>
               </div>
             </div>
-          </div>
-
-          <!-- PayPal Smart Buttons render here -->
-          <div id="paypal-button-container" class="paypal-wrap disabled" aria-live="polite"></div>
-
-          <div id="statusMessage" class="status" role="status" aria-live="polite"></div>
-
-          <div class="alt-row">
-            <h3>¿Prefiere transferencia internacional?</h3>
-            <p>
-              También puede pagar mediante Wire Transfer / ACH (cuentas en USA · USD).
-              <a href="https://www.deckeva.com/wiretransfers/">Ver datos bancarios →</a>
-            </p>
           </div>
         </aside>
 
       </div>
 
-      <!-- NOTE -->
-      <div class="note">
-        <strong>Importante:</strong> Una vez confirmado el pago, recibirá el comprobante de PayPal por correo y nos
-        contactaremos para coordinar la fabricación y el envío. Si requiere factura, indíquelo en el campo «Concepto».
-        <br/><br/>
-        <strong>Important:</strong> Once the payment is confirmed, you'll receive the PayPal receipt by email and we'll
-        contact you to coordinate manufacturing and shipping. If you need an invoice, please mention it in the
-        “Concepto” field.
+      <!-- METHODS -->
+      <div class="methods-head">
+        <h2>Elige tu metodo</h2>
+        <span class="methods-sub">Tres opciones, mismo nivel de seguridad.</span>
       </div>
 
-      <!-- CONTACT -->
+      <div class="methods-grid" id="methods">
+
+        <!-- Webpay -->
+        <label class="method" for="m-webpay">
+          <input type="radio" id="m-webpay" name="method" value="webpay" />
+          <span class="method-select" aria-hidden="true"></span>
+          <div class="method-head">
+            <span class="method-icon wp">WP</span>
+            <span class="method-title">Webpay Plus</span>
+          </div>
+          <p class="method-tagline">Debito y credito Chile · Transbank · CLP</p>
+          <ul class="method-features">
+            <li>Redcompra, Visa, Mastercard, Amex</li>
+            <li>3-D Secure incluido</li>
+            <li>Boleta electronica disponible</li>
+          </ul>
+        </label>
+
+        <!-- Mercado Pago -->
+        <label class="method" for="m-mp">
+          <input type="radio" id="m-mp" name="method" value="mercadopago" />
+          <span class="method-select" aria-hidden="true"></span>
+          <div class="method-head">
+            <span class="method-icon mp">MP</span>
+            <span class="method-title">Mercado Pago</span>
+          </div>
+          <p class="method-tagline">Tarjetas y saldo Mercado Pago · CLP</p>
+          <ul class="method-features">
+            <li>Credito y debito nacionales</li>
+            <li>Cuotas con o sin interes (segun banco)</li>
+            <li>Saldo Mercado Pago</li>
+          </ul>
+        </label>
+
+        <!-- PayPal -->
+        <label class="method" for="m-pp">
+          <input type="radio" id="m-pp" name="method" value="paypal" />
+          <span class="method-select" aria-hidden="true"></span>
+          <div class="method-head">
+            <span class="method-icon pp">PP</span>
+            <span class="method-title">PayPal</span>
+            <span class="method-badge">Recomendado · Internacional</span>
+          </div>
+          <p class="method-tagline">Saldo PayPal y tarjeta internacional · USD</p>
+          <ul class="method-features">
+            <li>Conversion automatica a USD</li>
+            <li>Proteccion al comprador PayPal</li>
+            <li>Visa · Mastercard · Amex · Discover</li>
+          </ul>
+        </label>
+
+      </div>
+
+      <!-- PAY AREA -->
+      <div class="pay-area disabled" id="payArea" aria-live="polite">
+
+        <div class="pay-area-empty" id="payAreaEmpty">
+          <span>Complete sus datos arriba y elija un metodo para continuar.</span>
+        </div>
+
+        <!-- Webpay -->
+        <div class="pay-action-grid" id="payWebpay" hidden>
+          <div class="pay-action-block">
+            <div class="pay-action-caption">Confirmar pago con Webpay Plus (CLP)</div>
+            <button type="button" id="btnWebpay" class="btn-pay wp">Pagar con Webpay</button>
+            <span class="pay-action-help">Sera redirigido a la pasarela segura de Transbank.</span>
+          </div>
+        </div>
+
+        <!-- Mercado Pago -->
+        <div class="pay-action-grid" id="payMP" hidden>
+          <div class="pay-action-block">
+            <div class="pay-action-caption">Confirmar pago con Mercado Pago (CLP)</div>
+            <button type="button" id="btnMP" class="btn-pay mp">Pagar con Mercado Pago</button>
+            <span class="pay-action-help">Sera redirigido a Mercado Pago para completar el pago.</span>
+          </div>
+        </div>
+
+        <!-- PayPal -->
+        <div class="pay-action-grid" id="payPayPal" hidden>
+          <div class="pay-action-block">
+            <div class="pay-action-caption">Paga con cuenta PayPal</div>
+            <div id="paypal-btn-paypal" class="paypal-wrap"></div>
+          </div>
+          <div class="pay-action-block">
+            <div class="pay-action-caption">Paga con tarjeta internacional · Visa · MasterCard · Amex · Discover</div>
+            <div id="paypal-btn-card" class="paypal-wrap"></div>
+            <span class="pay-action-help">Procesado en USD por PayPal. No requiere cuenta PayPal.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STATUS -->
+      <div id="statusMessage" class="status" role="status" aria-live="polite"></div>
+
+      <!-- TRUST STRIP 4-col -->
+      <div class="trust-strip">
+        <div class="trust-col">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <div class="trust-text">
+            <span class="trust-title">SSL 256-bit</span>
+            <span class="trust-sub">Conexion encriptada extremo a extremo.</span>
+          </div>
+        </div>
+        <div class="trust-col">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+          <div class="trust-text">
+            <span class="trust-title">Procesadores certificados</span>
+            <span class="trust-sub">Transbank · Mercado Pago · PayPal.</span>
+          </div>
+        </div>
+        <div class="trust-col">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 22 12 17.27 5.79 22l2.39-8.15L2 9.36h7.61z"/></svg>
+          <div class="trust-text">
+            <span class="trust-title">Reviews verificadas</span>
+            <span class="trust-sub">Clientes satisfechos · Pago instantaneo.</span>
+          </div>
+        </div>
+        <div class="trust-col">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          <div class="trust-text">
+            <span class="trust-title">Soporte directo</span>
+            <span class="trust-sub"><a href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20tengo%20una%20consulta%20sobre%20el%20pago." target="_blank" rel="noopener">WhatsApp +56 9 4021 1459</a></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTE -->
+      <div class="note">
+        <strong>Importante:</strong> Una vez confirmado el pago, recibira el comprobante por correo y nos
+        contactaremos para coordinar la fabricacion y el envio. Si requiere factura, indiquelo en el campo
+        &laquo;Concepto&raquo;.
+        <br/><br/>
+        <strong>Important:</strong> Once your payment is confirmed, you will receive the receipt by email and we
+        will contact you to coordinate manufacturing and shipping. If you need an invoice, please mention it in the
+        &ldquo;Concepto&rdquo; field.
+      </div>
+
+      <!-- CONTACT CTA -->
       <div class="contact">
-        <h3>¿Dudas? / Questions?</h3>
-        <p>Escríbanos por WhatsApp para coordinar el pago o aclarar cualquier dato.</p>
-        <a class="btn btn-primary" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20tengo%20una%20duda%20sobre%20el%20pago%20por%20PayPal." target="_blank" rel="noopener">
+        <h3>&iquest;Dudas? / Questions?</h3>
+        <p>Escribanos por WhatsApp para coordinar el pago o aclarar cualquier dato.</p>
+        <a class="btn btn-primary" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20tengo%20una%20duda%20sobre%20el%20pago." target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
           WhatsApp +56 9 4021 1459
         </a>
@@ -600,234 +369,13 @@
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container">
-      <span>© <span id="year"></span> DECKEVA · Pisos Náuticos de Goma EVA</span>
-      <span><a href="https://www.deckeva.com/">www.deckeva.com</a> · <a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></span>
+      <span>&copy; <span id="year"></span> DECKEVA &middot; Pisos Nauticos de Goma EVA</span>
+      <span><a href="https://deckeva.cl/">www.deckeva.cl</a> &middot; <a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></span>
     </div>
   </footer>
 
-  <!--
-    ============================================================
-    PAYPAL CONFIG — DECKEVA
-    ============================================================
-    Client ID Live de PayPal Business de DECKEVA.
-    ============================================================
-  -->
-  <script>
-    window.DECKEVA_PAYPAL = {
-      clientId: 'AdgtnNA-dGFfexjeWDSe9NVFdZQ2yqK9bhpQBc0oEIJ_kqEPuqA1ITQMXWtSodrHmkmwFTN2GTBEyGQA',
-      currency: 'USD',
-      intent: 'capture',
-      brandName: 'DECKEVA',
-      locale: 'es_CL'
-    };
-  </script>
-  <script>
-    // Cargar SDK PayPal con el client-id configurado.
-    (function () {
-      var cfg = window.DECKEVA_PAYPAL || {};
-      var src = 'https://www.paypal.com/sdk/js'
-        + '?client-id=' + encodeURIComponent(cfg.clientId || 'sb')
-        + '&currency=' + encodeURIComponent(cfg.currency || 'USD')
-        + '&intent=' + encodeURIComponent(cfg.intent || 'capture')
-        + '&components=buttons'
-        + '&disable-funding=credit';
-      var s = document.createElement('script');
-      s.src = src;
-      s.async = true;
-      s.dataset.namespace = 'paypal_deckeva';
-      s.onload = function () { window.__paypalReady && window.__paypalReady(); };
-      s.onerror = function () {
-        var st = document.getElementById('statusMessage');
-        if (st) {
-          st.className = 'status error show';
-          st.textContent = 'No fue posible cargar PayPal. Revise su conexión o use WhatsApp para coordinar el pago.';
-        }
-      };
-      document.head.appendChild(s);
-    })();
-  </script>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // ---- DOM ----
-    var $ = function (id) { return document.getElementById(id); };
-    var form          = $('pay-form');
-    var nameInput     = $('payerName');
-    var emailInput    = $('payerEmail');
-    var phoneInput    = $('payerPhone');
-    var bookingInput  = $('bookingCode');
-    var amountInput   = $('amount');
-    var descInput     = $('description');
-    var termsInput    = $('acceptTerms');
-    var ppContainer   = $('paypal-button-container');
-    var statusMsg     = $('statusMessage');
-    var summaryEmpty  = $('summaryEmpty');
-    var summaryFilled = $('summaryFilled');
-    var sumName       = $('sumName');
-    var sumDesc       = $('sumDesc');
-    var sumTotal      = $('sumTotal');
-
-    var paypalRendered = false;
-
-    // ---- Helpers ----
-    function fmtUSD(n) {
-      var v = Number(n) || 0;
-      return 'USD ' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function getAmount() {
-      var raw = (amountInput.value || '').replace(/[^0-9.]/g, '');
-      var n = parseFloat(raw);
-      if (!isFinite(n)) return 0;
-      return Math.round(n * 100) / 100;
-    }
-
-    function isFormValid() {
-      var nameOk   = (nameInput.value || '').trim().length >= 2;
-      var emailOk  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((emailInput.value || '').trim());
-      var amountOk = getAmount() >= 1;
-      var descOk   = (descInput.value || '').trim().length >= 3;
-      var termsOk  = !!termsInput.checked;
-      return nameOk && emailOk && amountOk && descOk && termsOk;
-    }
-
-    function refreshSummary() {
-      var amt = getAmount();
-      var name = (nameInput.value || '').trim();
-      var desc = (descInput.value || '').trim();
-
-      var hasAny = !!(amt > 0 || name || desc);
-      summaryEmpty.hidden = hasAny;
-      summaryFilled.hidden = !hasAny;
-
-      sumName.textContent = name || '—';
-      sumDesc.textContent = desc || '—';
-      sumTotal.textContent = fmtUSD(amt);
-
-      // Enable/disable PayPal area visually based on validity.
-      if (isFormValid()) {
-        ppContainer.classList.remove('disabled');
-      } else {
-        ppContainer.classList.add('disabled');
-      }
-    }
-
-    function showStatus(kind, text) {
-      statusMsg.className = 'status ' + kind + ' show';
-      statusMsg.textContent = text;
-    }
-    function clearStatus() {
-      statusMsg.className = 'status';
-      statusMsg.textContent = '';
-    }
-
-    [nameInput, emailInput, phoneInput, bookingInput, amountInput, descInput].forEach(function (el) {
-      el.addEventListener('input', refreshSummary);
-    });
-    termsInput.addEventListener('change', refreshSummary);
-
-    // ---- PayPal Smart Buttons ----
-    window.__paypalReady = function () {
-      if (paypalRendered) return;
-      var paypal = window.paypal_deckeva || window.paypal;
-      if (!paypal || !paypal.Buttons) {
-        showStatus('error', 'PayPal no se cargó correctamente. Recargue la página o use WhatsApp.');
-        return;
-      }
-
-      paypal.Buttons({
-        style: {
-          layout: 'vertical',
-          color:  'gold',
-          shape:  'pill',
-          label:  'paypal',
-          height: 48
-        },
-        onClick: function (data, actions) {
-          clearStatus();
-          if (!isFormValid()) {
-            showStatus('error', 'Complete sus datos, monto (≥ USD 1.00), concepto y acepte los términos antes de pagar.');
-            return actions.reject();
-          }
-          return actions.resolve();
-        },
-        createOrder: function (data, actions) {
-          var amt  = getAmount();
-          var desc = (descInput.value || '').trim().slice(0, 127);
-          var ref  = (bookingInput.value || '').trim().slice(0, 127) || ('DECK-' + Date.now());
-          var name = (nameInput.value || '').trim();
-          var em   = (emailInput.value || '').trim();
-          var tel  = (phoneInput.value || '').trim();
-
-          return actions.order.create({
-            intent: 'CAPTURE',
-            purchase_units: [{
-              reference_id: ref,
-              description: desc || ('Pago DECKEVA — ' + name),
-              custom_id: ref,
-              amount: {
-                currency_code: 'USD',
-                value: amt.toFixed(2)
-              }
-            }],
-            payer: em ? {
-              name: name ? { given_name: name.split(' ')[0], surname: name.split(' ').slice(1).join(' ') || name.split(' ')[0] } : undefined,
-              email_address: em,
-              phone: tel ? { phone_number: { national_number: tel.replace(/\D+/g, '').slice(-15) } } : undefined
-            } : undefined,
-            application_context: {
-              brand_name: (window.DECKEVA_PAYPAL && window.DECKEVA_PAYPAL.brandName) || 'DECKEVA',
-              locale: (window.DECKEVA_PAYPAL && window.DECKEVA_PAYPAL.locale) || 'es_CL',
-              user_action: 'PAY_NOW',
-              shipping_preference: 'NO_SHIPPING'
-            }
-          });
-        },
-        onApprove: function (data, actions) {
-          return actions.order.capture().then(function (details) {
-            var n = (details && details.payer && details.payer.name && details.payer.name.given_name) || (nameInput.value || '').trim();
-            showStatus('success',
-              '✓ Pago confirmado, ' + (n || 'gracias') + '. ' +
-              'Recibirá el comprobante de PayPal por correo y nos contactaremos para coordinar la entrega. ' +
-              'ID de transacción: ' + (details && details.id ? details.id : '—')
-            );
-            ppContainer.classList.add('disabled');
-          }).catch(function (err) {
-            console.error(err);
-            showStatus('error', 'No fue posible capturar el pago. Si su tarjeta fue cobrada, contáctenos por WhatsApp con el ID de orden.');
-          });
-        },
-        onCancel: function () {
-          showStatus('info', 'Pago cancelado. Puede intentarlo nuevamente cuando lo desee.');
-        },
-        onError: function (err) {
-          console.error(err);
-          showStatus('error', 'Ocurrió un error con PayPal. Revise sus datos o use WhatsApp para coordinar el pago.');
-        }
-      }).render('#paypal-button-container').then(function () {
-        paypalRendered = true;
-      }).catch(function (err) {
-        console.error(err);
-        showStatus('error', 'No fue posible mostrar el botón de PayPal. Use WhatsApp para coordinar el pago.');
-      });
-    };
-
-    refreshSummary();
-
-    // Open terms (anchor — lightweight: just opens wiretransfers as fallback).
-    var openTerms = $('open-terms');
-    if (openTerms) {
-      openTerms.addEventListener('click', function (e) {
-        e.preventDefault();
-        showStatus('info',
-          'Términos: el pago corresponde al abono o saldo del pedido acordado con DECKEVA. ' +
-          'PayPal aplica protección al comprador. Una vez confirmado, coordinaremos fabricación y envío. ' +
-          'No reembolsable una vez iniciada la fabricación.'
-        );
-      });
-    }
-  </script>
+  <!-- App JS -->
+  <script src="/pago/deckeva-pago.js"></script>
 
 </body>
 </html>
