@@ -7317,8 +7317,23 @@
   <meta name="theme-color" content="#0f2240">
   <!-- Zoom global 80% en desktop (replica el zoom 80% del navegador; móvil/tablet intactos) -->
   <style>@media (min-width:1025px){html{zoom:.8}}</style>
+
+  <!-- Winter promo bar (incentivo de temporada) -->
+  <style id="winter-promo-css">
+    #winter-promo{position:fixed;top:0;left:0;right:0;z-index:1001;background:linear-gradient(90deg,#0e8e85 0%,#1bb3a3 100%);color:#fff;text-align:center;font:600 13px/1.35 'DM Sans',system-ui,sans-serif;padding:8px 40px;box-shadow:0 1px 0 rgba(255,255,255,.14)}
+    #winter-promo .wp-cta{display:inline-block;margin-left:8px;background:#0f2240;color:#fff;padding:3px 12px;border-radius:999px;text-decoration:none;font-weight:700;white-space:nowrap;transition:background .2s}
+    #winter-promo .wp-cta:hover{background:#09182f}
+    #winter-promo .wp-x{position:absolute;right:9px;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:17px;line-height:1;cursor:pointer;opacity:.85;padding:4px}
+    #winter-promo .wp-x:hover{opacity:1}
+    @media(max-width:640px){#winter-promo{font-size:11px;line-height:1.3;padding:7px 34px 7px 12px}#winter-promo .wp-cta{padding:2px 10px;margin-left:6px}}
+    html.wp-closed #winter-promo{display:none}
+  </style>
 </head>
 <body data-quote-country="">
+  <div id="winter-promo" role="region" aria-label="Promoción de invierno">
+    <span class="wp-line">❄️ <strong>Invierno es el mejor momento:</strong> renueva el piso de tu lancha ahora y llega listo al verano. Cupos de instalación limitados. <a class="wp-cta" href="#cotizar">Agenda tu fecha →</a></span>
+    <button class="wp-x" type="button" aria-label="Cerrar" onclick="winterPromoClose()">✕</button>
+  </div>
 <!-- SEO cross-domain banner -->
 <div id="seo-cross-banner" style="background:#0f2240;color:#fff;padding:10px 16px;text-align:center;font:500 13px/1.4 'DM Sans',sans-serif;"><span>🌍 ¿Vives fuera de Chile? Cotiza envío internacional en <a href="https://www.deckeva.com/" style="color:#1bb3a3;text-decoration:underline;font-weight:700" rel="alternate" hreflang="x-default">deckeva.com →</a></span></div>
 
@@ -11271,5 +11286,28 @@
 </script>
 
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+
+  <!-- Winter promo: ajusta offsets de las barras fijas y maneja el cierre -->
+  <script>
+  (function(){
+    var promo=document.getElementById('winter-promo'); if(!promo) return;
+    var st=document.createElement('style'); st.id='wp-offsets'; document.head.appendChild(st);
+    function sync(){
+      if(document.documentElement.classList.contains('wp-closed')){ st.textContent=''; return; }
+      var h=promo.offsetHeight||0;
+      st.textContent =
+        '#seo-cross-banner{top:'+h+'px!important}'+
+        'body{padding-top:calc(38px + '+h+'px)!important}'+
+        'nav#navbar{top:calc(38px + '+h+'px)!important}'+
+        '.mobile-menu.open{top:calc(38px + '+h+'px)!important}'+
+        '@media(max-width:640px){body{padding-top:calc(32px + '+h+'px)!important}nav#navbar{top:calc(32px + '+h+'px)!important}.mobile-menu.open{top:calc(32px + '+h+'px)!important}}';
+    }
+    window.winterPromoClose=function(){document.documentElement.classList.add('wp-closed');promo.style.display='none';sync();try{localStorage.setItem('winterPromoClosed','1');}catch(e){}};
+    try{if(localStorage.getItem('winterPromoClosed')==='1'){document.documentElement.classList.add('wp-closed');promo.style.display='none';}}catch(e){}
+    sync();
+    var t; window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(sync,150);});
+    window.addEventListener('load',sync); setTimeout(sync,600);
+  })();
+  </script>
 </body>
 </html>
