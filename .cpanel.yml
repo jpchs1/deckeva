@@ -8,6 +8,17 @@ deployment:
     - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/index.html
     - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/deckeva-international.html
 
+    # ── Favicons / iconos web-app (raíz de AMBOS dominios) ──
+    # Set completo del emblema DECKEVA (barco): favicon.ico multi-tamaño,
+    # favicon.svg, PNG 16/32/48/96/192/512, apple-touch-icon, iconos maskable,
+    # mstile, site.webmanifest y browserconfig.xml. Se copian a la raíz para
+    # que /favicon.ico, /favicon.svg, /apple-touch-icon.png, /site.webmanifest,
+    # etc. resuelvan correctamente y se vean perfecto en navegador, Google,
+    # iOS, Android y Windows.
+    - /bin/mkdir -p /home/wwimpo/deckeva.com /home/wwimpo/deckeva.cl
+    - /bin/cp -R assets/icons/. /home/wwimpo/deckeva.com/
+    - /bin/cp -R assets/icons/. /home/wwimpo/deckeva.cl/
+
     # ── Subpaths existentes ──
     - /bin/mkdir -p /home/wwimpo/deckeva.com/guia
     - /bin/cp guia/index.html /home/wwimpo/deckeva.com/guia/index.html

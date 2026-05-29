@@ -55,3 +55,33 @@ function deckeva_cross_domain_backlinks() {
     <?php
 }
 add_action( 'wp_footer', 'deckeva_cross_domain_backlinks', 99 );
+
+/**
+ * DECKEVA favicons / web-app icons.
+ *
+ * Outputs the authoritative brand icon set (boat emblem) served from the site
+ * root, so the favicon shows consistently in browser tabs, Google search
+ * results, iOS home screen, Android and Windows tiles across every
+ * WordPress-rendered page (blog, categorías, productos, etc.). The default
+ * WordPress Site Icon output is removed to avoid a competing/older favicon.
+ */
+function deckeva_remove_default_site_icon() {
+    remove_action( 'wp_head', 'wp_site_icon', 99 );
+}
+add_action( 'init', 'deckeva_remove_default_site_icon' );
+
+function deckeva_favicons() {
+    echo '
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#0f2240">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <meta name="theme-color" content="#0f2240">
+';
+}
+add_action( 'wp_head', 'deckeva_favicons', 2 );
