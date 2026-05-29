@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="DECKEVA">
+  <title>DECKEVA</title>
+  <defs>
+    <clipPath id="wc"><circle cx="40" cy="40" r="36"/></clipPath>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1bb3a3"/><stop offset="100%" stop-color="#0e8e85"/></linearGradient>
+  </defs>
+  <circle cx="40" cy="40" r="38" fill="#ffffff"/>
+  <g clip-path="url(#wc)"><path d="M 12 40 A 28 28 0 1 0 68 40" fill="none" stroke="#0f2240" stroke-width="3" stroke-linecap="round"/>
+  <g clip-path="url(#wc)">
+    <path d="M -4 60 C 14 50 30 64 40 60 C 52 56 66 64 84 56 L 84 84 L -4 84 Z" fill="url(#w)"/>
+    <path d="M -4 66 C 14 58 30 70 40 66 C 52 62 66 70 84 64 L 84 84 L -4 84 Z" fill="#16a3a3" opacity="0.55"/>
+  </g>
+  <path d="M 8 50 C 22 50 50 50 72 48 C 64 58 50 60 40 60 C 28 60 16 56 8 50 Z" fill="#0f2240"/>
+  <g fill="#c4ccd6">
+    <path d="M 14 50 L 18 50 L 17 56 L 14 56 Z"/><path d="M 20 50 L 26 50 L 25 57 L 20 57 Z"/>
+    <path d="M 28 50 L 35 50 L 34 58 L 27 58 Z"/><path d="M 37 50 L 45 50 L 44 58 L 35 58 Z"/>
+    <path d="M 47 50 L 55 50 L 54 57 L 45 57 Z"/><path d="M 57 49 L 64 49 L 62 55 L 55 55 Z"/>
+  </g>
+  <path d="M 18 50 C 24 38 36 30 50 32 C 60 33 66 40 70 47 L 65 47 C 60 40 50 36 42 38 C 32 40 26 47 24 50 Z" fill="#0f2240"/>
+  <path d="M 30 47 C 35 42 45 40 55 44" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.65"/></g>
+  <circle cx="40" cy="40" r="38" fill="none" stroke="#0f2240" stroke-width="3"/>
+</svg>
