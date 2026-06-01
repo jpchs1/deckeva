@@ -4,7 +4,7 @@
    ════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ── SCROLL REVEAL ── */
   function initScrollReveal(){
@@ -139,12 +139,67 @@
     }, {passive:true});
   }
 
+  /* ── READING PROGRESS BAR ── */
+  function initProgressBar(){
+    var bar = document.getElementById('read-progress');
+    if(!bar){
+      bar = document.createElement('div');
+      bar.id = 'read-progress';
+      document.body.appendChild(bar);
+    }
+    var ticking = false;
+    function update(){
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var pct = max > 0 ? (h.scrollTop || window.pageYOffset) / max * 100 : 0;
+      bar.style.width = pct + '%';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){ requestAnimationFrame(update); ticking = true; }
+    }, {passive:true});
+    update();
+  }
+
+  /* ── BACK TO TOP ── */
+  function initBackToTop(){
+    var btn = document.getElementById('back-to-top');
+    if(!btn){
+      btn = document.createElement('button');
+      btn.id = 'back-to-top';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Volver arriba');
+      btn.innerHTML = '↑';
+      document.body.appendChild(btn);
+    }
+    btn.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    var ticking = false;
+    function toggle(){
+      var y = window.pageYOffset;
+      if(y > 600) btn.classList.add('show');
+      else btn.classList.remove('show');
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){ requestAnimationFrame(toggle); ticking = true; }
+    }, {passive:true});
+    toggle();
+  }
+
   /* ── INIT ── */
   function init(){
-    initScrollReveal();
-    initCounters();
+    // Functional features run for everyone
     initLazyPolish();
     initNavShadow();
+    initProgressBar();
+    initBackToTop();
+    // Decorative motion only when the user allows it
+    if(!reduceMotion){
+      initScrollReveal();
+      initCounters();
+    }
   }
 
   if(document.readyState === 'loading'){
