@@ -62,7 +62,7 @@ add_action( 'wp_footer', 'deckeva_cross_domain_backlinks', 99 );
  * Renders above the footer with SEO-optimized structured data.
  */
 function deckeva_strategic_partners_section() {
-    if ( ! is_front_page() ) return;
+    if ( ! is_front_page() && ! is_home() ) return;
     ?>
     <style>
     .deckeva-partners{background:linear-gradient(135deg,#0f2240 0%,#1a365d 100%);padding:70px 20px;text-align:center}
