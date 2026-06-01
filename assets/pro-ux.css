@@ -1,0 +1,111 @@
+/* ════════════════════════════════════════════════════════
+   PRO UX ENHANCEMENTS — deckeva.cl
+   Scroll-reveal, micro-polish, performance hints
+   ════════════════════════════════════════════════════════ */
+
+/* ── SCROLL REVEAL BASE ── */
+.sr{opacity:0;transform:translateY(28px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.sr.sr--visible{opacity:1;transform:translateY(0)}
+.sr-left{opacity:0;transform:translateX(-32px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.sr-left.sr--visible{opacity:1;transform:translateX(0)}
+.sr-right{opacity:0;transform:translateX(32px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.sr-right.sr--visible{opacity:1;transform:translateX(0)}
+.sr-scale{opacity:0;transform:scale(0.92);transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1)}
+.sr-scale.sr--visible{opacity:1;transform:scale(1)}
+
+/* Stagger children (cards in grids) */
+.sr-stagger > *:nth-child(1){transition-delay:0ms}
+.sr-stagger > *:nth-child(2){transition-delay:80ms}
+.sr-stagger > *:nth-child(3){transition-delay:160ms}
+.sr-stagger > *:nth-child(4){transition-delay:240ms}
+.sr-stagger > *:nth-child(5){transition-delay:320ms}
+.sr-stagger > *:nth-child(6){transition-delay:400ms}
+.sr-stagger > *:nth-child(7){transition-delay:480ms}
+.sr-stagger > *:nth-child(8){transition-delay:560ms}
+
+/* ── COUNTER ANIMATION ── */
+.counter-animated{display:inline-block}
+
+/* ── IMAGE REVEAL ── */
+.img-reveal{overflow:hidden}
+.img-reveal img,.img-reveal video{transition:transform 0.8s cubic-bezier(0.16,1,0.3,1)}
+.img-reveal:hover img,.img-reveal:hover video{transform:scale(1.03)}
+
+/* ── SMOOTH FOCUS STATES (A11Y) ── */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:2px solid var(--ocean,#0e6ba8);outline-offset:3px;border-radius:4px;transition:outline-offset 0.15s ease}
+
+/* ── SECTION DIVIDERS (subtle) ── */
+.section-divider{width:60px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--ocean,#0e6ba8),var(--gold,#f5a623));margin:0 auto 20px;opacity:0.6}
+
+/* ── FLOATING LABELS (quote form) ── */
+.form-group{position:relative}
+.form-group .form-label{transition:all 0.2s ease}
+
+/* ── PARTNERS PRO POLISH ── */
+.dp-card{transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s ease,border-color 0.3s ease}
+.dp-card__img img{transition:transform 0.6s cubic-bezier(0.16,1,0.3,1),filter 0.3s ease}
+.dp-card:hover .dp-card__img img{transform:scale(1.06)}
+.dp-card__cta svg{transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+.dp-card:hover .dp-card__cta svg{transform:translateX(5px)}
+
+/* ── HERO V3 ENHANCEMENTS ── */
+.hero-v3-content{animation:heroContentIn 1s 0.3s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes heroContentIn{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero-v3-spec-card{animation:heroSpecIn 0.8s 0.8s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes heroSpecIn{
+  from{opacity:0;transform:translateY(20px) scale(0.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.hero-v3-scroll-cue{animation:heroScrollIn 0.6s 1.2s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes heroScrollIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* ── TRUST STRIP ENTRANCE ── */
+.trust-strip .trust-item{opacity:0;transform:translateY(10px);animation:trustIn 0.5s cubic-bezier(0.16,1,0.3,1) both}
+.trust-strip .trust-item:nth-child(1){animation-delay:0.1s}
+.trust-strip .trust-item:nth-child(2){animation-delay:0.25s}
+.trust-strip .trust-item:nth-child(3){animation-delay:0.4s}
+.trust-strip .trust-item:nth-child(4){animation-delay:0.55s}
+@keyframes trustIn{to{opacity:1;transform:translateY(0)}}
+
+/* ── BUTTON MICRO-INTERACTIONS ── */
+.btn,.hero-v3-btn,.footer-cta-btn,.dp-card__cta{position:relative;overflow:hidden}
+.hero-v3-btn--primary .hv3b-icon{display:inline-block;animation:iconBounce 2s ease-in-out infinite 2s}
+@keyframes iconBounce{0%,100%{transform:translateY(0)}15%{transform:translateY(-3px)}30%{transform:translateY(0)}}
+
+/* ── NAVBAR GLASSMORPHISM ENHANCEMENT ── */
+nav#navbar{transition:all 0.35s cubic-bezier(0.16,1,0.3,1) !important}
+nav#navbar.scrolled{backdrop-filter:blur(16px) saturate(1.2) !important;-webkit-backdrop-filter:blur(16px) saturate(1.2) !important}
+
+/* ── MOBILE TOUCH IMPROVEMENTS ── */
+@media(max-width:640px){
+  .hero-v3-btn,.btn,.footer-cta-btn,.dp-card__cta,.faq-question,.pay-tab,.ship-tab,.gal-tab{
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    min-height:44px
+  }
+  .t-track{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .t-card{scroll-snap-align:center}
+  .payment-tabs,.ship-tabs,.gal-tabs{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .pay-tab,.ship-tab,.gal-tab{scroll-snap-align:start}
+}
+
+/* ── SKELETON LOADING FOR IMAGES ── */
+img[loading="lazy"]{background:linear-gradient(90deg,#eef2f7 25%,#f6f8fb 50%,#eef2f7 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+img[loading="lazy"].loaded{animation:none;background:transparent}
+
+/* ── PREFERS REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  .sr,.sr-left,.sr-right,.sr-scale{opacity:1 !important;transform:none !important;transition:none !important}
+  .sr-stagger > *{transition-delay:0ms !important}
+  .hero-v3-content,.hero-v3-spec-card,.hero-v3-scroll-cue,.trust-strip .trust-item{animation:none !important;opacity:1 !important;transform:none !important}
+  img[loading="lazy"]{animation:none !important}
+  .hero-v3-btn--primary .hv3b-icon{animation:none !important}
+}
