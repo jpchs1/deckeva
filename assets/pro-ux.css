@@ -299,6 +299,19 @@ nav#navbar .nav-cta:hover{box-shadow:0 6px 16px rgba(245,166,35,0.36) !important
 nav#navbar .nav-inner{gap:20px !important}
 nav#navbar .nav-right{gap:8px !important}
 
+/* ════════════════════════════════════════════════════════
+   FOOTER CTA — center & tighten the composition
+   (space-between on the wide strip left it looking off-center)
+   ════════════════════════════════════════════════════════ */
+.footer-cta-inner{
+  max-width:940px;margin-left:auto !important;margin-right:auto !important;
+  gap:40px !important
+}
+@media(max-width:640px){
+  .footer-cta-inner{max-width:none;text-align:center;align-items:center !important}
+  .footer-cta-text{width:100%}
+}
+
 /* ── PREFERS REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
   .sr,.sr-left,.sr-right,.sr-scale{opacity:1 !important;transform:none !important;transition:none !important}
