@@ -226,7 +226,16 @@
   <link rel="dns-prefetch" href="//fonts.googleapis.com" />
   <link rel="dns-prefetch" href="//fonts.gstatic.com" />
   <link rel="dns-prefetch" href="//deckeva.com" />
+  <link rel="dns-prefetch" href="//www.deckeva.com" />
   <link rel="preconnect" href="https://flagcdn.com" crossorigin />
+  <!-- Image hosts: preconnect early so LCP hero + gallery load fast -->
+  <link rel="preconnect" href="https://www.deckeva.com" crossorigin />
+  <link rel="preconnect" href="https://deckeva.com" crossorigin />
+  <!-- LCP: preload the hero background image (matches hero srcset) -->
+  <link rel="preload" as="image"
+        href="https://www.deckeva.com/staging/img/lifestyle/ls2-01.jpg"
+        imagesrcset="https://www.deckeva.com/staging/img/lifestyle/ls2-01.jpg 1x, https://www.deckeva.com/staging/img/lifestyle/ls2-06.jpg 1.5x"
+        fetchpriority="high" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
