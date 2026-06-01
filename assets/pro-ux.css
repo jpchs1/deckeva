@@ -160,6 +160,72 @@ table{max-width:100%}
 #seo-cross-banner{letter-spacing:0.2px;border-bottom:1px solid rgba(255,255,255,0.06)}
 #seo-cross-banner a{transition:color 0.2s ease,opacity 0.2s ease}
 
+/* ════════════════════════════════════════════════════════
+   ANCHOR OFFSET — fixed bars (winter-promo+seo+nav) no longer
+   hide section tops when navigating via the menu
+   ════════════════════════════════════════════════════════ */
+#caracteristicas,#como-trabajamos,#proyectos,#envios,#pagos,
+#testimonios,#galeria,#cotizar,#blog,#faq{scroll-margin-top:150px}
+@media(max-width:640px){
+  #caracteristicas,#como-trabajamos,#proyectos,#envios,#pagos,
+  #testimonios,#galeria,#cotizar,#blog,#faq{scroll-margin-top:118px}
+}
+
+/* ════════════════════════════════════════════════════════
+   READING PROGRESS BAR (top, above everything)
+   ════════════════════════════════════════════════════════ */
+#read-progress{
+  position:fixed;top:0;left:0;height:3px;width:0;z-index:1002;
+  background:linear-gradient(90deg,var(--ocean,#0e6ba8),var(--gold,#f5a623));
+  box-shadow:0 0 8px rgba(245,166,35,0.5);
+  transition:width 0.1s linear;pointer-events:none
+}
+
+/* ════════════════════════════════════════════════════════
+   BACK TO TOP
+   ════════════════════════════════════════════════════════ */
+#back-to-top{
+  position:fixed;bottom:88px;right:20px;z-index:998;
+  width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(15,34,64,0.92);color:#fff;font-size:20px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(15,23,42,0.25);
+  opacity:0;visibility:hidden;transform:translateY(12px);
+  transition:opacity 0.3s ease,transform 0.3s ease,visibility 0.3s ease,background 0.2s ease;
+  backdrop-filter:blur(8px)
+}
+#back-to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+#back-to-top:hover{background:var(--ocean,#0e6ba8);transform:translateY(-3px)}
+@media(max-width:640px){
+  #back-to-top{width:42px;height:42px;bottom:80px;right:16px;font-size:18px}
+}
+
+/* ════════════════════════════════════════════════════════
+   HERO TITLE <em> — animated gold underline accent
+   ════════════════════════════════════════════════════════ */
+.hero-v3-line-2 em{position:relative;display:inline-block}
+.hero-v3-line-2 em::after{
+  content:'';position:absolute;left:0;right:0;bottom:0.06em;height:0.10em;
+  background:var(--gold,#f5a623);border-radius:2px;transform:scaleX(0);
+  transform-origin:left;animation:emUnderline 0.8s 1.1s cubic-bezier(0.16,1,0.3,1) forwards
+}
+@keyframes emUnderline{to{transform:scaleX(1)}}
+
+/* ════════════════════════════════════════════════════════
+   WHATSAPP FLOAT — gentle attention pulse
+   ════════════════════════════════════════════════════════ */
+.whatsapp-float{position:relative}
+.whatsapp-float::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  box-shadow:0 0 0 0 rgba(37,211,102,0.5);
+  animation:waPulse 2.6s ease-out infinite
+}
+@keyframes waPulse{
+  0%{box-shadow:0 0 0 0 rgba(37,211,102,0.45)}
+  70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}
+  100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}
+}
+
 /* ── PREFERS REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
   .sr,.sr-left,.sr-right,.sr-scale{opacity:1 !important;transform:none !important;transition:none !important}
@@ -167,4 +233,7 @@ table{max-width:100%}
   .hero-v3-content,.hero-v3-spec-card,.hero-v3-scroll-cue,.trust-strip .trust-item{animation:none !important;opacity:1 !important;transform:none !important}
   img[loading="lazy"]{animation:none !important}
   .hero-v3-btn--primary .hv3b-icon{animation:none !important}
+  .hero-v3-line-2 em::after{animation:none !important;transform:scaleX(1) !important}
+  .whatsapp-float::before{animation:none !important}
+  #read-progress{transition:none !important}
 }
