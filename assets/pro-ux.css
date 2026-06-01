@@ -101,6 +101,65 @@ img[loading="lazy"]{background:linear-gradient(90deg,#eef2f7 25%,#f6f8fb 50%,#ee
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 img[loading="lazy"].loaded{animation:none;background:transparent}
 
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE HARDENING — defensive layer (safe, additive)
+   ════════════════════════════════════════════════════════ */
+
+/* Never let media/tables push horizontal scroll */
+img,svg,video,canvas,iframe{max-width:100%}
+table{max-width:100%}
+
+/* Break long words/emails/URLs so they never overflow on small screens */
+@media(max-width:640px){
+  .footer-contact-value,.contact-link,.blog-excerpt,.faq-answer-inner,
+  .hero-v3-desc,.t-text,.dp-card__desc,.cc-name{
+    overflow-wrap:break-word;word-break:break-word;hyphens:auto
+  }
+  /* Wide data tables get horizontal scroll instead of clipping */
+  .install-notice{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .install-table{min-width:0}
+}
+
+/* Tablet intermediate (768px): tighten container + section rhythm */
+@media(max-width:900px) and (min-width:641px){
+  .dp-grid{grid-template-columns:1fr 1fr !important;gap:20px}
+  .container{padding-left:22px !important;padding-right:22px !important}
+}
+
+/* Landscape phones: prevent fixed-bar stack from eating the hero */
+@media(max-height:520px) and (orientation:landscape){
+  .hero-v3{min-height:560px}
+  .hero-v3-scroll-cue{display:none}
+}
+
+/* ════════════════════════════════════════════════════════
+   TOUCH FEEDBACK + VISUAL POLISH (:active press states)
+   ════════════════════════════════════════════════════════ */
+@media(hover:none),(max-width:900px){
+  .hero-v3-btn:active,.btn:active,.footer-cta-btn:active,
+  .submit-btn:active,.tl-cta-row .btn:active,.dp-card__cta:active{
+    transform:scale(0.97);transition:transform 0.1s ease
+  }
+  .dp-card:active,.feature-card:active,.gal-card:active,
+  .blog-card:active,.country-card:active,.pay-card:active{
+    transform:scale(0.99);transition:transform 0.1s ease
+  }
+  .faq-question:active{background:rgba(14,107,168,0.05)}
+}
+
+/* Consistent shadow scale across all cards (visual cohesion) */
+.dp-card,.feature-card,.testimonial-card,.gal-card,.blog-card,
+.pay-card,.country-card,.tl-card,.faq-help-card{
+  box-shadow:0 1px 2px rgba(15,23,42,0.04),0 4px 14px rgba(15,23,42,0.05)
+}
+.dp-card:hover,.feature-card:hover,.gal-card:hover,.blog-card:hover{
+  box-shadow:0 10px 30px rgba(14,107,168,0.12)
+}
+
+/* SEO cross-banner: subtle polish so it reads less raw */
+#seo-cross-banner{letter-spacing:0.2px;border-bottom:1px solid rgba(255,255,255,0.06)}
+#seo-cross-banner a{transition:color 0.2s ease,opacity 0.2s ease}
+
 /* ── PREFERS REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
   .sr,.sr-left,.sr-right,.sr-scale{opacity:1 !important;transform:none !important;transition:none !important}
