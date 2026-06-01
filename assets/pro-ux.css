@@ -241,6 +241,64 @@ html.seo-closed #seo-cross-banner{display:none !important}
   100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}
 }
 
+/* ════════════════════════════════════════════════════════
+   NAV — cleaner, less saturated (FULL PRO)
+   Goal: one clear CTA, calmer links, compact lang switcher,
+   balanced breathing room between the three nav zones.
+   ════════════════════════════════════════════════════════ */
+
+/* 1 · Remove the redundant gold "Ver Precio" pill on desktop.
+   Two gold elements side by side (pill + CTA) both pointing to
+   #cotizar is what made the bar feel loud. The hero "Ver Precio"
+   button and the mobile sticky CTA already cover price intent. */
+nav#navbar .nav-price-link{display:none !important}
+
+/* 2 · Calmer nav links — they recede so the CTA leads the eye */
+nav#navbar .nav-links{gap:2px !important}
+nav#navbar .nav-links li a{
+  position:relative;
+  color:var(--gray,#475569) !important;
+  font-weight:500 !important;
+  font-size:14px !important;
+  padding:8px 13px !important;
+  background:transparent !important;
+  transition:color 0.2s ease !important;
+}
+nav#navbar .nav-links li a:hover{
+  color:var(--text-dark,#0a1628) !important;
+  background:transparent !important;
+}
+/* Subtle animated underline instead of a heavy filled pill */
+nav#navbar .nav-links li a::after{
+  content:'';position:absolute;left:13px;right:13px;bottom:5px;height:2px;
+  background:var(--ocean,#0e6ba8);border-radius:2px;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.25s cubic-bezier(0.16,1,0.3,1)
+}
+nav#navbar .nav-links li a:hover::after{transform:scaleX(1)}
+
+/* 3 · Compact, minimal language switcher — icon + caret, no wide label */
+.lang-trigger .lang-label-current{display:none !important}
+.lang-trigger{
+  padding:8px 11px !important;
+  gap:5px !important;
+  background:transparent !important;
+  border-color:transparent !important;
+}
+.lang-trigger:hover{background:rgba(15,23,42,0.05) !important}
+.lang-flag-current{font-size:15px}
+
+/* 4 · Single elegant CTA — softer, more refined shadow */
+nav#navbar .nav-cta{
+  padding:10px 20px !important;
+  box-shadow:0 3px 10px rgba(245,166,35,0.22) !important;
+}
+nav#navbar .nav-cta:hover{box-shadow:0 6px 16px rgba(245,166,35,0.36) !important}
+
+/* 5 · Breathing room + balance between logo | links | actions */
+nav#navbar .nav-inner{gap:20px !important}
+nav#navbar .nav-right{gap:8px !important}
+
 /* ── PREFERS REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
   .sr,.sr-left,.sr-right,.sr-scale{opacity:1 !important;transform:none !important;transition:none !important}
@@ -251,4 +309,5 @@ html.seo-closed #seo-cross-banner{display:none !important}
   .hero-v3-line-2 em::after{animation:none !important;transform:scaleX(1) !important}
   .whatsapp-float::before{animation:none !important}
   #read-progress{transition:none !important}
+  nav#navbar .nav-links li a::after{transition:none !important}
 }
