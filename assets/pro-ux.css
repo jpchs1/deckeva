@@ -157,8 +157,23 @@ table{max-width:100%}
 }
 
 /* SEO cross-banner: subtle polish so it reads less raw */
-#seo-cross-banner{letter-spacing:0.2px;border-bottom:1px solid rgba(255,255,255,0.06)}
+#seo-cross-banner{letter-spacing:0.2px;border-bottom:1px solid rgba(255,255,255,0.06);padding-right:44px !important}
 #seo-cross-banner a{transition:color 0.2s ease,opacity 0.2s ease}
+
+/* ── DISMISSIBLE SEO BANNER (reclaim viewport on mobile) ── */
+.seo-x{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(255,255,255,0.14);color:#fff;font-size:15px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s ease;padding:0
+}
+.seo-x:hover{background:rgba(255,255,255,0.28)}
+html.seo-closed #seo-cross-banner{display:none !important}
+@media(max-width:640px){
+  .seo-x{width:24px;height:24px;right:6px;font-size:14px}
+  #seo-cross-banner{padding-right:38px !important}
+}
 
 /* ════════════════════════════════════════════════════════
    ANCHOR OFFSET — fixed bars (winter-promo+seo+nav) no longer
