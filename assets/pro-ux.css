@@ -313,41 +313,54 @@ nav#navbar .nav-right{gap:8px !important}
 }
 
 /* ════════════════════════════════════════════════════════
-   FOOTER — partners band (text, ordered) + tidy
+   FOOTER — partners band (compact, text, ordered)
    ════════════════════════════════════════════════════════ */
 .footer-partners{
   border-top:1px solid rgba(15,23,42,0.08);
-  margin-top:8px;padding:34px 0 6px;position:relative;z-index:1
+  margin-top:4px;padding:18px 0 2px;position:relative;z-index:1
 }
-.footer-partners__head{margin-bottom:18px}
-.footer-partners__eyebrow{
-  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
-  text-transform:uppercase;color:var(--ocean,#0e6ba8);display:block;margin-bottom:6px
-}
+/* Title sits inline with the row on desktop to save vertical space */
+.footer-partners__head{margin-bottom:12px}
+.footer-partners__eyebrow{display:none}
 .footer-partners__title{
-  font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;
-  color:var(--text-dark,#0a1628);margin:0;letter-spacing:-0.2px
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text-dark,#0a1628);margin:0;letter-spacing:0
 }
-.footer-partners__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.footer-partners__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .footer-partner{
-  display:flex;flex-direction:column;gap:3px;
-  padding:16px 18px;border:1px solid rgba(15,23,42,0.08);border-radius:12px;
-  background:rgba(255,255,255,0.55);text-decoration:none;
-  transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease,background .25s ease
+  display:flex;flex-direction:column;gap:0;
+  padding:9px 12px;border:1px solid rgba(15,23,42,0.08);border-radius:9px;
+  background:rgba(255,255,255,0.5);text-decoration:none;line-height:1.3;
+  transition:border-color .2s ease,background .2s ease,transform .2s ease
 }
 .footer-partner:hover{
-  border-color:rgba(14,107,168,0.30);transform:translateY(-3px);
-  box-shadow:0 8px 22px rgba(14,107,168,0.10);background:#fff
+  border-color:rgba(14,107,168,0.28);background:#fff;transform:translateY(-1px)
 }
-.footer-partner__name{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text-dark,#0a1628)}
-.footer-partner__desc{font-size:12.5px;color:var(--gray,#475569);line-height:1.4}
-.footer-partner__arrow{margin-top:7px;font-size:11px;font-weight:700;color:var(--ocean,#0e6ba8);letter-spacing:.2px}
-.footer-partner:hover .footer-partner__arrow{color:var(--ocean-bright,#1a9be3)}
+.footer-partner__name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text-dark,#0a1628)}
+.footer-partner__desc{font-size:11px;color:var(--gray,#475569);line-height:1.3}
+/* Domain arrow hidden by default to keep cards short; show on hover */
+.footer-partner__arrow{
+  font-size:10px;font-weight:700;color:var(--ocean,#0e6ba8);letter-spacing:.2px;
+  max-height:0;opacity:0;overflow:hidden;transition:max-height .2s ease,opacity .2s ease,margin-top .2s ease
+}
+.footer-partner:hover .footer-partner__arrow{max-height:16px;opacity:1;margin-top:3px}
 @media(max-width:980px){.footer-partners__grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.footer-partners__grid{grid-template-columns:1fr}.footer-partners{padding-top:28px}}
+@media(max-width:560px){
+  .footer-partners__grid{grid-template-columns:1fr 1fr;gap:7px}
+  .footer-partner{padding:8px 10px}
+  .footer-partner__arrow{display:none}
+}
 
 /* Tidy the main footer grid: even columns, consistent rhythm */
 .site-footer .footer-grid{align-items:start}
+
+/* Overall footer: tighter vertical rhythm (was too tall) */
+.footer-cta{padding:30px 0 !important}
+.site-footer .container{padding-top:44px !important}
+@media(max-width:640px){
+  .footer-cta{padding:24px 0 !important}
+  .site-footer .container{padding-top:36px !important}
+}
 
 /* ── PREFERS REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
