@@ -188,6 +188,61 @@
     toggle();
   }
 
+  /* ── DISMISSIBLE SEO BANNER + FIXED-BAR STACK RECOMPUTE ──
+     The inline winter-promo script bakes the SEO banner height (38px/32px)
+     into body padding-top and nav top. When the user dismisses the SEO
+     banner we drop that height and keep only the winter-promo height.
+     We inject an override <style> AFTER #wp-offsets so our !important
+     rules win the cascade, and track winter height in a --wp-h var. */
+  function initBannerStack(){
+    var seo = document.getElementById('seo-cross-banner');
+    if(!seo) return;
+
+    // Override style — appended after #wp-offsets so it wins
+    var ov = document.getElementById('pro-offsets');
+    if(!ov){ ov = document.createElement('style'); ov.id = 'pro-offsets'; document.head.appendChild(ov); }
+    ov.textContent =
+      'html.seo-closed body{padding-top:var(--wp-h,0px)!important}' +
+      'html.seo-closed nav#navbar{top:var(--wp-h,0px)!important}' +
+      'html.seo-closed .mobile-menu.open{top:var(--wp-h,0px)!important}';
+
+    function syncWp(){
+      var wp = document.getElementById('winter-promo');
+      var h = 0;
+      if(wp && !document.documentElement.classList.contains('wp-closed') &&
+         getComputedStyle(wp).display !== 'none'){
+        h = wp.offsetHeight || 0;
+      }
+      document.documentElement.style.setProperty('--wp-h', h + 'px');
+    }
+
+    // Inject close button
+    if(!seo.querySelector('.seo-x')){
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'seo-x';
+      x.setAttribute('aria-label', 'Cerrar aviso');
+      x.innerHTML = '&times;';
+      seo.appendChild(x);
+      x.addEventListener('click', function(){
+        document.documentElement.classList.add('seo-closed');
+        try{ localStorage.setItem('seoBannerClosed','1'); }catch(e){}
+        syncWp();
+      });
+    }
+
+    // Restore previous dismissal
+    try{ if(localStorage.getItem('seoBannerClosed') === '1') document.documentElement.classList.add('seo-closed'); }catch(e){}
+
+    syncWp();
+    window.addEventListener('resize', syncWp, {passive:true});
+    // React when the winter promo gets closed (class change on <html>)
+    if(window.MutationObserver){
+      new MutationObserver(syncWp).observe(document.documentElement, {attributes:true, attributeFilter:['class']});
+    }
+    setTimeout(syncWp, 300); setTimeout(syncWp, 800);
+  }
+
   /* ── INIT ── */
   function init(){
     // Functional features run for everyone
@@ -195,6 +250,7 @@
     initNavShadow();
     initProgressBar();
     initBackToTop();
+    initBannerStack();
     // Decorative motion only when the user allows it
     if(!reduceMotion){
       initScrollReveal();
