@@ -17,7 +17,7 @@
       // Grids (stagger children)
       '.features-grid', '.countries-grid', '.gal-grid',
       '.blog-grid', '.dp-grid', '.dp-partners__grid',
-      '.deckeva-partners__grid',
+      '.deckeva-partners__grid', '.dq-pillars',
       // Individual cards/items
       '.tl-item', '.ls1-card', '.ls2-item',
       '.quote-form-wrap', '.quote-info',
