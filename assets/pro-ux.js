@@ -333,6 +333,22 @@
     };
   }
 
+  /* ── HERO REASSURANCE — low-friction reasons to act, right under the CTA
+     Uses the business's own promises (free quote, 24h reply, pro install)
+     to reduce hesitation and drive "ganas de contratar" on entry. ── */
+  function initHeroReassure(){
+    var ctaRow = document.querySelector('.hero-v3-cta-row');
+    if(!ctaRow || document.querySelector('.hero-v3-reassure')) return;
+    var check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+    var wrap = document.createElement('div');
+    wrap.className = 'hero-v3-reassure';
+    wrap.innerHTML =
+      '<span class="hvr-item">' + check + '<span data-es>Cotización gratis</span><span data-en>Free quote</span></span>' +
+      '<span class="hvr-item">' + check + '<span data-es>Respuesta en 24 h hábiles</span><span data-en>Reply within 24 business hours</span></span>' +
+      '<span class="hvr-item">' + check + '<span data-es>Instalación profesional</span><span data-en>Professional installation</span></span>';
+    ctaRow.parentNode.insertBefore(wrap, ctaRow.nextSibling);
+  }
+
   /* ── INIT ── */
   function init(){
     // Functional features run for everyone
@@ -343,6 +359,7 @@
     initBannerStack();
     initScrollSpy();
     initPriceAnimation();
+    initHeroReassure();
     // Decorative motion only when the user allows it
     if(!reduceMotion){
       initScrollReveal();
