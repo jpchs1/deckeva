@@ -285,6 +285,54 @@
     sections.forEach(function(s){ spy.observe(s); });
   }
 
+  /* ── PRICE COUNT-UP — animate the quote price when it changes ──
+     Wraps the global updatePrice() so, after it sets the new value, the
+     headline price counts up to it. The final text is always the exact
+     original, so formatting/currency is never altered. */
+  function initPriceAnimation(){
+    if(typeof window.updatePrice !== 'function') return;
+    var last = null, raf = null;
+
+    function animate(){
+      var el = document.getElementById('priceValue');
+      if(!el) return;
+      var text = el.textContent;
+      var m = text.match(/^(\D*?)([\d.,]+)(.*)$/);
+      if(!m){ last = null; return; }              // non-numeric (e.g. "A consultar")
+      var prefix = m[1], numStr = m[2], suffix = m[3];
+      var sep = numStr.indexOf('.') > -1 ? '.' : (numStr.indexOf(',') > -1 ? ',' : '');
+      var target = parseInt(numStr.replace(/[.,]/g, ''), 10);
+      if(isNaN(target)){ last = null; return; }
+      if(reduceMotion){ last = target; return; }  // leave the exact value in place
+      var from = (last == null ? 0 : last);
+      if(from === target){ last = target; return; }
+      if(raf) cancelAnimationFrame(raf);
+
+      function fmt(n){
+        var s = String(n);
+        if(sep) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+        return prefix + s + suffix;
+      }
+      var dur = 550, start = performance.now();
+      function frame(now){
+        var t = Math.min((now - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = fmt(Math.round(from + (target - from) * eased));
+        if(t < 1){ raf = requestAnimationFrame(frame); }
+        else { el.textContent = text; last = target; raf = null; }  // restore exact original
+      }
+      raf = requestAnimationFrame(frame);
+    }
+
+    var orig = window.updatePrice;
+    window.updatePrice = function(){
+      var r = orig.apply(this, arguments);
+      // let updatePrice finish writing the DOM, then animate
+      requestAnimationFrame(animate);
+      return r;
+    };
+  }
+
   /* ── INIT ── */
   function init(){
     // Functional features run for everyone
@@ -294,6 +342,7 @@
     initBackToTop();
     initBannerStack();
     initScrollSpy();
+    initPriceAnimation();
     // Decorative motion only when the user allows it
     if(!reduceMotion){
       initScrollReveal();
