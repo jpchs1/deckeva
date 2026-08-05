@@ -243,6 +243,48 @@
     setTimeout(syncWp, 300); setTimeout(syncWp, 800);
   }
 
+  /* ── SCROLLSPY — highlight the nav link of the section in view ── */
+  function initScrollSpy(){
+    var nav = document.getElementById('navbar');
+    if(!nav) return;
+    var links = nav.querySelectorAll('.nav-links a[href^="#"]');
+    if(!links.length) return;
+
+    // Map section id -> nav link (first link per target)
+    var map = {};
+    var sections = [];
+    links.forEach(function(a){
+      var id = (a.getAttribute('href') || '').replace('#','');
+      if(!id || map[id]) return;
+      var sec = document.getElementById(id);
+      if(sec){ map[id] = a; sections.push(sec); }
+    });
+    if(!sections.length) return;
+
+    var current = null;
+    function setActive(id){
+      if(id === current) return;
+      current = id;
+      links.forEach(function(a){
+        var lid = (a.getAttribute('href') || '').replace('#','');
+        a.classList.toggle('is-active', lid === id && !!id);
+      });
+    }
+
+    var spy = new IntersectionObserver(function(entries){
+      // Pick the entry nearest the top that is intersecting
+      var best = null;
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          if(!best || e.boundingClientRect.top < best.boundingClientRect.top) best = e;
+        }
+      });
+      if(best) setActive(best.target.id);
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+    sections.forEach(function(s){ spy.observe(s); });
+  }
+
   /* ── INIT ── */
   function init(){
     // Functional features run for everyone
@@ -251,6 +293,7 @@
     initProgressBar();
     initBackToTop();
     initBannerStack();
+    initScrollSpy();
     // Decorative motion only when the user allows it
     if(!reduceMotion){
       initScrollReveal();

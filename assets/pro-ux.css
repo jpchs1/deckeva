@@ -276,6 +276,9 @@ nav#navbar .nav-links li a::after{
   transition:transform 0.25s cubic-bezier(0.16,1,0.3,1)
 }
 nav#navbar .nav-links li a:hover::after{transform:scaleX(1)}
+/* Scrollspy: current section link stays highlighted with its underline */
+nav#navbar .nav-links li a.is-active{color:var(--text-dark,#0a1628) !important}
+nav#navbar .nav-links li a.is-active::after{transform:scaleX(1)}
 
 /* 3 · Compact, minimal language switcher — icon + caret, no wide label */
 .lang-trigger .lang-label-current{display:none !important}
