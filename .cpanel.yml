@@ -20,8 +20,15 @@ deployment:
     - /bin/cp -R assets/icons/. /home/wwimpo/deckeva.cl/
 
     # ── Subpaths existentes ──
-    - /bin/mkdir -p /home/wwimpo/deckeva.com/guia
+    # Guías DECKEVA: índice + "Cómo medir" (/guia/medir/) + "Cómo instalar"
+    # (/guia/instalar/). Ambas subpáginas comparten styles.css y script.js del
+    # directorio padre, por eso también se sincronizan aquí.
+    - /bin/mkdir -p /home/wwimpo/deckeva.com/guia/medir /home/wwimpo/deckeva.com/guia/instalar
     - /bin/cp guia/index.html /home/wwimpo/deckeva.com/guia/index.html
+    - /bin/cp guia/styles.css /home/wwimpo/deckeva.com/guia/styles.css
+    - /bin/cp guia/script.js /home/wwimpo/deckeva.com/guia/script.js
+    - /bin/cp guia/medir/index.html /home/wwimpo/deckeva.com/guia/medir/index.html
+    - /bin/cp guia/instalar/index.html /home/wwimpo/deckeva.com/guia/instalar/index.html
     - /bin/mkdir -p /home/wwimpo/deckeva.com/wiretransfers
     - /bin/cp wiretransfers/index.html /home/wwimpo/deckeva.com/wiretransfers/index.html
 
