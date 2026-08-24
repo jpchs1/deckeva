@@ -4623,6 +4623,28 @@
       background: rgba(245,166,35,0.12);
       color: #b07300;
     }
+
+    /* Pill clicable -> guia de medicion (video paso a paso) */
+    a.tl-pill[data-es], a.tl-pill[data-en] { display: inline-block; }
+    a.tl-pill {
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+    a.tl-pill:hover, a.tl-pill:focus-visible {
+      background: rgba(14,107,168,0.18);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(14,107,168,0.16);
+    }
+    /* Enlaces a las guias dentro del aviso de medidas / instalacion */
+    .install-notice a.guide-link {
+      color: var(--ocean);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-thickness: 1px;
+    }
+    .install-notice a.guide-link:hover { color: var(--gold); }
     .tl-cta-row {
       display: flex;
       gap: 10px;
@@ -6139,8 +6161,8 @@
             <h3 class="tl-title" data-en>Measurements</h3>
             <p class="tl-desc" data-es>Te enviamos un tutorial paso a paso — lo puede hacer cualquier persona en su propio tiempo, sin experiencia previa. Solo necesitas cinta métrica y seguir las instrucciones.</p>
             <p class="tl-desc" data-en>We send you a step-by-step tutorial — anyone can do it at their own pace, no experience required. Just a tape measure and our easy instructions.</p>
-            <div class="tl-pill" data-es>📩 Tutorial incluido · Fácil y rápido</div>
-            <div class="tl-pill" data-en>📩 Tutorial included · Easy & fast</div>
+            <a class="tl-pill" data-es href="https://www.deckeva.com/guia/medir/" target="_blank" rel="noopener">🎥 Ver tutorial de medición →</a>
+            <a class="tl-pill" data-en href="https://www.deckeva.com/guia/medir/" target="_blank" rel="noopener">🎥 Watch measuring tutorial →</a>
           </div>
         </div>
       </div>
@@ -8001,8 +8023,8 @@
             <p data-es style="margin-top:10px;"><strong>Deckeva acompaña todo el proceso sin costo adicional:</strong></p>
             <p data-en style="margin-top:10px;"><strong>Deckeva supports the entire process at no extra cost:</strong></p>
             <ul>
-              <li><span data-es>🎥 Video explicativo paso a paso para la <strong>toma de medidas</strong>.</span><span data-en>🎥 Step-by-step explainer <strong>video for measurement</strong>.</span></li>
-              <li><span data-es>🎥 Video explicativo paso a paso para la <strong>instalación</strong>.</span><span data-en>🎥 Step-by-step explainer <strong>video for installation</strong>.</span></li>
+              <li><span data-es>🎥 <a class="guide-link" href="https://www.deckeva.com/guia/medir/" target="_blank" rel="noopener">Video explicativo paso a paso</a> para la <strong>toma de medidas</strong>.</span><span data-en>🎥 <a class="guide-link" href="https://www.deckeva.com/guia/medir/" target="_blank" rel="noopener">Step-by-step explainer video</a> for <strong>measurement</strong>.</span></li>
+              <li><span data-es>🎥 <a class="guide-link" href="https://www.deckeva.com/guia/instalar/" target="_blank" rel="noopener">Video explicativo paso a paso</a> para la <strong>instalación</strong>.</span><span data-en>🎥 <a class="guide-link" href="https://www.deckeva.com/guia/instalar/" target="_blank" rel="noopener">Step-by-step explainer video</a> for <strong>installation</strong>.</span></li>
               <li><span data-es>📞 Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo durante el trabajo.</span><span data-en>📞 <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> for real-time guidance throughout the work.</span></li>
             </ul>
           </div>
