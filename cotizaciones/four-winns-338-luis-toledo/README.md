@@ -1,7 +1,7 @@
 # Cotización DK-2026-0915-FW338 — Four Winns 338 · Luis Toledo
 
 Cotización a medida para el crucero **Four Winns 338** de Luis Toledo (Rancagua),
-piso de goma EVA color **Gris Náutico**, con toma de medidas e instalación en terreno.
+piso de goma EVA **Gris Claro con líneas negras**, con toma de medidas e instalación en terreno.
 
 ## Archivos
 
@@ -23,7 +23,7 @@ que son los que busca el HTML:
 
 | Nombre del archivo | Qué imagen es |
 |---|---|
-| `referencia-piso-gris-nautico` | La referencia de cómo quiere que quede la cubierta (piso EVA gris). |
+| `referencia-piso-gris-claro` | La referencia de cómo quiere que quede la cubierta (piso EVA gris). |
 | `four-winns-338-babor` | La lancha completa de lado — "1 de 10". |
 | `four-winns-338-estribor` | La lancha completa del otro lado — "2 de 10". |
 | `four-winns-338-popa` | La popa con la plataforma y la escalerilla — "3 de 10". |
@@ -56,8 +56,8 @@ se normaliza el tamaño. El script avisa en pantalla cuál recortó y cuál no.
 ## Paso 2 — Generar el PDF
 
 Abra `index.html` en el navegador → Imprimir → Guardar como PDF.
-Ya viene configurado para A4 con márgenes, colores de fondo y cortes de página
-en los lugares correctos. Active **"Gráficos de fondo"** en el diálogo de impresión.
+Ya viene configurado para A4 y sale en **2 páginas**. Active **"Gráficos de fondo"**
+en el diálogo de impresión, o los fondos oscuros salen en blanco.
 
 ## De dónde salen los valores
 
