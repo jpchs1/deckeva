@@ -86,12 +86,15 @@ table{width:100%; border-collapse:collapse;}
 
 /* ── Fotos ── */
 .fotos{display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:9px;}
-.fotos figure{margin:0; border:1px solid var(--line); border-radius:7px; overflow:hidden; background:var(--hair);}
-.fotos img{width:100%; display:block; aspect-ratio:4/3; object-fit:cover;}
-.fotos figcaption{padding:6px 9px; font-size:10.5px; color:var(--soft); background:#fff; border-top:1px solid var(--hair); line-height:1.4;}
+/* La referencia es mas ancha que las otras tres, asi que a 4:3 queda mas alta y
+   marca el alto de la fila. Las celdas se estiran; sin flex, la imagen se
+   quedaba en su alto natural y dejaba un hueco blanco bajo cada pie de foto. */
+.fotos figure{margin:0; border:1px solid var(--line); border-radius:7px; overflow:hidden; background:var(--hair); display:flex; flex-direction:column;}
+.fotos img{width:100%; display:block; aspect-ratio:4/3; object-fit:cover; flex:1 1 auto; min-height:0;}
+.fotos figcaption{flex:none; padding:6px 9px; font-size:10.5px; color:var(--soft); background:#fff; border-top:1px solid var(--hair); line-height:1.4;}
 .fotos .ref{border-color:var(--gold);}
 .fotos .ref figcaption{background:#fff8ec; color:#8a5a06; font-weight:500;}
-.sinfoto{aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;
+.sinfoto{aspect-ratio:4/3; flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;
   background:repeating-linear-gradient(45deg,#eef2f6,#eef2f6 9px,#e5ebf1 9px,#e5ebf1 18px); color:var(--soft); font-size:10.5px;}
 
 /* ── Listas ── */

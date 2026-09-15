@@ -141,7 +141,8 @@ def realzar(img):
     return img
 
 
-def procesar(origen, destino):
+def preparar(origen):
+    """Abre, recorta y encuadra. Devuelve (imagen, medidas originales, recortada)."""
     img = Image.open(origen)
     img = ImageOps.exif_transpose(img)      # respeta la orientación del celular
     img = img.convert("RGB")
@@ -154,50 +155,132 @@ def procesar(origen, destino):
         alto = round(img.height * ANCHO_SALIDA / img.width)
         img = img.resize((ANCHO_SALIDA, alto), Image.LANCZOS)
 
-    img = realzar(img)
+    return realzar(img), medidas_originales, recortada
+
+
+def guardar(img, destino):
     destino.parent.mkdir(parents=True, exist_ok=True)
     img.save(destino, "JPEG", quality=CALIDAD_JPEG, optimize=True, progressive=True)
 
-    return medidas_originales, img.size, recortada
+
+# Los cuatro huecos que muestra index.html, en orden.
+HUECOS = [
+    ("referencia-piso-gris-claro", "referencia de acabado"),
+    ("four-winns-338-babor",       "vista de babor"),
+    ("four-winns-338-estribor",    "vista de estribor"),
+    ("four-winns-338-popa",        "popa y plataforma"),
+]
+NOMBRES = [h[0] for h in HUECOS]
+
+
+def repartir(analizadas):
+    """
+    Decide qué foto va en cada hueco de la cotización.
+
+    No hace falta renombrar nada antes: la referencia se distingue sola porque
+    es la única que NO es una captura de pantalla — las tres de la lancha vienen
+    con franjas negras del visor del iPhone y la referencia no. Las capturas se
+    reparten en orden de nombre, que es el orden en que las mandó el cliente
+    ("1 de 10", "2 de 10", "3 de 10").
+
+    Un archivo ya bautizado con el nombre de un hueco se respeta tal cual.
+    """
+    asignado = {}
+    libres = []
+
+    for datos in analizadas:                      # 1) nombres explícitos
+        if datos["ruta"].stem in NOMBRES and datos["ruta"].stem not in asignado:
+            asignado[datos["ruta"].stem] = datos
+        else:
+            libres.append(datos)
+
+    # 2) la referencia: la que no traía franjas negras
+    if NOMBRES[0] not in asignado:
+        limpias = [d for d in libres if not d["recortada"]]
+        if limpias:
+            asignado[NOMBRES[0]] = limpias[0]
+            libres.remove(limpias[0])
+
+    # 3) el resto, a los huecos de la lancha que queden
+    for nombre in NOMBRES[1:]:
+        if nombre in asignado or not libres:
+            continue
+        asignado[nombre] = libres.pop(0)
+
+    return asignado, libres
 
 
 def main():
     base = Path(__file__).resolve().parent
-    ap = argparse.ArgumentParser(description="Limpia fotos de WhatsApp para la cotización.")
+    ap = argparse.ArgumentParser(
+        description="Limpia las fotos del cliente y las deja listas para la cotización.",
+        epilog="Los nombres de archivo dan igual: la referencia se reconoce sola.",
+    )
+    ap.add_argument("fotos", nargs="*", type=Path,
+                    help="Fotos a procesar. Si no indicas ninguna, toma las de fotos/originales/.")
     ap.add_argument("--entrada", default=base / "fotos" / "originales", type=Path)
     ap.add_argument("--salida", default=base / "fotos" / "procesadas", type=Path)
     args = ap.parse_args()
 
-    if not args.entrada.is_dir():
-        sys.exit(f"No existe la carpeta de entrada: {args.entrada}")
+    if args.fotos:
+        archivos = [f for f in args.fotos if f.is_file() and f.suffix.lower() in EXTENSIONES]
+        faltan = [f for f in args.fotos if not f.is_file()]
+        for f in faltan:
+            print(f"  · no existe, se omite: {f}")
+    else:
+        if not args.entrada.is_dir():
+            sys.exit(f"No existe la carpeta de entrada: {args.entrada}")
+        archivos = [f for f in args.entrada.iterdir()
+                    if f.is_file() and f.suffix.lower() in EXTENSIONES]
 
-    archivos = sorted(
-        p for p in args.entrada.iterdir()
-        if p.is_file() and p.suffix.lower() in EXTENSIONES
-    )
+    # Dos comodines que se solapan (*.png y *Image*.png) cuelan el mismo archivo
+    # dos veces y descuadran el reparto. Nos quedamos con la primera aparición.
+    vistos, unicos = set(), []
+    for f in archivos:
+        clave = f.resolve()
+        if clave not in vistos:
+            vistos.add(clave)
+            unicos.append(f)
+    archivos = sorted(unicos, key=lambda f: f.name.lower())
     if not archivos:
         sys.exit(
-            f"No hay imágenes en {args.entrada}.\n"
-            "Copia ahí las fotos que mandó el cliente y vuelve a ejecutar."
+            f"No hay imágenes en {args.entrada}.\n\n"
+            "Copia ahí las cuatro fotos que mandó el cliente —con el nombre que sea—\n"
+            "y vuelve a ejecutar. También puedes pasarlas directamente:\n"
+            "    python3 arreglar-fotos.py ~/Descargas/IMG_*.jpg"
         )
 
-    print(f"Procesando {len(archivos)} imagen(es)…\n")
+    print(f"Analizando {len(archivos)} imagen(es)…\n")
+    analizadas = []
     for archivo in archivos:
-        destino = args.salida / (archivo.stem + ".jpg")
         try:
-            antes, despues, recortada = procesar(archivo, destino)
+            img, antes, recortada = preparar(archivo)
         except Exception as exc:                      # noqa: BLE001
             print(f"  ✗ {archivo.name}: {exc}")
             continue
-        nota = "franjas negras recortadas" if recortada else "sin franjas que recortar"
-        print(f"  ✓ {archivo.name}")
-        print(f"      {antes[0]}x{antes[1]} → {despues[0]}x{despues[1]} ({nota})")
-        try:
-            print(f"      {destino.relative_to(base)}")
-        except ValueError:          # salida fuera de la carpeta del script
-            print(f"      {destino}")
+        analizadas.append({"ruta": archivo, "img": img, "antes": antes, "recortada": recortada})
 
-    print(f"\nListo. Fotos limpias en: {args.salida}")
+    if not analizadas:
+        sys.exit("Ninguna imagen se pudo abrir.")
+
+    asignado, sobrantes = repartir(analizadas)
+
+    for nombre, rotulo in HUECOS:
+        datos = asignado.get(nombre)
+        if datos is None:
+            print(f"  · {rotulo}: sin foto — la cotización mostrará el recuadro vacío")
+            continue
+        destino = args.salida / f"{nombre}.jpg"
+        guardar(datos["img"], destino)
+        a, d = datos["antes"], datos["img"].size
+        origen = "recortada" if datos["recortada"] else "ya venía limpia"
+        print(f"  ✓ {rotulo}: {datos['ruta'].name}")
+        print(f"      {a[0]}x{a[1]} → {d[0]}x{d[1]} ({origen})  →  {nombre}.jpg")
+
+    for datos in sobrantes:
+        print(f"  · sobra (la cotización sólo usa cuatro): {datos['ruta'].name}")
+
+    print(f"\nListo. Abre index.html: las fotos ya están puestas.")
 
 
 if __name__ == "__main__":

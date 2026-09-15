@@ -12,46 +12,53 @@ piso de goma EVA **Gris Claro con líneas negras**, con toma de medidas e instal
 | `fotos/originales/` | Aquí van las fotos tal como llegaron. |
 | `fotos/procesadas/` | Aquí salen las fotos limpias que usa `index.html`. |
 
-## Paso 1 — Arreglar las fotos del cliente
+## Paso 1 — Que se vean las fotos
 
-El cliente mandó capturas de pantalla del iPhone: la foto real ocupa una franja
-al centro y el resto es negro, con la hora, la señal, la batería, el contador
-"3 de 10" y la X de cerrar. Pegadas tal cual se ven mal en una cotización.
-
-Copie las cuatro imágenes a `fotos/originales/` **con estos nombres exactos**,
-que son los que busca el HTML:
-
-| Nombre del archivo | Qué imagen es |
-|---|---|
-| `referencia-piso-gris-claro` | La referencia de cómo quiere que quede la cubierta (piso EVA gris). |
-| `four-winns-338-babor` | La lancha completa de lado — "1 de 10". |
-| `four-winns-338-estribor` | La lancha completa del otro lado — "2 de 10". |
-| `four-winns-338-popa` | La popa con la plataforma y la escalerilla — "3 de 10". |
-
-La extensión da lo mismo (`.jpg`, `.png`, `.heic`…): el script siempre entrega `.jpg`.
-
-Luego ejecute:
+Copie las cuatro fotos del cliente a `fotos/originales/` y ejecute:
 
 ```bash
 pip install Pillow          # solo la primera vez
 python3 arreglar-fotos.py
 ```
 
-El script, sobre cada imagen:
+Eso es todo: abra `index.html` y las fotos ya están puestas.
 
-1. Detecta la franja de foto real dentro de la captura y descarta todo el negro
-   de relleno. De paso se lleva la barra de estado, el contador y la X, porque
-   viven dentro de esa zona negra.
-2. Recorta a 4:3 desde el centro para que las tres fotos entren parejas en la grilla.
+**No hace falta renombrar nada.** Los nombres pueden ser `IMG_4471.jpg`,
+`WhatsApp Image 2026-09-14.jpeg` o lo que traigan; el script decide solo qué
+foto va en cada hueco. La extensión también da igual (`.jpg`, `.png`, `.heic`…):
+siempre entrega `.jpg`.
+
+También puede pasarlas directamente, sin copiarlas antes:
+
+```bash
+python3 arreglar-fotos.py ~/Descargas/IMG_*.jpg
+```
+
+### Qué hace con cada foto
+
+El cliente mandó capturas de pantalla del iPhone: la foto real ocupa una franja
+al centro y el resto es negro, con la hora, la señal, la batería, el contador
+"3 de 10" y la X de cerrar. Pegadas tal cual se ven mal en una cotización.
+
+1. Aísla la franja de foto real y descarta todo el negro de relleno. De paso se
+   lleva la barra de estado, el contador y la X, porque viven en esa zona negra.
+2. Recorta a 4:3 desde el centro, para que las cuatro entren parejas en la grilla.
 3. Sube un poco contraste, color y nitidez, y reescala a 1600 px de ancho.
 4. Guarda un JPEG optimizado en `fotos/procesadas/`.
 
-La imagen de referencia no tiene franjas negras, así que pasa sin recorte: solo
-se normaliza el tamaño. El script avisa en pantalla cuál recortó y cuál no.
+### Cómo sabe cuál es cuál
 
-> Si el HTML no encuentra una foto, muestra un recuadro gris con el nombre de la
-> vista en vez de un ícono roto. La cotización se puede enseñar igual mientras
-> las fotos no estén listas.
+La referencia del piso se distingue sola: es la única que **no** es una captura
+de pantalla, así que es la única sin franjas negras. Las tres de la lancha se
+reparten en orden de nombre, que es el orden en que las mandó el cliente
+("1 de 10", "2 de 10", "3 de 10") → babor, estribor, popa.
+
+Si el reparto no le calza, renombre el archivo con el nombre del hueco y el
+script lo respeta: `referencia-piso-gris-claro`, `four-winns-338-babor`,
+`four-winns-338-estribor`, `four-winns-338-popa`.
+
+> Mientras falte una foto, el HTML muestra un recuadro rayado en su lugar, nunca
+> un ícono roto. La cotización se puede enseñar igual.
 
 ## Paso 2 — Generar el PDF
 
