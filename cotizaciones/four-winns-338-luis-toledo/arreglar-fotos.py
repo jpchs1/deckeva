@@ -166,8 +166,8 @@ def guardar(img, destino):
 # Los cuatro huecos que muestra index.html, en orden.
 HUECOS = [
     ("referencia-piso-gris-claro", "referencia de acabado"),
-    ("four-winns-338-babor",       "vista de babor"),
-    ("four-winns-338-estribor",    "vista de estribor"),
+    ("four-winns-338-perfil",      "perfil completo"),
+    ("four-winns-338-costado",     "costado y superestructura"),
     ("four-winns-338-popa",        "popa y plataforma"),
 ]
 NOMBRES = [h[0] for h in HUECOS]

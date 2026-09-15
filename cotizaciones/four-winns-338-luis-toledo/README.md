@@ -12,29 +12,55 @@ piso de goma EVA **Gris Claro con líneas negras**, con toma de medidas e instal
 | `fotos/originales/` | Aquí van las fotos tal como llegaron. |
 | `fotos/procesadas/` | Aquí salen las fotos limpias que usa `index.html`. |
 
-## Paso 1 — Que se vean las fotos
+## Las fotos ya están puestas
 
-Copie las cuatro fotos del cliente a `fotos/originales/` y ejecute:
+Las cuatro fotos del cliente están procesadas y versionadas. `index.html` las
+muestra tal cual; no hay que ejecutar nada para verlas.
+
+```
+fotos/
+  originales/                     las de entrada, como llegaron
+    referencia-piso-gris-claro.webp
+    four-winns-338-perfil.webp
+    four-winns-338-costado.webp
+    four-winns-338-popa.webp
+    sin-recortar/
+      referencia-cliente-completa.webp    original íntegro, sólo de respaldo
+  procesadas/                     las que usa el HTML
+```
+
+### Por qué la referencia entra recortada
+
+La imagen de referencia que mandó el cliente traía un panel lateral con una
+paleta y el rótulo **"NUEVO PISO EVA COLOR GRIS NÁUTICO"**. Como la cotización
+va en Gris Claro con líneas negras, dejar ese rótulo a la vista contradecía el
+documento. En `fotos/originales/` está ya recortada a la zona de cubierta: sin
+panel y sin rótulo. El original íntegro queda en `sin-recortar/`, fuera del
+alcance del script, sólo como respaldo.
+
+### Sobre los rótulos de las fotos
+
+Las dos tomas laterales ("1 de 10" y "2 de 10") muestran **el mismo costado**:
+en ambas la proa apunta a la derecha. Rotularlas "babor" y "estribor" habría
+sido un error que el dueño nota de inmediato, así que van con descripciones
+neutras: *perfil completo*, *costado y superestructura*, *popa*.
+
+## Si hay que rehacer o cambiar fotos
 
 ```bash
 pip install Pillow          # solo la primera vez
 python3 arreglar-fotos.py
 ```
 
-Eso es todo: abra `index.html` y las fotos ya están puestas.
-
-**No hace falta renombrar nada.** Los nombres pueden ser `IMG_4471.jpg`,
-`WhatsApp Image 2026-09-14.jpeg` o lo que traigan; el script decide solo qué
-foto va en cada hueco. La extensión también da igual (`.jpg`, `.png`, `.heic`…):
-siempre entrega `.jpg`.
-
-También puede pasarlas directamente, sin copiarlas antes:
+Toma lo que haya en `fotos/originales/` y regenera `fotos/procesadas/`.
+**No hace falta renombrar nada**: los nombres pueden ser `IMG_4471.jpg` o lo
+que traigan. También puede pasarlas directas, sin copiarlas antes:
 
 ```bash
 python3 arreglar-fotos.py ~/Descargas/IMG_*.jpg
 ```
 
-### Qué hace con cada foto
+### Qué le hace a cada foto
 
 El cliente mandó capturas de pantalla del iPhone: la foto real ocupa una franja
 al centro y el resto es negro, con la hora, la señal, la batería, el contador
@@ -48,17 +74,14 @@ al centro y el resto es negro, con la hora, la señal, la batería, el contador
 
 ### Cómo sabe cuál es cuál
 
-La referencia del piso se distingue sola: es la única que **no** es una captura
-de pantalla, así que es la única sin franjas negras. Las tres de la lancha se
-reparten en orden de nombre, que es el orden en que las mandó el cliente
-("1 de 10", "2 de 10", "3 de 10") → babor, estribor, popa.
+La referencia se distingue sola: es la única que **no** es una captura de
+pantalla, o sea la única sin franjas negras. Las tres de la lancha se reparten
+en orden de nombre, que es el orden en que las mandó el cliente. Un archivo ya
+bautizado con el nombre de un hueco se respeta: `referencia-piso-gris-claro`,
+`four-winns-338-perfil`, `four-winns-338-costado`, `four-winns-338-popa`.
 
-Si el reparto no le calza, renombre el archivo con el nombre del hueco y el
-script lo respeta: `referencia-piso-gris-claro`, `four-winns-338-babor`,
-`four-winns-338-estribor`, `four-winns-338-popa`.
-
-> Mientras falte una foto, el HTML muestra un recuadro rayado en su lugar, nunca
-> un ícono roto. La cotización se puede enseñar igual.
+> Si falta una foto, el HTML muestra un recuadro rayado en su lugar, nunca un
+> ícono roto.
 
 ## Paso 2 — Generar el PDF
 
