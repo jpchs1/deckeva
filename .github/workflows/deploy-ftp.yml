@@ -7,23 +7,28 @@ name: Deploy a producción (FTP)
 # en los planes compartidos (confirmado por su soporte el 22/09/2026): esa
 # herramienta depende de SSH externo, que no habilitan. FTP sí está disponible.
 #
-# ── Para activarlo ──────────────────────────────────────────────────────────
-# Secretos (Settings → Secrets and variables → Actions → Secrets):
-#   FTP_HOST   servidor FTP, p. ej. single-4020.banahosting.com  (sin ftp://)
-#   FTP_USER   usuario FTP de la cuenta
+# ── Credenciales ────────────────────────────────────────────────────────────
+# En GitHub: Settings → Secrets and variables → Actions → Secrets
+#   FTP_HOST   servidor FTP: single-4020.banahosting.com  (sin ftp://)
+#   FTP_USER   usuario FTP, p. ej. github@deckeva.cl
 #   FTP_PASS   su contraseña
 #
-# Variables (la pestaña Variables, al lado de Secrets):
-#   FTP_ACTIVO   "si" para subir de verdad. Sin ella, todo son simulacros.
-#   FTP_BASE     opcional: carpeta donde viven los dominios, si no es la raíz
-#                del usuario FTP. Debe acabar en "/". Ejemplo: "public_html/"
-#   FTP_VERIFICAR_CERT  opcional: "no" si el certificado del servidor no valida.
+# Variables opcionales (pestaña Variables, al lado):
+#   FTP_ACTIVO          "si" para que cada merge publique solo.
+#   FTP_BASE            carpeta donde viven los dominios si no es la raíz del
+#                       usuario FTP. Debe acabar en "/".
+#   FTP_VERIFICAR_CERT  "no" si el certificado del servidor no valida.
 #
-# ── Cómo estrenarlo sin riesgo ──────────────────────────────────────────────
-# 1. Añadir los tres secretos, SIN la variable FTP_ACTIVO.
-# 2. Lanzarlo a mano (pestaña Actions → este workflow → Run workflow).
-#    Hará un simulacro: lista qué subiría, sin tocar nada.
-# 3. Revisar esa lista. Si cuadra, crear FTP_ACTIVO = si.
+# ── Dos formas de lanzarlo ──────────────────────────────────────────────────
+# Por merge a main-branch: sube los dos dominios completos, pero solo si
+#   FTP_ACTIVO = si. Si no, hace un simulacro.
+# A mano (Actions → Run workflow), eligiendo:
+#   modo     prueba = solo compara con el servidor · real = sube
+#   alcance  todo = los dos dominios · mu-plugins = solo el código de WordPress
+#
+# El simulacro compara por tamaño con lo que hay en el servidor y lista lo que
+# de verdad cambiaría. Tras una subida real, esa misma comparación tiene que
+# salir vacía: es la prueba de que lo subido es lo que está en el repo.
 #
 # Nunca borra archivos del servidor: solo crea y actualiza. Eso protege lo que
 # vive únicamente allí (uploads, dompdf, el core de WordPress).
@@ -32,6 +37,17 @@ on:
   push:
     branches: [main-branch]
   workflow_dispatch:
+    inputs:
+      modo:
+        description: "prueba: solo compara con el servidor · real: sube"
+        type: choice
+        options: [prueba, real]
+        default: prueba
+      alcance:
+        description: "todo: los dos dominios · mu-plugins: solo el código propio de WordPress"
+        type: choice
+        options: [todo, mu-plugins]
+        default: todo
 
 concurrency:
   group: deploy-ftp
@@ -59,6 +75,31 @@ jobs:
             echo "configurado=si" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Decidir qué se hace
+        id: plan
+        if: steps.credenciales.outputs.configurado == 'si'
+        env:
+          EVENTO: ${{ github.event_name }}
+          MODO_MANUAL: ${{ inputs.modo }}
+          ALCANCE_MANUAL: ${{ inputs.alcance }}
+          FTP_ACTIVO: ${{ vars.FTP_ACTIVO }}
+        run: |
+          if [ "${EVENTO}" = "workflow_dispatch" ]; then
+            modo="${MODO_MANUAL:-prueba}"
+            alcance="${ALCANCE_MANUAL:-todo}"
+          else
+            alcance="todo"
+            if [ "${FTP_ACTIVO:-}" = "si" ]; then modo="real"; else modo="prueba"; fi
+          fi
+
+          # Solo valores conocidos: cualquier otra cosa se trata como simulacro.
+          case "${modo}" in real|prueba) ;; *) modo="prueba" ;; esac
+          case "${alcance}" in todo|mu-plugins) ;; *) alcance="todo" ;; esac
+
+          echo "modo=${modo}" >> "$GITHUB_OUTPUT"
+          echo "alcance=${alcance}" >> "$GITHUB_OUTPUT"
+          echo "Modo: ${modo} · Alcance: ${alcance}"
+
       - name: Preparar lo que se va a subir
         if: steps.credenciales.outputs.configurado == 'si'
         run: .github/deploy/preparar-arbol.sh _deploy
@@ -73,64 +114,87 @@ jobs:
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASS: ${{ secrets.FTP_PASS }}
-          FTP_ACTIVO: ${{ vars.FTP_ACTIVO }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASS }}
           FTP_BASE: ${{ vars.FTP_BASE }}
           FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
+          MODO: ${{ steps.plan.outputs.modo }}
+          ALCANCE: ${{ steps.plan.outputs.alcance }}
         run: |
           set -euo pipefail
+          source .github/deploy/ftp.sh
 
-          if [ "${FTP_ACTIVO:-}" = "si" ]; then
-            simulacro=""
-            echo "Subida real."
-          else
-            simulacro="--dry-run"
-            echo "::notice title=Simulacro::Solo se lista lo que se subiría. Para subir de verdad, crear la variable FTP_ACTIVO con el valor si."
-          fi
+          for par in "${PARES[@]}"; do
+            local_dir="${par%%|*}"
+            remoto="${FTP_BASE:-}${par##*|}"
 
-          verificar="yes"
-          [ "${FTP_VERIFICAR_CERT:-}" = "no" ] && verificar="no"
+            if [ "${MODO}" = "real" ]; then
+              echo "── Subiendo ${remoto} ──"
+              # Primero confirmar acceso: si las credenciales o la ruta están
+              # mal, que falle aquí y con un mensaje claro, no a mitad de subida.
+              ftp_comprobar_acceso "${remoto}"
+              ftp_ejecutar "mirror --reverse --no-perms --parallel=4 --verbose '${local_dir}' '${remoto}'"
+            else
+              echo "── Simulacro ${remoto}: lo que cambiaría en el servidor ──"
+              pendientes=$(ftp_diferencias "${local_dir}" "${remoto}")
+              if [ -z "${pendientes}" ]; then
+                echo "  Nada: el servidor ya tiene exactamente esto."
+              else
+                echo "${pendientes}" | sed 's/^/  /'
+                echo "  Total: $(echo "${pendientes}" | wc -l) archivo(s)"
+              fi
+            fi
+          done
 
-          base="${FTP_BASE:-}"
+      - name: Verificar que el servidor quedó igual que el repo
+        id: verificar
+        if: steps.credenciales.outputs.configurado == 'si' && steps.plan.outputs.modo == 'real'
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASS }}
+          FTP_BASE: ${{ vars.FTP_BASE }}
+          FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
+          ALCANCE: ${{ steps.plan.outputs.alcance }}
+        run: |
+          set -euo pipefail
+          source .github/deploy/ftp.sh
 
-          # Sin --delete a propósito: en el servidor hay cosas que no están en el
-          # repo (uploads, dompdf, el propio WordPress) y un borrado en espejo
-          # se las llevaría por delante.
-          subir_dominio() {
-            local local_dir="$1" remoto="$2"
-            echo "── ${remoto} ──"
-            lftp -c "
-              set ftp:ssl-force true;
-              set ftp:ssl-protect-data true;
-              set ssl:verify-certificate ${verificar};
-              set ftp:passive-mode true;
-              set net:max-retries 3;
-              set net:timeout 20;
-              open -u '${FTP_USER}','${FTP_PASS}' '${FTP_HOST}';
-              mirror --reverse ${simulacro} --only-newer --parallel=4 --verbose \
-                     '${local_dir}' '${base}${remoto}';
-              bye
-            "
-          }
+          fallos=0
+          for par in "${PARES[@]}"; do
+            local_dir="${par%%|*}"
+            remoto="${FTP_BASE:-}${par##*|}"
+            pendientes=$(ftp_diferencias "${local_dir}" "${remoto}")
+            if [ -n "${pendientes}" ]; then
+              echo "::error title=${remoto} no quedó igual::Estos archivos siguen distintos en el servidor:"
+              echo "${pendientes}" | sed 's/^/  /'
+              fallos=$((fallos + 1))
+            else
+              echo "${remoto}: idéntico al repo ✓"
+            fi
+          done
 
-          subir_dominio _deploy/deckeva.cl  deckeva.cl
-          subir_dominio _deploy/deckeva.com deckeva.com
-
-          if [ -n "${simulacro}" ]; then
-            echo "::warning title=No se subió nada::Esto fue un simulacro."
-          else
-            echo "::notice title=Publicado::deckeva.cl y deckeva.com actualizados con ${GITHUB_SHA:0:7}."
-          fi
+          [ "${fallos}" -eq 0 ] || exit 1
+          echo "::notice title=Publicado y verificado::${GITHUB_SHA:0:7} está en producción."
 
       - name: Resumen
         if: always()
+        env:
+          CONFIGURADO: ${{ steps.credenciales.outputs.configurado }}
+          MODO: ${{ steps.plan.outputs.modo }}
+          ALCANCE: ${{ steps.plan.outputs.alcance }}
+          SUBIR: ${{ steps.subir.outcome }}
+          VERIFICAR: ${{ steps.verificar.outcome }}
         run: |
-          if [ "${{ steps.credenciales.outputs.configurado }}" != "si" ]; then
-            echo "Publicación automática sin configurar: faltan los secretos FTP_*." >> "$GITHUB_STEP_SUMMARY"
-          elif [ "${{ steps.subir.outcome }}" != "success" ]; then
-            echo "La subida falló. Revisa el registro; el servidor se quedó como estaba." >> "$GITHUB_STEP_SUMMARY"
-          elif [ "${{ vars.FTP_ACTIVO }}" = "si" ]; then
-            echo "Publicado en deckeva.cl y deckeva.com." >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "Simulacro correcto. Para publicar de verdad, crear la variable FTP_ACTIVO = si." >> "$GITHUB_STEP_SUMMARY"
-          fi
+          {
+            if [ "${CONFIGURADO}" != "si" ]; then
+              echo "Publicación automática sin configurar: faltan los secretos FTP_*."
+            elif [ "${SUBIR}" != "success" ]; then
+              echo "La subida falló. Revisa el registro; lo que no llegó a subirse sigue como estaba."
+            elif [ "${MODO}" != "real" ]; then
+              echo "Simulacro (${ALCANCE}): no se subió nada. La lista de arriba es lo que cambiaría."
+            elif [ "${VERIFICAR}" = "success" ]; then
+              echo "Publicado (${ALCANCE}) y verificado: el servidor tiene exactamente lo del repo."
+            else
+              echo "Se subió (${ALCANCE}) pero la verificación encontró diferencias. Revisa el registro."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -50,11 +50,25 @@ Lo que sí funciona es **FTP**, y de eso se encarga `deploy-ftp.yml` en cada pus
 2. `lftp` los sube por FTPS, **sin borrar nada** en el servidor: en el servidor
    hay cosas que no están en el repo (uploads, `dompdf/`, el propio WordPress) y
    un espejo con borrado se las llevaría.
+3. Después compara por tamaño lo subido con lo que quedó en el servidor. Si algo
+   no cuadra, el workflow falla: no hay "publicado" sin verificar.
+
+Las funciones de FTP viven en `.github/deploy/ftp.sh`. Dos trampas de lftp
+comprobadas con la 4.9.2, que ese archivo ya sortea y no hay que reintroducir:
+
+- En simulacro de subida escribe cada archivo como `get … file:<local>`, no como
+  `put`. Filtrar solo por `put` deja la lista vacía = falso "todo igual".
+- Con el servidor inalcanzable, el simulacro **no falla**: lista todo como
+  pendiente y sale con 0. Por eso antes se comprueba el acceso con `cls`.
 
 Sin los secretos `FTP_HOST` / `FTP_USER` / `FTP_PASS`, el workflow avisa y no hace
-nada. Con ellos pero sin la variable `FTP_ACTIVO = si`, hace un simulacro que
-lista lo que subiría. Mientras no esté activo, se sube a mano por **cPanel →
-File Manager** o por FTP.
+nada. Con ellos, cada merge publica solo si la variable `FTP_ACTIVO = si`; si no,
+hace un simulacro. A mano (*Actions → Run workflow*) se elige `modo` (`prueba` o
+`real`) y `alcance` (`todo` o solo `mu-plugins`), así que Claude puede lanzar una
+publicación controlada con `actions_run_trigger`: primero `prueba`, revisar la
+lista, luego `real`.
+
+Mientras no haya secretos, se sube a mano por **cPanel → File Manager** o por FTP.
 
 Si el mapeo cambia, se toca `preparar-arbol.sh` **y** `.cpanel.yml`, para que no
 se separen.
