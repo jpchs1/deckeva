@@ -1,0 +1,59 @@
+name: Verificación
+
+# Red de seguridad antes de que nada llegue a producción.
+#
+# deckeva.cl es un WordPress en vivo con clientes reales: un error de sintaxis en
+# un mu-plugin no da un aviso, deja la web en blanco. Como los cambios se mergean
+# y despliegan de forma automática, este lint es lo único que se interpone entre
+# un descuido y un sitio caído.
+
+on:
+  pull_request:
+  push:
+    branches: [main-branch]
+
+jobs:
+  php:
+    name: Sintaxis PHP del código propio
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versión de PHP
+        run: php -v
+
+      - name: Revisar los archivos que escribimos nosotros
+        run: |
+          set -uo pipefail
+
+          # Solo código propio. El core de WordPress y los plugins de terceros no
+          # son nuestros y arrastran sintaxis antigua que no nos toca arreglar.
+          rutas=(
+            wp-content/mu-plugins
+            wp-content/themes/dt-the7-child
+            pago
+          )
+
+          errores=0
+          revisados=0
+
+          for ruta in "${rutas[@]}"; do
+            [ -d "$ruta" ] || continue
+            while IFS= read -r archivo; do
+              revisados=$((revisados + 1))
+              if ! salida=$(php -l "$archivo" 2>&1); then
+                echo "::error file=${archivo}::${salida}"
+                errores=$((errores + 1))
+              fi
+            done < <(find "$ruta" -name '*.php' -not -path '*/dompdf/*')
+          done
+
+          echo "Archivos revisados: ${revisados}"
+
+          if [ "$errores" -gt 0 ]; then
+            echo "::error::${errores} archivo(s) con errores de sintaxis. Esto dejaría la web en blanco: no se despliega."
+            exit 1
+          fi
+
+          echo "Sin errores de sintaxis."
