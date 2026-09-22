@@ -141,7 +141,9 @@ jobs:
 
           log=$(echo "$respuesta" | jq -r '.data.log_path // empty')
           echo "Despliegue encolado. Registro en el servidor: ${log:-(sin ruta)}"
-          echo "::notice title=Desplegado::deckeva.cl actualizado con $(git rev-parse --short HEAD 2>/dev/null || echo 'el último commit')."
+          # Este job no hace checkout, así que el commit sale de la variable del
+          # entorno, no de git.
+          echo "::notice title=Desplegado::deckeva.cl actualizado con ${GITHUB_SHA:0:7}."
 
       - name: Resumen
         if: always()
