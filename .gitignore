@@ -69,3 +69,6 @@ wp-content/mu-plugins/dompdf/
 *.bak
 *.backup
 *.orig
+
+# Árbol temporal que arma .github/deploy/preparar-arbol.sh para subir por FTP
+_deploy/
