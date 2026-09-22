@@ -164,10 +164,18 @@ function deckeva_send_cotizacion_emails($contact_form) {
     $fecha = date_i18n('d/m/Y');
     $numero_cotizacion = 'DCK-' . date('Ymd') . '-' . wp_rand(1000, 9999);
 
-    // Headers para enviar HTML
+    // Headers para enviar HTML.
+    // El remitente sale del núcleo de correo (contacto@deckeva.cl): debe ser una
+    // casilla del mismo dominio desde el que envía el servidor. Antes iba como
+    // no-reply@deckeva.com, un dominio distinto al del sitio, y eso hace que
+    // Gmail/Outlook manden el correo a spam por SPF/DKIM.
+    $from = function_exists('deckeva_mail_from_address')
+        ? 'Deckeva <' . deckeva_mail_from_address() . '>'
+        : 'Deckeva <contacto@deckeva.cl>';
+
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: Deckeva <no-reply@deckeva.com>',
+        'From: ' . $from,
     );
 
     // ─── EMAIL AL USUARIO (CLIENTE) ───
@@ -181,10 +189,36 @@ function deckeva_send_cotizacion_emails($contact_form) {
     }
 
     // ─── EMAIL AL ADMIN ───
-    $admin_email   = get_option('admin_email');
     $asunto_admin  = "Nueva Cotización Deckeva N° " . $numero_cotizacion . " - " . $nombre_completo;
     $body_admin    = deckeva_build_admin_email($nombre_completo, $email, $telefono, $tamano, $marca, $modelo, $year, $color, $precio, $numero_cotizacion, $fecha);
-    $sent_admin = wp_mail($admin_email, $asunto_admin, $body_admin, $headers);
+
+    // Registro en disco primero: si el correo falla, el contacto no se pierde.
+    if (function_exists('deckeva_record_lead')) {
+        deckeva_record_lead('cf7-cotizacion#1031', array(
+            'Cotización' => $numero_cotizacion,
+            'Nombre'     => $nombre_completo,
+            'Email'      => $email,
+            'Teléfono'   => $telefono,
+            'Tamaño'     => $tamano,
+            'Marca'      => $marca,
+            'Modelo'     => $modelo,
+            'Año'        => $year,
+            'Color'      => $color,
+            'Precio'     => $precio,
+        ));
+    }
+
+    // Aviso a TODAS las casillas del negocio y con Reply-To del cliente. Antes iba
+    // solo a get_option('admin_email'): si esa casilla no se revisa, la cotización
+    // no llegaba a nadie aunque el cliente sí recibiera la suya.
+    if (function_exists('deckeva_notify_lead')) {
+        $sent_admin = deckeva_notify_lead($asunto_admin, $body_admin, $email, $nombre_completo);
+        $admin_email = implode(', ', deckeva_lead_recipients());
+    } else {
+        $admin_email = get_option('admin_email');
+        $sent_admin  = wp_mail($admin_email, $asunto_admin, $body_admin, $headers);
+    }
+
     if (!$sent_admin) {
         deckeva_log('Admin email FAILED for ' . $admin_email);
     }
