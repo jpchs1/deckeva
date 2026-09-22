@@ -96,8 +96,12 @@ add_filter('wpcf7_spam', function ($spam, $submission) {
 // =============================================
 
 /**
- * Limit CF7 form submissions to max 3 per 10 minutes per IP.
- * Prevents spam floods and brute-force form attacks.
+ * Limit CF7 form submissions per IP in a 10 minute window.
+ *
+ * El limite era de 3, y se comparte entre todos los formularios del sitio: una
+ * familia, una oficina o una empresa detras de una sola IP publica alcanzaba el
+ * tope con facilidad y sus mensajes se descartaban como spam. 6 deja margen a
+ * personas reales sin abrir la puerta a un flood.
  */
 add_filter('wpcf7_spam', function ($spam, $submission) {
     if ($spam) return $spam;
@@ -110,7 +114,7 @@ add_filter('wpcf7_spam', function ($spam, $submission) {
         $submissions = 0;
     }
 
-    $max_submissions = 3;
+    $max_submissions = 6;
     $time_window = 10 * MINUTE_IN_SECONDS;
 
     if ($submissions >= $max_submissions) {
@@ -144,13 +148,33 @@ add_filter('wpcf7_spam', function ($spam, $submission) {
         return is_array($v) ? implode(' ', $v) : $v;
     }, $posted_data));
 
-    // Block email header injection attempts
-    if (preg_match('/(\r|\n|%0a|%0d|bcc:|cc:|to:|content-type:|mime-version:|subject:)/i', $all_content)) {
-        $submission->add_spam_log(array(
-            'agent'  => 'deckeva_header_injection',
-            'reason' => 'Email header injection attempt detected.',
-        ));
-        return true;
+    // Block email header injection attempts.
+    //
+    // Solo pueden inyectar cabeceras los campos que ACABAN dentro de una cabecera
+    // del correo (De, Responder a, Asunto, telefono). El cuerpo del mensaje no:
+    // ahi un salto de linea es, simplemente, alguien escribiendo en varias lineas.
+    //
+    // La version anterior buscaba "\n", "to:", "cc:"... en TODO el formulario, asi
+    // que marcaba como spam cualquier mensaje real escrito en mas de una linea, o
+    // que contuviera palabras tan normales como "Asunto:", "presupuesto:",
+    // "proyecto:" o "contacto:" (todas contienen "to:").
+    foreach ($posted_data as $field_key => $field_value) {
+        if (!preg_match('/(e-?mail|correo|name|nombre|apellido|subject|asunto|tel|phone|fono|celular|whats)/i', $field_key)) {
+            continue;
+        }
+
+        $field_flat = is_array($field_value)
+            ? implode(' ', array_map('strval', $field_value))
+            : (string) $field_value;
+
+        // Un campo que viaja en una cabecera es siempre de una sola linea.
+        if (preg_match('/[\r\n]|%0a|%0d/i', $field_flat)) {
+            $submission->add_spam_log(array(
+                'agent'  => 'deckeva_header_injection',
+                'reason' => sprintf('Salto de linea en el campo de cabecera "%s".', $field_key),
+            ));
+            return true;
+        }
     }
 
     // Count URLs - more than 3 URLs is suspicious for a contact form
@@ -179,9 +203,11 @@ add_filter('wpcf7_spam', function ($spam, $submission) {
         'ransomware', 'phishing', 'trojan',
     );
 
+    // Con limite de palabra: "casino" no debe saltar dentro de un apellido ni
+    // "poker" dentro de otra palabra mas larga.
     $content_lower = mb_strtolower($all_content, 'UTF-8');
     foreach ($spam_keywords as $keyword) {
-        if (strpos($content_lower, strtolower($keyword)) !== false) {
+        if (preg_match('/\b' . preg_quote(strtolower($keyword), '/') . '\b/iu', $content_lower)) {
             $submission->add_spam_log(array(
                 'agent'  => 'deckeva_keyword_spam',
                 'reason' => sprintf('Spam keyword detected: "%s".', $keyword),
@@ -323,10 +349,12 @@ add_filter('rest_endpoints', function ($endpoints) {
  */
 add_filter('wp_mail', function ($args) {
     // Sanitize subject - remove any newlines that could inject headers
-    $args['subject'] = str_replace(array("\r", "\n", "%0a", "%0d"), '', $args['subject']);
+    if (isset($args['subject'])) {
+        $args['subject'] = str_replace(array("\r", "\n", "%0a", "%0d"), '', $args['subject']);
+    }
 
     // Sanitize To field
-    if (is_string($args['to'])) {
+    if (isset($args['to']) && is_string($args['to'])) {
         $args['to'] = str_replace(array("\r", "\n", "%0a", "%0d"), '', $args['to']);
     }
 
@@ -336,18 +364,78 @@ add_filter('wp_mail', function ($args) {
             $args['headers'] = explode("\n", $args['headers']);
         }
         $clean_headers = array();
-        foreach ($args['headers'] as $header) {
+        foreach ((array) $args['headers'] as $header) {
             $header = trim($header);
-            // Remove any header that tries to inject additional recipients
-            if (!preg_match('/^(bcc|cc)\s*:/i', $header) || strpos($header, '@deckeva.cl') !== false || strpos($header, '@deckeva.com') !== false) {
-                $clean_headers[] = $header;
+            if ($header === '') {
+                continue;
             }
+
+            // Copias (Cc/Bcc): se conservan las casillas PROPIAS y se descartan solo
+            // las ajenas, que son las que convertirian el sitio en un relay de spam.
+            //
+            // La version anterior borraba la linea entera salvo que contuviera
+            // "@deckeva.cl" o "@deckeva.com", de modo que un "Bcc: jpchs1@gmail.com"
+            // -unica via por la que el cotizador avisaba al negocio- desaparecia sin
+            // dejar rastro: el cliente recibia su cotizacion y en Deckeva no llegaba nada.
+            if (preg_match('/^(bcc|cc)\s*:(.*)$/i', $header, $m)) {
+                $label = (strtolower($m[1]) === 'bcc') ? 'Bcc' : 'Cc';
+                $kept = array();
+                $dropped = array();
+
+                foreach (explode(',', $m[2]) as $address) {
+                    $address = trim($address);
+                    if ($address === '') {
+                        continue;
+                    }
+
+                    if (deckeva_header_address_is_internal($address)) {
+                        $kept[] = $address;
+                    } else {
+                        $dropped[] = $address;
+                    }
+                }
+
+                if (!empty($kept)) {
+                    $clean_headers[] = $label . ': ' . implode(', ', $kept);
+                }
+                if (!empty($dropped)) {
+                    error_log(sprintf(
+                        '[Deckeva AntiSpam] %s externo descartado: %s',
+                        $label,
+                        implode(', ', $dropped)
+                    ));
+                }
+                continue;
+            }
+
+            $clean_headers[] = $header;
         }
         $args['headers'] = $clean_headers;
     }
 
     return $args;
 }, 1);
+
+/**
+ * ¿La direccion de una cabecera Cc/Bcc es una casilla nuestra?
+ *
+ * Acepta tanto "correo@dominio" como "Nombre <correo@dominio>". Delega en el
+ * nucleo de correo (deckeva-00-mail-core.php) para que la lista de casillas del
+ * negocio viva en un solo sitio; si ese archivo faltara, cae al criterio antiguo
+ * de dominio propio.
+ */
+function deckeva_header_address_is_internal($address) {
+    if (preg_match('/<([^>]+)>/', $address, $m)) {
+        $address = $m[1];
+    }
+    $address = strtolower(trim($address));
+
+    if (function_exists('deckeva_is_internal_address')) {
+        return deckeva_is_internal_address($address);
+    }
+
+    return (strpos($address, '@deckeva.cl') !== false || strpos($address, '@deckeva.com') !== false);
+}
 
 // =============================================
 // 11. LOGIN SECURITY
@@ -498,16 +586,43 @@ function deckeva_get_client_ip() {
 // =============================================
 // 14. LOG SPAM ATTEMPTS (for monitoring)
 // =============================================
-add_filter('wpcf7_spam', function ($spam) {
-    if ($spam) {
-        $ip = deckeva_get_client_ip();
-        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Unknown';
-        error_log(sprintf(
-            '[Deckeva AntiSpam] SPAM BLOCKED | IP: %s | UA: %s | Time: %s',
-            $ip,
-            substr($ua, 0, 100),
-            current_time('mysql')
-        ));
+add_filter('wpcf7_spam', function ($spam, $submission) {
+    if (!$spam) {
+        return $spam;
     }
+
+    $ip = deckeva_get_client_ip();
+    $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Unknown';
+
+    // Motivo concreto del bloqueo, para poder distinguir spam real de un
+    // falso positivo sin tener que adivinar.
+    $reason = 'sin detalle';
+    if ($submission && method_exists($submission, 'get_spam_log')) {
+        $entries = $submission->get_spam_log();
+        if (!empty($entries)) {
+            $reasons = array();
+            foreach ($entries as $entry) {
+                $reasons[] = (isset($entry['agent']) ? $entry['agent'] . ': ' : '')
+                    . (isset($entry['reason']) ? $entry['reason'] : '');
+            }
+            $reason = implode(' | ', $reasons);
+        }
+    }
+
+    error_log(sprintf(
+        '[Deckeva AntiSpam] SPAM BLOCKED | IP: %s | Motivo: %s | UA: %s | Time: %s',
+        $ip,
+        $reason,
+        substr($ua, 0, 100),
+        current_time('mysql')
+    ));
+
+    // Guardar tambien el contenido bloqueado. Si alguna vez volvemos a marcar por
+    // error el mensaje de un cliente real, queda recuperable en
+    // wp-content/uploads/deckeva-leads/ en lugar de perderse para siempre.
+    if ($submission && function_exists('deckeva_record_lead') && method_exists($submission, 'get_posted_data')) {
+        deckeva_record_lead('cf7-BLOQUEADO-ANTISPAM', $submission->get_posted_data(), $reason);
+    }
+
     return $spam;
-}, 99);
+}, 99, 2);

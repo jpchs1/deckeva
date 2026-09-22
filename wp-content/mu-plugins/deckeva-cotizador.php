@@ -193,7 +193,6 @@ class Deckeva_Cotizador {
         $headers = [
             'Content-Type: text/html; charset=UTF-8',
             'From: Deckeva <' . $this->email_from . '>',
-            'Bcc: ' . $this->bcc_email,
         ];
 
         $subject = 'Cotización Deckeva N° ' . $quote_number . ' - Servicios Náuticos';
@@ -204,14 +203,27 @@ class Deckeva_Cotizador {
 
         $sent = wp_mail($client_email, $subject, $email_html, $headers, $attachments);
 
-        // Also send admin notification
-        $admin_email = get_option('admin_email');
-        $admin_headers = [
-            'Content-Type: text/html; charset=UTF-8',
-            'From: Deckeva Cotizador <' . $this->email_from . '>',
-        ];
-        $admin_subject = 'Nueva Cotización N° ' . $quote_number . ' - ' . $client_name;
-        wp_mail($admin_email, $admin_subject, $email_html, $admin_headers, $attachments);
+        // Aviso interno: a TODAS las casillas del negocio (antes solo a
+        // get_option('admin_email'), que puede ser una casilla que nadie revisa)
+        // y con Reply-To del cliente para poder responderle desde el propio aviso.
+        $this->notify_internal_lead(
+            '🔔 Nueva cotización N° ' . $quote_number . ' — ' . $client_name,
+            [
+                'Cotización'   => $quote_number,
+                'Nombre'       => $client_name,
+                'Email'        => $client_email,
+                'Teléfono'     => $client_phone,
+                'Empresa'      => $client_company,
+                'RUT'          => $client_rut,
+                'Embarcación'  => trim($boat_brand . ' ' . $boat_model . ' ' . $boat_year),
+                'Tipo'         => $boat_type,
+                'Marina'       => $boat_marina,
+                'Total'        => $this->format_money($total, $currency_code) . ' ' . $currency_code,
+            ],
+            $client_email,
+            $client_name,
+            $attachments
+        );
 
         // Clean up PDF file after sending
         if ($pdf_path && file_exists($pdf_path)) {
@@ -223,6 +235,73 @@ class Deckeva_Cotizador {
         } else {
             wp_send_json_error(['message' => 'Error al enviar el email. Intente nuevamente.']);
         }
+    }
+
+    /* ──────────────────────────────────────────
+       AVISO INTERNO DE LEADS
+    ────────────────────────────────────────── */
+
+    /**
+     * Avisa al negocio de una solicitud y la deja registrada en disco.
+     *
+     * El registro va primero y es independiente del correo: si el envío falla
+     * (servidor de correo caído, casilla llena, el mensaje marcado como spam en
+     * destino), el contacto igual queda guardado en
+     * wp-content/uploads/deckeva-leads/ y se puede recuperar.
+     *
+     * Usa el núcleo de correo (deckeva-00-mail-core.php) cuando está disponible;
+     * si faltara ese archivo, envía igualmente por la vía mínima.
+     *
+     * @param string $subject     Asunto del aviso.
+     * @param array  $lead        Pares etiqueta => valor con los datos del cliente.
+     * @param string $reply_to    Email del cliente, para responderle desde el aviso.
+     * @param string $reply_name  Nombre del cliente.
+     * @param array  $attachments Adjuntos opcionales (PDF de la cotización).
+     * @return bool
+     */
+    private function notify_internal_lead($subject, $lead, $reply_to = '', $reply_name = '', $attachments = []) {
+        if (function_exists('deckeva_record_lead')) {
+            deckeva_record_lead('cotizador', $lead);
+        }
+
+        if (function_exists('deckeva_notify_lead') && function_exists('deckeva_lead_notification_html')) {
+            $html = deckeva_lead_notification_html(
+                'Nueva solicitud de cotización',
+                'Entró una solicitud desde la web. <strong>Responde este correo</strong> para contestarle directamente al cliente.',
+                $lead
+            );
+            return deckeva_notify_lead($subject, $html, $reply_to, $reply_name, $attachments);
+        }
+
+        // Respaldo si el núcleo de correo no estuviera presente.
+        $rows = '';
+        foreach ((array) $lead as $label => $value) {
+            if (trim((string) $value) === '') {
+                continue;
+            }
+            $rows .= '<tr>'
+                . '<td style="padding:6px 10px;font-weight:600;border-bottom:1px solid #e5e7eb;">' . esc_html($label) . '</td>'
+                . '<td style="padding:6px 10px;border-bottom:1px solid #e5e7eb;">' . esc_html($value) . '</td>'
+                . '</tr>';
+        }
+
+        $headers = [
+            'Content-Type: text/html; charset=UTF-8',
+            'From: Deckeva Cotizador <' . $this->email_from . '>',
+        ];
+        if ($reply_to && is_email($reply_to)) {
+            $headers[] = 'Reply-To: ' . $reply_to;
+        }
+
+        $recipients = array_unique(array_filter([$this->email_from, $this->bcc_email, get_option('admin_email')]));
+
+        return wp_mail(
+            $recipients,
+            $subject,
+            '<table style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:14px;">' . $rows . '</table>',
+            $headers,
+            $attachments
+        );
     }
 
     /* ──────────────────────────────────────────
@@ -385,7 +464,6 @@ class Deckeva_Cotizador {
             $headers = [
                 'Content-Type: text/html; charset=UTF-8',
                 'From: Deckeva <' . $this->email_from . '>',
-                'Bcc: ' . $this->bcc_email,
             ];
             $subject = 'DECKEVA — Cotización / Quote ' . $quote_number;
             $attachments = ($pdf_path && file_exists($pdf_path)) ? [$pdf_path] : [];
@@ -394,6 +472,36 @@ class Deckeva_Cotizador {
                 $email_error = 'No pudimos enviar el email. Intente por WhatsApp.';
             }
         }
+
+        // ─── AVISO INTERNO (siempre, sea cual sea el modo) ───
+        // Este es el formulario de la home (deckeva.cl y deckeva.com). Hasta ahora
+        // el negocio solo se enteraba por la copia oculta del correo al cliente, y
+        // esa copia se perdía: el cliente recibía su cotización, daba por hecho que
+        // había escrito, y aquí no llegaba nada. Ahora el aviso va aparte y también
+        // en modo WhatsApp, donde el cliente puede abrir el chat y no llegar a enviar.
+        $nombre_lead = trim($first . ' ' . $last);
+        $this->notify_internal_lead(
+            '🔔 Nueva cotización ' . $quote_number . ' — ' . $nombre_lead . ' (' . $country . ')',
+            [
+                'Cotización'  => $quote_number,
+                'Nombre'      => $nombre_lead,
+                'Email'       => $email,
+                'Teléfono'    => $phone,
+                'País'        => $country,
+                'Embarcación' => trim($boat_brand . ' ' . $boat_model . ' ' . $boat_year),
+                'Tamaño'      => $boat_size !== '' ? $boat_size . ' pies' : '',
+                'Color'       => $boat_color,
+                'Subtotal'    => $this->convert_and_format_from_clp($price_clp, $currency_code),
+                'IVA 19%'     => $this->convert_and_format_from_clp($iva_clp, $currency_code),
+                'Total'       => $this->convert_and_format_from_clp($total_clp, $currency_code),
+                'Vía'         => $mode,
+                'Copia al cliente' => ($mode === 'whatsapp') ? 'no (eligió WhatsApp)' : ($email_sent ? 'enviada' : 'FALLÓ'),
+                'PDF'         => $pdf_url ? $pdf_url : '(sin PDF)',
+            ],
+            $email,
+            $nombre_lead,
+            ($pdf_path && file_exists($pdf_path)) ? [$pdf_path] : []
+        );
 
         // Email-only: delete server copy after sending. WhatsApp/Both: keep
         // for the client to download via the link in WhatsApp.
