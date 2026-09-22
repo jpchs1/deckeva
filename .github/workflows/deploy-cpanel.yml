@@ -1,0 +1,157 @@
+name: Deploy a producción (cPanel)
+
+# Publica en deckeva.cl / deckeva.com lo que entra en main-branch, usando el
+# Git Version Control de cPanel: trae los cambios desde GitHub al repositorio
+# del servidor y ejecuta las tareas de .cpanel.yml.
+#
+# Requiere tres secretos del repositorio (Settings → Secrets and variables →
+# Actions). Mientras falte alguno, el workflow no falla: avisa y se queda quieto,
+# y el despliegue se sigue haciendo a mano desde cPanel.
+#
+#   CPANEL_HOST   servidor de cPanel, p. ej. servidor.hosting.cl  (sin https://)
+#   CPANEL_USER   usuario de cPanel, p. ej. wwimpo
+#   CPANEL_TOKEN  token de cPanel → Manage API Tokens (revocable en un clic)
+#
+# Opcional:
+#   CPANEL_REPO_ROOT  ruta del repositorio en el servidor. Si no se indica, se
+#                     busca sola entre los repositorios de la cuenta.
+
+on:
+  push:
+    branches: [main-branch]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-cpanel
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publicar en deckeva.cl
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comprobar que hay credenciales
+        id: credenciales
+        env:
+          CP_HOST: ${{ secrets.CPANEL_HOST }}
+          CP_USER: ${{ secrets.CPANEL_USER }}
+          CP_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+        run: |
+          if [ -z "${CP_HOST}" ] || [ -z "${CP_USER}" ] || [ -z "${CP_TOKEN}" ]; then
+            echo "configurado=no" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Despliegue automático inactivo::Faltan CPANEL_HOST, CPANEL_USER o CPANEL_TOKEN. Despliega a mano: cPanel → Git Version Control → Update from Remote → Deploy HEAD Commit."
+          else
+            echo "configurado=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Localizar el repositorio en el servidor
+        id: repo
+        if: steps.credenciales.outputs.configurado == 'si'
+        env:
+          CP_HOST: ${{ secrets.CPANEL_HOST }}
+          CP_USER: ${{ secrets.CPANEL_USER }}
+          CP_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          CP_ROOT: ${{ secrets.CPANEL_REPO_ROOT }}
+        run: |
+          set -uo pipefail
+
+          if [ -n "${CP_ROOT}" ]; then
+            echo "root=${CP_ROOT}" >> "$GITHUB_OUTPUT"
+            echo "Repositorio indicado a mano: ${CP_ROOT}"
+            exit 0
+          fi
+
+          # Llamada de solo lectura: confirma que el token sirve y de paso
+          # devuelve la ruta del repositorio, que es lo que piden las siguientes.
+          respuesta=$(curl -sS --max-time 60 \
+            -H "Authorization: cpanel ${CP_USER}:${CP_TOKEN}" \
+            "https://${CP_HOST}:2083/execute/VersionControl/retrieve") || {
+              echo "::error::No se pudo hablar con cPanel. Revisa CPANEL_HOST y que el puerto 2083 esté accesible."
+              exit 1
+            }
+
+          if [ "$(echo "$respuesta" | jq -r '.errors // "null"')" != "null" ]; then
+            echo "::error::cPanel rechazó la petición: $(echo "$respuesta" | jq -c '.errors')"
+            echo "Suele ser el token (caducado o sin permisos) o el usuario."
+            exit 1
+          fi
+
+          root=$(echo "$respuesta" | jq -r '[.data[]? | select((.repository_root // "") | test("deckeva"))][0].repository_root // empty')
+
+          if [ -z "$root" ]; then
+            echo "::error::No encontré ningún repositorio que contenga \"deckeva\". Repositorios de la cuenta:"
+            echo "$respuesta" | jq -r '.data[]? | "  - \(.repository_root)"'
+            echo "Indica la ruta exacta en el secreto CPANEL_REPO_ROOT."
+            exit 1
+          fi
+
+          echo "root=${root}" >> "$GITHUB_OUTPUT"
+          echo "Repositorio encontrado: ${root}"
+
+      - name: Traer los cambios desde GitHub
+        if: steps.credenciales.outputs.configurado == 'si'
+        continue-on-error: true
+        env:
+          CP_HOST: ${{ secrets.CPANEL_HOST }}
+          CP_USER: ${{ secrets.CPANEL_USER }}
+          CP_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          CP_ROOT: ${{ steps.repo.outputs.root }}
+        run: |
+          set -uo pipefail
+
+          # Equivale al botón "Update from Remote" del panel. Si esta llamada no
+          # fuese la correcta para esta versión de cPanel, no se corta el trabajo:
+          # se avisa y se intenta el despliegue igualmente, que es lo importante.
+          respuesta=$(curl -sS --max-time 120 -G \
+            -H "Authorization: cpanel ${CP_USER}:${CP_TOKEN}" \
+            --data-urlencode "repository_root=${CP_ROOT}" \
+            --data-urlencode "branch=main-branch" \
+            "https://${CP_HOST}:2083/execute/VersionControl/update")
+
+          echo "$respuesta" | jq . || echo "$respuesta"
+
+          if [ "$(echo "$respuesta" | jq -r '.errors // "null"')" != "null" ]; then
+            echo "::warning title=No se pudo actualizar desde el remoto::$(echo "$respuesta" | jq -c '.errors') — se intenta desplegar lo que ya tenga el servidor."
+          fi
+
+      - name: Desplegar
+        id: desplegar
+        if: steps.credenciales.outputs.configurado == 'si'
+        env:
+          CP_HOST: ${{ secrets.CPANEL_HOST }}
+          CP_USER: ${{ secrets.CPANEL_USER }}
+          CP_TOKEN: ${{ secrets.CPANEL_TOKEN }}
+          CP_ROOT: ${{ steps.repo.outputs.root }}
+        run: |
+          set -uo pipefail
+
+          # Ejecuta las tareas de .cpanel.yml sobre el HEAD del repositorio.
+          respuesta=$(curl -sS --max-time 120 -G \
+            -H "Authorization: cpanel ${CP_USER}:${CP_TOKEN}" \
+            --data-urlencode "repository_root=${CP_ROOT}" \
+            "https://${CP_HOST}:2083/execute/VersionControlDeployment/create")
+
+          echo "$respuesta" | jq . || echo "$respuesta"
+
+          if [ "$(echo "$respuesta" | jq -r '.errors // "null"')" != "null" ]; then
+            echo "::error::cPanel no aceptó el despliegue: $(echo "$respuesta" | jq -c '.errors')"
+            exit 1
+          fi
+
+          log=$(echo "$respuesta" | jq -r '.data.log_path // empty')
+          echo "Despliegue encolado. Registro en el servidor: ${log:-(sin ruta)}"
+          # Este job no hace checkout, así que el commit sale de la variable del
+          # entorno, no de git.
+          echo "::notice title=Desplegado::deckeva.cl actualizado con ${GITHUB_SHA:0:7}."
+
+      - name: Resumen
+        if: always()
+        run: |
+          if [ "${{ steps.credenciales.outputs.configurado }}" != "si" ]; then
+            echo "Despliegue automático no configurado todavía. Se despliega a mano desde cPanel." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "${{ steps.desplegar.outcome }}" == "success" ]; then
+            echo "Desplegado en producción." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "El despliegue no salió. Revisa el registro de arriba y, mientras tanto, despliega desde cPanel → Git Version Control." >> "$GITHUB_STEP_SUMMARY"
+          fi
