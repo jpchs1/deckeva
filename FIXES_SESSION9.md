@@ -100,6 +100,22 @@ en tres sitios distintos, así que se añadió un panel que los reúne:
 Desde el panel se filtra por fecha, se descarga un **CSV** y se puede pedir el listado
 **por correo**.
 
+### Escribirles de vuelta desde el mismo panel
+
+Debajo del listado hay un bloque **"Escribirles de vuelta"**: se marcan las casillas de
+los clientes a contactar, se revisa el texto y se envía. Detalles:
+
+- El correo sale **desde el propio sitio**, o sea con remitente `contacto@deckeva.cl`
+  y el SPF/DKIM del dominio. No hace falta dar la contraseña de la casilla a nadie.
+- `{nombre}` y `{fecha}` se reemplazan por los datos de cada cliente; si no se conocía
+  el nombre, el saludo se ajusta solo.
+- Va **uno por persona**, nunca en copia conjunta.
+- A nadie se le escribe dos veces: quien ya fue contactado aparece con ✓ y su casilla
+  deshabilitada.
+- Las filas sin email utilizable no se pueden marcar, y el spam real se queda sin
+  marcar porque la selección es manual.
+- El texto se guarda para la siguiente tanda.
+
 ## Qué conviene revisar en el servidor
 
 1. **Panel de leads perdidos** (arriba): es el punto de partida para retomar contacto.
