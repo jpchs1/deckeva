@@ -57,8 +57,16 @@ llegaba a nadie aunque el cliente sí recibiera su copia.
 ### 4. Remitente de otro dominio
 
 El email de cotización de CF7 salía como `no-reply@deckeva.com` desde un servidor que
-envía por `deckeva.cl`. Con SPF/DKIM de por medio, ese desajuste hace que Gmail y
-Outlook manden el correo a spam o lo rechacen.
+envía por `deckeva.cl`.
+
+**Comprobado en el DNS**: ambos dominios tienen SPF (`v=spf1 ip4:50.31.188.34 +a +mx
+ip4:50.31.188.40 include:relay.mailchannels.net ~all`) y `deckeva.cl` tiene DKIM en
+`default._domainkey`. Es decir, el desajuste **no** era la causa de que no llegaran los
+mensajes: el correo del servidor funciona — las notificaciones de `contacto@imporlan.cl`
+llegan sin problema a la misma casilla de Gmail. Alinear el remitente sigue siendo lo
+correcto, pero es higiene, no la causa.
+
+Lo que sí falta es **DMARC**: ninguno de los dos dominios tiene registro `_dmarc`.
 
 ## Correcciones aplicadas
 
@@ -76,17 +84,32 @@ Todo contacto queda escrito en `wp-content/uploads/deckeva-leads/leads-AAAA-MM.l
 el envío, y también cuando el antispam lo bloquea. Aunque el correo falle, el
 contacto se puede recuperar de ahí.
 
+## Recuperar los contactos que se perdieron
+
+Los leads perdidos **no están en el correo** (nunca salieron). Quedaron en el servidor,
+en tres sitios distintos, así que se añadió un panel que los reúne:
+
+**WP Admin → Herramientas → Leads perdidos** (`deckeva-recuperar-leads.php`)
+
+| Fuente | Qué contiene |
+|---|---|
+| Flamingo | Todos los mensajes de formularios, incluidos los que el antispam marcó como spam y por tanto nunca se enviaron. |
+| `uploads/cotizaciones-intl/*.pdf` | Cotizaciones del formulario de la home que dejaron su PDF en el servidor (retención 30 días). Nombre, email y teléfono se leen del propio PDF. |
+| `uploads/deckeva-leads/` | Registro propio, a partir de esta corrección. |
+
+Desde el panel se filtra por fecha, se descarga un **CSV** y se puede pedir el listado
+**por correo**.
+
 ## Qué conviene revisar en el servidor
 
-1. **Mensajes atrapados**: WP Admin → *Flamingo* → *Mensajes entrantes* → carpeta
-   **Spam**. Ahí deberían estar los mensajes que el antispam descartó por error.
-2. **Carpeta de spam de la casilla** `contacto@deckeva.cl` y de la de Gmail.
-3. **SPF y DKIM** del dominio: sin ellos, los correos que el sitio envía a Gmail
-   entran a spam. Un plugin SMTP (WP Mail SMTP, con la casilla de cPanel o con un
-   servicio tipo Brevo/SendGrid) resuelve esto de raíz y además deja registro de
-   cada envío.
+1. **Panel de leads perdidos** (arriba): es el punto de partida para retomar contacto.
+2. **Carpeta de spam** de la casilla `contacto@deckeva.cl`.
+3. **DMARC**: añadir un registro TXT en `_dmarc.deckeva.cl` y `_dmarc.deckeva.com`
+   (empezar por `v=DMARC1; p=none; rua=mailto:contacto@deckeva.cl`). SPF y DKIM ya están.
 4. **Destinatario de cada formulario CF7**: WP Admin → *Contacto* → pestaña *Correo*,
    revisar que el campo "Para" apunte a una casilla que se lea a diario.
+5. Opcional: un plugin SMTP (WP Mail SMTP) deja registro de cada envío y avisa si
+   alguno falla.
 
 ## Verificación
 
