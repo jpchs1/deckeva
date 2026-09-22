@@ -1,0 +1,136 @@
+name: Deploy a producción (FTP)
+
+# Publica en deckeva.cl y deckeva.com lo que entra en main-branch, subiendo por
+# FTPS los mismos archivos que describe .cpanel.yml.
+#
+# Es FTP y no Git porque BanaHosting no ofrece Git Version Control ni acceso SSH
+# en los planes compartidos (confirmado por su soporte el 22/09/2026): esa
+# herramienta depende de SSH externo, que no habilitan. FTP sí está disponible.
+#
+# ── Para activarlo ──────────────────────────────────────────────────────────
+# Secretos (Settings → Secrets and variables → Actions → Secrets):
+#   FTP_HOST   servidor FTP, p. ej. single-4020.banahosting.com  (sin ftp://)
+#   FTP_USER   usuario FTP de la cuenta
+#   FTP_PASS   su contraseña
+#
+# Variables (la pestaña Variables, al lado de Secrets):
+#   FTP_ACTIVO   "si" para subir de verdad. Sin ella, todo son simulacros.
+#   FTP_BASE     opcional: carpeta donde viven los dominios, si no es la raíz
+#                del usuario FTP. Debe acabar en "/". Ejemplo: "public_html/"
+#   FTP_VERIFICAR_CERT  opcional: "no" si el certificado del servidor no valida.
+#
+# ── Cómo estrenarlo sin riesgo ──────────────────────────────────────────────
+# 1. Añadir los tres secretos, SIN la variable FTP_ACTIVO.
+# 2. Lanzarlo a mano (pestaña Actions → este workflow → Run workflow).
+#    Hará un simulacro: lista qué subiría, sin tocar nada.
+# 3. Revisar esa lista. Si cuadra, crear FTP_ACTIVO = si.
+#
+# Nunca borra archivos del servidor: solo crea y actualiza. Eso protege lo que
+# vive únicamente allí (uploads, dompdf, el core de WordPress).
+
+on:
+  push:
+    branches: [main-branch]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ftp
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publicar por FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comprobar que hay credenciales
+        id: credenciales
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: |
+          if [ -z "${FTP_HOST}" ] || [ -z "${FTP_USER}" ] || [ -z "${FTP_PASS}" ]; then
+            echo "configurado=no" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Publicación automática inactiva::Faltan FTP_HOST, FTP_USER o FTP_PASS. Mientras tanto hay que subir los archivos a mano por File Manager o FTP."
+          else
+            echo "configurado=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Preparar lo que se va a subir
+        if: steps.credenciales.outputs.configurado == 'si'
+        run: .github/deploy/preparar-arbol.sh _deploy
+
+      - name: Instalar lftp
+        if: steps.credenciales.outputs.configurado == 'si'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Subir
+        id: subir
+        if: steps.credenciales.outputs.configurado == 'si'
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          FTP_ACTIVO: ${{ vars.FTP_ACTIVO }}
+          FTP_BASE: ${{ vars.FTP_BASE }}
+          FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
+        run: |
+          set -euo pipefail
+
+          if [ "${FTP_ACTIVO:-}" = "si" ]; then
+            simulacro=""
+            echo "Subida real."
+          else
+            simulacro="--dry-run"
+            echo "::notice title=Simulacro::Solo se lista lo que se subiría. Para subir de verdad, crear la variable FTP_ACTIVO con el valor si."
+          fi
+
+          verificar="yes"
+          [ "${FTP_VERIFICAR_CERT:-}" = "no" ] && verificar="no"
+
+          base="${FTP_BASE:-}"
+
+          # Sin --delete a propósito: en el servidor hay cosas que no están en el
+          # repo (uploads, dompdf, el propio WordPress) y un borrado en espejo
+          # se las llevaría por delante.
+          subir_dominio() {
+            local local_dir="$1" remoto="$2"
+            echo "── ${remoto} ──"
+            lftp -c "
+              set ftp:ssl-force true;
+              set ftp:ssl-protect-data true;
+              set ssl:verify-certificate ${verificar};
+              set ftp:passive-mode true;
+              set net:max-retries 3;
+              set net:timeout 20;
+              open -u '${FTP_USER}','${FTP_PASS}' '${FTP_HOST}';
+              mirror --reverse ${simulacro} --only-newer --parallel=4 --verbose \
+                     '${local_dir}' '${base}${remoto}';
+              bye
+            "
+          }
+
+          subir_dominio _deploy/deckeva.cl  deckeva.cl
+          subir_dominio _deploy/deckeva.com deckeva.com
+
+          if [ -n "${simulacro}" ]; then
+            echo "::warning title=No se subió nada::Esto fue un simulacro."
+          else
+            echo "::notice title=Publicado::deckeva.cl y deckeva.com actualizados con ${GITHUB_SHA:0:7}."
+          fi
+
+      - name: Resumen
+        if: always()
+        run: |
+          if [ "${{ steps.credenciales.outputs.configurado }}" != "si" ]; then
+            echo "Publicación automática sin configurar: faltan los secretos FTP_*." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "${{ steps.subir.outcome }}" != "success" ]; then
+            echo "La subida falló. Revisa el registro; el servidor se quedó como estaba." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "${{ vars.FTP_ACTIVO }}" = "si" ]; then
+            echo "Publicado en deckeva.cl y deckeva.com." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Simulacro correcto. Para publicar de verdad, crear la variable FTP_ACTIVO = si." >> "$GITHUB_STEP_SUMMARY"
+          fi

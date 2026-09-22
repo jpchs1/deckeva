@@ -35,16 +35,32 @@ son clientes perdidos: es exactamente lo que pasó con los avisos de cotización
 
 ## Despliegue
 
-`.cpanel.yml` copia los archivos a `/home/wwimpo/deckeva.cl/` y
-`/home/wwimpo/deckeva.com/`. Lo dispara el workflow `deploy-cpanel.yml` en cada
-push a `main-branch`.
+El hosting es **BanaHosting, plan compartido**: no tiene Git Version Control ni
+acceso SSH, y su soporte confirmó (22/09/2026) que no los habilitan porque esa
+herramienta depende de SSH externo. Así que `.cpanel.yml` **está en el repo pero
+nunca se ejecuta**: se conserva solo como la definición buena de qué archivo va a
+qué ruta.
 
-Si faltan los secretos `CPANEL_HOST` / `CPANEL_USER` / `CPANEL_TOKEN`, el workflow
-avisa y no hace nada: entonces toca a mano en **cPanel → Git Version Control →
-Update from Remote → Deploy HEAD Commit**.
+Lo que sí funciona es **FTP**, y de eso se encarga `deploy-ftp.yml` en cada push a
+`main-branch`:
 
-El deploy copia `wp-content/mu-plugins` **entero**, así que un archivo nuevo ahí
-llega solo. Lo que vive únicamente en la base de datos (formularios CF7, CSS de
+1. `.github/deploy/preparar-arbol.sh` arma en local los dos árboles
+   (`deckeva.cl` y `deckeva.com`) replicando el mapeo de `.cpanel.yml`. Se puede
+   ejecutar suelto para revisar qué se subiría.
+2. `lftp` los sube por FTPS, **sin borrar nada** en el servidor: en el servidor
+   hay cosas que no están en el repo (uploads, `dompdf/`, el propio WordPress) y
+   un espejo con borrado se las llevaría.
+
+Sin los secretos `FTP_HOST` / `FTP_USER` / `FTP_PASS`, el workflow avisa y no hace
+nada. Con ellos pero sin la variable `FTP_ACTIVO = si`, hace un simulacro que
+lista lo que subiría. Mientras no esté activo, se sube a mano por **cPanel →
+File Manager** o por FTP.
+
+Si el mapeo cambia, se toca `preparar-arbol.sh` **y** `.cpanel.yml`, para que no
+se separen.
+
+Un archivo nuevo en `wp-content/mu-plugins` llega solo, porque se sube la carpeta
+entera. Lo que vive únicamente en la base de datos (formularios CF7, CSS de
 Elementor, snippets) **no** está en el repo y no se despliega.
 
 ## Estructura
