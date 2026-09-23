@@ -251,3 +251,43 @@ de reactivación y un envío real de Contact Form 7 con respuesta automática.
 Todos los correos a clientes llevan la copia; los internos no. Las copias de los
 12 salen solo al dueño, y una campaña nueva no las duplica. Los 7 escenarios del
 reenvío siguen pasando.
+
+### Verificación en producción y el límite de envío por hora
+
+La primera prueba (cotización de las 00:23 del 23/09, hora de Chile) no llegó
+nunca: ni la copia oculta ni el aviso interno. El diagnóstico por FTP (#123)
+confirmó que la web no registró ningún fallo, así que el servidor aceptó los
+correos y no los despachó. Una segunda prueba a las 02:08 llegó a Gmail en
+segundos: la cotización dirigida solo a `contacto@deckeva.cl` apareció en el
+Gmail del dueño como copia oculta, y el aviso interno también. **La copia oculta
+funciona en producción.**
+
+Lo que falló fue el **límite de correo saliente por hora del hosting**. Entre las
+00:01 y las 00:22 salieron 25 correos a direcciones externas: los 12 reenvíos, el
+resumen y las 12 copias. Los siguientes no salieron. Según el SPF de deckeva.cl,
+el correo saliente pasa por MailChannels. Lo que pasa del límite no sale más
+tarde: a las 02:08, 1 h 45 min después, la primera prueba seguía sin llegar, y
+hay que darla por perdida.
+
+- **Cualquier envío en bloque va espaciado**, muy por debajo de 25 correos
+  externos por hora contando todo lo que manda el sitio: avisos a Gmail,
+  cotizaciones y copias ocultas. Si no, los que pasan el límite, incluidas las
+  cotizaciones de clientes reales, se pierden sin error.
+- Si alguna vez hace falta el detalle, *cPanel → Correo electrónico → Rastrear
+  entrega* muestra qué pasó con cada correo y por qué.
+
+## Rebotes a contacto@deckeva.cl
+
+WordPress no fija el remitente del sobre (`Return-Path`). Con `mail()` de PHP,
+el sobre queda con el usuario del hosting y los rebotes van a la casilla interna
+de la cuenta de cPanel. Si un cliente escribía mal su correo, su cotización
+rebotaba y aquí nadie se enteraba.
+
+`deckeva_mail_sobre_remitente()` (en `phpmailer_init`) pone el sobre en
+`contacto@deckeva.cl` en todo lo que sale de ese remitente. No pisa un sobre que
+otro plugin haya fijado. El SPF de deckeva.cl ya autoriza al servidor y a
+MailChannels, así que el cambio no afecta la entrega.
+
+Probado con el PHPMailer de WordPress y un sendmail falso: el servidor recibe
+`-fcontacto@deckeva.cl` cuando el remitente es contacto@deckeva.cl (también en
+mayúsculas). Sin `-f` cuando es otro remitente, y respeta el sobre ya fijado.

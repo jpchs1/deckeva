@@ -156,6 +156,31 @@ function deckeva_email_de_direccion($direccion) {
 }
 
 /**
+ * Remitente del sobre (Return-Path) = contacto@deckeva.cl.
+ *
+ * WordPress no lo fija, así que PHP entrega el correo con el usuario del hosting
+ * como remitente del sobre, y los rebotes van a la casilla interna de la cuenta
+ * de cPanel, no a contacto@deckeva.cl. Un cliente que escribió mal su correo se
+ * quedaba sin su cotización y aquí nadie se enteraba. Con el sobre en
+ * contacto@deckeva.cl, el rebote llega a la casilla que el dueño revisa, con el
+ * correo original y los datos para llamar al cliente.
+ *
+ * Solo toca lo que ya sale de nuestro remitente, y respeta un sobre que otro
+ * plugin haya fijado a propósito.
+ */
+add_action('phpmailer_init', 'deckeva_mail_sobre_remitente', 5);
+function deckeva_mail_sobre_remitente($phpmailer) {
+    $remitente = strtolower(trim((string) deckeva_mail_from_address()));
+    if (!is_object($phpmailer) || !empty($phpmailer->Sender) || !is_email($remitente)) {
+        return;
+    }
+    if (strtolower(trim((string) $phpmailer->From)) !== $remitente) {
+        return;
+    }
+    $phpmailer->Sender = $remitente;
+}
+
+/**
  * Envía el aviso interno de un lead a todas las casillas del negocio.
  *
  * Va en el "Para:" (no en Bcc) a propósito: el Bcc se puede perder por filtros,
