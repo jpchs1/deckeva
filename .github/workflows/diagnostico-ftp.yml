@@ -14,6 +14,9 @@ on:
       lineas:
         description: "Cuántas líneas finales de errores y avisos mostrar por archivo"
         default: "30"
+      ventana_leads:
+        description: "Opcional: cuántos contactos entraron entre dos horas UTC (AAAA-MM-DDTHH:MM:SSZ/AAAA-MM-DDTHH:MM:SSZ). Solo el número, sin datos"
+        default: ""
 
 permissions:
   contents: read
@@ -37,4 +40,5 @@ jobs:
           FTP_BASE: ${{ vars.FTP_BASE }}
           FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
           LINEAS: ${{ inputs.lineas }}
+          VENTANA_LEADS: ${{ inputs.ventana_leads }}
         run: bash .github/deploy/diagnostico.sh

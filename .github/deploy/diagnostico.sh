@@ -83,3 +83,32 @@ for remoto in "${candidatos[@]}"; do
     ' "${local_f}" | tail -n "${lineas}" | tapar)"
   echo "${avisos:-(ninguno)}"
 done
+
+# Contactos en una ventana de tiempo (UTC), para saber si una caída del correo
+# dejó clientes sin respuesta. Solo se imprime cuántos hubo por origen: el
+# registro de leads tiene datos de clientes y no sale del runner.
+if [ -n "${VENTANA_LEADS:-}" ]; then
+  echo
+  echo "── Contactos en la ventana ${VENTANA_LEADS} (UTC) ──"
+  patron='^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$'
+  desde="${VENTANA_LEADS%%/*}"
+  hasta="${VENTANA_LEADS##*/}"
+  if [[ ! "${desde}" =~ ${patron} || ! "${hasta}" =~ ${patron} ]]; then
+    echo "Ventana inválida: se espera AAAA-MM-DDTHH:MM:SSZ/AAAA-MM-DDTHH:MM:SSZ."
+    exit 1
+  fi
+  # Un archivo por mes (leads-AAAA-MM.log); la ventana puede cruzar un cambio de mes.
+  archivos=()
+  for mes in $(printf '%s\n%s\n' "${desde:0:7}" "${hasta:0:7}" | sort -u); do
+    local_f="${tmp}/leads-${mes}.log"
+    if ftp_ejecutar "get '${base}deckeva.cl/wp-content/uploads/deckeva-leads/leads-${mes}.log' -o '${local_f}'" >/dev/null 2>&1 \
+       && [ -s "${local_f}" ]; then
+      archivos+=("${local_f}")
+    fi
+  done
+  if [ "${#archivos[@]}" -eq 0 ]; then
+    echo "(no se pudo leer el registro de leads)"
+  else
+    python3 "$(dirname "$0")/contar-leads.py" "${desde}" "${hasta}" "${archivos[@]}"
+  fi
+fi
