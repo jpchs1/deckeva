@@ -34,7 +34,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-const DECKEVA_RESCATE_FASE = 'muestra';
+// 'enviar' aprobado por el dueño el 23/09/2026, tras revisar la muestra en su Gmail.
+const DECKEVA_RESCATE_FASE = 'enviar';
 
 // Todo el estado cuelga de esta versión: cambiarla empezaría la campaña de cero y
 // volvería a escribir a los mismos clientes. No tocar.
