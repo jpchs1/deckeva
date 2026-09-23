@@ -90,7 +90,12 @@ function deckeva_rescate_programar() {
     }
 
     // Marca rápida de "fase terminada", para no abrir el archivo de estado en cada visita.
-    if (get_option(deckeva_rescate_opcion_hecho())) {
+    // En "enviar", lo último es la copia al dueño de lo ya enviado: la campaña queda
+    // inerte cuando esa copia también salió.
+    $terminada = (DECKEVA_RESCATE_FASE === 'enviar')
+        ? get_option(deckeva_rescate_opcion_copias())
+        : get_option(deckeva_rescate_opcion_hecho());
+    if ($terminada) {
         return;
     }
 
@@ -103,6 +108,10 @@ function deckeva_rescate_opcion_hecho() {
     return 'deckeva_rescate_' . DECKEVA_RESCATE_VERSION . '_' . DECKEVA_RESCATE_FASE . '_hecho';
 }
 
+function deckeva_rescate_opcion_copias() {
+    return 'deckeva_rescate_' . DECKEVA_RESCATE_VERSION . '_copias_hecho';
+}
+
 /**
  * Todo lo que hace falta de los otros mu-plugins. Si falta algo (por ejemplo, a mitad
  * de una subida por FTP), no se toca nada y se reintenta en la siguiente visita.
@@ -110,6 +119,7 @@ function deckeva_rescate_opcion_hecho() {
 function deckeva_rescate_listo() {
     return function_exists('deckeva_lead_log_dir')
         && function_exists('deckeva_lead_recipients')
+        && function_exists('deckeva_is_internal_address')
         && function_exists('deckeva_mail_headers')
         && function_exists('deckeva_notify_lead')
         && function_exists('deckeva_record_lead')
@@ -162,6 +172,8 @@ function deckeva_rescate_trabajar() {
             deckeva_mail_log('Reenvío de cotizaciones: el archivo de estado no se puede leer; no se envía nada.');
         } elseif (DECKEVA_RESCATE_FASE === 'muestra') {
             deckeva_rescate_fase_muestra($dir, $estado);
+        } elseif (!empty($estado['resumen'])) {
+            deckeva_rescate_fase_copias($dir, $estado);
         } else {
             deckeva_rescate_fase_enviar($dir, $estado);
         }
@@ -377,6 +389,8 @@ function deckeva_rescate_fase_enviar($dir, array $estado) {
         if (deckeva_rescate_enviar($dir, $lead, $lead['email'])) {
             $envio['estado'] = 'enviado';
             $envio['fecha']  = deckeva_rescate_ahora();
+            // Con copia oculta al dueño: el paso de copias no tiene que repetirlo.
+            $envio['copia_oculta'] = function_exists('deckeva_mail_headers_cliente');
             deckeva_leads_marcar_contactado($lead['email']);
             deckeva_record_lead('rescate-enviado', array(
                 'Cotización' => $numero,
@@ -449,6 +463,72 @@ function deckeva_rescate_terminada(array $estado) {
 }
 
 /* ──────────────────────────────────────────
+   COPIA AL DUEÑO DE LO YA ENVIADO
+────────────────────────────────────────── */
+
+/**
+ * Los 12 correos salieron antes de que el dueño pidiera copia oculta de todo lo que
+ * va a un cliente (23/09/2026). Esto le manda, una sola vez, la copia que habría
+ * recibido: el mismo correo con el mismo PDF, solo a él y nunca a los clientes.
+ * Lleva el Reply-To del cliente, para que al responder la copia le escriba directo.
+ */
+function deckeva_rescate_fase_copias($dir, array $estado) {
+    $copia = function_exists('deckeva_copia_oculta_address') ? deckeva_copia_oculta_address() : '';
+    if (!is_email($copia)) {
+        return;
+    }
+    if (!isset($estado['copias']) || !is_array($estado['copias'])) {
+        $estado['copias'] = array();
+    }
+
+    $pendiente = function ($numero) use (&$estado) {
+        $envio = isset($estado['envios'][$numero]) ? $estado['envios'][$numero] : array();
+        if (empty($envio['estado']) || $envio['estado'] !== 'enviado' || empty($estado['datos'][$numero])) {
+            return false;
+        }
+        // Si ya salió con copia oculta, el dueño la tiene.
+        if (!empty($envio['copia_oculta'])) {
+            return false;
+        }
+        $hecha = isset($estado['copias'][$numero]) ? $estado['copias'][$numero] : array();
+        $hecha += array('estado' => '', 'intentos' => 0);
+
+        return $hecha['estado'] !== 'enviada' && $hecha['intentos'] < DECKEVA_RESCATE_INTENTOS;
+    };
+
+    $hechas = 0;
+    foreach (deckeva_rescate_cotizaciones() as $numero) {
+        if ($hechas >= DECKEVA_RESCATE_POR_VISITA) {
+            break;
+        }
+        if (!$pendiente($numero)) {
+            continue;
+        }
+
+        $lead  = $estado['datos'][$numero];
+        $hecha = isset($estado['copias'][$numero]) ? $estado['copias'][$numero] : array();
+        $hecha += array('estado' => '', 'intentos' => 0);
+        $hecha['intentos']++;
+        $hechas++;
+
+        $prefijo = '[Copia para ' . deckeva_rescate_nombre_propio($lead['nombre']) . '] ';
+        if (deckeva_rescate_enviar($dir, $lead, $copia, $prefijo, $lead['email'])) {
+            $hecha['estado'] = 'enviada';
+            $hecha['fecha']  = deckeva_rescate_ahora();
+        }
+        $estado['copias'][$numero] = $hecha;
+        deckeva_rescate_estado_guardar($dir, $estado);
+    }
+
+    foreach (deckeva_rescate_cotizaciones() as $numero) {
+        if ($pendiente($numero)) {
+            return;
+        }
+    }
+    update_option(deckeva_rescate_opcion_copias(), deckeva_rescate_ahora(), true);
+}
+
+/* ──────────────────────────────────────────
    EL CORREO
 ────────────────────────────────────────── */
 
@@ -456,7 +536,7 @@ function deckeva_rescate_terminada(array $estado) {
  * Genera el PDF con el diseño nuevo y manda el correo. $para es el cliente, o las
  * casillas internas en la muestra. Sin PDF no sale nada: el correo dice que lo adjunta.
  */
-function deckeva_rescate_enviar($dir, array $lead, $para, $prefijo_asunto = '') {
+function deckeva_rescate_enviar($dir, array $lead, $para, $prefijo_asunto = '', $reply_to = '') {
     $idioma = deckeva_rescate_idioma($lead['pais']);
 
     $pdf = Deckeva_Cotizador::pdf_diseno_nuevo(deckeva_rescate_datos_pdf($lead, $idioma));
@@ -476,7 +556,14 @@ function deckeva_rescate_enviar($dir, array $lead, $para, $prefijo_asunto = '') 
         . wpautop(esc_html($texto['cuerpo']))
         . '</div>';
 
-    $enviado = wp_mail($para, $prefijo_asunto . $texto['asunto'], $html, deckeva_mail_headers(), array($adjunto));
+    // A un cliente: con copia oculta al dueño. A las casillas internas (muestra y
+    // copias) no, porque ya son el dueño.
+    $interno = is_array($para) || deckeva_is_internal_address($para);
+    $headers = (!$interno && function_exists('deckeva_mail_headers_cliente'))
+        ? deckeva_mail_headers_cliente($para)
+        : deckeva_mail_headers($reply_to);
+
+    $enviado = wp_mail($para, $prefijo_asunto . $texto['asunto'], $html, $headers, array($adjunto));
     @unlink($adjunto);
 
     if (!$enviado) {

@@ -182,7 +182,11 @@ function deckeva_send_cotizacion_emails($contact_form) {
     if (!empty($email)) {
         $asunto_cliente = "Cotización Formal Deckeva - Piso para tu " . ($marca ? $marca : 'Lancha') . " " . $modelo . " | N° " . $numero_cotizacion;
         $body_cliente   = deckeva_build_client_email($nombre, $nombre_completo, $tamano, $marca, $modelo, $year, $color, $precio, $numero_cotizacion, $fecha);
-        $sent_cliente = wp_mail($email, $asunto_cliente, $body_cliente, $headers);
+        // Con copia oculta al dueño, para que vea lo que recibió el cliente.
+        $headers_cliente = function_exists('deckeva_mail_headers_cliente')
+            ? deckeva_mail_headers_cliente($email)
+            : $headers;
+        $sent_cliente = wp_mail($email, $asunto_cliente, $body_cliente, $headers_cliente);
         if (!$sent_cliente) {
             deckeva_log('Client email FAILED for ' . $email);
         }
