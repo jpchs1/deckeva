@@ -241,9 +241,9 @@ lo que recibe cada cliente.
   le manda al dueño, una sola vez, la copia de cada uno (mismo correo y PDF,
   asunto "[Copia para …]", con `Reply-To` del cliente). Nunca a los clientes.
 
-Ojo: la copia oculta es de lo que **sale**. Las respuestas de los clientes
-siguen llegando solo a `contacto@deckeva.cl`; para verlas en Gmail hace falta el
-reenviador de cPanel.
+La copia oculta es de lo que **sale**. Las respuestas de los clientes llegan a
+`contacto@deckeva.cl`, que el dueño revisa directamente: no hace falta
+reenviarla a Gmail.
 
 Probado en el WordPress local, con los filtros reales (incluido el del
 antispam) y el correo interceptado: cotización de la home, `/cotizador/`, panel

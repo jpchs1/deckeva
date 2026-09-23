@@ -120,7 +120,8 @@ Cargan por orden alfabético, por eso el núcleo va con `00`:
   Cualquier envío nuevo pasa por aquí, no reinventarlo. **Regla del dueño:** todo
   correo a un cliente sale de contacto@deckeva.cl con copia oculta a su casilla:
   usar `deckeva_mail_headers_cliente($para)`. Los de Contact Form 7 se ajustan
-  solos (`wpcf7_mail_components`). Los avisos internos no llevan copia.
+  solos (`wpcf7_mail_components`). Los avisos internos no llevan copia. El dueño
+  revisa contacto@deckeva.cl directamente: no proponer reenviarla a Gmail.
 - `deckeva-antispam-security.php` — antispam y endurecimiento. Ojo con los falsos
   positivos: una regla de más aquí deja al negocio sin mensajes y nadie se entera.
 - `deckeva-cotizador.php` — cotizador de `/cotizador/` y endpoint del formulario
