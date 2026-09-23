@@ -141,6 +141,70 @@ function deckeva_leads_from_pdfs() {
 }
 
 /**
+ * Todos los datos de una cotización antigua, campo por campo, para poder
+ * reemitirla con el diseño nuevo y exactamente los mismos montos que vio el
+ * cliente. Devuelve null si el PDF no se puede leer o no trae email.
+ *
+ * Los montos se guardan tal cual se imprimieron ("CLP $1.251.669",
+ * "MXN $23,040"): así se respeta el precio cotizado aunque la lista haya
+ * cambiado después.
+ */
+function deckeva_leads_datos_pdf($path) {
+    $raw = @file_get_contents($path);
+    if ($raw === false) {
+        return null;
+    }
+    $t = deckeva_leads_texto_pdf($raw);
+
+    $campo = function ($patron) use ($t) {
+        return preg_match($patron, $t, $m) ? trim($m[1]) : '';
+    };
+
+    $email = $campo('/Email\s+(\S+@\S+\.\S+)/u');
+    if ($email === '') {
+        return null;
+    }
+
+    // "20 ft / pies" → "20 pies"; "Otro / Other" → "Otro".
+    $tamano = $campo('/Size \/ Tamaño\s+(.+?)\s+(?:Make|Color|PRICING)/u');
+    if (preg_match('/^(\d+)\s*ft/i', $tamano, $m)) {
+        $tamano = $m[1] . ' pies';
+    } elseif (stripos($tamano, 'otro') === 0) {
+        $tamano = 'Otro';
+    }
+
+    // "Glastron 205 GTS (2013)" → modelo y año por separado.
+    $modelo = $campo('/Make & Model\s+(.+?)\s+(?:Color|PRICING)/u');
+    $anio = '';
+    if (preg_match('/^(.*?)\s*\((\d{4})\)$/u', $modelo, $m)) {
+        $modelo = $m[1];
+        $anio = $m[2];
+    }
+
+    $total = $campo('/TOTAL\s*([A-Z]{3}\s*\S+)/u');
+    $numero = preg_match('/(DCK-INT-(\d{4})(\d{2})(\d{2})\d{6}-[A-F0-9]{5})/', basename($path), $n) ? $n[1] : '';
+
+    return array(
+        'numero'   => $numero,
+        'fecha'    => $numero ? "$n[2]-$n[3]-$n[4]" : '',
+        'nombre'   => $campo('/Name \/ Nombre\s+(.+?)\s+Email\b/u'),
+        'email'    => rtrim($email, '.'),
+        'telefono' => $campo('/Tel[eé]fono\s+(.+?)\s+Shipping/u'),
+        'pais'     => $campo('/Shipping \/ Envío\s+(.+?)\s+VESSEL/u'),
+        'tamano'   => $tamano,
+        'modelo'   => $modelo,
+        'anio'     => $anio,
+        'color'    => $campo('/Color\s+(.+?)\s+PRICING/u'),
+        'subtotal' => $campo('/Base \/ Subtotal\s*([A-Z]{3}\s*\S+)/u'),
+        'iva'      => $campo('/IVA \/ VAT 19%\s*([A-Z]{3}\s*\S+)/u'),
+        'total'    => $total,
+        'moneda'   => substr($total, 0, 3),
+        // Tamaño "Otro" se cotizaba en cero: eso es "a consultar", no gratis.
+        'a_consultar' => ($tamano === 'Otro' || preg_match('/\$0$/', $total)),
+    );
+}
+
+/**
  * Lee cliente y embarcación de un PDF de cotización de los que generaba el
  * formulario de la home antes del arreglo: son lo único que quedó de esas
  * solicitudes. Se apoya en las etiquetas fijas de aquella plantilla
