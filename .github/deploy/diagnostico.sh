@@ -115,9 +115,11 @@ if [ -n "${VENTANA_LEADS:-}" ]; then
   # Rebotes en la misma ventana. Hasta el 23/09 el sobre de los correos de la web
   # era el usuario del hosting, así que los rebotes llegaban a la casilla interna
   # de la cuenta (~/mail, Maildir) y nadie los veía. La hora de llegada va al
-  # principio del nombre de cada archivo. De cada correo solo se mira el asunto,
-  # para distinguir un rebote de otro aviso del sistema, y si es el de una prueba
-  # a example.com. Se imprimen solo números.
+  # principio del nombre de cada archivo. Un rebote se reconoce por el sobre
+  # vacío ("Return-path: <>") o por venir de Mailer-Daemon; de cada correo solo
+  # se imprime la hora y si es rebote (y si es de una prueba a example.com),
+  # nunca el contenido: los rebotes traen el correo original, con datos del
+  # cliente.
   echo
   echo "── Correos en la casilla interna de la cuenta, misma ventana ──"
   desde_s="$(date -u -d "${desde}" +%s)"
@@ -131,13 +133,25 @@ if [ -n "${VENTANA_LEADS:-}" ]; then
       total=$((total + 1))
       msj="${tmp}/correo"
       rm -f "${msj}"
-      ftp_ejecutar "get '${base}${carpeta}${nombre}' -o '${msj}'" </dev/null >/dev/null 2>&1 || continue
-      if grep -m1 -iE '^Subject: *(Mail delivery failed|Undelivered|Delivery Status Notification|Returned mail|Delivery failure)' "${msj}" >/dev/null; then
-        rebotes=$((rebotes + 1))
-        grep -qi '@example\.com' "${msj}" && de_prueba=$((de_prueba + 1))
+      tipo="no se pudo leer"
+      if ftp_ejecutar "get '${base}${carpeta}${nombre}' -o '${msj}'" </dev/null >/dev/null 2>&1; then
+        # Solo las cabeceras (hasta la primera línea en blanco).
+        cabeceras="$(sed '/^\r\{0,1\}$/q' "${msj}")"
+        if grep -qiE '^Return-path: *<>' <<< "${cabeceras}" \
+           || grep -qiE '^From:.*(mailer-daemon|postmaster|mail delivery)' <<< "${cabeceras}"; then
+          rebotes=$((rebotes + 1))
+          tipo="rebote"
+          if grep -qi '@example\.com' "${msj}"; then
+            de_prueba=$((de_prueba + 1))
+            tipo="rebote de una prueba a example.com"
+          fi
+        else
+          tipo="otro aviso (no es rebote)"
+        fi
       fi
+      echo "  $(date -u -d "@${llegada}" '+%d/%m %H:%M UTC') · ${tipo}"
     done < <(ftp_ejecutar "cls -1 '${base}${carpeta}'" 2>/dev/null | sed 's#.*/##')
   done
   rm -f "${tmp}/correo"
-  echo "Correos: ${total} · avisos de rebote: ${rebotes} (de pruebas a example.com: ${de_prueba})"
+  echo "Correos: ${total} · rebotes: ${rebotes} (de pruebas a example.com: ${de_prueba})"
 fi
