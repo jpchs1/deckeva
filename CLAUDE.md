@@ -90,6 +90,13 @@ PHP del servidor: *Actions → Diagnóstico del servidor (FTP)*
 `deckeva.cl/error_log` y `wp-admin/error_log` y los avisos `[Deckeva …]` (si la
 web no pudo entregar un correo al servidor). Solo lee.
 
+Con `ventana_leads` (dos horas UTC, `AAAA-MM-DDTHH:MM:SSZ/AAAA-MM-DDTHH:MM:SSZ`)
+responde además "¿quedó algún cliente sin respuesta en ese rato?". Cuenta los
+contactos del registro de leads, sin las pruebas propias. También lista los
+correos que llegaron a la casilla interna de la cuenta (`~/mail`): rebotes,
+avisos de cPanel u otros. Solo imprime números, horas y tipos, nunca datos de
+clientes.
+
 **El repo es público, y sus logs de Actions también.** Nada de datos de
 clientes en commits, PRs ni en lo que imprima un workflow.
 

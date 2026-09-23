@@ -83,3 +83,62 @@ for remoto in "${candidatos[@]}"; do
     ' "${local_f}" | tail -n "${lineas}" | tapar)"
   echo "${avisos:-(ninguno)}"
 done
+
+# Contactos en una ventana de tiempo (UTC), para saber si una caída del correo
+# dejó clientes sin respuesta. Solo se imprime cuántos hubo por origen: el
+# registro de leads tiene datos de clientes y no sale del runner.
+if [ -n "${VENTANA_LEADS:-}" ]; then
+  echo
+  echo "── Contactos en la ventana ${VENTANA_LEADS} (UTC) ──"
+  patron='^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$'
+  desde="${VENTANA_LEADS%%/*}"
+  hasta="${VENTANA_LEADS##*/}"
+  if [[ ! "${desde}" =~ ${patron} || ! "${hasta}" =~ ${patron} ]]; then
+    echo "Ventana inválida: se espera AAAA-MM-DDTHH:MM:SSZ/AAAA-MM-DDTHH:MM:SSZ."
+    exit 1
+  fi
+  # Un archivo por mes (leads-AAAA-MM.log); la ventana puede cruzar un cambio de mes.
+  archivos=()
+  for mes in $(printf '%s\n%s\n' "${desde:0:7}" "${hasta:0:7}" | sort -u); do
+    local_f="${tmp}/leads-${mes}.log"
+    if ftp_ejecutar "get '${base}deckeva.cl/wp-content/uploads/deckeva-leads/leads-${mes}.log' -o '${local_f}'" >/dev/null 2>&1 \
+       && [ -s "${local_f}" ]; then
+      archivos+=("${local_f}")
+    fi
+  done
+  if [ "${#archivos[@]}" -eq 0 ]; then
+    echo "(no se pudo leer el registro de leads)"
+  else
+    python3 "$(dirname "$0")/contar-leads.py" "${desde}" "${hasta}" "${archivos[@]}"
+  fi
+
+  # Rebotes en la misma ventana. Hasta el 23/09 el sobre de los correos de la web
+  # era el usuario del hosting, así que los rebotes llegaban a la casilla interna
+  # de la cuenta (~/mail, Maildir) y nadie los veía; ahí llegan también los
+  # avisos de cPanel, como el de límite de correos por hora. La hora de llegada
+  # va al principio del nombre de cada archivo. De cada correo solo se imprime la
+  # hora y el tipo (clasificar-correo.py), nunca el contenido: los rebotes traen
+  # el correo original, con datos del cliente.
+  echo
+  echo "── Correos en la casilla interna de la cuenta, misma ventana ──"
+  desde_s="$(date -u -d "${desde}" +%s)"
+  hasta_s="$(date -u -d "${hasta}" +%s)"
+  total=0
+  for carpeta in mail/new/ mail/cur/; do
+    while IFS= read -r nombre; do
+      llegada="${nombre%%.*}"
+      [[ "${llegada}" =~ ^[0-9]+$ ]] || continue
+      (( llegada >= desde_s && llegada < hasta_s )) || continue
+      total=$((total + 1))
+      msj="${tmp}/correo"
+      rm -f "${msj}"
+      tipo="no se pudo leer"
+      if ftp_ejecutar "get '${base}${carpeta}${nombre}' -o '${msj}'" </dev/null >/dev/null 2>&1; then
+        tipo="$(python3 "$(dirname "$0")/clasificar-correo.py" "${msj}")"
+      fi
+      echo "  $(date -u -d "@${llegada}" '+%d/%m %H:%M UTC') · ${tipo}"
+    done < <(ftp_ejecutar "cls -1 '${base}${carpeta}'" 2>/dev/null | sed 's#.*/##')
+  done
+  rm -f "${tmp}/correo"
+  echo "Correos en la ventana: ${total}"
+fi
