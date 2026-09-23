@@ -417,19 +417,11 @@ class Deckeva_Cotizador {
         if (file_exists($dompdf_autoload)) {
             require_once $dompdf_autoload;
             try {
-                $dompdf = new \Dompdf\Dompdf([
-                    'isRemoteEnabled' => false,
-                    'isPhpEnabled'    => false,
-                ]);
-                $pdf_html = $this->build_international_pdf_html(
+                $pdf_output = $this->render_international_pdf(
                     $first, $last, $email, $phone, $country,
                     $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
                     $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
                 );
-                $dompdf->loadHtml($pdf_html, 'UTF-8');
-                $dompdf->setPaper('A4', 'portrait');
-                $dompdf->render();
-                $pdf_output = $dompdf->output();
 
                 $upload_dir = wp_upload_dir();
                 $pdf_dir = $upload_dir['basedir'] . '/cotizaciones-intl';
@@ -527,7 +519,145 @@ class Deckeva_Cotizador {
     }
 
     /* ──────────────────────────────────────────
-       INTERNATIONAL — PDF builder (DOMPDF HTML)
+       INTERNATIONAL — PDF (diseño nuevo, con respaldo)
+    ────────────────────────────────────────── */
+
+    /**
+     * Genera el PDF de la cotización con el diseño de deckeva-assets/pdf-cotizacion.php.
+     *
+     * Si la plantilla no está o algo falla, usa la anterior: un cliente sin PDF es
+     * peor que un PDF con el diseño viejo. Lo mismo si no se puede escribir la
+     * carpeta de fuentes, porque sin ella DOMPDF no registra las tipografías y
+     * el diseño nuevo saldría con Times.
+     *
+     * @return string Bytes del PDF.
+     */
+    private function render_international_pdf($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
+        $assets    = __DIR__ . '/deckeva-assets';
+        $plantilla = $assets . '/pdf-cotizacion.php';
+
+        $upload  = wp_upload_dir();
+        $fuentes = $upload['basedir'] . '/deckeva-pdf-fuentes';
+        if (!is_dir($fuentes)) {
+            wp_mkdir_p($fuentes);
+        }
+
+        if (is_readable($plantilla) && is_writable($fuentes)) {
+            try {
+                require_once $plantilla;
+
+                $dompdf = new \Dompdf\Dompdf([
+                    'isRemoteEnabled' => false,
+                    'isPhpEnabled'    => false,
+                    // Solo puede leer las fuentes y el emblema, nada más del servidor.
+                    'chroot'          => [$assets, __DIR__ . '/dompdf'],
+                    'fontDir'         => $fuentes,
+                    'fontCache'       => $fuentes,
+                    'defaultFont'     => 'dk-texto',
+                    // En DOMPDF 2.0.8 cada línea mide interlineado × altura de la
+                    // fuente × este factor; con 0,83 el interlineado de la
+                    // plantilla es el que se imprime (con el 1,1 por defecto, la
+                    // cotización se iba a dos páginas).
+                    'fontHeightRatio' => 0.83,
+                ]);
+                $dompdf->loadHtml(deckeva_pdf_cotizacion_html(
+                    $this->international_pdf_data(
+                        $first, $last, $email, $phone, $country,
+                        $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
+                        $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
+                    ),
+                    $assets
+                ), 'UTF-8');
+                $dompdf->setPaper('A4', 'portrait');
+                $dompdf->render();
+
+                return $dompdf->output();
+            } catch (\Throwable $e) {
+                error_log('[Deckeva INT PDF] Falló el diseño nuevo, se usa el anterior: ' . $e->getMessage());
+            }
+        } else {
+            error_log('[Deckeva INT PDF] Sin plantilla nueva o sin permiso de escritura en ' . $fuentes . ': se usa el diseño anterior.');
+        }
+
+        $dompdf = new \Dompdf\Dompdf([
+            'isRemoteEnabled' => false,
+            'isPhpEnabled'    => false,
+        ]);
+        $dompdf->loadHtml($this->build_international_pdf_html(
+            $first, $last, $email, $phone, $country,
+            $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
+            $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
+        ), 'UTF-8');
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return $dompdf->output();
+    }
+
+    /**
+     * Datos ya formateados para la plantilla nueva.
+     */
+    private function international_pdf_data($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
+        // Fecha en español con nombres fijos: no depende del idioma del WordPress.
+        $meses = array(1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
+        $ahora = current_time('timestamp');
+        $fecha = date('j', $ahora) . ' de ' . $meses[(int) date('n', $ahora)] . ' de ' . date('Y', $ahora);
+
+        if ($boat_size === 'otro') {
+            $tamano = 'Otro';
+        } elseif ($boat_size !== '') {
+            $tamano = $boat_size . ' pies';
+        } else {
+            $tamano = '';
+        }
+
+        // Tamaño "Otro" llega sin precio: se muestra "A consultar", no "CLP $0".
+        $a_consultar = ($price_clp <= 0);
+
+        $ref_usd = '';
+        if (!$a_consultar && $currency_code !== 'CLP' && $currency_code !== 'USD') {
+            $ref_usd = $this->convert_and_format_from_clp($total_clp, 'USD');
+        }
+
+        $tipo_cambio = '';
+        if (!$a_consultar && $currency_code !== 'CLP') {
+            $rate = (float) $this->get_currency($currency_code)['rate'];
+            if ($rate >= 1) {
+                $tipo_cambio = '1 ' . $currency_code . ' ≈ ' . number_format($rate, 0, ',', '.') . ' CLP';
+            } elseif ($rate > 0) {
+                $tipo_cambio = '1 CLP ≈ ' . number_format(1 / $rate, 2, ',', '.') . ' ' . $currency_code;
+            }
+        }
+
+        return array(
+            'numero' => $quote_number,
+            'fecha'  => $fecha,
+            'cliente' => array(
+                'nombre'   => trim($first . ' ' . $last),
+                'email'    => $email,
+                'telefono' => $phone,
+                'pais'     => $country,
+            ),
+            'embarcacion' => array(
+                'tamano' => $tamano,
+                'modelo' => trim($boat_brand . ' ' . $boat_model),
+                'anio'   => $boat_year,
+                'color'  => $boat_color,
+            ),
+            'precio' => array(
+                'a_consultar' => $a_consultar,
+                'subtotal'    => $this->convert_and_format_from_clp($price_clp, $currency_code),
+                'iva'         => $this->convert_and_format_from_clp($iva_clp, $currency_code),
+                'total'       => $this->convert_and_format_from_clp($total_clp, $currency_code),
+                'ref_usd'     => $ref_usd,
+                'tipo_cambio' => $tipo_cambio,
+            ),
+        );
+    }
+
+    /* ──────────────────────────────────────────
+       INTERNATIONAL — PDF anterior (respaldo)
     ────────────────────────────────────────── */
     private function build_international_pdf_html($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
         $fecha = date_i18n('d/m/Y');
@@ -601,12 +731,12 @@ td { padding: 4px 10px; vertical-align: top; }
 </div>
 
 <div class="notice">
-  <h3>📐 Toma de Medidas &amp; 🛠️ Instalación — Importante / Important</h3>
+  <h3>Toma de Medidas &amp; Instalación — Importante / Important</h3>
   <p style="margin:0 0 6px;font-size:11px;color:#4a4a4a;"><strong>ES:</strong> La <strong>toma de medidas</strong> (para envíos dentro de Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Deckeva no realiza estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.</p>
   <table style="width:100%;margin-top:6px;border-collapse:collapse;font-size:11px;">
     <tr style="background:#fff4d6;"><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Ítem / Item</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Costo ref. / Ref. cost</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Tiempo / Time</td></tr>
-    <tr><td style="padding:6px 10px;color:#4a4a4a;">📐 Toma de medidas · Measurement</td><td style="padding:6px 10px;color:#4a4a4a;font-weight:600;">USD $120</td><td style="padding:6px 10px;color:#4a4a4a;">4–6 hrs aprox.</td></tr>
-    <tr><td style="padding:6px 10px;color:#4a4a4a;">🛠️ Instalación · Installation</td><td style="padding:6px 10px;color:#4a4a4a;font-weight:600;">USD $120</td><td style="padding:6px 10px;color:#4a4a4a;">3–5 hrs aprox.</td></tr>
+    <tr><td style="padding:6px 10px;color:#4a4a4a;">Toma de medidas · Measurement</td><td style="padding:6px 10px;color:#4a4a4a;font-weight:600;">CLP $145.000 (ref. Santiago)</td><td style="padding:6px 10px;color:#4a4a4a;">4–6 hrs aprox.</td></tr>
+    <tr><td style="padding:6px 10px;color:#4a4a4a;">Instalación · Installation</td><td style="padding:6px 10px;color:#4a4a4a;font-weight:600;">CLP $145.000 (ref. Santiago)</td><td style="padding:6px 10px;color:#4a4a4a;">3–5 hrs aprox.</td></tr>
   </table>
   <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;">Para acompañarte en ambos procesos, Deckeva entrega <strong>sin costo</strong>:</p>
   <ul>
@@ -614,7 +744,7 @@ td { padding: 4px 10px; vertical-align: top; }
     <li>Video explicativo paso a paso para la <strong>instalación</strong>.</li>
     <li>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo.</li>
   </ul>
-  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>USD $120</strong> each, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
+  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>CLP $145,000</strong> each in Santiago, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
 </div>
 
 <div class="footer">
@@ -672,14 +802,14 @@ td { padding: 4px 10px; vertical-align: top; }
 <tr><td style="padding-top:8px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #f0d89a;border-radius:6px;font-size:12px;">
 <tr style="background:#fff4d6;"><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Ítem / Item</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Costo ref.</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Tiempo</td></tr>
-<tr><td style="padding:7px 10px;color:#4a4a4a;">📐 Toma de medidas · Measurement</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;">USD $120</td><td style="padding:7px 10px;color:#4a4a4a;">4–6 hrs</td></tr>
-<tr><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">🛠️ Instalación · Installation</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;border-top:1px solid #f0d89a;">USD $120</td><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">3–5 hrs</td></tr>
+<tr><td style="padding:7px 10px;color:#4a4a4a;">📐 Toma de medidas · Measurement</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;">CLP $145.000 <span style="font-weight:400;color:#7a4a00;font-size:11px;">ref. Santiago</span></td><td style="padding:7px 10px;color:#4a4a4a;">4–6 hrs</td></tr>
+<tr><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">🛠️ Instalación · Installation</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;border-top:1px solid #f0d89a;">CLP $145.000 <span style="font-weight:400;color:#7a4a00;font-size:11px;">ref. Santiago</span></td><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">3–5 hrs</td></tr>
 </table>
 </td></tr>
 <tr><td style="padding-top:10px;font-size:12px;color:#4a4a4a;line-height:1.6;">
 Deckeva entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo durante el trabajo.
 <br><br>
-<strong>EN:</strong> <strong>Measurement (shipments to Chile)</strong> and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. These are <u>not included</u> in the quote. Reference: USD $120 each · ~4–6 hrs measurement · ~3–5 hrs installation. Deckeva provides free step-by-step videos + 24/7 WhatsApp &amp; phone support.
+<strong>EN:</strong> <strong>Measurement (shipments to Chile)</strong> and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. These are <u>not included</u> in the quote. Reference: CLP $145,000 each in Santiago · ~4–6 hrs measurement · ~3–5 hrs installation. Deckeva provides free step-by-step videos + 24/7 WhatsApp &amp; phone support.
 </td></tr>
 </table>
 </td></tr>
