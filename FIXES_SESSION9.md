@@ -221,3 +221,33 @@ terminada evita que vuelva a enviar nada. Las respuestas llegan a
 - **Fechas del cotizador en hora de Chile**: con el WordPress en UTC+2, las
   cotizaciones pedidas después de las 19:00 en Chile salían con la fecha del
   día siguiente.
+
+## Copia oculta al dueño de todo correo a un cliente
+
+Pedido del dueño (23/09/2026): los correos a clientes salen de
+`contacto@deckeva.cl` **y con copia oculta a su casilla**, para ver exactamente
+lo que recibe cada cliente.
+
+- `deckeva_mail_headers_cliente($para)` en el núcleo de correo: remitente
+  contacto@deckeva.cl y `Bcc` al dueño (sin duplicarlo si el destinatario ya es
+  él). La usan el cotizador (home y `/cotizador/`), el correo formal de CF7, el
+  panel de reactivación y el reenvío.
+- Contact Form 7: `wpcf7_mail_components` fuerza el remitente contacto@deckeva.cl
+  en todos los formularios y añade la copia oculta cuando el destinatario es un
+  cliente (la respuesta automática). Si un formulario usaba la dirección del
+  cliente como remitente, esa dirección pasa a `Reply-To`.
+- Los avisos internos no llevan copia: ya van al dueño.
+- Los 12 correos del reenvío salieron antes de esta regla: el plugin del reenvío
+  le manda al dueño, una sola vez, la copia de cada uno (mismo correo y PDF,
+  asunto "[Copia para …]", con `Reply-To` del cliente). Nunca a los clientes.
+
+Ojo: la copia oculta es de lo que **sale**. Las respuestas de los clientes
+siguen llegando solo a `contacto@deckeva.cl`; para verlas en Gmail hace falta el
+reenviador de cPanel.
+
+Probado en el WordPress local, con los filtros reales (incluido el del
+antispam) y el correo interceptado: cotización de la home, `/cotizador/`, panel
+de reactivación y un envío real de Contact Form 7 con respuesta automática.
+Todos los correos a clientes llevan la copia; los internos no. Las copias de los
+12 salen solo al dueño, y una campaña nueva no las duplica. Los 7 escenarios del
+reenvío siguen pasando.

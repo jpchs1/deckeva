@@ -44,6 +44,24 @@ class Deckeva_Cotizador {
         return isset($this->currencies[$code]) ? $this->currencies[$code] : $this->currencies['CLP'];
     }
 
+    /* Cabeceras del correo al cliente: desde contacto@deckeva.cl y con copia
+       oculta al dueño, para que vea exactamente lo que recibió el cliente. El
+       aviso interno con los datos sigue saliendo aparte (notify_internal_lead). */
+    private function client_headers($to) {
+        if (function_exists('deckeva_mail_headers_cliente')) {
+            return deckeva_mail_headers_cliente($to);
+        }
+
+        $headers = [
+            'Content-Type: text/html; charset=UTF-8',
+            'From: Deckeva <' . $this->email_from . '>',
+        ];
+        if (strtolower(trim($to)) !== strtolower($this->bcc_email)) {
+            $headers[] = 'Bcc: ' . $this->bcc_email;
+        }
+        return $headers;
+    }
+
     /* Fecha de hoy en Chile para lo que ve el cliente (PDF y correos). La zona
        del WordPress va en UTC+2: con ella, una cotización pedida después de
        las 19:00 en Chile salía con la fecha del día siguiente. */
@@ -206,10 +224,7 @@ class Deckeva_Cotizador {
         // Build HTML email body
         $email_html = $this->build_email_html($client_name, $client_email, $client_phone, $client_company, $client_rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code);
 
-        $headers = [
-            'Content-Type: text/html; charset=UTF-8',
-            'From: Deckeva <' . $this->email_from . '>',
-        ];
+        $headers = $this->client_headers($client_email);
 
         $subject = 'Cotización Deckeva N° ' . $quote_number . ' - Servicios Náuticos';
         $attachments = [];
@@ -469,10 +484,7 @@ class Deckeva_Cotizador {
                 $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
                 $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
             );
-            $headers = [
-                'Content-Type: text/html; charset=UTF-8',
-                'From: Deckeva <' . $this->email_from . '>',
-            ];
+            $headers = $this->client_headers($email);
             $subject = 'DECKEVA — Cotización / Quote ' . $quote_number;
             $attachments = ($pdf_path && file_exists($pdf_path)) ? [$pdf_path] : [];
             $email_sent = wp_mail($email, $subject, $email_html, $headers, $attachments);

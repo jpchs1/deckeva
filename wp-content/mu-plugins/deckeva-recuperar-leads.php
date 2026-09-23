@@ -509,8 +509,9 @@ function deckeva_leads_reactivar() {
             . wpautop(esc_html(deckeva_leads_personalizar($cuerpo, $datos)))
             . '</div>';
 
-        $headers = function_exists('deckeva_mail_headers')
-            ? deckeva_mail_headers()
+        // Desde contacto@deckeva.cl y con copia oculta al dueño.
+        $headers = function_exists('deckeva_mail_headers_cliente')
+            ? deckeva_mail_headers_cliente($email)
             : array('Content-Type: text/html; charset=UTF-8', 'From: Deckeva <contacto@deckeva.cl>');
 
         if (wp_mail($email, deckeva_leads_personalizar($asunto, $datos), $html, $headers)) {

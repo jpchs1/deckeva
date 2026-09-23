@@ -110,6 +110,52 @@ function deckeva_mail_headers($reply_to_email = '', $reply_to_name = '') {
 }
 
 /**
+ * Casilla que recibe copia oculta de todo correo que el sitio le manda a un cliente.
+ *
+ * Pedido del dueño (23/09/2026): ver exactamente lo que recibe cada cliente, con su
+ * PDF. Es una copia, no el aviso: el aviso interno sigue llegando aparte
+ * (deckeva_notify_lead), con los datos del lead y el Reply-To del cliente.
+ */
+function deckeva_copia_oculta_address() {
+    return apply_filters('deckeva_copia_oculta_address', 'jpchs1@gmail.com');
+}
+
+/**
+ * Cabeceras de un correo a un cliente: sale de contacto@deckeva.cl y con copia
+ * oculta al dueño.
+ *
+ * Es un Bcc a una casilla interna, así que el filtro de wp_mail del antispam lo
+ * conserva. Si el destinatario ya es esa misma casilla (una prueba), no se duplica.
+ *
+ * @param string|array $para Destinatario(s) del correo, para no duplicar la copia.
+ */
+function deckeva_mail_headers_cliente($para = '', $reply_to_email = '', $reply_to_name = '') {
+    $headers = deckeva_mail_headers($reply_to_email, $reply_to_name);
+
+    $copia = strtolower(trim((string) deckeva_copia_oculta_address()));
+    $destinatarios = array_map('deckeva_email_de_direccion', is_array($para) ? $para : explode(',', (string) $para));
+
+    if (is_email($copia) && !in_array($copia, $destinatarios, true)) {
+        $headers[] = 'Bcc: ' . $copia;
+    }
+
+    return $headers;
+}
+
+/**
+ * "Nombre <correo@x.cl>" o "correo@x.cl" → "correo@x.cl" en minúsculas ('' si no lo es).
+ */
+function deckeva_email_de_direccion($direccion) {
+    $direccion = trim((string) $direccion);
+    if (preg_match('/<([^>]+)>/', $direccion, $m)) {
+        $direccion = $m[1];
+    }
+    $direccion = strtolower(trim($direccion));
+
+    return is_email($direccion) ? $direccion : '';
+}
+
+/**
  * Envía el aviso interno de un lead a todas las casillas del negocio.
  *
  * Va en el "Para:" (no en Bcc) a propósito: el Bcc se puede perder por filtros,
@@ -314,6 +360,49 @@ function deckeva_handle_cf7_mail_failed($contact_form) {
         $html,
         $email
     );
+}
+
+/**
+ * Contact Form 7: sus correos también salen de contacto@deckeva.cl y, cuando van a
+ * un cliente (la respuesta automática de un formulario), con copia oculta al dueño.
+ *
+ * El remitente de cada formulario vive en la base de datos y se puede cambiar desde
+ * el panel; se fuerza aquí para que SPF/DKIM cuadren siempre. Si un formulario usaba
+ * la dirección del cliente como remitente (para responderle directo desde el aviso),
+ * esa dirección pasa a Reply-To y no se pierde.
+ */
+add_filter('wpcf7_mail_components', 'deckeva_cf7_componentes_correo', 20, 3);
+function deckeva_cf7_componentes_correo($components, $contact_form = null, $mail = null) {
+    if (!is_array($components)) {
+        return $components;
+    }
+
+    $cabeceras = isset($components['additional_headers']) ? trim((string) $components['additional_headers']) : '';
+
+    $remitente_original = deckeva_email_de_direccion(isset($components['sender']) ? $components['sender'] : '');
+    if ($remitente_original !== '' && !deckeva_is_internal_address($remitente_original)
+        && !preg_match('/^\s*reply-to\s*:/im', $cabeceras)) {
+        $cabeceras = trim($cabeceras . "\nReply-To: " . $remitente_original);
+    }
+    $components['sender'] = deckeva_mail_from_name() . ' <' . deckeva_mail_from_address() . '>';
+
+    $para_cliente = false;
+    $destinatario = isset($components['recipient']) ? (string) $components['recipient'] : '';
+    foreach (explode(',', $destinatario) as $direccion) {
+        $email = deckeva_email_de_direccion($direccion);
+        if ($email !== '' && !deckeva_is_internal_address($email)) {
+            $para_cliente = true;
+        }
+    }
+
+    $copia = deckeva_copia_oculta_address();
+    if ($para_cliente && is_email($copia) && stripos($cabeceras, $copia) === false) {
+        $cabeceras = trim($cabeceras . "\nBcc: " . $copia);
+    }
+
+    $components['additional_headers'] = $cabeceras;
+
+    return $components;
 }
 
 /**
