@@ -136,3 +136,72 @@ los clientes a contactar, se revisa el texto y se envía. Detalles:
   negocio se conserva y el dirigido a un tercero se descarta.
 - Aviso interno comprobado de extremo a extremo: llega a `contacto@deckeva.cl`,
   `jpchs1@gmail.com` y al correo del administrador, con `Reply-To` del cliente.
+
+## Publicación por FTP (#108 a #110)
+
+BanaHosting no ofrece Git Version Control ni SSH en planes compartidos, así que
+`.cpanel.yml` nunca se ejecuta. Publica `deploy-ftp.yml` por FTPS con lftp, sin
+borrar nada en el servidor, y después compara por tamaño lo subido con lo que
+quedó allí: si algo no cuadra, el workflow falla. Detalles y trampas de lftp en
+`CLAUDE.md`.
+
+## Cotización en PDF con diseño nuevo (#112 y #113)
+
+La cotización del formulario de la home sale con `deckeva-assets/pdf-cotizacion.php`
+(Barlow, Space Mono, colores de la web, una página) y cae al diseño anterior si
+algo falla. Aprobada por el dueño con la toma de medidas e instalación a
+CLP $145.000 por ítem (referencia Santiago).
+
+## Caída de WordPress por Elementor 4.3 (23/09, #114 y #115)
+
+**Qué pasó.** A las 01:28 UTC (22:28 en Chile) Elementor se actualizó solo de la
+3.x a la 4.3.0 y todo WordPress de deckeva.cl respondió *"Ha habido un error
+crítico"* hasta las 02:04 UTC: escritorio, cotizador, el formulario de la home y
+los de Contact Form 7. La home estática y deckeva.com siguieron bien.
+
+**Causa** (del `error_log`, leído con el nuevo workflow *Diagnóstico del servidor*):
+Elementor Pro 3.12, de 2023 y sin actualizar, registra el experimento `mega-menu`
+dependiendo de `nested-elements`. Elementor 4.3 marca `nested-elements` como oculto
+y lanza `Dependency_Exception` sin capturar, en cada petición.
+
+**Arreglo.** `deckeva-compat-elementor.php` registra `nested-elements` antes que
+Elementor, con los mismos datos pero visible; Elementor ignora el duplicado y la
+dependencia de Pro vuelve a ser válida. Reproducido y verificado en un WordPress
+local con Elementor 4.3.0, Pro 3.12 y los complementos del sitio. Tras publicarlo,
+las 45 páginas del sitemap responden 200.
+
+**Pendiente del dueño.** Mientras Elementor Pro siga en la 3.12, cada actualización
+automática de Elementor puede traer otra incompatibilidad. Opciones: renovar la
+licencia y actualizar Pro, o pausar las actualizaciones automáticas de Elementor.
+
+**Diagnóstico sin SSH.** *Actions → Diagnóstico del servidor (FTP)* lista lo que
+cambió hace poco en el servidor y los últimos errores fatales de PHP, con correos,
+IPs y teléfonos tapados (el repo y sus logs de Actions son públicos).
+
+## Reenvío a los 12 clientes sin respuesta
+
+`deckeva-rescate-cotizaciones.php`, campaña única controlada por
+`DECKEVA_RESCATE_FASE`:
+
+- **muestra**: manda a las casillas internas dos correos exactos (uno en español y
+  el del cliente de EE. UU. en inglés) y la lista completa. No escribe a clientes.
+- **enviar** (solo con aprobación del dueño, en su propio PR): de a 3 por visita a
+  WordPress, una vez por cliente, con su cotización reemitida en el diseño nuevo y
+  **el mismo valor que se le cotizó**. Al final, resumen interno.
+
+El archivo solo tiene números de cotización. Los datos de cada cliente se leen de
+los PDF originales en el servidor y se guardan en `uploads/deckeva-leads` (cerrada
+a la web), porque el cotizador borra a veces los PDF de más de 30 días.
+
+Salvaguardas: cerrojo `flock` contra visitas simultáneas; "enviando" se anota antes
+de mandar y no se reintenta (mejor revisarlo a mano que escribir dos veces); nunca
+a quien ya se contactó desde el panel; sin PDF no sale el correo; un estado
+ilegible detiene todo. Fechas en hora de Chile (el WordPress está en UTC+2 y los
+números de cotización van en UTC).
+
+Probado en un WordPress local con los mu-plugins reales, DOMPDF 2.0.8 y los PDF
+originales, con el correo interceptado. Siete escenarios: sin muestra no envía; de
+a 3 por visita y resumen al final; fallo de envío con 3 intentos; ya contactado;
+proceso muerto a mitad; visitas simultáneas sin duplicados; estado corrupto. Los 12
+correos llevan la cotización de su destinatario, con su total, en una página y en
+su idioma.

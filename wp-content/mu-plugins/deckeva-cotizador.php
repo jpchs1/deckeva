@@ -22,8 +22,10 @@ class Deckeva_Cotizador {
 
     /* Supported currencies. 'rate' is reference CLP per 1 unit of currency.
        Used by the international (deckeva.com) endpoint for on-quote display
-       only; the real quote is confirmed by the Deckeva team afterwards. */
-    private $currencies = [
+       only; the real quote is confirmed by the Deckeva team afterwards.
+       Constante pública para que el reenvío de cotizaciones muestre el mismo
+       tipo de cambio de referencia sin copiar la tabla. */
+    const MONEDAS = [
         'CLP' => ['symbol' => '$',  'thousands' => '.', 'rate' => 1,    'label' => 'Pesos Chilenos (CLP)'],
         'USD' => ['symbol' => '$',  'thousands' => ',', 'rate' => 970,  'label' => 'US Dollars (USD)'],
         'EUR' => ['symbol' => '€',  'thousands' => '.', 'rate' => 1050, 'label' => 'Euros (EUR)'],
@@ -35,6 +37,8 @@ class Deckeva_Cotizador {
         'COP' => ['symbol' => '$',  'thousands' => '.', 'rate' => 0.25, 'label' => 'Pesos Colombianos (COP)'],
         'GBP' => ['symbol' => '£',  'thousands' => ',', 'rate' => 1230, 'label' => 'Libras Esterlinas (GBP)'],
     ];
+
+    private $currencies = self::MONEDAS;
 
     private function get_currency($code) {
         return isset($this->currencies[$code]) ? $this->currencies[$code] : $this->currencies['CLP'];
@@ -525,60 +529,22 @@ class Deckeva_Cotizador {
     /**
      * Genera el PDF de la cotización con el diseño de deckeva-assets/pdf-cotizacion.php.
      *
-     * Si la plantilla no está o algo falla, usa la anterior: un cliente sin PDF es
-     * peor que un PDF con el diseño viejo. Lo mismo si no se puede escribir la
-     * carpeta de fuentes, porque sin ella DOMPDF no registra las tipografías y
-     * el diseño nuevo saldría con Times.
+     * Si el diseño nuevo no se puede generar, usa el anterior: un cliente sin PDF
+     * es peor que un PDF con el diseño viejo.
      *
      * @return string Bytes del PDF.
      */
     private function render_international_pdf($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
-        $assets    = __DIR__ . '/deckeva-assets';
-        $plantilla = $assets . '/pdf-cotizacion.php';
-
-        $upload  = wp_upload_dir();
-        $fuentes = $upload['basedir'] . '/deckeva-pdf-fuentes';
-        if (!is_dir($fuentes)) {
-            wp_mkdir_p($fuentes);
+        $pdf = self::pdf_diseno_nuevo($this->international_pdf_data(
+            $first, $last, $email, $phone, $country,
+            $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
+            $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
+        ));
+        if ($pdf !== null) {
+            return $pdf;
         }
 
-        if (is_readable($plantilla) && is_writable($fuentes)) {
-            try {
-                require_once $plantilla;
-
-                $dompdf = new \Dompdf\Dompdf([
-                    'isRemoteEnabled' => false,
-                    'isPhpEnabled'    => false,
-                    // Solo puede leer las fuentes y el emblema, nada más del servidor.
-                    'chroot'          => [$assets, __DIR__ . '/dompdf'],
-                    'fontDir'         => $fuentes,
-                    'fontCache'       => $fuentes,
-                    'defaultFont'     => 'dk-texto',
-                    // En DOMPDF 2.0.8 cada línea mide interlineado × altura de la
-                    // fuente × este factor; con 0,83 el interlineado de la
-                    // plantilla es el que se imprime (con el 1,1 por defecto, la
-                    // cotización se iba a dos páginas).
-                    'fontHeightRatio' => 0.83,
-                ]);
-                $dompdf->loadHtml(deckeva_pdf_cotizacion_html(
-                    $this->international_pdf_data(
-                        $first, $last, $email, $phone, $country,
-                        $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color,
-                        $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
-                    ),
-                    $assets
-                ), 'UTF-8');
-                $dompdf->setPaper('A4', 'portrait');
-                $dompdf->render();
-
-                return $dompdf->output();
-            } catch (\Throwable $e) {
-                error_log('[Deckeva INT PDF] Falló el diseño nuevo, se usa el anterior: ' . $e->getMessage());
-            }
-        } else {
-            error_log('[Deckeva INT PDF] Sin plantilla nueva o sin permiso de escritura en ' . $fuentes . ': se usa el diseño anterior.');
-        }
-
+        error_log('[Deckeva INT PDF] Se usa el diseño anterior para ' . $quote_number . '.');
         $dompdf = new \Dompdf\Dompdf([
             'isRemoteEnabled' => false,
             'isPhpEnabled'    => false,
@@ -592,6 +558,70 @@ class Deckeva_Cotizador {
         $dompdf->render();
 
         return $dompdf->output();
+    }
+
+    /**
+     * PDF con el diseño nuevo a partir de datos ya formateados (el formato está en
+     * deckeva_pdf_cotizacion_datos_ejemplo()).
+     *
+     * Pública y estática porque también la usa el reenvío de cotizaciones perdidas
+     * (deckeva-rescate-cotizaciones.php), que no pasa por el formulario.
+     *
+     * Devuelve null si no se puede: sin DOMPDF, sin plantilla, sin carpeta de
+     * fuentes escribible (sin ella DOMPDF no registra las tipografías y todo
+     * saldría en Times) o si falla el render. Quien llama decide qué hacer.
+     *
+     * @return string|null Bytes del PDF.
+     */
+    public static function pdf_diseno_nuevo(array $datos) {
+        $assets    = __DIR__ . '/deckeva-assets';
+        $plantilla = $assets . '/pdf-cotizacion.php';
+
+        if (!class_exists('\Dompdf\Dompdf')) {
+            $autoload = __DIR__ . '/dompdf/autoload.php';
+            if (!file_exists($autoload)) {
+                return null;
+            }
+            require_once $autoload;
+        }
+
+        $upload  = wp_upload_dir();
+        $fuentes = $upload['basedir'] . '/deckeva-pdf-fuentes';
+        if (!is_dir($fuentes)) {
+            wp_mkdir_p($fuentes);
+        }
+
+        if (!is_readable($plantilla) || !is_writable($fuentes)) {
+            error_log('[Deckeva INT PDF] Sin plantilla nueva o sin permiso de escritura en ' . $fuentes . '.');
+            return null;
+        }
+
+        try {
+            require_once $plantilla;
+
+            $dompdf = new \Dompdf\Dompdf([
+                'isRemoteEnabled' => false,
+                'isPhpEnabled'    => false,
+                // Solo puede leer las fuentes y el emblema, nada más del servidor.
+                'chroot'          => [$assets, __DIR__ . '/dompdf'],
+                'fontDir'         => $fuentes,
+                'fontCache'       => $fuentes,
+                'defaultFont'     => 'dk-texto',
+                // En DOMPDF 2.0.8 cada línea mide interlineado × altura de la
+                // fuente × este factor; con 0,83 el interlineado de la
+                // plantilla es el que se imprime (con el 1,1 por defecto, la
+                // cotización se iba a dos páginas).
+                'fontHeightRatio' => 0.83,
+            ]);
+            $dompdf->loadHtml(deckeva_pdf_cotizacion_html($datos, $assets), 'UTF-8');
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            return $dompdf->output();
+        } catch (\Throwable $e) {
+            error_log('[Deckeva INT PDF] Falló el diseño nuevo: ' . $e->getMessage());
+            return null;
+        }
     }
 
     /**
