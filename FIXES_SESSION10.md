@@ -100,3 +100,30 @@ El mapeo se añadió **en los dos sitios**, como manda la casa: `.cpanel.yml` y
 - Quedan 11 proyectos del álbum sin publicar (tomas de medidas, desarmes). Sirven
   para un futuro apartado de «cómo trabajamos», no para «proyectos realizados».
 - El `addEventListener` sobre un elemento que no existe, en la propia página.
+
+---
+
+## Corrección posterior (mismo día)
+
+Dos cosas que el dueño pidió al ver la galería publicada:
+
+**Fuera el proyecto «Interior — EVA gris oscuro»** (6 fotos). No cumple el
+estándar de calidad de la casa y no representa el trabajo. Se quitó la tarjeta,
+su entrada en los datos del visor y las siete imágenes del repo. La galería queda
+en 11 proyectos con 81 fotos.
+
+Ojo: **el despliegue por FTP nunca borra nada** del servidor, a propósito, para no
+llevarse por delante lo que solo vive allí. Así que las siete imágenes siguen en
+`deckeva.com/staging/img/proyectos/interior-gris-oscuro/`, ya sin enlace desde
+ninguna página. Para que desaparezcan de verdad hay que borrarlas a mano por
+File Manager o FTP.
+
+**Portada nueva para el semirrígido del Lago Ranco.** Las nueve fotos de ese
+proyecto son verticales y la tarjeta es 4:3: al recortar, el navegador se quedaba
+con la franja del medio —la consola y el pasamanos— y se perdía la cubierta, que
+es lo que vendemos. La portada se genera ahora **ya recortada a 4:3 desde arriba**
+del original en alta, así la tarjeta enseña la proa entera con la V de teca.
+
+Quedan otras dos portadas verticales (`bowrider-teca` y `piso-eva-gris`) que
+aguantan bien el recorte porque son planos de detalle del piso. Si algún día no,
+el arreglo es el mismo.
