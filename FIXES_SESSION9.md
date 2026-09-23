@@ -335,7 +335,9 @@ Ahora el idioma sale del país que el cliente elige en el formulario
 
 El asunto también cambia: "DECKEVA — Cotización …", "DECKEVA — Quote …" o, con
 los dos idiomas, "DECKEVA — Cotización / Quote …". Los textos son los de siempre
-y solo se elige cuáles mostrar. El PDF ya iba con el español primero.
+y solo se elige cuáles mostrar. El PDF ya iba con el español primero. El nombre
+del adjunto también sigue el idioma: `DECKEVA-Cotizacion-….pdf` o
+`DECKEVA-Quote-….pdf`.
 
 Probado en el WordPress local con cinco cotizaciones: Chile, México, Estados
 Unidos, Brasil y "Otro". Se revisó palabra por palabra que el correo en español
