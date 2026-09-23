@@ -55,6 +55,14 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
     $ola = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 40" preserveAspectRatio="none"><path d="M0 24 C 100 6 200 40 310 22 C 420 4 510 34 600 18 L600 40 L0 40 Z" fill="#0e6ba8"/><path d="M0 32 C 120 18 230 44 340 30 C 450 16 530 38 600 28 L600 40 L0 40 Z" fill="#1a9be3"/></svg>');
 
     $precio = $d['precio'];
+
+    // Campos opcionales para cotizaciones hechas a mano (no los usa el
+    // formulario web): servicios extra en el detalle, forma de pago, y la
+    // variante en que Deckeva sí hace la toma de medidas y la instalación.
+    $servicios = isset($d['servicios']) && is_array($d['servicios']) ? $d['servicios'] : array();
+    $forma_pago = isset($d['forma_pago']) && is_array($d['forma_pago']) ? $d['forma_pago'] : array();
+    $servicios_incluidos = isset($d['servicios_incluidos']) ? trim((string) $d['servicios_incluidos']) : '';
+    $proximos = isset($d['proximos_pasos']) && is_array($d['proximos_pasos']) ? $d['proximos_pasos'] : array();
     $consultar = !empty($precio['a_consultar']);
 
     // Solo se pintan los datos que existen, para no dejar "—" sueltos.
@@ -156,6 +164,9 @@ td { vertical-align: top; }
 .incluye td { padding: 2.2pt 0; font-size: 8pt; line-height: 10.5pt; color: #3d3d3d; vertical-align: middle; }
 .incluye .celda-check { width: 15pt; }
 .check { width: 9.5pt; height: 9.5pt; }
+.aviso-ok { background: #effaf5; border-left-color: #00b87a; }
+.aviso-ok .aviso-tit { color: #0b5d43; }
+.aviso-ok .aviso-tit span { color: #00875a; }
 .aviso p.en { font-size: 7.1pt; line-height: 9.8pt; color: #7c7c7c; margin-top: 7pt; }
 
 /* ── Llamada a la acción y pie ────────────────────────── */
@@ -211,7 +222,7 @@ td { vertical-align: top; }
       <?php if ($contacto !== ''): ?>
       <div class="contacto"><?php echo $e($contacto); ?></div>
       <?php endif; ?>
-      <div class="saludo">Gracias por cotizar con Deckeva. Aquí tienes el valor referencial de tu piso náutico EVA a medida y todo lo que necesitas saber para avanzar.</div>
+      <div class="saludo"><?php echo !empty($d['saludo']) ? $e($d['saludo']) : 'Gracias por cotizar con Deckeva. Aquí tienes el valor referencial de tu piso náutico EVA a medida y todo lo que necesitas saber para avanzar.'; ?></div>
     </td>
     <td style="width:43%;">
       <div class="tarjeta-total">
@@ -256,6 +267,12 @@ td { vertical-align: top; }
       <td><div class="desc">IVA 19%</div><div class="sub">VAT</div></td>
       <td class="monto"><?php echo $e($precio['iva']); ?></td>
     </tr>
+    <?php foreach ($servicios as $sv): ?>
+    <tr>
+      <td><div class="desc"><?php echo $e($sv['desc']); ?></div><?php if (!empty($sv['sub'])): ?><div class="sub"><?php echo $e($sv['sub']); ?></div><?php endif; ?></td>
+      <td class="monto"><?php echo $e($sv['monto']); ?></td>
+    </tr>
+    <?php endforeach; ?>
     <tr class="fila-total">
       <td><div class="desc">Total</div></td>
       <td class="monto"><?php echo $e($precio['total']); ?></td>
@@ -266,6 +283,32 @@ td { vertical-align: top; }
     echo !empty($precio['tipo_cambio']) ? ' Tipo de cambio ref. / Reference rate: ' . $e($precio['tipo_cambio']) . '.' : '';
   ?></div>
 
+  <?php if ($forma_pago): ?>
+  <div class="seccion">FORMA DE PAGO <span>· PAYMENT TERMS</span></div>
+  <table class="detalle">
+    <?php foreach ($forma_pago as $fp): ?>
+    <tr>
+      <td><div class="desc"><?php echo $e($fp['etiqueta']); ?></div><?php if (!empty($fp['detalle'])): ?><div class="sub"><?php echo $e($fp['detalle']); ?></div><?php endif; ?></td>
+      <td class="monto"><?php echo $e($fp['monto']); ?></td>
+    </tr>
+    <?php endforeach; ?>
+  </table>
+  <?php endif; ?>
+
+  <?php if ($servicios_incluidos !== ''): ?>
+  <div class="aviso aviso-ok">
+    <div class="aviso-tit">Toma de medidas e instalación &nbsp;<span>INCLUIDAS · INCLUDED</span></div>
+    <p><?php echo $e($servicios_incluidos); ?></p>
+    <?php if ($proximos): ?>
+    <table class="incluye">
+      <?php foreach ($proximos as $paso): ?>
+      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td><?php echo $e($paso); ?></td></tr>
+      <?php endforeach; ?>
+      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong>.</td></tr>
+    </table>
+    <?php endif; ?>
+  </div>
+  <?php else: ?>
   <div class="aviso">
     <div class="aviso-tit">Toma de medidas e instalación &nbsp;<span>IMPORTANTE · IMPORTANT</span></div>
     <p><strong>ES:</strong> La <strong>toma de medidas</strong> (para envíos dentro de Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Deckeva no realiza estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.</p>
@@ -293,6 +336,7 @@ td { vertical-align: top; }
 
     <p class="en"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>CLP $145,000</strong> each in Santiago, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
   </div>
+  <?php endif; ?>
 
   <div class="cta">
     <table><tr>
