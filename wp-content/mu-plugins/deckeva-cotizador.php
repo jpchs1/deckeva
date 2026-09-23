@@ -465,7 +465,9 @@ class Deckeva_Cotizador {
                 }
                 // Unguessable filename
                 $uuid = bin2hex(random_bytes(16));
-                $pdf_filename = 'DECKEVA-Quote-' . $quote_number . '-' . $uuid . '.pdf';
+                // El nombre se ve como adjunto en el correo: en el idioma del cliente.
+                $pdf_palabra = (self::idioma_cliente($country) === 'en') ? 'Quote' : 'Cotizacion';
+                $pdf_filename = 'DECKEVA-' . $pdf_palabra . '-' . $quote_number . '-' . $uuid . '.pdf';
                 $pdf_path = $pdf_dir . '/' . $pdf_filename;
                 file_put_contents($pdf_path, $pdf_output);
                 $pdf_url = $pdf_url_base . '/' . $pdf_filename;
