@@ -77,6 +77,26 @@ Un archivo nuevo en `wp-content/mu-plugins` llega solo, porque se sube la carpet
 entera. Lo que vive únicamente en la base de datos (formularios CF7, CSS de
 Elementor, snippets) **no** está en el repo y no se despliega.
 
+Tras cada merge, el simulacro automático y el deploy manual van en serie (mismo
+grupo de concurrencia). Si corre prisa, cancelar el simulacro es inofensivo:
+solo compara.
+
+### Diagnóstico sin SSH
+
+Si WordPress muestra *"Ha habido un error crítico"*, la causa está en el log de
+PHP del servidor: *Actions → Diagnóstico del servidor (FTP)*
+(`diagnostico-ftp.yml`, `actions_run_trigger`). Lista lo que cambió hace poco
+(mu-plugins, plugins, temas, traducciones) y los últimos errores fatales de
+`deckeva.cl/error_log` y `wp-admin/error_log`. Solo lee.
+
+**El repo es público, y sus logs de Actions también.** Nada de datos de
+clientes en commits, PRs ni en lo que imprima un workflow.
+
+Precedente (23/09/2026): Elementor se actualizó solo a la 4.3 y tumbó todo
+WordPress porque el Elementor Pro del sitio es la 3.12, de 2023. Lo sostiene
+`deckeva-compat-elementor.php`. Mientras Pro no se actualice, cada actualización
+automática de Elementor es sospechosa ante una caída.
+
 ## Estructura
 
 | Ruta | Qué es |
@@ -104,8 +124,19 @@ Cargan por orden alfabético, por eso el núcleo va con `00`:
   de la home (`/cotizador/enviar-international`).
 - `deckeva-cotizacion-email.php` — correos del formulario CF7 1031.
 - `deckeva-recuperar-leads.php` — panel *Herramientas → Leads perdidos*.
+- `deckeva-compat-elementor.php` — evita la caída de Elementor 4.3 con Elementor
+  Pro 3.12. Sobra cuando Pro se actualice.
+- `deckeva-rescate-cotizaciones.php` — campaña única de reenvío a los clientes
+  sin respuesta, gobernada por `DECKEVA_RESCATE_FASE` (`muestra` → `enviar` solo
+  con aprobación del dueño). Se borra al terminar.
+- `deckeva-assets/` — plantilla y tipografías del PDF de cotización. Está en una
+  subcarpeta a propósito: WordPress solo carga los PHP de la raíz de mu-plugins.
 
 `dompdf/` está en `.gitignore`: existe en el servidor, no en el repo.
+
+La zona horaria del WordPress no es la de Chile (va en UTC+2) y los números de
+cotización van en UTC: para fechas que lea un cliente, usar `America/Santiago`
+explícitamente.
 
 ## Convenciones
 
