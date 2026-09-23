@@ -104,9 +104,16 @@ function deckeva_leads_from_pdfs() {
         return array();
     }
 
+    // Las cotizaciones posteriores al arreglo ya avisaron y quedaron en el
+    // registro propio, con todos sus datos: aquí sobran y además no son "sin aviso".
+    $registradas = deckeva_leads_numeros_registrados();
+
     $leads = array();
     foreach ((array) glob($dir . '/*.pdf') as $path) {
         $nombre_archivo = basename($path);
+        if (preg_match('/(DCK-INT-\d{14}-[A-F0-9]{5})/', $nombre_archivo, $num) && isset($registradas[$num[1]])) {
+            continue;
+        }
         $datos = deckeva_leads_parse_pdf($path);
 
         // El número de cotización lleva la fecha: DECKEVA-Quote-DCK-INT-AAAAMMDDHHMMSS-uuid.pdf
@@ -134,8 +141,10 @@ function deckeva_leads_from_pdfs() {
 }
 
 /**
- * Saca el texto de un PDF de DOMPDF (streams FlateDecode) para leer email y teléfono.
- * Es best-effort: si el PDF no se puede descomprimir, se devuelve lo que haya.
+ * Lee cliente y embarcación de un PDF de cotización de los que generaba el
+ * formulario de la home antes del arreglo: son lo único que quedó de esas
+ * solicitudes. Se apoya en las etiquetas fijas de aquella plantilla
+ * ("Name / Nombre", "Email", "Phone / Teléfono"…).
  */
 function deckeva_leads_parse_pdf($path) {
     $vacio = array('nombre' => '', 'email' => '', 'telefono' => '', 'detalle' => '');
@@ -145,54 +154,109 @@ function deckeva_leads_parse_pdf($path) {
         return $vacio;
     }
 
+    $t = deckeva_leads_texto_pdf($raw);
+    if ($t === '') {
+        return $vacio;
+    }
+
+    $campo = function ($patron) use ($t) {
+        return preg_match($patron, $t, $m) ? trim($m[1]) : '';
+    };
+
+    $email = $campo('/Email\s+(\S+@\S+\.\S+)/u');
+    if ($email === '' && preg_match('/[\w.+-]+@[\w-]+\.[\w.-]+/', $t, $m)) {
+        $email = $m[0];
+    }
+
+    $detalle = array_filter(array(
+        $campo('/Make & Model\s+(.+?)\s+(?:Color|PRICING)/u'),
+        $campo('/Size \/ Tamaño\s+(.+?)\s+(?:Make|Color|PRICING)/u'),
+        $campo('/TOTAL\s*([A-Z]{3}\s*\S+)/u'),
+        $campo('/Shipping \/ Envío\s+(.+?)\s+VESSEL/u'),
+    ));
+
+    return array(
+        'nombre'   => $campo('/Name \/ Nombre\s+(.+?)\s+Email\b/u'),
+        'email'    => rtrim($email, '.'),
+        'telefono' => $campo('/Tel[eé]fono\s+(\+?\d[\d\s().-]{5,}?)\s+(?:Shipping|Env)/u'),
+        'detalle'  => implode(' · ', $detalle),
+    );
+}
+
+/**
+ * Texto plano de un PDF de DOMPDF.
+ *
+ * DOMPDF 2.x escribe cada trozo como un arreglo: "[(Mario Henriquez)] TJ". La
+ * primera versión de este lector solo entendía la forma "(texto) Tj" y, con los
+ * PDF reales del servidor, devolvía nombre, email y teléfono vacíos. Se aceptan
+ * las dos.
+ */
+function deckeva_leads_texto_pdf($raw) {
+    if (!preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $raw, $streams)) {
+        return '';
+    }
+
     $texto = '';
-    if (preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $raw, $streams)) {
-        foreach ($streams[1] as $stream) {
-            $plano = @gzuncompress($stream);
-            if ($plano === false) {
-                $plano = @gzinflate(substr($stream, 2));
+    foreach ($streams[1] as $stream) {
+        $plano = @gzuncompress($stream);
+        if ($plano === false) {
+            $plano = @gzinflate(substr($stream, 2));
+        }
+        if ($plano === false) {
+            continue;
+        }
+
+        if (!preg_match_all('/\[(.*?)\]\s*TJ|\(((?:\\\\.|[^\\\\()])*)\)\s*Tj/s', $plano, $ops, PREG_SET_ORDER)) {
+            continue;
+        }
+        foreach ($ops as $op) {
+            if (isset($op[2]) && $op[2] !== '') {
+                $trozos = array($op[2]);
+            } else {
+                preg_match_all('/\(((?:\\\\.|[^\\\\()])*)\)/', $op[1], $m);
+                $trozos = $m[1];
             }
-            if ($plano === false) {
-                continue;
-            }
-            // Operadores de texto: (contenido) Tj
-            if (preg_match_all('/\(((?:\\\\.|[^\\\\()])*)\)\s*Tj/', $plano, $trozos)) {
-                foreach ($trozos[1] as $t) {
-                    $texto .= str_replace(array('\\(', '\\)', '\\\\'), array('(', ')', '\\'), $t) . ' ';
-                }
-            }
+            $texto .= implode('', array_map('deckeva_leads_desescapar_pdf', $trozos)) . ' ';
         }
     }
 
-    $texto = trim(preg_replace('/\s+/', ' ', $texto));
+    return trim(preg_replace('/\s+/u', ' ', $texto));
+}
 
-    $email = '';
-    if (preg_match('/[\w.+-]+@[\w-]+\.[\w.-]+/', $texto, $m)) {
-        $email = rtrim($m[0], '.');
+/**
+ * Deshace el escapado de las cadenas de un PDF y lo deja en UTF-8.
+ *
+ * Con las fuentes base (Helvetica), DOMPDF escribe los acentos en WinAnsi y en
+ * octal: "Henr\355quez". Sin esto, los nombres con tilde o eñe salían rotos.
+ */
+function deckeva_leads_desescapar_pdf($s) {
+    $s = preg_replace_callback('/\\\\([0-7]{1,3}|.)/s', function ($m) {
+        if (ctype_digit($m[1])) {
+            return chr(octdec($m[1]) & 0xFF);
+        }
+        return in_array($m[1], array('n', 'r', 't'), true) ? ' ' : $m[1];
+    }, $s);
+
+    if (preg_match('//u', $s)) {
+        return $s; // ya es UTF-8 válido
     }
-
-    // Telefono: primero el que va junto a su etiqueta ("Phone / Telefono"), y solo
-    // si no aparece, uno que empiece por "+". Asi no se confunde con el numero de
-    // cotizacion, que es una tira larga de digitos.
-    $telefono = '';
-    if (preg_match('/(?:phone|tel[eé]fono|tel|fono|whats)[^\d+]{0,15}(\+?\d[\d\s().-]{6,})/i', $texto, $m)) {
-        $telefono = trim($m[1]);
-    } elseif (preg_match('/\+\d[\d\s().-]{6,}/', $texto, $m)) {
-        $telefono = trim($m[0]);
+    if (function_exists('mb_convert_encoding')) {
+        return mb_convert_encoding($s, 'UTF-8', 'Windows-1252');
     }
+    return function_exists('iconv') ? (string) @iconv('Windows-1252', 'UTF-8//IGNORE', $s) : $s;
+}
 
-    // Nombre: lo que sigue a la etiqueta "Name / Nombre" o "Client / Cliente".
-    $nombre = '';
-    if (preg_match('/(?:name|nombre|client|cliente)[^\p{L}]{0,6}([\p{L}][\p{L}\s\'.-]{2,60}?)(?=\s+(?:email|phone|tel|pa[ií]s|country|[\w.+-]+@)|$)/iu', $texto, $m)) {
-        $nombre = trim($m[1]);
+/**
+ * Números de cotización que ya están en el registro propio.
+ */
+function deckeva_leads_numeros_registrados() {
+    $numeros = array();
+    foreach (deckeva_leads_from_log() as $fila) {
+        if (preg_match('/(DCK-INT-\d{14}-[A-F0-9]{5})/', $fila['detalle'], $m)) {
+            $numeros[$m[1]] = true;
+        }
     }
-
-    return array(
-        'nombre'   => $nombre,
-        'email'    => $email,
-        'telefono' => $telefono,
-        'detalle'  => mb_substr($texto, 0, 300),
-    );
+    return $numeros;
 }
 
 /**
