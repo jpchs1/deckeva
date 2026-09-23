@@ -139,7 +139,12 @@ Cargan por orden alfabético, por eso el núcleo va con `00`:
 - `deckeva-antispam-security.php` — antispam y endurecimiento. Ojo con los falsos
   positivos: una regla de más aquí deja al negocio sin mensajes y nadie se entera.
 - `deckeva-cotizador.php` — cotizador de `/cotizador/` y endpoint del formulario
-  de la home (`/cotizador/enviar-international`).
+  de la home (`/cotizador/enviar-international`). El correo con la cotización va
+  en el idioma del cliente según el país del formulario
+  (`Deckeva_Cotizador::idioma_cliente()`):
+  - español para los países de habla hispana;
+  - inglés para los de habla inglesa;
+  - los dos, con el español primero, para Brasil y "Otro".
 - `deckeva-cotizacion-email.php` — correos del formulario CF7 1031.
 - `deckeva-recuperar-leads.php` — panel *Herramientas → Leads perdidos*.
 - `deckeva-compat-elementor.php` — evita la caída de Elementor 4.3 con Elementor

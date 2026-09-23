@@ -485,7 +485,7 @@ class Deckeva_Cotizador {
                 $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number
             );
             $headers = $this->client_headers($email);
-            $subject = 'DECKEVA — Cotización / Quote ' . $quote_number;
+            $subject = $this->international_email_subject($quote_number, $country);
             $attachments = ($pdf_path && file_exists($pdf_path)) ? [$pdf_path] : [];
             $email_sent = wp_mail($email, $subject, $email_html, $headers, $attachments);
             if (!$email_sent) {
@@ -811,37 +811,117 @@ td { padding: 4px 10px; vertical-align: top; }
     /* ──────────────────────────────────────────
        INTERNATIONAL — Email HTML builder
     ────────────────────────────────────────── */
+
+    /**
+     * Idioma del correo al cliente, según el país que eligió en el formulario.
+     *
+     * El formulario de la home es el mismo en deckeva.cl y deckeva.com, y el correo
+     * salía en los dos idiomas con el inglés primero: a un cliente chileno le
+     * llegaba "Hi Rodrigo, Thanks for reaching out!" (reclamo del dueño, 23/09/2026).
+     * El país es obligatorio en el formulario y dice más que el nombre.
+     *
+     * @return string 'es', 'en' o 'ambos': Brasil, "Otro" o un país que no
+     *                conocemos reciben los dos idiomas, con el español primero.
+     */
+    public static function idioma_cliente($pais) {
+        $pais = strtolower(trim(remove_accents((string) $pais)));
+
+        $espanol = array('chile', 'argentina', 'uruguay', 'colombia', 'peru', 'mexico', 'espana', 'spain',
+            'paraguay', 'bolivia', 'ecuador', 'venezuela', 'costa rica', 'panama', 'guatemala', 'honduras',
+            'el salvador', 'nicaragua', 'cuba', 'republica dominicana', 'dominican republic', 'puerto rico');
+        $ingles = array('united states', 'usa', 'estados unidos', 'eeuu', 'ee.uu.', 'united kingdom', 'uk',
+            'reino unido', 'australia', 'new zealand', 'nueva zelanda', 'canada', 'ireland', 'irlanda');
+
+        if (in_array($pais, $espanol, true)) {
+            return 'es';
+        }
+        if (in_array($pais, $ingles, true)) {
+            return 'en';
+        }
+        return 'ambos';
+    }
+
+    /**
+     * Asunto del correo con la cotización, en el idioma del cliente.
+     */
+    private function international_email_subject($quote_number, $country) {
+        $palabra = array('es' => 'Cotización', 'en' => 'Quote', 'ambos' => 'Cotización / Quote');
+        return 'DECKEVA — ' . $palabra[self::idioma_cliente($country)] . ' ' . $quote_number;
+    }
+
     private function build_international_email_html($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
+        $idioma = self::idioma_cliente($country);
+        $es = ($idioma !== 'en');
+        $en = ($idioma !== 'es');
+        // Texto en el idioma del cliente. Con los dos idiomas: el tercer argumento
+        // si lo hay, y si no "español / inglés".
+        $t = function ($texto_es, $texto_en, $texto_ambos = null) use ($idioma) {
+            if ($idioma === 'es') return $texto_es;
+            if ($idioma === 'en') return $texto_en;
+            return $texto_ambos !== null ? $texto_ambos : $texto_es . ' / ' . $texto_en;
+        };
+
         $fecha = $this->fecha_chile('d/m/Y');
         $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
-        $size_label = ($boat_size && $boat_size !== 'otro') ? esc_html($boat_size) . ' ft / pies' : 'Otro / Other';
+        $size_label = ($boat_size && $boat_size !== 'otro')
+            ? esc_html($boat_size) . ' ' . $t('pies', 'ft', 'ft / pies')
+            : $t('Otro', 'Other');
         $boat_desc  = trim($boat_brand . ' ' . $boat_model . ' ' . ($boat_year ? '(' . $boat_year . ')' : ''));
+        $nombre     = esc_html($first);
 
-        $html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+        if ($idioma === 'en') {
+            $saludo = '<h2 style="margin:0 0 4px;font-size:18px;color:#0d2137;">Hi ' . $nombre . ',</h2>
+<p style="margin:0;color:#6b7280;font-size:14px;line-height:1.7;">Thanks for reaching out! Attached is your custom quote from Deckeva. We will follow up via WhatsApp or email within 24 hours to confirm details.</p>';
+        } else {
+            $saludo = '<h2 style="margin:0 0 4px;font-size:18px;color:#0d2137;">Hola ' . $nombre . ',</h2>
+<p style="margin:0;color:#6b7280;font-size:14px;line-height:1.7;">Adjuntamos tu cotización. Te contactaremos en menos de 24 horas para confirmar los detalles.</p>';
+            if ($en) {
+                $saludo .= '
+<p style="margin:12px 0 0;color:#6b7280;font-size:14px;line-height:1.7;">Hi ' . $nombre . ', thanks for reaching out! Attached is your custom quote from Deckeva. We will follow up via WhatsApp or email within 24 hours to confirm details.</p>';
+            }
+        }
+
+        // Toma de medidas e instalación: el mismo aviso de siempre, en el idioma del cliente.
+        $aviso_es = 'La <strong>toma de medidas</strong> (envíos a Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Nosotros no realizamos estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.';
+        $apoyo_es = 'Deckeva entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo durante el trabajo.';
+        if ($idioma === 'en') {
+            $aviso = '<strong>Measurement (shipments to Chile)</strong> and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. These are <u>not included</u> in the quote.';
+            $apoyo = 'Deckeva provides free step-by-step videos + <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>.';
+            $costo = 'CLP $145,000 <span style="font-weight:400;color:#7a4a00;font-size:11px;">Santiago ref.</span>';
+        } else {
+            $aviso = ($en ? '<strong>ES:</strong> ' : '') . $aviso_es;
+            $apoyo = $apoyo_es;
+            if ($en) {
+                $apoyo .= '
+<br><br>
+<strong>EN:</strong> <strong>Measurement (shipments to Chile)</strong> and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. These are <u>not included</u> in the quote. Reference: CLP $145,000 each in Santiago · ~4–6 hrs measurement · ~3–5 hrs installation. Deckeva provides free step-by-step videos + 24/7 WhatsApp &amp; phone support.';
+            }
+            $costo = 'CLP $145.000 <span style="font-weight:400;color:#7a4a00;font-size:11px;">ref. Santiago</span>';
+        }
+
+        $html = '<!DOCTYPE html><html lang="' . ($idioma === 'en' ? 'en' : 'es') . '"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f0f2f5;font-family:Helvetica,Arial,sans-serif;color:#1a2a3a;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f2f5;">
 <tr><td align="center" style="padding:30px 15px;">
 <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,40,80,0.12);">
 <tr><td style="background:linear-gradient(135deg,#0d2137 0%,#1a3a5c 50%,#2a5a8c 100%);padding:28px 36px;text-align:center;color:#fff;">
 <h1 style="margin:0;font-size:28px;letter-spacing:3px;">DECKEVA</h1>
-<p style="margin:4px 0 0;color:rgba(255,255,255,0.75);font-size:11px;letter-spacing:2px;text-transform:uppercase;">Custom Marine EVA Flooring · Pisos a medida</p>
+<p style="margin:4px 0 0;color:rgba(255,255,255,0.75);font-size:11px;letter-spacing:2px;text-transform:uppercase;">' . $t('Pisos náuticos a medida', 'Custom Marine EVA Flooring', 'Pisos náuticos a medida · Custom Marine EVA Flooring') . '</p>
 </td></tr>
 <tr><td style="padding:28px 36px 10px;">
-<h2 style="margin:0 0 4px;font-size:18px;color:#0d2137;">Hi ' . esc_html($first) . ',</h2>
-<p style="margin:0;color:#6b7280;font-size:14px;line-height:1.7;">Thanks for reaching out! Attached is your custom quote from Deckeva. We will follow up via WhatsApp or email within 24 hours to confirm details.</p>
-<p style="margin:12px 0 0;color:#6b7280;font-size:14px;line-height:1.7;">Hola ' . esc_html($first) . ', adjuntamos tu cotización. Te contactaremos en menos de 24 horas para confirmar los detalles.</p>
-<p style="margin:10px 0 0;color:#9ca3af;font-size:12px;">Quote Nº ' . esc_html($quote_number) . ' · ' . esc_html($fecha) . '</p>
+' . $saludo . '
+<p style="margin:10px 0 0;color:#9ca3af;font-size:12px;">' . $t('Cotización Nº', 'Quote Nº', 'Cotización / Quote Nº') . ' ' . esc_html($quote_number) . ' · ' . esc_html($fecha) . '</p>
 </td></tr>
 <tr><td style="padding:6px 36px 0;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8faff;border-radius:10px;border:1px solid #e5e7eb;padding:14px 18px;">
-<tr><td style="padding:0 0 8px;font-size:10px;color:#0d2137;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Vessel / Embarcación</td></tr>
+<tr><td style="padding:0 0 8px;font-size:10px;color:#0d2137;font-weight:700;letter-spacing:2px;text-transform:uppercase;">' . $t('Embarcación', 'Vessel') . '</td></tr>
 <tr><td style="font-size:13px;color:#1a2a3a;"><strong>' . $size_label . '</strong>' . ($boat_desc ? ' · ' . esc_html($boat_desc) : '') . ($boat_color ? ' · ' . esc_html($boat_color) : '') . '</td></tr>
 </table>
 </td></tr>
 <tr><td style="padding:14px 36px 0;">
 <table width="100%" cellpadding="0" cellspacing="0" style="border-radius:10px;border:1px solid #e5e7eb;">
-<tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">Base / Subtotal</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($price_clp)) . '</td></tr>
-<tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">IVA / VAT 19%</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($iva_clp)) . '</td></tr>
+<tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">Subtotal</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($price_clp)) . '</td></tr>
+<tr><td style="padding:10px 16px;font-size:13px;color:#6b7280;">' . $t('IVA 19%', 'VAT 19%', 'IVA / VAT 19%') . '</td><td style="padding:10px 16px;font-size:13px;text-align:right;color:#1a2a3a;font-weight:600;">' . esc_html($fm($iva_clp)) . '</td></tr>
 <tr><td colspan="2" style="padding:6px 16px;"><div style="border-top:2px dashed #e5e7eb;"></div></td></tr>
 <tr><td style="padding:12px 16px;font-size:16px;color:#1a2a3a;font-weight:800;">TOTAL</td><td style="padding:12px 16px;text-align:right;"><span style="background:#e8a735;color:#fff;padding:6px 16px;border-radius:8px;font-size:16px;font-weight:800;">' . esc_html($fm($total_clp)) . '</span></td></tr>
 ' . $this->usd_ref_line($total_clp, $currency_code, 'email') . '
@@ -849,26 +929,24 @@ td { padding: 4px 10px; vertical-align: top; }
 </td></tr>
 <tr><td style="padding:16px 36px 10px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbee;border:1px solid #e8a735;border-radius:10px;padding:14px 18px;">
-<tr><td style="padding:0 0 6px;font-size:10px;color:#a56a00;font-weight:700;letter-spacing:2px;text-transform:uppercase;">📐 Toma de Medidas &amp; 🛠️ Instalación · Importante</td></tr>
+<tr><td style="padding:0 0 6px;font-size:10px;color:#a56a00;font-weight:700;letter-spacing:2px;text-transform:uppercase;">' . $t('📐 Toma de Medidas &amp; 🛠️ Instalación · Importante', '📐 Measurement &amp; 🛠️ Installation · Important', '📐 Toma de Medidas &amp; 🛠️ Instalación · Importante') . '</td></tr>
 <tr><td style="font-size:12px;color:#4a4a4a;line-height:1.6;">
-<strong>ES:</strong> La <strong>toma de medidas</strong> (envíos a Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Nosotros no realizamos estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.
+' . $aviso . '
 </td></tr>
 <tr><td style="padding-top:8px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #f0d89a;border-radius:6px;font-size:12px;">
-<tr style="background:#fff4d6;"><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Ítem / Item</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Costo ref.</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">Tiempo</td></tr>
-<tr><td style="padding:7px 10px;color:#4a4a4a;">📐 Toma de medidas · Measurement</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;">CLP $145.000 <span style="font-weight:400;color:#7a4a00;font-size:11px;">ref. Santiago</span></td><td style="padding:7px 10px;color:#4a4a4a;">4–6 hrs</td></tr>
-<tr><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">🛠️ Instalación · Installation</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;border-top:1px solid #f0d89a;">CLP $145.000 <span style="font-weight:400;color:#7a4a00;font-size:11px;">ref. Santiago</span></td><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">3–5 hrs</td></tr>
+<tr style="background:#fff4d6;"><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">' . $t('Ítem', 'Item') . '</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">' . $t('Costo ref.', 'Ref. cost', 'Costo ref.') . '</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">' . $t('Tiempo', 'Time', 'Tiempo') . '</td></tr>
+<tr><td style="padding:7px 10px;color:#4a4a4a;">📐 ' . $t('Toma de medidas', 'Measurement', 'Toma de medidas · Measurement') . '</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;">' . $costo . '</td><td style="padding:7px 10px;color:#4a4a4a;">4–6 hrs</td></tr>
+<tr><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">🛠️ ' . $t('Instalación', 'Installation', 'Instalación · Installation') . '</td><td style="padding:7px 10px;color:#1a2a3a;font-weight:600;border-top:1px solid #f0d89a;">' . $costo . '</td><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">3–5 hrs</td></tr>
 </table>
 </td></tr>
 <tr><td style="padding-top:10px;font-size:12px;color:#4a4a4a;line-height:1.6;">
-Deckeva entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo durante el trabajo.
-<br><br>
-<strong>EN:</strong> <strong>Measurement (shipments to Chile)</strong> and <strong>installation</strong> must be arranged by the customer with a technician or trusted person. These are <u>not included</u> in the quote. Reference: CLP $145,000 each in Santiago · ~4–6 hrs measurement · ~3–5 hrs installation. Deckeva provides free step-by-step videos + 24/7 WhatsApp &amp; phone support.
+' . $apoyo . '
 </td></tr>
 </table>
 </td></tr>
 <tr><td style="padding:24px 36px;background:#f8faff;text-align:center;border-top:1px solid #e5e7eb;">
-<p style="margin:0 0 6px;font-size:13px;color:#6b7280;">Quote valid for 15 business days / Cotización válida 15 días hábiles.</p>
+<p style="margin:0 0 6px;font-size:13px;color:#6b7280;">' . $t('Cotización válida por 15 días hábiles.', 'Quote valid for 15 business days.', 'Cotización válida por 15 días hábiles / Quote valid for 15 business days.') . '</p>
 <p style="margin:0;font-size:12px;color:#0d2137;font-weight:600;">WhatsApp: +56 9 4021 1459 · contacto@deckeva.cl · deckeva.com</p>
 </td></tr>
 </table>
