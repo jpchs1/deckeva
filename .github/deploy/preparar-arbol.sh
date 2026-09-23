@@ -76,6 +76,9 @@ copiar staging/index.html "${COM}/staging/index.html"
 copiar staging/.htaccess  "${COM}/staging/.htaccess"
 copiar staging/robots.txt "${COM}/staging/robots.txt"
 copiar_dir staging/img/lifestyle "${COM}/staging/img/lifestyle"
+# Fotos de la galería de /proyectos/. La página vive en deckeva.cl pero las
+# imágenes se sirven desde .com, igual que las de lifestyle.
+copiar_dir staging/img/proyectos "${COM}/staging/img/proyectos"
 
 copiar staging/index-com.html "${COM}/preview-2026/index.html"
 

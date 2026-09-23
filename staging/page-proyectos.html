@@ -6726,6 +6726,60 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.5);
       margin-bottom: 4px;
     }
+    /* ── Galería de proyecto ──────────────────────────────────────────────
+       Cada tarjeta con fotos es un <button>: la portada abre el resto del
+       trabajo sin sacar al visitante de la página. Las tarjetas antiguas, que
+       tienen una sola foto, siguen siendo <div> y no abren nada. */
+    button.proyecto-card {
+      border: 0; padding: 0; margin: 0; font: inherit; color: inherit;
+      text-align: left; width: 100%; display: block; -webkit-appearance: none;
+    }
+    button.proyecto-card:focus-visible { outline: 3px solid var(--ocean); outline-offset: 3px; }
+    .proy-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .proy-fotos {
+      background: rgba(15,23,42,0.60); color: #fff;
+      padding: 5px 11px; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.3px; white-space: nowrap; backdrop-filter: blur(6px);
+    }
+
+    .pg-visor {
+      position: fixed; inset: 0; z-index: 99999;
+      background: rgba(7,14,22,0.95);
+      display: grid; grid-template-columns: 72px 1fr 72px;
+      align-items: center; justify-items: center;
+      padding: 20px 0 28px;
+    }
+    .pg-visor[hidden] { display: none; }
+    .pg-marco { display: flex; flex-direction: column; gap: 14px; align-items: center; max-width: 100%; max-height: 100%; }
+    .pg-marco img {
+      max-width: 100%; max-height: calc(100vh - 170px);
+      width: auto; height: auto; border-radius: 10px; display: block;
+      background: #0d1a26; box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    }
+    .pg-pie { color: #E7EFF5; text-align: center; max-width: 60ch; padding: 0 16px; }
+    .pg-pie strong { display: block; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; }
+    .pg-pie span { display: block; font-size: 13px; color: #A9BECE; margin-top: 3px; }
+    .pg-contador { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1px; color: #7E97A9; margin-top: 8px; }
+    .pg-btn {
+      background: rgba(255,255,255,0.10); color: #fff; border: 0;
+      width: 46px; height: 46px; border-radius: 50%; cursor: pointer;
+      font-size: 26px; line-height: 1; display: grid; place-items: center;
+      transition: background 0.2s;
+    }
+    .pg-btn:hover { background: rgba(255,255,255,0.22); }
+    .pg-btn:focus-visible { outline: 3px solid var(--ocean); outline-offset: 2px; }
+    .pg-cerrar { position: absolute; top: 16px; right: 16px; font-size: 22px; }
+    @media (max-width: 700px) {
+      .pg-visor { grid-template-columns: 1fr; grid-template-rows: 1fr auto; padding: 56px 12px 18px; }
+      .pg-marco img { max-height: calc(100vh - 230px); }
+      .pg-nav { position: absolute; bottom: 18px; }
+      .pg-prev { left: 18px; }
+      .pg-next { right: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .proyecto-card, .proyecto-card img, .pg-btn { transition: none !important; }
+    }
     .proy-loc {
       font-size: 12px;
       color: rgba(255,255,255,0.88);
@@ -7980,26 +8034,174 @@
       </div>
 
       <div class="proyectos-grid">
-      <div class="proyecto-card">
-        <img src="https://deckeva.com/wp-content/uploads/elementor/thumbs/20211114_150407-e1691872065617-qatiwoe6h3s2j0d6k1777vxxn211izn0jyw8kti9j8.jpg" alt="Lancha Starcraft Pintado, Chile" loading="lazy" />
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="sea-ray-lago"
+              aria-label="Sea Ray — en el agua, Chile — ver 9 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/sea-ray-lago/portada.jpg" alt="Sea Ray — en el agua — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
         <div class="proyecto-overlay">
-          <span class="proy-tag">Lancha</span>
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">9 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Sea Ray — en el agua</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="lancha-starcraft"
+              aria-label="Lancha Starcraft, Pintado, Chile — ver 11 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/lancha-starcraft/portada.jpg" alt="Lancha Starcraft — piso náutico EVA de Deckeva, Pintado, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">11 fotos</span>
+          </div>
           <div class="proy-info">
             <div class="proy-name">Lancha Starcraft</div>
             <div class="proy-loc">📍 Pintado, Chile</div>
           </div>
         </div>
-      </div>
-      <div class="proyecto-card">
-        <img src="https://deckeva.com/wp-content/uploads/elementor/thumbs/20211206_164209-e1691871921912-qatisxz9bso2ersfcx3jtbv0oyfjy9tedhlsy91k90.jpg" alt="Embarcación a medida Lago Rapel, Chile" loading="lazy" />
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="lago-ranco"
+              aria-label="Semirrígido, Lago Ranco, Chile — ver 9 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/lago-ranco/portada.jpg" alt="Semirrígido — piso náutico EVA de Deckeva, Lago Ranco, Chile" loading="lazy" width="675" height="900" />
         <div class="proyecto-overlay">
-          <span class="proy-tag">Lancha</span>
+          <div class="proy-top">
+            <span class="proy-tag">Semirrígido</span>
+            <span class="proy-fotos">9 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Semirrígido</div>
+            <div class="proy-loc">📍 Lago Ranco, Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="sea-ray-214"
+              aria-label="Sea Ray 214, Chile — ver 9 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/sea-ray-214/portada.jpg" alt="Sea Ray 214 — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">9 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Sea Ray 214</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="sea-ray-inserto"
+              aria-label="Sea Ray — teca e inserto negro, Chile — ver 8 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/sea-ray-inserto/portada.jpg" alt="Sea Ray — teca e inserto negro — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">8 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Sea Ray — teca e inserto negro</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="bowrider-teca"
+              aria-label="Bowrider — piso teca, Chile — ver 8 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/bowrider-teca/portada.jpg" alt="Bowrider — piso teca — piso náutico EVA de Deckeva, Chile" loading="lazy" width="675" height="900" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">8 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Bowrider — piso teca</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="velero-cubierta"
+              aria-label="Velero — cubierta completa, Chile — ver 7 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/velero-cubierta/portada.jpg" alt="Velero — cubierta completa — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Velero</span>
+            <span class="proy-fotos">7 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Velero — cubierta completa</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="lago-rapel"
+              aria-label="Embarcación a medida, Lago Rapel, Chile — ver 6 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/lago-rapel/portada.jpg" alt="Embarcación a medida — piso náutico EVA de Deckeva, Lago Rapel, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">6 fotos</span>
+          </div>
           <div class="proy-info">
             <div class="proy-name">Embarcación a medida</div>
             <div class="proy-loc">📍 Lago Rapel, Chile</div>
           </div>
         </div>
-      </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="piso-eva-gris"
+              aria-label="Lancha — piso EVA gris, Chile — ver 6 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/piso-eva-gris/portada.jpg" alt="Lancha — piso EVA gris — piso náutico EVA de Deckeva, Chile" loading="lazy" width="675" height="900" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">6 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Lancha — piso EVA gris</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="interior-gris-oscuro"
+              aria-label="Interior — EVA gris oscuro, Chile — ver 6 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/interior-gris-oscuro/portada.jpg" alt="Interior — EVA gris oscuro — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">6 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Interior — EVA gris oscuro</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="cubierta-proa"
+              aria-label="Cubierta de proa, Chile — ver 4 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/cubierta-proa/portada.jpg" alt="Cubierta de proa — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Lancha</span>
+            <span class="proy-fotos">4 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Cubierta de proa</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
+      <button type="button" class="proyecto-card proyecto-card--galeria" data-galeria="tapiceria"
+              aria-label="Tapicería a medida, Chile — ver 4 fotos del proyecto">
+        <img src="https://www.deckeva.com/staging/img/proyectos/tapiceria/portada.jpg" alt="Tapicería a medida — piso náutico EVA de Deckeva, Chile" loading="lazy" width="900" height="675" />
+        <div class="proyecto-overlay">
+          <div class="proy-top">
+            <span class="proy-tag">Tapicería</span>
+            <span class="proy-fotos">4 fotos</span>
+          </div>
+          <div class="proy-info">
+            <div class="proy-name">Tapicería a medida</div>
+            <div class="proy-loc">📍 Chile</div>
+          </div>
+        </div>
+      </button>
       <div class="proyecto-card">
         <img src="https://deckeva.com/wp-content/uploads/elementor/thumbs/8-3-e1691869170283-qatgt1bqi28e8o8l8u502h3kpsup3ucmhkyla7ns90.jpeg" alt="Yamaha 242 Limited S Lago Villarrica, Chile" loading="lazy" />
         <div class="proyecto-overlay">
@@ -8037,16 +8239,6 @@
           <div class="proy-info">
             <div class="proy-name">Yamaha AR190 — Plataforma</div>
             <div class="proy-loc">📍 Lago Colbún, Chile</div>
-          </div>
-        </div>
-      </div>
-      <div class="proyecto-card">
-        <img src="https://deckeva.com/wp-content/uploads/elementor/thumbs/WhatsApp-Image-2022-10-18-at-11.52.38-e1691868702187-qatggw8s83m29zvh537hd1e8hmp0ol5fthlt4jnumc.jpeg" alt="Semirrígido Lago Ranco, Chile" loading="lazy" />
-        <div class="proyecto-overlay">
-          <span class="proy-tag">Semirrígido</span>
-          <div class="proy-info">
-            <div class="proy-name">Semirrígido</div>
-            <div class="proy-loc">📍 Lago Ranco, Chile</div>
           </div>
         </div>
       </div>
@@ -9001,5 +9193,96 @@
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 
 <script>(function(){var s=document.getElementById('stickyPriceCta');if(s)s.style.display='none';})();</script>
+
+<!-- Visor de la galería de proyectos. Las fotos se piden solo al abrirlo. -->
+<div class="pg-visor" id="pgVisor" hidden role="dialog" aria-modal="true" aria-label="Fotos del proyecto">
+  <button type="button" class="pg-btn pg-cerrar" id="pgCerrar" aria-label="Cerrar la galería">✕</button>
+  <button type="button" class="pg-btn pg-nav pg-prev" id="pgPrev" aria-label="Foto anterior">‹</button>
+  <div class="pg-marco">
+    <img id="pgImg" alt="" />
+    <figcaption class="pg-pie">
+      <strong id="pgTitulo"></strong>
+      <span id="pgDesc"></span>
+      <div class="pg-contador" id="pgContador"></div>
+    </figcaption>
+  </div>
+  <button type="button" class="pg-btn pg-nav pg-next" id="pgNext" aria-label="Foto siguiente">›</button>
+</div>
+<script id="pgDatos" type="application/json">{"sea-ray-lago":{"nombre":"Sea Ray — en el agua","lugar":"Chile","desc":"La lancha terminada, navegando: plataforma, bañera y proa en EVA teca.","fotos":[{"f":"01.jpg","w":1200,"h":900},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900},{"f":"07.jpg","w":1200,"h":900},{"f":"08.jpg","w":1200,"h":900},{"f":"09.jpg","w":1200,"h":900}]},"lancha-starcraft":{"nombre":"Lancha Starcraft","lugar":"Pintado, Chile","desc":"Del casco rayado al piso EVA gris: lijado, pintura y cubierta nueva.","fotos":[{"f":"01.jpg","w":1200,"h":900},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900},{"f":"07.jpg","w":900,"h":1200},{"f":"08.jpg","w":900,"h":1200},{"f":"09.jpg","w":900,"h":1200},{"f":"10.jpg","w":900,"h":1200},{"f":"11.jpg","w":1200,"h":900}]},"lago-ranco":{"nombre":"Semirrígido","lugar":"Lago Ranco, Chile","desc":"Consola central con piso teca completo, recortado pieza por pieza.","fotos":[{"f":"01.jpg","w":900,"h":1200},{"f":"02.jpg","w":900,"h":1200},{"f":"03.jpg","w":900,"h":1200},{"f":"04.jpg","w":900,"h":1200},{"f":"05.jpg","w":900,"h":1200},{"f":"06.jpg","w":900,"h":1200},{"f":"07.jpg","w":900,"h":1200},{"f":"08.jpg","w":900,"h":1200},{"f":"09.jpg","w":900,"h":1200}]},"sea-ray-214":{"nombre":"Sea Ray 214","lugar":"Chile","desc":"Teca con marcos blancos y el logo EVADECK grabado en la plancha.","fotos":[{"f":"01.jpg","w":1080,"h":763},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":900,"h":1200},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900},{"f":"07.jpg","w":1200,"h":900},{"f":"08.jpg","w":1200,"h":900},{"f":"09.jpg","w":1200,"h":900}]},"sea-ray-inserto":{"nombre":"Sea Ray — teca e inserto negro","lugar":"Chile","desc":"Inserto negro tipo diamante y logo bordado sobre el piso de teca.","fotos":[{"f":"01.jpg","w":1200,"h":900},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900},{"f":"07.jpg","w":1200,"h":900},{"f":"08.jpg","w":1200,"h":900}]},"bowrider-teca":{"nombre":"Bowrider — piso teca","lugar":"Chile","desc":"Piso completo en teca, incluida la tapa circular del pique.","fotos":[{"f":"01.jpg","w":900,"h":1200},{"f":"02.jpg","w":900,"h":1200},{"f":"03.jpg","w":900,"h":1200},{"f":"04.jpg","w":900,"h":1200},{"f":"05.jpg","w":900,"h":1200},{"f":"06.jpg","w":900,"h":1200},{"f":"07.jpg","w":900,"h":1200},{"f":"08.jpg","w":900,"h":1200}]},"velero-cubierta":{"nombre":"Velero — cubierta completa","lugar":"Chile","desc":"Pasillos, bañera y proa en EVA teca, cortados al milímetro del molde.","fotos":[{"f":"01.jpg","w":900,"h":1200},{"f":"02.jpg","w":900,"h":1200},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900},{"f":"07.jpg","w":1200,"h":900}]},"lago-rapel":{"nombre":"Embarcación a medida","lugar":"Lago Rapel, Chile","desc":"Piso EVA gris en pasillos, consola y sector de asientos.","fotos":[{"f":"01.jpg","w":1200,"h":900},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900}]},"piso-eva-gris":{"nombre":"Lancha — piso EVA gris","lugar":"Chile","desc":"Gris de grano fino en toda la bañera, con el logo EVADECK integrado.","fotos":[{"f":"01.jpg","w":900,"h":1200},{"f":"02.jpg","w":900,"h":1200},{"f":"03.jpg","w":900,"h":1200},{"f":"04.jpg","w":900,"h":1200},{"f":"05.jpg","w":900,"h":1200},{"f":"06.jpg","w":900,"h":1200}]},"interior-gris-oscuro":{"nombre":"Interior — EVA gris oscuro","lugar":"Chile","desc":"Gris oscuro contra tapicería blanca: el contraste que más se pide.","fotos":[{"f":"01.jpg","w":1200,"h":900},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900},{"f":"05.jpg","w":1200,"h":900},{"f":"06.jpg","w":1200,"h":900}]},"cubierta-proa":{"nombre":"Cubierta de proa","lugar":"Chile","desc":"Paneles de proa recortados alrededor de herrajes y luz de navegación.","fotos":[{"f":"01.jpg","w":1200,"h":900},{"f":"02.jpg","w":1200,"h":900},{"f":"03.jpg","w":1200,"h":900},{"f":"04.jpg","w":1200,"h":900}]},"tapiceria":{"nombre":"Tapicería a medida","lugar":"Chile","desc":"Asientos y respaldos retapizados, entregados con film protector.","fotos":[{"f":"01.jpg","w":900,"h":1200},{"f":"02.jpg","w":900,"h":1200},{"f":"03.jpg","w":900,"h":1200},{"f":"04.jpg","w":1200,"h":900}]}}</script>
+<script>
+(function () {
+  var GAL = JSON.parse(document.getElementById('pgDatos').textContent);
+  var CDN = 'https://www.deckeva.com/staging/img/proyectos';
+  var visor = document.getElementById('pgVisor');
+  var img = document.getElementById('pgImg');
+  var titulo = document.getElementById('pgTitulo');
+  var desc = document.getElementById('pgDesc');
+  var contador = document.getElementById('pgContador');
+  var actual = null, i = 0, origen = null;
+
+  function url(slug, foto) { return CDN + '/' + slug + '/' + foto; }
+
+  function pintar() {
+    var g = GAL[actual], f = g.fotos[i];
+    img.src = url(actual, f.f);
+    img.alt = g.nombre + ' — foto ' + (i + 1) + ' de ' + g.fotos.length;
+    img.width = f.w; img.height = f.h;
+    titulo.textContent = g.nombre;
+    desc.textContent = g.desc + ' · ' + g.lugar;
+    contador.textContent = (i + 1) + ' / ' + g.fotos.length;
+    // Adelantar la siguiente para que el salto sea inmediato.
+    var sig = g.fotos[(i + 1) % g.fotos.length];
+    if (sig) { var pre = new Image(); pre.src = url(actual, sig.f); }
+  }
+
+  function abrir(slug, boton) {
+    if (!GAL[slug]) return;
+    actual = slug; i = 0; origen = boton || null;
+    visor.hidden = false;
+    document.body.style.overflow = 'hidden';
+    pintar();
+    document.getElementById('pgCerrar').focus();
+  }
+
+  function cerrar() {
+    visor.hidden = true;
+    document.body.style.overflow = '';
+    img.removeAttribute('src');
+    if (origen && origen.focus) origen.focus();
+    actual = null;
+  }
+
+  function mover(paso) {
+    if (!actual) return;
+    var n = GAL[actual].fotos.length;
+    i = (i + paso + n) % n;
+    pintar();
+  }
+
+  document.addEventListener('click', function (ev) {
+    var card = ev.target.closest ? ev.target.closest('[data-galeria]') : null;
+    if (card) { abrir(card.getAttribute('data-galeria'), card); }
+  });
+  document.getElementById('pgCerrar').addEventListener('click', cerrar);
+  document.getElementById('pgPrev').addEventListener('click', function () { mover(-1); });
+  document.getElementById('pgNext').addEventListener('click', function () { mover(1); });
+  visor.addEventListener('click', function (ev) { if (ev.target === visor) cerrar(); });
+  document.addEventListener('keydown', function (ev) {
+    if (visor.hidden) return;
+    if (ev.key === 'Escape') cerrar();
+    else if (ev.key === 'ArrowLeft') mover(-1);
+    else if (ev.key === 'ArrowRight') mover(1);
+  });
+  // Deslizar en el teléfono, que es desde donde entra la mayoría.
+  var x0 = null;
+  visor.addEventListener('touchstart', function (ev) { x0 = ev.touches[0].clientX; }, { passive: true });
+  visor.addEventListener('touchend', function (ev) {
+    if (x0 === null) return;
+    var dx = ev.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 45) mover(dx < 0 ? 1 : -1);
+    x0 = null;
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>
