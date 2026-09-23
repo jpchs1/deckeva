@@ -151,6 +151,7 @@ td { vertical-align: top; }
 .costos td { padding: 4.5pt 8pt; font-size: 8pt; line-height: 10pt; color: #4a4a4a; border-bottom: 0.6pt solid #f1dfbf; vertical-align: middle; }
 .costos .cab td { font-family: 'dk-mono'; font-weight: bold; font-size: 5.8pt; line-height: 7pt; letter-spacing: 1pt; color: #7a4a00; background: #fdebc8; border-bottom: 0; }
 .ico { width: 10pt; height: 10pt; }
+.costos .ref { font-family: 'dk-mono'; font-size: 5.8pt; letter-spacing: 0.6pt; color: #b7791f; }
 .incluye { margin-top: 5pt; }
 .incluye td { padding: 2.2pt 0; font-size: 8pt; line-height: 10.5pt; color: #3d3d3d; vertical-align: middle; }
 .incluye .celda-check { width: 15pt; }
@@ -273,12 +274,12 @@ td { vertical-align: top; }
       <tr class="cab"><td>ÍTEM · ITEM</td><td>COSTO REF. · REF. COST</td><td>TIEMPO · TIME</td></tr>
       <tr>
         <td><img class="ico" src="<?php echo $icono_regla; ?>"> &nbsp;Toma de medidas · Measurement</td>
-        <td><strong>USD $120</strong></td>
+        <td><strong>CLP $145.000</strong> &nbsp;<span class="ref">REF. SANTIAGO</span></td>
         <td>4–6 hrs aprox.</td>
       </tr>
       <tr>
         <td><img class="ico" src="<?php echo $icono_llave; ?>"> &nbsp;Instalación · Installation</td>
-        <td><strong>USD $120</strong></td>
+        <td><strong>CLP $145.000</strong> &nbsp;<span class="ref">REF. SANTIAGO</span></td>
         <td>3–5 hrs aprox.</td>
       </tr>
     </table>
@@ -290,7 +291,7 @@ td { vertical-align: top; }
       <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo.</td></tr>
     </table>
 
-    <p class="en"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>USD $120</strong> each, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
+    <p class="en"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>CLP $145,000</strong> each in Santiago, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
   </div>
 
   <div class="cta">
