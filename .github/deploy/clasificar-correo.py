@@ -10,18 +10,31 @@ Uso: clasificar-correo.py archivo
 """
 import email
 import email.policy
+import email.utils
 import re
 import sys
 
 REBOTE_REMITENTE = re.compile(r'mailer-daemon|postmaster|mail delivery', re.IGNORECASE)
 LIMITE = re.compile(
-    r'exceeded the max(imum)? (number of )?e-?mails? per hour'
-    r'|max(imum)? (number of )?e-?mails? per hour'
-    r'|l[íi]mite de correos por hora',
+    r'e-?mails? per hour|max_emails_per_hour'
+    r'|(correos?|mensajes?)( de correo)?( electr[oó]nicos?)?( salientes?)? por hora',
     re.IGNORECASE,
 )
 # cPanel pone el conteo como "(25/25 (100%))".
 CONTEO = re.compile(r'\((\d{1,5})\s*/\s*(\d{1,5})')
+# Remitentes del propio servidor: sus avisos no traen datos de clientes, así que
+# de ellos sí se puede mostrar el asunto (con correos, IPs y teléfonos tapados).
+SISTEMA = re.compile(
+    r'^(cpanel\w*|root|mailer-daemon|postmaster|no-?reply|wwimpo)@|@[\w.-]*banahosting\.',
+    re.IGNORECASE,
+)
+
+
+def tapar(texto):
+    texto = re.sub(r'[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}', '<correo>', texto)
+    texto = re.sub(r'(\d{1,3}\.){3}\d{1,3}', '<ip>', texto)
+    texto = re.sub(r'\+?\d[\d ]{7,}\d', '<número>', texto)
+    return ' '.join(texto.split())[:160]
 
 
 def texto_legible(msj):
@@ -58,7 +71,11 @@ def clasificar(ruta):
             return 'aviso del hosting: límite de correos por hora superado (%s/%s)' % conteo.groups()
         return 'aviso del hosting: límite de correos por hora superado'
 
-    return 'otro aviso (no es rebote)'
+    direccion = email.utils.parseaddr(de)[1]
+    if SISTEMA.search(direccion):
+        return 'aviso del sistema (%s): %s' % (direccion.split('@')[0].lower(), tapar(asunto))
+
+    return 'correo de otro remitente (no se muestra)'
 
 
 if __name__ == '__main__':
