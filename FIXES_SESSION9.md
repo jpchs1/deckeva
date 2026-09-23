@@ -316,3 +316,29 @@ Resultado (23/09, 09:45 hora de Chile):
 - La cotización de prueba de las 00:23 sigue sin llegar nueve horas después: lo
   que pasa del límite por hora se pierde, no se entrega más tarde.
 
+## Correo de cotización en el idioma del cliente
+
+El dueño vio la copia oculta de una cotización real (un cliente chileno) y
+preguntó por qué le llegaba en inglés. El correo del formulario de la home era
+bilingüe con el inglés primero ("Hi Rodrigo, Thanks for reaching out!…"): es el
+mismo formulario en deckeva.cl y deckeva.com.
+
+Ahora el idioma sale del país que el cliente elige en el formulario
+(`idioma_cliente()`), que es obligatorio y más fiable que el nombre:
+
+- Chile, Argentina, Uruguay, Colombia, Perú, México, España y el resto de los
+  países de habla hispana: **todo en español**.
+- Estados Unidos, Reino Unido, Australia, Nueva Zelanda, Canadá e Irlanda:
+  **todo en inglés**.
+- Brasil, "Otro" o un país desconocido: los dos idiomas, **con el español
+  primero**.
+
+El asunto también cambia: "DECKEVA — Cotización …", "DECKEVA — Quote …" o, con
+los dos idiomas, "DECKEVA — Cotización / Quote …". Los textos son los de siempre
+y solo se elige cuáles mostrar. El PDF ya iba con el español primero.
+
+Probado en el WordPress local con cinco cotizaciones: Chile, México, Estados
+Unidos, Brasil y "Otro". Se revisó palabra por palabra que el correo en español
+no tenga nada en inglés y al revés. Todas salen desde contacto@deckeva.cl, con
+copia oculta al dueño y el PDF adjunto.
+
