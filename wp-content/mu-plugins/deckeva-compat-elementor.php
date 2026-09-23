@@ -2,7 +2,8 @@
 /**
  * Plugin Name: Deckeva - Compatibilidad de Elementor 4 con Elementor Pro antiguo
  * Description: Evita que Elementor 4.3 tumbe todo WordPress por un experimento de
- *              Elementor Pro 3.12. No toca archivos de terceros.
+ *              Elementor Pro 3.12, y pausa las actualizaciones automáticas de
+ *              Elementor mientras Pro siga en la 3.x. No toca archivos de terceros.
  *
  * El caso (23/09/2026): a las 01:28 UTC Elementor se actualizó solo de la 3.x a la
  * 4.3.0 y todo WordPress de deckeva.cl pasó a responder "Ha habido un error
@@ -57,4 +58,27 @@ function deckeva_compat_elementor_nested($experimentos) {
         // Mejor seguir sin el arreglo que convertirlo en otra caída.
         error_log('[Deckeva compat Elementor] No se pudo registrar nested-elements: ' . $e->getMessage());
     }
+}
+
+/*
+ * Sin actualizaciones automáticas de Elementor mientras Pro sea de la generación
+ * anterior (3.x frente a Elementor 4). La de la 4.3 tumbó el sitio sola, de
+ * madrugada; la siguiente puede traer otra incompatibilidad que este archivo no
+ * cubre. Decisión del dueño (23/09/2026). Se puede seguir actualizando a mano desde
+ * Plugins, comprobando después que el sitio responde. Al actualizar Pro a la 4.x,
+ * las automáticas vuelven solas.
+ */
+add_filter('auto_update_plugin', 'deckeva_compat_elementor_sin_autoactualizar', 20, 2);
+
+function deckeva_compat_elementor_sin_autoactualizar($actualizar, $item) {
+    $es_elementor = is_object($item) && (
+        (isset($item->plugin) && $item->plugin === 'elementor/elementor.php')
+        || (isset($item->slug) && $item->slug === 'elementor')
+    );
+
+    if ($es_elementor && defined('ELEMENTOR_PRO_VERSION') && version_compare(ELEMENTOR_PRO_VERSION, '4.0', '<')) {
+        return false;
+    }
+
+    return $actualizar;
 }

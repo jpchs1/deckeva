@@ -205,3 +205,19 @@ a 3 por visita y resumen al final; fallo de envío con 3 intentos; ya contactado
 proceso muerto a mitad; visitas simultáneas sin duplicados; estado corrupto. Los 12
 correos llevan la cotización de su destinatario, con su total, en una página y en
 su idioma.
+
+**Resultado.** El dueño revisó la muestra y aprobó el envío (#119). Salieron los
+12 correos el 23/09/2026 entre las 00:01 y las 00:02 (hora de Chile), de a 3 por
+visita, sin fallos ni omisiones; el resumen "12 de 12 clientes contactados"
+llegó a las casillas del negocio. La campaña queda inerte: la marca de fase
+terminada evita que vuelva a enviar nada. Las respuestas llegan a
+`contacto@deckeva.cl`.
+
+## Después del incidente (#120)
+
+- **Elementor sin actualizaciones automáticas** mientras Pro siga en la 3.x
+  (decisión del dueño). Se puede actualizar a mano; al pasar Pro a la 4.x, las
+  automáticas vuelven solas.
+- **Fechas del cotizador en hora de Chile**: con el WordPress en UTC+2, las
+  cotizaciones pedidas después de las 19:00 en Chile salían con la fecha del
+  día siguiente.
