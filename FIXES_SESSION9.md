@@ -291,3 +291,28 @@ MailChannels, así que el cambio no afecta la entrega.
 Probado con el PHPMailer de WordPress y un sendmail falso: el servidor recibe
 `-fcontacto@deckeva.cl` cuando el remitente es contacto@deckeva.cl (también en
 mayúsculas). Sin `-f` cuando es otro remitente, y respeta el sobre ya fijado.
+
+## ¿Quedó algún cliente sin respuesta por el corte?
+
+El dueño pidió que, si alguien cotizó durante el corte de correo, se le enviara
+el correo desde contacto@deckeva.cl con copia oculta a su casilla. Para saberlo
+sin SSH ni exponer datos, el diagnóstico por FTP ganó la opción `ventana_leads`:
+
+- `contar-leads.py` cuenta los contactos del registro de leads en una ventana
+  UTC, por origen y por vía. Descarta las pruebas propias y los envíos nuestros.
+  La hora del registro va en la de WordPress; el desfase (UTC+2) se mide con los
+  números de cotización, que llevan la hora UTC.
+- `clasificar-correo.py` dice qué es cada correo que llegó a la casilla interna
+  de la cuenta, donde iban los rebotes antes del cambio de sobre: rebote, aviso
+  de cPanel u otro remitente. De los externos no muestra nada.
+
+Resultado (23/09, 09:45 hora de Chile):
+
+- Durante el corte (00:23–02:08) no entró ningún contacto real, solo la prueba.
+  Desde el lunes 21 a las 21:00 tampoco hubo otros: no hay a quién reenviarle.
+- En la casilla interna no hay ningún rebote desde el lunes, así que nada indica
+  que alguno de los 12 correos del reenvío no llegara. Hay un solo correo, de un
+  remitente externo, a las 00:23, que no se abrió.
+- La cotización de prueba de las 00:23 sigue sin llegar nueve horas después: lo
+  que pasa del límite por hora se pierde, no se entrega más tarde.
+
