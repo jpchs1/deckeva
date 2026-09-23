@@ -1,17 +1,18 @@
 name: Diagnóstico del servidor (FTP)
 
-# Lee por FTP el estado del servidor y los últimos errores fatales de PHP.
-# Solo lee: no sube ni borra nada.
+# Lee por FTP el estado del servidor, los últimos errores fatales de PHP y los
+# fallos de correo que registró la web. Solo lee: no sube ni borra nada.
 #
-# Para cuando WordPress muestra "Ha habido un error crítico" y no hay SSH para
-# mirar el log. El repo es público: el script imprime solo errores fatales,
-# recortados y con correos e IPs tapados (ver .github/deploy/diagnostico.sh).
+# Para cuando WordPress muestra "Ha habido un error crítico", o un correo no
+# llega, y no hay SSH para mirar el log. El repo es público: el script imprime
+# solo errores fatales y avisos propios recortados, con correos e IPs tapados
+# (ver .github/deploy/diagnostico.sh).
 
 on:
   workflow_dispatch:
     inputs:
       lineas:
-        description: "Cuántas líneas finales de errores fatales mostrar por archivo"
+        description: "Cuántas líneas finales de errores y avisos mostrar por archivo"
         default: "30"
 
 permissions:

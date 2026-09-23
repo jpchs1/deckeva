@@ -86,8 +86,9 @@ solo compara.
 Si WordPress muestra *"Ha habido un error crítico"*, la causa está en el log de
 PHP del servidor: *Actions → Diagnóstico del servidor (FTP)*
 (`diagnostico-ftp.yml`, `actions_run_trigger`). Lista lo que cambió hace poco
-(mu-plugins, plugins, temas, traducciones) y los últimos errores fatales de
-`deckeva.cl/error_log` y `wp-admin/error_log`. Solo lee.
+(mu-plugins, plugins, temas, traducciones), los últimos errores fatales de
+`deckeva.cl/error_log` y `wp-admin/error_log` y los avisos `[Deckeva …]` (si la
+web no pudo entregar un correo al servidor). Solo lee.
 
 **El repo es público, y sus logs de Actions también.** Nada de datos de
 clientes en commits, PRs ni en lo que imprima un workflow.

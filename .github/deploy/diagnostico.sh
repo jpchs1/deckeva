@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-# Diagnóstico del servidor por FTP: qué hay en mu-plugins, qué cambió hace poco
-# y cuáles son los últimos errores fatales de PHP.
+# Diagnóstico del servidor por FTP: qué hay en mu-plugins, qué cambió hace poco,
+# cuáles son los últimos errores fatales de PHP y si la web registró fallos al
+# enviar correo.
 #
 # Existe porque el hosting no da SSH: cuando WordPress muestra "Ha habido un
 # error crítico", la causa solo está en los logs del servidor.
 #
 # El repo es público y los logs de Actions también, así que de los logs de PHP
-# solo se imprimen errores fatales, recortados, con correos e IPs tapados.
+# solo se imprimen errores fatales y avisos propios recortados, con correos e IPs
+# tapados.
 #
 # Espera en el entorno lo mismo que ftp.sh (FTP_HOST, FTP_USER, LFTP_PASSWORD,
 # FTP_BASE, FTP_VERIFICAR_CERT) y, opcional, LINEAS.
@@ -67,4 +69,17 @@ for remoto in "${candidatos[@]}"; do
   echo "Tamaño: $(wc -c < "${local_f}") bytes · última línea: $(tail -n 1 "${local_f}" | cut -c1-40 | tapar)"
   grep -E 'PHP (Fatal|Parse) error|Uncaught|critical|Allowed memory' "${local_f}" \
     | tail -n "${lineas}" | tapar || echo "(sin errores fatales)"
+
+  # Avisos propios ([Deckeva Correo], [Deckeva INT PDF]…) y fallos de mail() de
+  # PHP: responden a "¿la web llegó a entregar el correo al servidor?". De los
+  # propios se imprime solo la fecha, la etiqueta y el texto fijo hasta el primer
+  # "(" o ":", porque lo que sigue es el asunto o los destinatarios, con nombres
+  # de clientes.
+  echo
+  echo "── Avisos de correo y PDF en ${remoto} (últimos ${lineas}) ──"
+  avisos="$(perl -ne '
+      if (/^(\[[^\]]*\] )?.*?(\[Deckeva [^\]]+\] )([^(:\r\n]*)/) { print "$1$2$3\n"; }
+      elsif (/PHP Warning:\s+mail\(\)/) { print; }
+    ' "${local_f}" | tail -n "${lineas}" | tapar)"
+  echo "${avisos:-(ninguno)}"
 done
