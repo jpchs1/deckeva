@@ -595,28 +595,107 @@ function deckeva_leads_mail() {
     check_admin_referer('deckeva_leads_mail');
 
     $desde = isset($_GET['desde']) ? sanitize_text_field(wp_unslash($_GET['desde'])) : '';
-    $filas = deckeva_leads_filas_planas($desde);
-
-    $html = '<p>Listado de contactos web sin respuesta, desde ' . esc_html($desde ? $desde : 'el principio') . '.</p>'
-        . '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px;">'
-        . '<tr><th>Fecha</th><th>Origen</th><th>Estado</th><th>Nombre</th><th>Email</th><th>Teléfono</th></tr>';
-    foreach ($filas as $f) {
-        $html .= '<tr><td>' . esc_html($f['fecha']) . '</td><td>' . esc_html($f['origen']) . '</td><td>'
-            . esc_html($f['estado']) . '</td><td>' . esc_html($f['nombre']) . '</td><td>'
-            . esc_html($f['email']) . '</td><td>' . esc_html($f['telefono']) . '</td></tr>';
-    }
-    $html .= '</table>';
-
-    $asunto = 'Deckeva — ' . count($filas) . ' contactos web sin respuesta';
-    $enviado = function_exists('deckeva_notify_lead')
-        ? deckeva_notify_lead($asunto, $html)
-        : wp_mail(get_option('admin_email'), $asunto, $html, array('Content-Type: text/html; charset=UTF-8'));
+    $enviado = deckeva_leads_enviar_informe($desde);
 
     wp_safe_redirect(add_query_arg(
         array('page' => 'deckeva-leads', 'desde' => $desde, 'enviado' => $enviado ? '1' : '0'),
         admin_url('tools.php')
     ));
     exit;
+}
+
+/**
+ * Arma el informe de contactos y lo manda a las casillas del negocio.
+ *
+ * Incluye un extracto de cada mensaje: sin él no se puede distinguir a un
+ * cliente real de un bot, que es lo primero que hay que hacer con el listado.
+ *
+ * @return bool true si salió el correo.
+ */
+function deckeva_leads_enviar_informe($desde = '', $titulo = '') {
+    $filas = deckeva_leads_filas_planas($desde);
+    $total = count($filas);
+
+    // Tope para que una avalancha de spam no produzca un correo imposible de abrir.
+    $tope = 400;
+    $mostradas = array_slice($filas, 0, $tope);
+
+    $celda = 'padding:6px 8px;border:1px solid #d7dde3;vertical-align:top;';
+    $html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a2a3a;">'
+        . '<p style="font-size:15px;"><strong>' . esc_html($titulo ? $titulo : 'Contactos web') . '</strong><br>'
+        . esc_html($total) . ' registro(s) desde ' . esc_html($desde ? $desde : 'el principio') . '. '
+        . 'En rojo, los que nunca generaron aviso: el antispam los descartó o la copia al negocio se perdió.</p>'
+        . '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;">'
+        . '<tr style="background:#0d2137;color:#fff;">'
+        . '<th style="' . $celda . '">Fecha</th><th style="' . $celda . '">Estado</th>'
+        . '<th style="' . $celda . '">Nombre</th><th style="' . $celda . '">Email</th>'
+        . '<th style="' . $celda . '">Teléfono</th><th style="' . $celda . '">Mensaje</th></tr>';
+
+    foreach ($mostradas as $f) {
+        $perdido = (stripos($f['estado'], 'spam') !== false || stripos($f['estado'], 'sin aviso') !== false);
+        $mensaje = trim(($f['asunto'] ? $f['asunto'] . ' — ' : '') . $f['detalle']);
+
+        $html .= '<tr' . ($perdido ? ' style="background:#fff4f4;"' : '') . '>'
+            . '<td style="' . $celda . 'white-space:nowrap;">' . esc_html($f['fecha']) . '</td>'
+            . '<td style="' . $celda . '">' . esc_html($f['origen'] . ' · ' . $f['estado']) . '</td>'
+            . '<td style="' . $celda . '">' . esc_html($f['nombre']) . '</td>'
+            . '<td style="' . $celda . '">' . esc_html($f['email']) . '</td>'
+            . '<td style="' . $celda . 'white-space:nowrap;">' . esc_html($f['telefono']) . '</td>'
+            . '<td style="' . $celda . 'max-width:420px;">' . esc_html(mb_substr($mensaje, 0, 280)) . '</td>'
+            . '</tr>';
+    }
+
+    $html .= '</table>';
+    if ($total > $tope) {
+        $html .= '<p>Se muestran los ' . $tope . ' más recientes. El resto está en Herramientas → Leads perdidos.</p>';
+    }
+    $html .= '</div>';
+
+    $asunto = 'Deckeva — ' . $total . ' contactos web' . ($titulo ? ' · ' . $titulo : '');
+
+    return function_exists('deckeva_notify_lead')
+        ? deckeva_notify_lead($asunto, $html)
+        : wp_mail(get_option('admin_email'), $asunto, $html, array('Content-Type: text/html; charset=UTF-8'));
+}
+
+/* ──────────────────────────────────────────
+   INFORME ÚNICO TRAS PUBLICAR
+────────────────────────────────────────── */
+
+/**
+ * Manda el informe una sola vez por versión, sin que nadie entre al panel.
+ *
+ * Existe porque quien publica (por FTP, desde GitHub) no tiene sesión en
+ * WordPress para pulsar "Enviármelo por correo", y el dueño pidió recibir el
+ * listado. Para volver a mandarlo más adelante basta con subir la versión.
+ */
+const DECKEVA_LEADS_INFORME_VERSION = 1;
+
+// wp_loaded y no init: Flamingo registra sus tipos de contenido en init, y sin
+// ellos el informe saldría sin los mensajes de los formularios.
+add_action('wp_loaded', 'deckeva_leads_informe_unico');
+function deckeva_leads_informe_unico() {
+    $clave = 'deckeva_leads_informe_v' . DECKEVA_LEADS_INFORME_VERSION;
+
+    if (get_option($clave)) {
+        return;
+    }
+
+    // add_option falla si la opción ya existe: si llegan dos visitas a la vez,
+    // solo una manda el correo.
+    if (!add_option($clave, 'enviando', '', 'no')) {
+        return;
+    }
+
+    if (deckeva_leads_enviar_informe('2026-01-01', 'Rescate de contactos sin respuesta')) {
+        update_option($clave, current_time('mysql'), true);
+    } else {
+        // Que lo reintente la siguiente visita en vez de darlo por enviado.
+        delete_option($clave);
+        if (function_exists('deckeva_mail_log')) {
+            deckeva_mail_log('No se pudo enviar el informe único de leads; se reintentará.');
+        }
+    }
 }
 
 function deckeva_leads_filas_planas($desde = '') {
