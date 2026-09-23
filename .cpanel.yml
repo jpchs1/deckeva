@@ -58,6 +58,11 @@ deployment:
     - /bin/mkdir -p /home/wwimpo/deckeva.com/staging/img/lifestyle
     - /bin/cp -R staging/img/lifestyle/. /home/wwimpo/deckeva.com/staging/img/lifestyle/
 
+    # ── Fotos de la galería de /proyectos/ ──
+    # La página vive en deckeva.cl, las imágenes se sirven desde .com.
+    - /bin/mkdir -p /home/wwimpo/deckeva.com/staging/img/proyectos
+    - /bin/cp -R staging/img/proyectos/. /home/wwimpo/deckeva.com/staging/img/proyectos/
+
     # ── Previews production-ready (validación pública con cliente) ──
     - /bin/mkdir -p /home/wwimpo/deckeva.com/preview-2026
     - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/preview-2026/index.html
