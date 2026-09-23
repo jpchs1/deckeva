@@ -111,4 +111,33 @@ if [ -n "${VENTANA_LEADS:-}" ]; then
   else
     python3 "$(dirname "$0")/contar-leads.py" "${desde}" "${hasta}" "${archivos[@]}"
   fi
+
+  # Rebotes en la misma ventana. Hasta el 23/09 el sobre de los correos de la web
+  # era el usuario del hosting, así que los rebotes llegaban a la casilla interna
+  # de la cuenta (~/mail, Maildir) y nadie los veía. La hora de llegada va al
+  # principio del nombre de cada archivo. De cada correo solo se mira el asunto,
+  # para distinguir un rebote de otro aviso del sistema, y si es el de una prueba
+  # a example.com. Se imprimen solo números.
+  echo
+  echo "── Correos en la casilla interna de la cuenta, misma ventana ──"
+  desde_s="$(date -u -d "${desde}" +%s)"
+  hasta_s="$(date -u -d "${hasta}" +%s)"
+  total=0; rebotes=0; de_prueba=0
+  for carpeta in mail/new/ mail/cur/; do
+    while IFS= read -r nombre; do
+      llegada="${nombre%%.*}"
+      [[ "${llegada}" =~ ^[0-9]+$ ]] || continue
+      (( llegada >= desde_s && llegada < hasta_s )) || continue
+      total=$((total + 1))
+      msj="${tmp}/correo"
+      rm -f "${msj}"
+      ftp_ejecutar "get '${base}${carpeta}${nombre}' -o '${msj}'" </dev/null >/dev/null 2>&1 || continue
+      if grep -m1 -iE '^Subject: *(Mail delivery failed|Undelivered|Delivery Status Notification|Returned mail|Delivery failure)' "${msj}" >/dev/null; then
+        rebotes=$((rebotes + 1))
+        grep -qi '@example\.com' "${msj}" && de_prueba=$((de_prueba + 1))
+      fi
+    done < <(ftp_ejecutar "cls -1 '${base}${carpeta}'" 2>/dev/null | sed 's#.*/##')
+  done
+  rm -f "${tmp}/correo"
+  echo "Correos: ${total} · avisos de rebote: ${rebotes} (de pruebas a example.com: ${de_prueba})"
 fi
