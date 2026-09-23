@@ -44,6 +44,18 @@ class Deckeva_Cotizador {
         return isset($this->currencies[$code]) ? $this->currencies[$code] : $this->currencies['CLP'];
     }
 
+    /* Fecha de hoy en Chile para lo que ve el cliente (PDF y correos). La zona
+       del WordPress va en UTC+2: con ella, una cotización pedida después de
+       las 19:00 en Chile salía con la fecha del día siguiente. */
+    private function fecha_chile($formato) {
+        try {
+            $ahora = new DateTime('now', new DateTimeZone('America/Santiago'));
+        } catch (\Exception $e) {
+            $ahora = new DateTime('now');
+        }
+        return $ahora->format($formato);
+    }
+
     private function format_money($amount, $code) {
         $c = $this->get_currency($code);
         return $c['symbol'] . number_format(intval($amount), 0, ',', $c['thousands']);
@@ -631,8 +643,8 @@ class Deckeva_Cotizador {
         // Fecha en español con nombres fijos: no depende del idioma del WordPress.
         $meses = array(1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
             'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
-        $ahora = current_time('timestamp');
-        $fecha = date('j', $ahora) . ' de ' . $meses[(int) date('n', $ahora)] . ' de ' . date('Y', $ahora);
+        list($dia, $mes, $anio) = explode('|', $this->fecha_chile('j|n|Y'));
+        $fecha = $dia . ' de ' . $meses[(int) $mes] . ' de ' . $anio;
 
         if ($boat_size === 'otro') {
             $tamano = 'Otro';
@@ -690,7 +702,7 @@ class Deckeva_Cotizador {
        INTERNATIONAL — PDF anterior (respaldo)
     ────────────────────────────────────────── */
     private function build_international_pdf_html($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
-        $fecha = date_i18n('d/m/Y');
+        $fecha = $this->fecha_chile('d/m/Y');
         $currency = $this->get_currency($currency_code);
         $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
 
@@ -788,7 +800,7 @@ td { padding: 4px 10px; vertical-align: top; }
        INTERNATIONAL — Email HTML builder
     ────────────────────────────────────────── */
     private function build_international_email_html($first, $last, $email, $phone, $country, $boat_size, $boat_brand, $boat_model, $boat_year, $boat_color, $price_clp, $iva_clp, $total_clp, $currency_code, $quote_number) {
-        $fecha = date_i18n('d/m/Y');
+        $fecha = $this->fecha_chile('d/m/Y');
         $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
         $size_label = ($boat_size && $boat_size !== 'otro') ? esc_html($boat_size) . ' ft / pies' : 'Otro / Other';
         $boat_desc  = trim($boat_brand . ' ' . $boat_model . ' ' . ($boat_year ? '(' . $boat_year . ')' : ''));
@@ -857,7 +869,7 @@ Deckeva entrega <strong>sin costo</strong>: videos explicativos paso a paso para
        BUILD PDF HTML (server-side, no client input)
     ────────────────────────────────────────── */
     private function build_pdf_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code = 'CLP') {
-        $fecha = date_i18n('d/m/Y');
+        $fecha = $this->fecha_chile('d/m/Y');
         $currency = $this->get_currency($currency_code);
 
         $services_rows = '';
@@ -936,7 +948,7 @@ table { width: 100%; border-collapse: collapse; }
        BUILD EMAIL HTML
     ────────────────────────────────────────── */
     private function build_email_html($name, $email, $phone, $company, $rut, $boat_type, $boat_brand, $boat_model, $boat_year, $boat_marina, $services, $subtotal, $discount_value, $discount_type, $total, $quote_number, $currency_code = 'CLP') {
-        $fecha = date_i18n('d/m/Y');
+        $fecha = $this->fecha_chile('d/m/Y');
         $logo = esc_url($this->logo_url);
         $currency = $this->get_currency($currency_code);
 
