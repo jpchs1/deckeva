@@ -172,13 +172,13 @@
         "@type": "ListItem",
         "position": 2,
         "name": "Proyectos",
-        "item": "https://www.deckeva.com/proyectos/"
+        "item": "https://www.deckeva.cl/proyectos/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Blog",
-        "item": "https://www.deckeva.com/blog/"
+        "item": "https://www.deckeva.cl/blog/"
       }
     ]
   }
@@ -8179,7 +8179,7 @@
     <!-- Bottom bar -->
     <div class="footer-bottom">
       <div class="footer-bottom-left">
-        © 2025 DECKEVA · <span data-es>Todos los derechos reservados.</span><span data-en>All rights reserved.</span>
+        © <span class="dk-anio">2026</span><script>document.querySelectorAll(".dk-anio").forEach(function(e){e.textContent=new Date().getFullYear()})</script> DECKEVA · <span data-es>Todos los derechos reservados.</span><span data-en>All rights reserved.</span>
       </div>
       <div class="footer-bottom-center">
         <a href="#" data-es>Política de Privacidad</a><a href="#" data-en>Privacy Policy</a>
@@ -8197,7 +8197,7 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 
   // ─── HERO SLIDESHOW ───
   (function() {
@@ -8417,7 +8417,7 @@
   }
 
   // Mark currency as user-picked on manual change (not triggered programmatically)
-  document.getElementById('currencySelect').addEventListener('change', function() {
+  (document.getElementById('currencySelect') || document.createElement('select')).addEventListener('change', function() {
     userPickedCurrency = true;
   });
 

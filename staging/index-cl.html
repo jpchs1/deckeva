@@ -172,13 +172,13 @@
         "@type": "ListItem",
         "position": 2,
         "name": "Proyectos",
-        "item": "https://www.deckeva.com/proyectos/"
+        "item": "https://www.deckeva.cl/proyectos/"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Blog",
-        "item": "https://www.deckeva.com/blog/"
+        "item": "https://www.deckeva.cl/blog/"
       }
     ]
   }
@@ -7362,8 +7362,32 @@
 
   <!-- Pro UX enhancements (scroll-reveal, counters, responsive polish, nav/footer) -->
   <link rel="stylesheet" href="/assets/pro-ux.css" />
+<style id="dk-ajustes-2026-09">
+/* Ajustes de la revisión de sep-2026 (van al final para ganarle a las reglas previas). */
+/* Envíos: en celular las 19 banderas iban de a una por fila (~2.600 px de scroll). */
+@media (max-width: 480px) {
+  .countries-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .country-card { min-height: 0 !important; }
+  .cc-flag-fill { height: 70px !important; padding: 10px !important; }
+}
+/* Pie: "Nuestras empresas & partners" no tenía estilos y salía como texto suelto. */
+.footer-partners { margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(15,23,42,0.08); }
+.footer-partners__eyebrow { display: block; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ocean) !important; }
+html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"] span.footer-partners__eyebrow[data-es] { display: none !important; }
+.footer-partners__title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; color: var(--text-dark) !important; margin: 4px 0 16px; }
+.footer-partners__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.footer-partner { display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border-radius: 12px; background: #f5f7fa; border: 1px solid rgba(15,23,42,0.08); text-decoration: none; transition: border-color .2s, transform .2s; }
+.footer-partner:hover { border-color: rgba(14,107,168,.4); transform: translateY(-2px); }
+.footer-partner__name { font-weight: 700; color: var(--text-dark) !important; font-size: 15px; }
+.footer-partner__desc { font-size: 13px; color: var(--gray) !important; }
+.footer-partner__arrow { font-size: 12px; color: var(--ocean) !important; font-weight: 600; margin-top: 4px; }
+@media (max-width: 900px) { .footer-partners__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .footer-partners__grid { grid-template-columns: 1fr; } }
+/* Menú: "Cómo Trabajamos" se partía en dos líneas en notebooks. */
+.nav-links a { white-space: nowrap; }
+</style>
 </head>
-<body data-quote-country="">
+<body id="top" data-quote-country="">
   <div id="winter-promo" role="region" aria-label="Promoción de invierno">
     <span class="wp-line">❄️ <strong>Invierno es el mejor momento:</strong> renueva el piso de tu lancha ahora y llega listo al verano. Cupos de instalación limitados. <a class="wp-cta" href="#cotizar">Agenda tu fecha →</a></span>
     <button class="wp-x" type="button" aria-label="Cerrar" onclick="winterPromoClose()">✕</button>
@@ -8276,7 +8300,7 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </button>
     <figure class="gal-lb-figure">
-      <img id="galLbImg" src="" alt="" />
+      <img id="galLbImg" alt="" />
       <figcaption class="gal-lb-cap">
         <div class="gal-lb-name" id="galLbName"></div>
         <div class="gal-lb-loc" id="galLbLoc"></div>
@@ -10416,7 +10440,7 @@
     </div>
     <div class="blog-grid">
 
-      <a href="https://deckeva.com/que-es-sea-dek/" class="blog-card fade-in" target="_blank" rel="noopener">
+      <a href="https://www.deckeva.cl/que-es-sea-dek/" class="blog-card fade-in" target="_blank" rel="noopener">
         <div class="blog-img">
           <span class="blog-tag" data-es>Guía</span>
           <span class="blog-tag" data-en>Guide</span>
@@ -10440,7 +10464,7 @@
         </div>
       </a>
 
-      <a href="https://deckeva.com/por-que-elegir-pisos-de-goma-eva-para-mi-lancha/" class="blog-card fade-in fade-in-delay-1" target="_blank" rel="noopener">
+      <a href="https://www.deckeva.cl/por-que-elegir-pisos-de-goma-eva-para-mi-lancha/" class="blog-card fade-in fade-in-delay-1" target="_blank" rel="noopener">
         <div class="blog-img">
           <span class="blog-tag" data-es>Consejos</span>
           <span class="blog-tag" data-en>Tips</span>
@@ -10464,11 +10488,11 @@
         </div>
       </a>
 
-      <a href="https://deckeva.com/por-que-necesitas-un-piso-antideslizante-para-tu-lancha/" class="blog-card fade-in fade-in-delay-2" target="_blank" rel="noopener">
+      <a href="https://www.deckeva.cl/por-que-necesitas-un-piso-antideslizante-para-tu-lancha/" class="blog-card fade-in fade-in-delay-2" target="_blank" rel="noopener">
         <div class="blog-img">
           <span class="blog-tag" data-es>Seguridad</span>
           <span class="blog-tag" data-en>Safety</span>
-          <img src="https://deckeva.com/wp-content/uploads/2023/08/1_5.jpg"
+          <img src="https://deckeva.com/wp-content/uploads/2023/08/1_5-scaled-768x689.jpg"
                alt="Piso antideslizante instalado en lancha"
                loading="lazy" />
         </div>
@@ -10491,7 +10515,7 @@
     </div>
 
     <div class="blog-footer">
-      <a href="https://deckeva.com/blog/" class="blog-all-link" target="_blank" rel="noopener">
+      <a href="https://www.deckeva.cl/blog/" class="blog-all-link" target="_blank" rel="noopener">
         <span data-es>Ver todos los artículos</span>
         <span data-en>See all articles</span>
         <span class="arrow">→</span>
@@ -10984,7 +11008,7 @@
     <!-- Bottom bar -->
     <div class="footer-bottom">
       <div class="footer-bottom-left">
-        © 2025 DECKEVA · <span data-es>Todos los derechos reservados.</span><span data-en>All rights reserved.</span>
+        © <span class="dk-anio">2026</span><script>document.querySelectorAll(".dk-anio").forEach(function(e){e.textContent=new Date().getFullYear()})</script> DECKEVA · <span data-es>Todos los derechos reservados.</span><span data-en>All rights reserved.</span>
       </div>
       <div class="footer-bottom-center">
         <a href="#" data-es>Política de Privacidad</a><a href="#" data-en>Privacy Policy</a>
@@ -11002,7 +11026,7 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 
   // ─── HERO SLIDESHOW ───
   (function() {
@@ -11222,7 +11246,7 @@
   }
 
   // Mark currency as user-picked on manual change (not triggered programmatically)
-  document.getElementById('currencySelect').addEventListener('change', function() {
+  (document.getElementById('currencySelect') || document.createElement('select')).addEventListener('change', function() {
     userPickedCurrency = true;
   });
 
