@@ -20,7 +20,6 @@
   <meta name="geo.position" content="-33.3500;-70.5000" />
   <meta name="ICBM" content="-33.3500, -70.5000" />
   
-  <link rel="preload" as="image" href="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg" fetchpriority="high" />
   <meta name="theme-color" content="#0f2240" />
   <link rel="canonical" href="https://www.deckeva.com/" />
 
@@ -2975,7 +2974,7 @@
       box-shadow: 0 1px 2px rgba(15,23,42,0.04);
     }
     .pay-badge--paypal { color: #003087; }
-    .pay-badge--mp { color: #009ee3; }
+    .pay-badge--mp { color: #0077b0; }
     .pay-badge--stripe { color: #635bff; }
     .pay-badge--wire { color: var(--text); }
     .pay-badge--webpay { color: #e31837; }
@@ -7852,8 +7851,8 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
     <div class="section-tag" data-en>✦ DECKEVA Process</div>
     <div class="timeline-header">
       <div>
-        <h2 class="heading" data-es>Cómo hacemos<br/><em style="color:var(--gold);font-style:normal;">tu piso a medida</em></h2>
-        <h2 class="heading" data-en>How we craft<br/><em style="color:var(--gold);font-style:normal;">your custom deck</em></h2>
+        <h2 class="heading" data-es>Cómo hacemos<br/><em style="color:#c47f00;font-style:normal;">tu piso a medida</em></h2>
+        <h2 class="heading" data-en>How we craft<br/><em style="color:#c47f00;font-style:normal;">your custom deck</em></h2>
         <p class="timeline-intro" data-es>Un proceso simple y preciso. Tú participas desde tu casa — nosotros hacemos el resto con calidad de exportación.</p>
         <p class="timeline-intro" data-en>A simple and precise process. You participate from home — we do the rest with export-grade quality.</p>
       </div>
@@ -8002,7 +8001,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
     </div>
 
     <div class="gal-tabs-wrap">
-      <div class="gal-tabs" role="tablist">
+      <div class="gal-tabs" role="group" aria-label="Filtrar proyectos">
         <button class="gal-tab active" type="button" data-filter="all" onclick="filterGallery('all')">
           🌍 <span data-es>Todos</span><span data-en>All</span>
           <span class="gal-tab-count">9</span>
@@ -8216,7 +8215,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
   </div>
 
   <!-- Lightbox modal -->
-  <div class="gal-lightbox" id="galLightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="gal-lightbox" id="galLightbox" role="dialog" aria-modal="true" aria-hidden="true" inert>
     <div class="gal-lb-backdrop" onclick="galClose()"></div>
     <button class="gal-lb-close" type="button" onclick="galClose()" aria-label="Cerrar">×</button>
     <button class="gal-lb-prev" type="button" onclick="galNav(-1)" aria-label="Anterior">
@@ -8273,7 +8272,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
     </div>
 
     <div class="ship-tabs-wrap">
-      <div class="ship-tabs" role="tablist">
+      <div class="ship-tabs" role="group" aria-label="Filtrar países">
         <button class="ship-tab active" type="button" data-region="all" onclick="filterCountries('all')">
           🌍 <span data-es>Todos</span><span data-en>All</span>
           <span class="ship-tab-count">19</span>
@@ -8303,7 +8302,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/cl.png" srcset="https://flagcdn.com/w320/cl.png 1x, https://flagcdn.com/w640/cl.png 2x" alt="Chile" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Chile</div>
@@ -8319,7 +8318,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/ar.png" srcset="https://flagcdn.com/w320/ar.png 1x, https://flagcdn.com/w640/ar.png 2x" alt="Argentina" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Argentina</div>
@@ -8335,7 +8334,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/uy.png" srcset="https://flagcdn.com/w320/uy.png 1x, https://flagcdn.com/w640/uy.png 2x" alt="Uruguay" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Uruguay</div>
@@ -8351,7 +8350,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/co.png" srcset="https://flagcdn.com/w320/co.png 1x, https://flagcdn.com/w640/co.png 2x" alt="Colombia" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Colombia</div>
@@ -8367,7 +8366,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/pe.png" srcset="https://flagcdn.com/w320/pe.png 1x, https://flagcdn.com/w640/pe.png 2x" alt="Peru" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Perú</div>
@@ -8383,7 +8382,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/br.png" srcset="https://flagcdn.com/w320/br.png 1x, https://flagcdn.com/w640/br.png 2x" alt="Brazil" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Brasil</div>
@@ -8399,7 +8398,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/ec.png" srcset="https://flagcdn.com/w320/ec.png 1x, https://flagcdn.com/w640/ec.png 2x" alt="Ecuador" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Ecuador</div>
@@ -8415,7 +8414,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/py.png" srcset="https://flagcdn.com/w320/py.png 1x, https://flagcdn.com/w640/py.png 2x" alt="Paraguay" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Paraguay</div>
@@ -8431,7 +8430,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/us.png" srcset="https://flagcdn.com/w320/us.png 1x, https://flagcdn.com/w640/us.png 2x" alt="USA" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>USA</div>
@@ -8447,7 +8446,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/mx.png" srcset="https://flagcdn.com/w320/mx.png 1x, https://flagcdn.com/w640/mx.png 2x" alt="Mexico" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>México</div>
@@ -8463,7 +8462,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/ca.png" srcset="https://flagcdn.com/w320/ca.png 1x, https://flagcdn.com/w640/ca.png 2x" alt="Canada" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Canadá</div>
@@ -8479,7 +8478,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/gb.png" srcset="https://flagcdn.com/w320/gb.png 1x, https://flagcdn.com/w640/gb.png 2x" alt="United Kingdom" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Reino Unido</div>
@@ -8495,7 +8494,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/es.png" srcset="https://flagcdn.com/w320/es.png 1x, https://flagcdn.com/w640/es.png 2x" alt="Spain" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>España</div>
@@ -8511,7 +8510,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/fr.png" srcset="https://flagcdn.com/w320/fr.png 1x, https://flagcdn.com/w640/fr.png 2x" alt="France" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Francia</div>
@@ -8527,7 +8526,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/de.png" srcset="https://flagcdn.com/w320/de.png 1x, https://flagcdn.com/w640/de.png 2x" alt="Germany" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Alemania</div>
@@ -8543,7 +8542,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/it.png" srcset="https://flagcdn.com/w320/it.png 1x, https://flagcdn.com/w640/it.png 2x" alt="Italy" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Italia</div>
@@ -8559,7 +8558,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/pt.png" srcset="https://flagcdn.com/w320/pt.png 1x, https://flagcdn.com/w640/pt.png 2x" alt="Portugal" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Portugal</div>
@@ -8575,7 +8574,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/au.png" srcset="https://flagcdn.com/w320/au.png 1x, https://flagcdn.com/w640/au.png 2x" alt="Australia" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Australia</div>
@@ -8591,7 +8590,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
           <img src="https://flagcdn.com/w320/nz.png" srcset="https://flagcdn.com/w320/nz.png 1x, https://flagcdn.com/w640/nz.png 2x" alt="New Zealand" loading="lazy" decoding="async" width="120" height="80" />
         </div>
         <div class="cc-top">
-          <span class="cc-status" title="Envío activo" aria-label="Activo"></span>
+          <span class="cc-status" role="img" title="Envío activo" aria-label="Activo"></span>
         </div>
         <div class="cc-body">
           <div class="cc-name" data-es>Nueva Zelanda</div>
@@ -8654,7 +8653,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
     </div>
 
     <div class="pay-tabs-wrap">
-      <div class="payment-tabs" role="tablist">
+      <div class="payment-tabs" role="group" aria-label="Medios de pago por región">
         <button class="pay-tab active" type="button" data-tab="chile" onclick="showPayTab('chile')">
           <span class="pay-tab-flag">🇨🇱</span><span>Chile</span>
         </button>
@@ -9759,8 +9758,8 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
   <div class="ls2-intro container">
     <div class="section-tag" data-es>✦ Tu Embarcación · Otra Dimensión</div>
     <div class="section-tag" data-en>✦ Your Vessel · Another Dimension</div>
-    <h2 class="heading" data-es>El detalle que<br/><em style="color:var(--gold);font-style:normal;">lo cambia todo</em></h2>
-    <h2 class="heading" data-en>The detail that<br/><em style="color:var(--gold);font-style:normal;">changes everything</em></h2>
+    <h2 class="heading" data-es>El detalle que<br/><em style="color:#c47f00;font-style:normal;">lo cambia todo</em></h2>
+    <h2 class="heading" data-en>The detail that<br/><em style="color:#c47f00;font-style:normal;">changes everything</em></h2>
     <p class="ls2-sub" data-es>Un piso DECKEVA no es solo protección — es la diferencia entre una lancha común y una experiencia que tus pasajeros no olvidarán.</p>
     <p class="ls2-sub" data-en>A DECKEVA floor is not just protection — it's the difference between an ordinary boat and an experience your passengers will never forget.</p>
   </div>
@@ -10061,7 +10060,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
         <div class="section-tag" data-es>✦ Cotización Gratuita</div>
         <div class="section-tag" data-en>✦ Free Quote</div>
         <h2 class="heading" style="margin-top:12px;opacity:1;" data-es>Cotiza el piso<br/>de <em style="color:var(--gold);font-style:normal;">tu embarcación</em></h2>
-        <h2 class="heading" style="margin-top:12px;" data-en>Get the floor for<br/><em style="color:var(--gold);font-style:normal;">your vessel</em></h2>
+        <h2 class="heading" style="margin-top:12px;" data-en>Get the floor for<br/><em style="color:#c47f00;font-style:normal;">your vessel</em></h2>
         <p style="font-size:16px;color:var(--text);margin-top:20px;margin-bottom:32px;" data-es>
           Envíanos los datos de tu embarcación y te contactaremos en menos de 24 horas con precio, medidas y disponibilidad de stock.
         </p>
@@ -10128,7 +10127,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
             <div class="form-group">
               <label class="form-label" data-es>Tamaño de embarcación</label>
               <label class="form-label" data-en>Vessel size</label>
-              <select class="form-control" id="sizeSelect" onchange="updatePrice()" required>
+              <select class="form-control" id="sizeSelect" aria-label="Tamaño de la lancha o tipo de embarcación" onchange="updatePrice()" required>
                 <option value="" data-es>Selecciona el tamaño (pies)</option>
                 <option value="" data-en>Select the size (feet)</option>
                 <option value="14|626988">14 pies / feet</option>
@@ -10191,7 +10190,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
               <div class="form-group">
                 <label class="form-label" data-es>Color preferido</label>
                 <label class="form-label" data-en>Preferred color</label>
-                <select class="form-control" id="fColor" required>
+                <select class="form-control" id="fColor" aria-label="Color preferido" required>
                   <option value="">—</option>
                   <option value="Gris / Gray">Gris / Gray</option>
                   <option value="Beige / Teak">Beige / Teak</option>
@@ -10239,7 +10238,7 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
             <div class="form-group">
               <label class="form-label" data-es>País de envío</label>
               <label class="form-label" data-en>Shipping country</label>
-              <select class="form-control" id="fCountry" onchange="onCountryChange()" required>
+              <select class="form-control" id="fCountry" aria-label="País de envío" onchange="onCountryChange()" required>
                 <option value="" data-es>Selecciona tu país</option>
                 <option value="" data-en>Select your country</option>
                 <option value="Chile">Chile</option>
@@ -11415,12 +11414,14 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
     const lb = document.getElementById('galLightbox');
     lb.classList.add('open');
     lb.setAttribute('aria-hidden','false');
+    lb.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
   }
   function galClose() {
     const lb = document.getElementById('galLightbox');
     lb.classList.remove('open');
     lb.setAttribute('aria-hidden','true');
+    lb.setAttribute('inert','');
     document.body.style.overflow = '';
   }
   function galNav(dir) {
