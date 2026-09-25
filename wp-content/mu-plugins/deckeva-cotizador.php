@@ -511,7 +511,7 @@ class Deckeva_Cotizador {
                 'Teléfono'    => $phone,
                 'País'        => $country,
                 'Embarcación' => trim($boat_brand . ' ' . $boat_model . ' ' . $boat_year),
-                'Tamaño'      => $boat_size !== '' ? $boat_size . ' pies' : '',
+                'Tamaño'      => self::tamano_texto($boat_size),
                 'Color'       => $boat_color,
                 'Subtotal'    => $this->convert_and_format_from_clp($price_clp, $currency_code),
                 'IVA 19%'     => $this->convert_and_format_from_clp($iva_clp, $currency_code),
@@ -551,6 +551,33 @@ class Deckeva_Cotizador {
     /* ──────────────────────────────────────────
        INTERNATIONAL — PDF (diseño nuevo, con respaldo)
     ────────────────────────────────────────── */
+
+    /**
+     * Tamaño como se le muestra al cliente. Además de los pies de una lancha, el
+     * cotizador ofrece motos de agua con precio fijo (moto-normal, moto-grande).
+     *
+     * @param string $boat_size Valor del selector: pies, 'otro', 'moto-normal' o 'moto-grande'.
+     * @param string $idioma    'es', 'en' o 'ambos'.
+     * @return string Texto sin escapar ('' si no hay tamaño).
+     */
+    public static function tamano_texto($boat_size, $idioma = 'es') {
+        $textos = array(
+            'moto-normal' => array('Moto de agua normal', 'Standard jet ski'),
+            'moto-grande' => array('Moto de agua mediana a grande', 'Mid-size to large jet ski'),
+            'otro'        => array('Otro', 'Other'),
+        );
+        if (isset($textos[$boat_size])) {
+            list($es, $en) = $textos[$boat_size];
+        } elseif ($boat_size !== '') {
+            $es = $boat_size . ' pies';
+            $en = $boat_size . ' ft';
+        } else {
+            return '';
+        }
+        if ($idioma === 'en') return $en;
+        if ($idioma === 'ambos') return $es . ' / ' . $en;
+        return $es;
+    }
 
     /**
      * Genera el PDF de la cotización con el diseño de deckeva-assets/pdf-cotizacion.php.
@@ -660,13 +687,7 @@ class Deckeva_Cotizador {
         list($dia, $mes, $anio) = explode('|', $this->fecha_chile('j|n|Y'));
         $fecha = $dia . ' de ' . $meses[(int) $mes] . ' de ' . $anio;
 
-        if ($boat_size === 'otro') {
-            $tamano = 'Otro';
-        } elseif ($boat_size !== '') {
-            $tamano = $boat_size . ' pies';
-        } else {
-            $tamano = '';
-        }
+        $tamano = self::tamano_texto($boat_size);
 
         // Tamaño "Otro" llega sin precio: se muestra "A consultar", no "CLP $0".
         $a_consultar = ($price_clp <= 0);
@@ -720,7 +741,7 @@ class Deckeva_Cotizador {
         $currency = $this->get_currency($currency_code);
         $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
 
-        $size_label = ($boat_size && $boat_size !== 'otro') ? esc_html($boat_size) . ' ft / pies' : 'Otro / Other';
+        $size_label = $boat_size !== '' ? esc_html(self::tamano_texto($boat_size, 'ambos')) : 'Otro / Other';
         $boat_desc  = trim($boat_brand . ' ' . $boat_model . ' ' . ($boat_year ? '(' . $boat_year . ')' : ''));
         $rate_line  = ($currency_code === 'CLP')
             ? ''
@@ -865,8 +886,8 @@ td { padding: 4px 10px; vertical-align: top; }
 
         $fecha = $this->fecha_chile('d/m/Y');
         $fm = function ($clp) use ($currency_code) { return $this->convert_and_format_from_clp($clp, $currency_code); };
-        $size_label = ($boat_size && $boat_size !== 'otro')
-            ? esc_html($boat_size) . ' ' . $t('pies', 'ft', 'ft / pies')
+        $size_label = $boat_size !== ''
+            ? esc_html(self::tamano_texto($boat_size, $idioma))
             : $t('Otro', 'Other');
         $boat_desc  = trim($boat_brand . ' ' . $boat_model . ' ' . ($boat_year ? '(' . $boat_year . ')' : ''));
         $nombre     = esc_html($first);
