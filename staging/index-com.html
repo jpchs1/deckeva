@@ -7375,6 +7375,25 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
 @media (max-width: 480px) { .footer-partners__grid { grid-template-columns: 1fr; } }
 /* Menú: "Cómo Trabajamos" se partía en dos líneas en notebooks. */
 .nav-links a { white-space: nowrap; }
+
+/* ── UI ronda 5: sin huecos en las grillas de fotos ── */
+/* Proyectos: 9 tarjetas en 6 columnas dejaban un hueco al final. La última va ancha. */
+@media (min-width: 641px) { #galGrid > .gal-card:last-child { grid-column: span 4; } }
+/* "Vive el agua": la 6.ª tarjeta quedaba sola en una fila. Pasa a banner a todo el ancho. */
+@media (min-width: 601px) {
+  .ls1-grid { grid-auto-rows: 190px; }
+  .ls1-grid > .ls1-card:nth-child(6):last-child { grid-column: 1 / -1; }
+}
+/* "El detalle que lo cambia todo": la última fila tenía una celda vacía. */
+@media (min-width: 601px) { .ls2-grid > .ls2-card:last-child { grid-column: span 2; } }
+/* Franja de beneficios: en escritorio el 5.º ítem se iba solo a otra línea;
+   en celular eran 5 líneas centradas. */
+.trust-inner { gap: 14px 32px !important; }
+@media (min-width: 1100px) { .trust-inner { flex-wrap: nowrap !important; justify-content: space-between !important; gap: 16px !important; } .trust-item { font-size: 12px !important; white-space: nowrap; } }
+@media (max-width: 600px) {
+  .trust-inner { display: grid !important; grid-template-columns: 1fr 1fr; gap: 10px 14px !important; justify-items: start; }
+  .trust-item { font-size: 11px !important; letter-spacing: 0 !important; }
+}
 </style>
 </head>
 <body id="top" data-quote-country="">
