@@ -79,6 +79,8 @@ copiar_dir staging/img/lifestyle "${COM}/staging/img/lifestyle"
 # Fotos de la galería de /proyectos/. La página vive en deckeva.cl pero las
 # imágenes se sirven desde .com, igual que las de lifestyle.
 copiar_dir staging/img/proyectos "${COM}/staging/img/proyectos"
+# Fotos de la sección #motos-de-agua de la home (se sirven desde .com).
+copiar_dir staging/img/motos-de-agua "${COM}/staging/img/motos-de-agua"
 
 copiar staging/index-com.html "${COM}/preview-2026/index.html"
 
