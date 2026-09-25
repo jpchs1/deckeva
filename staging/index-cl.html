@@ -11742,7 +11742,17 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
 
 </script>
 
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+<script>
+  // Google Translate solo hace falta para idiomas distintos de ES/EN: changeLang()
+  // deja la cookie googtrans y recarga. Sin cookie no se descarga (~300 KB de JS
+  // y 6 pedidos menos en cada visita en español o inglés).
+  if (document.cookie.indexOf('googtrans=') !== -1) {
+    var gt = document.createElement('script');
+    gt.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    gt.async = true;
+    document.head.appendChild(gt);
+  }
+</script>
 
   <!-- Winter promo: ajusta offsets de las barras fijas y maneja el cierre -->
   <script>

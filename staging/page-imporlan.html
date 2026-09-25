@@ -7861,7 +7861,17 @@
 
 </script>
 
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+<script>
+  // Google Translate solo hace falta para idiomas distintos de ES/EN: changeLang()
+  // deja la cookie googtrans y recarga. Sin cookie no se descarga (~300 KB de JS
+  // y 6 pedidos menos en cada visita en español o inglés).
+  if (document.cookie.indexOf('googtrans=') !== -1) {
+    var gt = document.createElement('script');
+    gt.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    gt.async = true;
+    document.head.appendChild(gt);
+  }
+</script>
 
 <script>(function(){var s=document.getElementById('stickyPriceCta');if(s)s.style.display='none';})();</script>
 </body>
