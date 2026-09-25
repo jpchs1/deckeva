@@ -63,6 +63,10 @@ deployment:
     - /bin/mkdir -p /home/wwimpo/deckeva.com/staging/img/proyectos
     - /bin/cp -R staging/img/proyectos/. /home/wwimpo/deckeva.com/staging/img/proyectos/
 
+    # ── Fotos de la sección #motos-de-agua de la home ──
+    - /bin/mkdir -p /home/wwimpo/deckeva.com/staging/img/motos-de-agua
+    - /bin/cp -R staging/img/motos-de-agua/. /home/wwimpo/deckeva.com/staging/img/motos-de-agua/
+
     # ── Previews production-ready (validación pública con cliente) ──
     - /bin/mkdir -p /home/wwimpo/deckeva.com/preview-2026
     - /bin/cp staging/index-com.html /home/wwimpo/deckeva.com/preview-2026/index.html

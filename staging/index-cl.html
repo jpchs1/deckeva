@@ -9981,6 +9981,16 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
 .jet-row .jet-card{background:linear-gradient(180deg,#f5a623,#d68a00)}
 .jet-row .jet-card.tx{background:#cfd5dc}
 .jet-note{font-size:12px;color:#8fa3bd;margin-top:14px}
+.jet-photo{margin:0;background:#0a1628}
+.jet-photo img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:2/1}
+.jet-row .jet-photo img{aspect-ratio:8/5}
+.jet-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,22,40,.35) 0%,transparent 35%,transparent 70%,rgba(10,22,40,.45) 100%);pointer-events:none}
+.jet-photo .jc-tag{z-index:2}
+.jc-brand{position:absolute;right:14px;bottom:12px;z-index:2;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:.14em;color:#fff;background:rgba(10,22,40,.72);padding:4px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.18)}
+.jc-brand b{color:#16a3a3}
+.jet-credits{font-size:11px;color:#6f84a0;margin-top:6px;line-height:1.5}
+.jet-credits a{color:#8fa3bd;text-decoration:underline}
+
 @media (max-width:900px){.jet-section{padding:64px 0}.jet-section .jet-wrap{grid-template-columns:1fr;gap:34px}.jet-visual{order:-1}}
 @media (max-width:520px){.jet-list,.jet-prices,.jet-row{grid-template-columns:1fr}.jet-btn{width:100%;justify-content:center}}
 </style>
@@ -10024,109 +10034,27 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
       </div>
     </div>
     <div class="jet-visual fade-in fade-in-delay-1">
-      <div class="jet-card"><span class="jc-tag" data-es>Gris claro · líneas negras</span><span class="jc-tag" data-en>Light gray · black lines</span><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Moto de agua con piso EVA gris claro y líneas negras">
-  <defs>
-    <clipPath id="pads-g">
-      <!-- pisadera izquierda (arriba), derecha (abajo) y plataforma de popa -->
-      <path d="M150 58 L372 64 Q392 66 396 84 L398 104 L150 104 Q132 104 130 86 L130 76 Q132 58 150 58 Z"/>
-      <path d="M150 242 L372 236 Q392 234 396 216 L398 196 L150 196 Q132 196 130 214 L130 224 Q132 242 150 242 Z"/>
-      <path d="M44 92 L112 92 Q122 92 122 102 L122 198 Q122 208 112 208 L44 208 Q34 208 34 198 L34 102 Q34 92 44 92 Z"/>
-    </clipPath>
-    <linearGradient id="hull-g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f4f6f9"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#f4f6f9"/>
-    </linearGradient>
-    <linearGradient id="seat-g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1b2433"/><stop offset=".5" stop-color="#2c3950"/><stop offset="1" stop-color="#1b2433"/>
-    </linearGradient>
-  </defs>
-  <!-- sombra -->
-  <ellipse cx="300" cy="272" rx="250" ry="14" fill="#000" opacity=".18"/>
-  <!-- casco -->
-  <path d="M26 78 Q26 40 70 38 L380 40 Q500 44 578 150 Q500 256 380 260 L70 262 Q26 260 26 222 Z"
-        fill="url(#hull-g)" stroke="#c9d2de" stroke-width="2"/>
-  <!-- franja de color del casco -->
-  <path d="M400 46 Q505 60 566 150 Q505 240 400 254 Q470 222 500 150 Q470 78 400 46 Z" fill="#0e6ba8" opacity=".9"/>
-  <!-- pads EVA con surcos -->
-  <g clip-path="url(#pads-g)">
-    <rect width="600" height="300" fill="#cfd5dc"/>
-    <g stroke="#1a1f27" stroke-width="2.2" opacity=".85"><line x1="0" y1="0" x2="0" y2="300" /><line x1="11" y1="0" x2="11" y2="300" /><line x1="22" y1="0" x2="22" y2="300" /><line x1="33" y1="0" x2="33" y2="300" /><line x1="44" y1="0" x2="44" y2="300" /><line x1="55" y1="0" x2="55" y2="300" /><line x1="66" y1="0" x2="66" y2="300" /><line x1="77" y1="0" x2="77" y2="300" /><line x1="88" y1="0" x2="88" y2="300" /><line x1="99" y1="0" x2="99" y2="300" /><line x1="110" y1="0" x2="110" y2="300" /><line x1="121" y1="0" x2="121" y2="300" /><line x1="132" y1="0" x2="132" y2="300" /><line x1="143" y1="0" x2="143" y2="300" /><line x1="154" y1="0" x2="154" y2="300" /><line x1="165" y1="0" x2="165" y2="300" /><line x1="176" y1="0" x2="176" y2="300" /><line x1="187" y1="0" x2="187" y2="300" /><line x1="198" y1="0" x2="198" y2="300" /><line x1="209" y1="0" x2="209" y2="300" /><line x1="220" y1="0" x2="220" y2="300" /><line x1="231" y1="0" x2="231" y2="300" /><line x1="242" y1="0" x2="242" y2="300" /><line x1="253" y1="0" x2="253" y2="300" /><line x1="264" y1="0" x2="264" y2="300" /><line x1="275" y1="0" x2="275" y2="300" /><line x1="286" y1="0" x2="286" y2="300" /><line x1="297" y1="0" x2="297" y2="300" /><line x1="308" y1="0" x2="308" y2="300" /><line x1="319" y1="0" x2="319" y2="300" /><line x1="330" y1="0" x2="330" y2="300" /><line x1="341" y1="0" x2="341" y2="300" /><line x1="352" y1="0" x2="352" y2="300" /><line x1="363" y1="0" x2="363" y2="300" /><line x1="374" y1="0" x2="374" y2="300" /><line x1="385" y1="0" x2="385" y2="300" /><line x1="396" y1="0" x2="396" y2="300" /><line x1="407" y1="0" x2="407" y2="300" /><line x1="418" y1="0" x2="418" y2="300" /><line x1="429" y1="0" x2="429" y2="300" /><line x1="440" y1="0" x2="440" y2="300" /><line x1="451" y1="0" x2="451" y2="300" /><line x1="462" y1="0" x2="462" y2="300" /><line x1="473" y1="0" x2="473" y2="300" /><line x1="484" y1="0" x2="484" y2="300" /><line x1="495" y1="0" x2="495" y2="300" /><line x1="506" y1="0" x2="506" y2="300" /><line x1="517" y1="0" x2="517" y2="300" /><line x1="528" y1="0" x2="528" y2="300" /><line x1="539" y1="0" x2="539" y2="300" /><line x1="550" y1="0" x2="550" y2="300" /><line x1="561" y1="0" x2="561" y2="300" /><line x1="572" y1="0" x2="572" y2="300" /><line x1="583" y1="0" x2="583" y2="300" /><line x1="594" y1="0" x2="594" y2="300" /></g>
-  </g>
-  <g fill="none" stroke="#1a1f27" stroke-width="3">
-    <path d="M150 58 L372 64 Q392 66 396 84 L398 104 L150 104 Q132 104 130 86 L130 76 Q132 58 150 58 Z"/>
-    <path d="M150 242 L372 236 Q392 234 396 216 L398 196 L150 196 Q132 196 130 214 L130 224 Q132 242 150 242 Z"/>
-    <path d="M44 92 L112 92 Q122 92 122 102 L122 198 Q122 208 112 208 L44 208 Q34 208 34 198 L34 102 Q34 92 44 92 Z"/>
-  </g>
-  <!-- logo grabado en la plataforma -->
-  <text x="78" y="156" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800"
-        font-size="17" letter-spacing="2" fill="#1a1f27" transform="rotate(-90 78 150)">DECKEVA</text>
-  <!-- asiento -->
-  <path d="M140 118 Q140 110 150 110 L360 112 Q392 114 398 150 Q392 186 360 188 L150 190 Q140 190 140 182 Z" fill="url(#seat-g)"/>
-  <path d="M250 112 L250 188" stroke="#0f1622" stroke-width="2" opacity=".6"/>
-  <!-- consola y manubrio -->
-  <path d="M404 104 Q470 110 486 150 Q470 190 404 196 Q420 150 404 104 Z" fill="#1f2a3c"/>
-  <rect x="418" y="72" width="10" height="156" rx="5" fill="#111826"/>
-  <rect x="412" y="66" width="22" height="18" rx="6" fill="#0a0f18"/>
-  <rect x="412" y="216" width="22" height="18" rx="6" fill="#0a0f18"/>
-  <circle cx="452" cy="150" r="9" fill="#0e6ba8"/>
-</svg></div>
+      <!-- Fotos reales de motos de agua con piso EVA de fábrica, de Wikimedia Commons
+           (licencias CC con atribución, créditos abajo). No son trabajos de Deckeva:
+           reemplazar por fotos propias apenas existan. -->
+      <figure class="jet-card jet-photo">
+        <img src="https://www.deckeva.com/staging/img/motos-de-agua/moto-01.jpg" width="1200" height="600" loading="lazy" decoding="async" alt="Plataforma trasera de una moto de agua Yamaha FX SVHO con piso de goma EVA antideslizante">
+        <span class="jc-tag" data-es>Plataforma con EVA antideslizante</span><span class="jc-tag" data-en>Non-slip EVA platform</span>
+        <span class="jc-brand">DECK<b>EVA</b></span>
+      </figure>
       <div class="jet-row">
-        <div class="jet-card"><span class="jc-tag" data-es>Café claro</span><span class="jc-tag" data-en>Light brown</span><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Moto de agua con piso EVA café claro y líneas negras">
-  <defs>
-    <clipPath id="pads-c">
-      <!-- pisadera izquierda (arriba), derecha (abajo) y plataforma de popa -->
-      <path d="M150 58 L372 64 Q392 66 396 84 L398 104 L150 104 Q132 104 130 86 L130 76 Q132 58 150 58 Z"/>
-      <path d="M150 242 L372 236 Q392 234 396 216 L398 196 L150 196 Q132 196 130 214 L130 224 Q132 242 150 242 Z"/>
-      <path d="M44 92 L112 92 Q122 92 122 102 L122 198 Q122 208 112 208 L44 208 Q34 208 34 198 L34 102 Q34 92 44 92 Z"/>
-    </clipPath>
-    <linearGradient id="hull-c" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#eef1f5"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#eef1f5"/>
-    </linearGradient>
-    <linearGradient id="seat-c" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#1b2433"/><stop offset=".5" stop-color="#2c3950"/><stop offset="1" stop-color="#1b2433"/>
-    </linearGradient>
-  </defs>
-  <!-- sombra -->
-  <ellipse cx="300" cy="272" rx="250" ry="14" fill="#000" opacity=".18"/>
-  <!-- casco -->
-  <path d="M26 78 Q26 40 70 38 L380 40 Q500 44 578 150 Q500 256 380 260 L70 262 Q26 260 26 222 Z"
-        fill="url(#hull-c)" stroke="#c9d2de" stroke-width="2"/>
-  <!-- franja de color del casco -->
-  <path d="M400 46 Q505 60 566 150 Q505 240 400 254 Q470 222 500 150 Q470 78 400 46 Z" fill="#f5a623" opacity=".9"/>
-  <!-- pads EVA con surcos -->
-  <g clip-path="url(#pads-c)">
-    <rect width="600" height="300" fill="#c9a27a"/>
-    <g stroke="#2a1d12" stroke-width="2.2" opacity=".85"><line x1="0" y1="0" x2="0" y2="300" /><line x1="11" y1="0" x2="11" y2="300" /><line x1="22" y1="0" x2="22" y2="300" /><line x1="33" y1="0" x2="33" y2="300" /><line x1="44" y1="0" x2="44" y2="300" /><line x1="55" y1="0" x2="55" y2="300" /><line x1="66" y1="0" x2="66" y2="300" /><line x1="77" y1="0" x2="77" y2="300" /><line x1="88" y1="0" x2="88" y2="300" /><line x1="99" y1="0" x2="99" y2="300" /><line x1="110" y1="0" x2="110" y2="300" /><line x1="121" y1="0" x2="121" y2="300" /><line x1="132" y1="0" x2="132" y2="300" /><line x1="143" y1="0" x2="143" y2="300" /><line x1="154" y1="0" x2="154" y2="300" /><line x1="165" y1="0" x2="165" y2="300" /><line x1="176" y1="0" x2="176" y2="300" /><line x1="187" y1="0" x2="187" y2="300" /><line x1="198" y1="0" x2="198" y2="300" /><line x1="209" y1="0" x2="209" y2="300" /><line x1="220" y1="0" x2="220" y2="300" /><line x1="231" y1="0" x2="231" y2="300" /><line x1="242" y1="0" x2="242" y2="300" /><line x1="253" y1="0" x2="253" y2="300" /><line x1="264" y1="0" x2="264" y2="300" /><line x1="275" y1="0" x2="275" y2="300" /><line x1="286" y1="0" x2="286" y2="300" /><line x1="297" y1="0" x2="297" y2="300" /><line x1="308" y1="0" x2="308" y2="300" /><line x1="319" y1="0" x2="319" y2="300" /><line x1="330" y1="0" x2="330" y2="300" /><line x1="341" y1="0" x2="341" y2="300" /><line x1="352" y1="0" x2="352" y2="300" /><line x1="363" y1="0" x2="363" y2="300" /><line x1="374" y1="0" x2="374" y2="300" /><line x1="385" y1="0" x2="385" y2="300" /><line x1="396" y1="0" x2="396" y2="300" /><line x1="407" y1="0" x2="407" y2="300" /><line x1="418" y1="0" x2="418" y2="300" /><line x1="429" y1="0" x2="429" y2="300" /><line x1="440" y1="0" x2="440" y2="300" /><line x1="451" y1="0" x2="451" y2="300" /><line x1="462" y1="0" x2="462" y2="300" /><line x1="473" y1="0" x2="473" y2="300" /><line x1="484" y1="0" x2="484" y2="300" /><line x1="495" y1="0" x2="495" y2="300" /><line x1="506" y1="0" x2="506" y2="300" /><line x1="517" y1="0" x2="517" y2="300" /><line x1="528" y1="0" x2="528" y2="300" /><line x1="539" y1="0" x2="539" y2="300" /><line x1="550" y1="0" x2="550" y2="300" /><line x1="561" y1="0" x2="561" y2="300" /><line x1="572" y1="0" x2="572" y2="300" /><line x1="583" y1="0" x2="583" y2="300" /><line x1="594" y1="0" x2="594" y2="300" /></g>
-  </g>
-  <g fill="none" stroke="#2a1d12" stroke-width="3">
-    <path d="M150 58 L372 64 Q392 66 396 84 L398 104 L150 104 Q132 104 130 86 L130 76 Q132 58 150 58 Z"/>
-    <path d="M150 242 L372 236 Q392 234 396 216 L398 196 L150 196 Q132 196 130 214 L130 224 Q132 242 150 242 Z"/>
-    <path d="M44 92 L112 92 Q122 92 122 102 L122 198 Q122 208 112 208 L44 208 Q34 208 34 198 L34 102 Q34 92 44 92 Z"/>
-  </g>
-  <!-- logo grabado en la plataforma -->
-  <text x="78" y="156" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800"
-        font-size="17" letter-spacing="2" fill="#2a1d12" transform="rotate(-90 78 150)">DECKEVA</text>
-  <!-- asiento -->
-  <path d="M140 118 Q140 110 150 110 L360 112 Q392 114 398 150 Q392 186 360 188 L150 190 Q140 190 140 182 Z" fill="url(#seat-c)"/>
-  <path d="M250 112 L250 188" stroke="#0f1622" stroke-width="2" opacity=".6"/>
-  <!-- consola y manubrio -->
-  <path d="M404 104 Q470 110 486 150 Q470 190 404 196 Q420 150 404 104 Z" fill="#1f2a3c"/>
-  <rect x="418" y="72" width="10" height="156" rx="5" fill="#111826"/>
-  <rect x="412" y="66" width="22" height="18" rx="6" fill="#0a0f18"/>
-  <rect x="412" y="216" width="22" height="18" rx="6" fill="#0a0f18"/>
-  <circle cx="452" cy="150" r="9" fill="#f5a623"/>
-</svg></div>
-        <div class="jet-card tx"><svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Textura EVA antideslizante con logo Deckeva">
-  <defs><clipPath id="tx-t"><rect x="0" y="0" width="600" height="300"/></clipPath></defs>
-  <rect width="600" height="300" fill="#cfd5dc"/>
-  <g clip-path="url(#tx-t)" stroke="#1a1f27" stroke-width="3.2" opacity=".8"><line x1="-40" y1="-40" x2="-100" y2="340" /><line x1="-26" y1="-40" x2="-86" y2="340" /><line x1="-12" y1="-40" x2="-72" y2="340" /><line x1="2" y1="-40" x2="-58" y2="340" /><line x1="16" y1="-40" x2="-44" y2="340" /><line x1="30" y1="-40" x2="-30" y2="340" /><line x1="44" y1="-40" x2="-16" y2="340" /><line x1="58" y1="-40" x2="-2" y2="340" /><line x1="72" y1="-40" x2="12" y2="340" /><line x1="86" y1="-40" x2="26" y2="340" /><line x1="100" y1="-40" x2="40" y2="340" /><line x1="114" y1="-40" x2="54" y2="340" /><line x1="128" y1="-40" x2="68" y2="340" /><line x1="142" y1="-40" x2="82" y2="340" /><line x1="156" y1="-40" x2="96" y2="340" /><line x1="170" y1="-40" x2="110" y2="340" /><line x1="184" y1="-40" x2="124" y2="340" /><line x1="198" y1="-40" x2="138" y2="340" /><line x1="212" y1="-40" x2="152" y2="340" /><line x1="226" y1="-40" x2="166" y2="340" /><line x1="240" y1="-40" x2="180" y2="340" /><line x1="254" y1="-40" x2="194" y2="340" /><line x1="268" y1="-40" x2="208" y2="340" /><line x1="282" y1="-40" x2="222" y2="340" /><line x1="296" y1="-40" x2="236" y2="340" /><line x1="310" y1="-40" x2="250" y2="340" /><line x1="324" y1="-40" x2="264" y2="340" /><line x1="338" y1="-40" x2="278" y2="340" /><line x1="352" y1="-40" x2="292" y2="340" /><line x1="366" y1="-40" x2="306" y2="340" /><line x1="380" y1="-40" x2="320" y2="340" /><line x1="394" y1="-40" x2="334" y2="340" /><line x1="408" y1="-40" x2="348" y2="340" /><line x1="422" y1="-40" x2="362" y2="340" /><line x1="436" y1="-40" x2="376" y2="340" /><line x1="450" y1="-40" x2="390" y2="340" /><line x1="464" y1="-40" x2="404" y2="340" /><line x1="478" y1="-40" x2="418" y2="340" /><line x1="492" y1="-40" x2="432" y2="340" /><line x1="506" y1="-40" x2="446" y2="340" /><line x1="520" y1="-40" x2="460" y2="340" /><line x1="534" y1="-40" x2="474" y2="340" /><line x1="548" y1="-40" x2="488" y2="340" /><line x1="562" y1="-40" x2="502" y2="340" /><line x1="576" y1="-40" x2="516" y2="340" /><line x1="590" y1="-40" x2="530" y2="340" /><line x1="604" y1="-40" x2="544" y2="340" /><line x1="618" y1="-40" x2="558" y2="340" /><line x1="632" y1="-40" x2="572" y2="340" /><line x1="646" y1="-40" x2="586" y2="340" /><line x1="660" y1="-40" x2="600" y2="340" /><line x1="674" y1="-40" x2="614" y2="340" /><line x1="688" y1="-40" x2="628" y2="340" /></g>
-  <rect x="150" y="96" width="300" height="108" rx="14" fill="#cfd5dc" stroke="#1a1f27" stroke-width="3"/>
-  <text x="300" y="164" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800"
-        font-size="46" letter-spacing="6" fill="#1a1f27">DECKEVA</text>
-  <text x="300" y="188" text-anchor="middle" font-family="Space Mono, monospace" font-size="11" letter-spacing="3" fill="#1a1f27">PERSONALIZADO · A MEDIDA</text>
-</svg></div>
+        <figure class="jet-card jet-photo">
+          <img src="https://www.deckeva.com/staging/img/motos-de-agua/moto-02.jpg" width="800" height="500" loading="lazy" decoding="async" alt="Moto de agua blanca con piso EVA gris en la plataforma">
+          <span class="jc-tag" data-es>EVA gris</span><span class="jc-tag" data-en>Gray EVA</span>
+        </figure>
+        <figure class="jet-card jet-photo">
+          <img src="https://www.deckeva.com/staging/img/motos-de-agua/moto-03.jpg" width="800" height="500" loading="lazy" decoding="async" alt="Moto de agua Yamaha en el lago al atardecer con piso antideslizante">
+          <span class="jc-tag" data-es>Grip en el agua</span><span class="jc-tag" data-en>Grip on the water</span>
+        </figure>
       </div>
-      <div class="jet-note" data-es>Ilustraciones de referencia. El diseño final se hace a la medida de tu moto.</div>
-      <div class="jet-note" data-en>Reference illustrations. The final design is made to fit your jet ski.</div>
+      <div class="jet-note" data-es>Fotos de referencia de pisos EVA en motos de agua. El diseño Deckeva se hace a la medida de tu moto.</div>
+      <div class="jet-note" data-en>Reference photos of EVA decks on jet skis. Your Deckeva design is made to fit your jet ski.</div>
+      <div class="jet-credits">Fotos: Matti Blume (<a href="https://commons.wikimedia.org/wiki/File:WaveRunner_FX_SVHO,_Interboot_2020,_Friedrichshafen_(IB200226).jpg" target="_blank" rel="noopener">1</a>, <a href="https://commons.wikimedia.org/wiki/File:Interboot_2023,_Friedrichshafen_(P1120811).jpg" target="_blank" rel="noopener">2</a>) · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> · Yamaha Watercraft (<a href="https://commons.wikimedia.org/wiki/File:2020_Yamaha_FX_SVHO_WaveRunner.jpg" target="_blank" rel="noopener">3</a>) · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a> · recortadas.</div>
     </div>
   </div>
 <script>
