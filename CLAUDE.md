@@ -149,6 +149,10 @@ Cargan por orden alfabético, por eso el núcleo va con `00`:
 - `deckeva-recuperar-leads.php` — panel *Herramientas → Leads perdidos*.
 - `deckeva-compat-elementor.php` — evita la caída de Elementor 4.3 con Elementor
   Pro 3.12. Sobra cuando Pro se actualice.
+- `deckeva-meta-pixel.php` — Pixel de Meta y evento `Lead` por la API de
+  Conversiones en cada cotización de deckeva.cl. Se configura en *Ajustes →
+  Meta Ads*; sin ID ni token no hace nada. La home estática carga
+  `uploads/deckeva-meta/pixel.js`, que se escribe al guardar el ID.
 - `deckeva-rescate-cotizaciones.php` — campaña única de reenvío a los clientes
   sin respuesta, gobernada por `DECKEVA_RESCATE_FASE` (`muestra` → `enviar` solo
   con aprobación del dueño). Se borra al terminar.

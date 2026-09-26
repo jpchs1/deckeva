@@ -223,6 +223,10 @@ function deckeva_notify_lead($subject, $html_body, $reply_to_email = '', $reply_
  * falle o el antispam se pase de listo, el contacto queda registrado y recuperable.
  */
 function deckeva_record_lead($source, $data, $note = '') {
+    // Para quien necesite saber que entró un contacto (la medición de Meta Ads).
+    // Va antes que el disco: si escribir falla, el contacto igual existió.
+    do_action('deckeva_lead_registrado', $source, $data);
+
     $dir = deckeva_lead_log_dir();
     if (!$dir) {
         return false;
