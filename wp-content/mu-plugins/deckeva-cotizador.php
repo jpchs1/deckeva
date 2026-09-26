@@ -1602,6 +1602,7 @@ table { width: 100%; border-collapse: collapse; }
             .dc-preview-content { padding: 10px !important; }
         }
     </style>
+<?php echo function_exists('deckeva_meta_pixel_tag') ? deckeva_meta_pixel_tag() : ''; ?>
 </head>
 <body>
 
