@@ -1,0 +1,326 @@
+<?php
+/**
+ * Plugin Name: Deckeva - Cotización formal desde WhatsApp
+ * Description: Cuando un chat de WhatsApp ya trae lo necesario, arma la cotización
+ *              formal en PDF con el mismo diseño y el mismo precio que el cotizador
+ *              de la home, y se la manda al cliente por correo desde contacto@deckeva.cl.
+ *
+ * El caso (28-sep-2026): once clientes pidieron cotización por WhatsApp en un día,
+ * cinco dejaron todos sus datos (nombre, correo, largo, color) y a ninguno le llegó
+ * nada. La IA de Meta les dijo que se la mandaban por correo; nadie la mandó.
+ *
+ * El precio NO se escribe acá. Sale de la tabla del home publicado
+ * (ABSPATH/index.html, el <select id="sizeSelect"> con «pies|clp»), que es la misma
+ * que usa el cliente cuando se cotiza solo. Si esa tabla no se puede leer, o el largo
+ * no está en ella, no se cotiza: queda para JP. Nunca se adivina un precio.
+ *
+ * Lo que queda para JP (su mandato del 28-sep, punto 3): un largo que no es un
+ * número entero de pies, «otro», precios fuera de la tabla, descuentos, reclamos.
+ *
+ * Modo (Ajustes → WhatsApp Deckeva → Cotizaciones):
+ * - borrador (por defecto): la cotización se arma y se le manda a JP con el PDF;
+ *   sale al cliente cuando JP aprieta «Enviar».
+ * - automático: sale sola, 1 a 40 minutos después del último mensaje del cliente,
+ *   de 8:00 a 20:00. Lo prende JP, no el código.
+ *
+ * El repo es público: acá no hay ningún dato de cliente. Todo vive en la opción
+ * deckeva_wa_chats, en el servidor.
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+function deckeva_wa_cotiza_modo() {
+    if (defined('DECKEVA_WA_COTIZA_MODO')) return DECKEVA_WA_COTIZA_MODO === 'automatico' ? 'automatico' : 'borrador';
+    return get_option('deckeva_wa_cotiza_modo', 'borrador') === 'automatico' ? 'automatico' : 'borrador';
+}
+
+/**
+ * La tabla de precios del home publicado: array('14' => 658337, …, 'moto-normal' => …).
+ * Vacía si no se puede leer. Se lee del archivo que ve el cliente, no de una copia.
+ */
+function deckeva_wa_cotiza_tabla($html = null) {
+    if ($html === null) {
+        $f = ABSPATH . 'index.html';
+        $html = is_readable($f) ? (string) file_get_contents($f) : '';
+    }
+    if (!preg_match('/<select[^>]*id="sizeSelect"[^>]*>(.*?)<\/select>/s', $html, $m)) return array();
+    preg_match_all('/value="(\d{2}|moto-normal|moto-grande)\|(\d+)"/', $m[1], $ops, PREG_SET_ORDER);
+    $out = array();
+    foreach ($ops as $o) if ((int) $o[2] > 0) $out[$o[1]] = (int) $o[2];
+    return $out;
+}
+
+function deckeva_wa_cotiza_clp($n) {
+    return 'CLP $' . number_format((int) $n, 0, ',', '.');
+}
+
+/**
+ * Qué dice el chat · Claude pasa la conversación a un JSON fijo. Lo completo lo
+ * decide el código (deckeva_wa_cotiza_listo), no Claude.
+ */
+function deckeva_wa_cotiza_leer($mensajes) {
+    $tz = new DateTimeZone('America/Santiago');
+    $txt = '';
+    foreach ($mensajes as $m) {
+        $t = trim((string) $m['texto']);
+        if ($t === '' || ($m['dir'] ?? '') !== 'in') continue;
+        $txt .= '[' . (new DateTimeImmutable('@' . (int) $m['ts']))->setTimezone($tz)->format('Y-m-d H:i') . '] Cliente: ' . $t . "\n";
+    }
+    if ($txt === '') return array('ok' => false, 'error' => 'chat sin texto');
+    $str = array('type' => 'string');
+    $esquema = array('type' => 'object', 'additionalProperties' => false,
+        'required' => array('nombre', 'apellido', 'email', 'largo', 'tipo', 'marca', 'modelo', 'anio', 'color', 'ubicacion', 'pais', 'quiere_cotizacion'),
+        'properties' => array(
+            'nombre' => $str, 'apellido' => $str, 'email' => $str, 'largo' => $str,
+            'tipo' => array('type' => 'string', 'enum' => array('lancha', 'moto_normal', 'moto_grande', 'otro', 'no_dice')),
+            'marca' => $str, 'modelo' => $str, 'anio' => $str, 'color' => $str, 'ubicacion' => $str, 'pais' => $str,
+            'quiere_cotizacion' => array('type' => 'boolean'),
+        ));
+    $sistema = "Te paso lo que escribió un cliente de Deckeva (pisos de goma EVA para embarcaciones) por WhatsApp. "
+        . "Devuelve SOLO lo que el cliente escribió, sin deducir nada. Si un dato no está escrito, déjalo vacío.\n"
+        . "- largo: el largo en pies TAL COMO LO ESCRIBIÓ el cliente (\"19\", \"22,4\", \"21 pies\"). Nunca lo deduzcas del modelo (una Sea Ray 185 NO es un dato de largo). Si dio metros, déjalo vacío.\n"
+        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto_normal o moto_grande si es moto de agua y lo dice; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
+        . "- email: exacto, como lo escribió.\n"
+        . "- color: el que eligió (gris, beige, negro...).\n"
+        . "- pais: Chile salvo que diga otro.\n"
+        . "- quiere_cotizacion: true si pidió precio o cotización.";
+    $res = wp_remote_post('https://api.anthropic.com/v1/messages', array(
+        'timeout' => 60,
+        'headers' => array('x-api-key' => deckeva_wa_llave(), 'anthropic-version' => '2023-06-01', 'anthropic-beta' => 'server-side-fallback-2026-07-01', 'content-type' => 'application/json'),
+        'body' => wp_json_encode(array(
+            'model' => DECKEVA_WA_MODELO, 'max_tokens' => 1500, 'fallbacks' => 'default',
+            'output_config' => array('effort' => 'low', 'format' => array('type' => 'json_schema', 'schema' => $esquema)),
+            'system' => $sistema,
+            'messages' => array(array('role' => 'user', 'content' => "<cliente>\n" . $txt . '</cliente>')),
+        )),
+    ));
+    if (is_wp_error($res)) return array('ok' => false, 'error' => $res->get_error_message());
+    $j = json_decode((string) wp_remote_retrieve_body($res), true);
+    if ((int) wp_remote_retrieve_response_code($res) !== 200 || !is_array($j)) return array('ok' => false, 'error' => 'Claude HTTP ' . (int) wp_remote_retrieve_response_code($res));
+    $out = '';
+    foreach ((array) ($j['content'] ?? array()) as $b) if (($b['type'] ?? '') === 'text') $out .= (string) $b['text'];
+    $d = json_decode($out, true);
+    return is_array($d) ? array('ok' => true, 'd' => $d) : array('ok' => false, 'error' => 'respuesta no es JSON');
+}
+
+/**
+ * ¿Alcanza para cotizar? Devuelve array('ok' => true, 'clave' => '19', 'precio' => …)
+ * o array('ok' => false, 'falta' => '…'). Cada dato que decide el precio o el
+ * destinatario se vuelve a buscar en lo que ESCRIBIÓ el cliente: si Claude lo
+ * inventó, no está, y no se cotiza.
+ */
+function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla) {
+    $escrito = '';
+    foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') $escrito .= ' ' . mb_strtolower((string) $m['texto']);
+    $email = strtolower(trim((string) ($d['email'] ?? '')));
+    if (!is_email($email) || strpos($escrito, $email) === false) return array('ok' => false, 'falta' => 'el correo');
+    if (trim((string) ($d['nombre'] ?? '')) === '') return array('ok' => false, 'falta' => 'el nombre');
+    if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
+    $tipo = (string) ($d['tipo'] ?? '');
+    if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · lo ve JP', 'jp' => true);
+    if ($tipo === 'moto_normal' || $tipo === 'moto_grande') {
+        $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
+    } else {
+        $largo = str_replace(',', '.', trim((string) ($d['largo'] ?? '')));
+        if (!preg_match('/^(\d{1,2})(?:\.(\d+))?/', $largo, $lm)) return array('ok' => false, 'falta' => 'el largo en pies');
+        if (isset($lm[2]) && (int) $lm[2] !== 0) return array('ok' => false, 'falta' => 'el largo es ' . $largo . ' pies, no un entero · lo ve JP', 'jp' => true);
+        $clave = (string) (int) $lm[1];
+        if (!preg_match('/(?<!\d)' . preg_quote($clave, '/') . '(?!\d)/', $escrito)) return array('ok' => false, 'falta' => 'el largo en pies');
+    }
+    if (!isset($tabla[$clave])) return array('ok' => false, 'falta' => $clave . ' no está en la tabla · lo ve JP', 'jp' => true);
+    if (trim((string) ($d['color'] ?? '')) === '') return array('ok' => false, 'falta' => 'el color');
+    return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave]);
+}
+
+/** Los datos del PDF, con la misma forma que usa el cotizador de la home. */
+function deckeva_wa_cotiza_datos_pdf(array $d, array $listo, $numero, $telefono) {
+    $meses = array(1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre');
+    $hoy = new DateTimeImmutable('now', new DateTimeZone('America/Santiago'));
+    $iva = (int) round($listo['precio'] * 0.19);
+    $tamano = ctype_digit($listo['clave']) ? $listo['clave'] . ' pies' : ($listo['clave'] === 'moto-normal' ? 'Moto de agua normal' : 'Moto de agua mediana a grande');
+    if (class_exists('Deckeva_Cotizador') && method_exists('Deckeva_Cotizador', 'tamano_texto')) {
+        $t = Deckeva_Cotizador::tamano_texto($listo['clave']);
+        if (is_string($t) && $t !== '') $tamano = $t;
+    }
+    return array(
+        'numero' => $numero,
+        'fecha' => $hoy->format('j') . ' de ' . $meses[(int) $hoy->format('n')] . ' de ' . $hoy->format('Y'),
+        'cliente' => array('nombre' => trim($d['nombre'] . ' ' . ($d['apellido'] ?? '')), 'email' => strtolower(trim($d['email'])), 'telefono' => '+' . $telefono, 'pais' => trim((string) ($d['pais'] ?? '')) ?: 'Chile'),
+        'embarcacion' => array('tamano' => $tamano, 'modelo' => trim(($d['marca'] ?? '') . ' ' . ($d['modelo'] ?? '')), 'anio' => (string) ($d['anio'] ?? ''), 'color' => (string) ($d['color'] ?? '')),
+        'precio' => array('a_consultar' => false, 'subtotal' => deckeva_wa_cotiza_clp($listo['precio']), 'iva' => deckeva_wa_cotiza_clp($iva), 'total' => deckeva_wa_cotiza_clp($listo['precio'] + $iva), 'ref_usd' => '', 'tipo_cambio' => ''),
+    );
+}
+
+/**
+ * Una pasada · la llama deckeva_wa_pasada() cada minuto. A lo más dos lecturas de
+ * Claude por pasada. Todo lo que cambia un chat se guarda con el candado y sólo si
+ * nadie lo tocó mientras tanto.
+ */
+function deckeva_wa_cotiza_pasada() {
+    $lecturas = 0;
+    $tabla = null;
+    foreach (array_keys(deckeva_wa_chats()) as $num) {
+        $num = (string) $num;
+        $chat = deckeva_wa_chats()[$num] ?? null;
+        if (!is_array($chat)) continue;
+        $c = $chat['cotizacion'] ?? null;
+
+        // 1 · Mandar lo aprobado, a su hora.
+        if (is_array($c) && ($c['estado'] ?? '') === 'aprobada') {
+            if (time() >= (int) $c['en'] && deckeva_wa_habil(time())) deckeva_wa_cotiza_enviar($num);
+            continue;
+        }
+        if (is_array($c) && in_array($c['estado'] ?? '', array('lista', 'enviada', 'descartada', 'error'), true)) continue;
+
+        // 2 · ¿Hay algo nuevo que leer? Sólo si el cliente dejó un correo y no
+        //     se leyó ya este mismo hilo.
+        $ultIn = 0; $escrito = '';
+        foreach ((array) $chat['mensajes'] as $m) if (($m['dir'] ?? '') === 'in') { $ultIn = max($ultIn, (int) $m['ts']); $escrito .= ' ' . $m['texto']; }
+        if ($ultIn === 0 || time() - $ultIn < DECKEVA_WA_SILENCIO || time() - $ultIn > 7 * 86400) continue;
+        if (!preg_match('/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/', $escrito)) continue;
+        if (is_array($c) && (int) ($c['leido_hasta'] ?? 0) >= $ultIn) continue;
+        if ($lecturas >= 2) break;
+        $lecturas++;
+
+        if ($tabla === null) $tabla = deckeva_wa_cotiza_tabla();
+        $huella = deckeva_wa_huella($chat);
+        $r = deckeva_wa_cotiza_leer((array) $chat['mensajes']);
+        if (!$r['ok']) continue;
+        $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla);
+        $nueva = array('estado' => 'incompleta', 'leido_hasta' => $ultIn, 'falta' => $listo['falta'] ?? '', 'jp' => !empty($listo['jp']));
+        $pdfBytes = null;
+        if ($listo['ok']) {
+            $numero = 'DCK-WA-' . (new DateTimeImmutable('now', new DateTimeZone('America/Santiago')))->format('YmdHis') . '-' . strtoupper(substr(md5($num . '|' . $ultIn), 0, 5));
+            $datos = deckeva_wa_cotiza_datos_pdf($r['d'], $listo, $numero, $num);
+            $pdfBytes = (class_exists('Deckeva_Cotizador') && method_exists('Deckeva_Cotizador', 'pdf_diseno_nuevo')) ? Deckeva_Cotizador::pdf_diseno_nuevo($datos) : null;
+            if (!is_string($pdfBytes) || strncmp($pdfBytes, '%PDF', 4) !== 0) {
+                $nueva = array('estado' => 'incompleta', 'leido_hasta' => $ultIn, 'falta' => 'no se pudo generar el PDF · lo ve JP', 'jp' => true);
+            } else {
+                $up = wp_upload_dir(null, false);
+                $dir = trailingslashit($up['basedir']) . 'cotizaciones-intl';
+                if (!is_dir($dir)) wp_mkdir_p($dir);
+                $archivo = 'DECKEVA-Cotizacion-' . $numero . '-' . md5(wp_generate_password(32, false)) . '.pdf';
+                file_put_contents($dir . '/' . $archivo, $pdfBytes);
+                $auto = deckeva_wa_cotiza_modo() === 'automatico';
+                $semilla = $num . '|' . $ultIn . '|cotiza';
+                $nueva = array(
+                    'estado' => $auto ? 'aprobada' : 'lista', 'numero' => $numero, 'leido_hasta' => $ultIn,
+                    'pdf' => $dir . '/' . $archivo, 'pdf_url' => trailingslashit($up['baseurl']) . 'cotizaciones-intl/' . $archivo,
+                    'datos' => $datos, 'creada' => time(),
+                    'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
+                    'aprobada_por' => $auto ? 'automático' : '',
+                );
+            }
+        }
+        $guardado = false;
+        deckeva_wa_con_candado(function ($chats) use ($num, $huella, $nueva, &$guardado) {
+            if (!isset($chats[$num]) || deckeva_wa_huella($chats[$num]) !== $huella) return $chats;
+            $chats[$num]['cotizacion'] = $nueva;
+            deckeva_wa_anotar($chats[$num], ($nueva['numero'] ?? 'cotización') . ' · ' . $nueva['estado'] . (($nueva['falta'] ?? '') !== '' ? ' · falta ' . $nueva['falta'] : ''));
+            $guardado = true;
+            return $chats;
+        });
+        if (!$guardado && isset($nueva['pdf'])) @unlink($nueva['pdf']);
+        if ($guardado && ($nueva['estado'] === 'lista' || !empty($nueva['jp']))) deckeva_wa_cotiza_avisar_jp($num, $nueva);
+    }
+}
+
+/** El correo al cliente · desde contacto@deckeva.cl, con copia oculta a JP. */
+function deckeva_wa_cotiza_enviar($num) {
+    $c = deckeva_wa_chats()[$num]['cotizacion'] ?? null;
+    if (!is_array($c) || ($c['estado'] ?? '') !== 'aprobada' || !is_readable((string) $c['pdf'])) return false;
+    $d = $c['datos'];
+    $nombre = strtok((string) $d['cliente']['nombre'], ' ');
+    $bote = trim((string) $d['embarcacion']['modelo']) !== '' ? 'tu ' . $d['embarcacion']['modelo'] : 'tu embarcación';
+    $cuerpo = "Hola {$nombre},\n\n"
+        . "Te adjunto la cotización del piso de goma EVA para {$bote}, en {$d['embarcacion']['color']}, como me contaste por WhatsApp.\n\n"
+        . "La toma de medidas y la instalación las coordinamos contigo según dónde esté la embarcación.\n\n"
+        . "Cualquier duda, respóndeme este correo o escríbeme por WhatsApp.\n\n"
+        . "Juan Pablo\nDeckeva";
+    $html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#1a2a3a">' . wpautop(esc_html($cuerpo)) . '</div>';
+    $headers = function_exists('deckeva_mail_headers_cliente') ? deckeva_mail_headers_cliente($d['cliente']['email']) : array('Content-Type: text/html; charset=UTF-8');
+    $ok = wp_mail($d['cliente']['email'], 'Tu cotización Deckeva · ' . $c['numero'], $html, $headers, array($c['pdf']));
+    deckeva_wa_con_candado(function ($chats) use ($num, $c, $ok) {
+        $x = $chats[$num]['cotizacion'] ?? null;
+        if (!is_array($x) || ($x['numero'] ?? '') !== $c['numero']) return $chats;
+        if ($ok) { $x['estado'] = 'enviada'; $x['enviada_ts'] = time(); }
+        else { $x['intentos'] = (int) ($x['intentos'] ?? 0) + 1; if ($x['intentos'] >= 5) $x['estado'] = 'error'; }
+        $chats[$num]['cotizacion'] = $x;
+        deckeva_wa_anotar($chats[$num], $c['numero'] . ($ok ? ' enviada al correo del cliente' : ' no salió el correo (intento ' . $x['intentos'] . ')'));
+        return $chats;
+    });
+    if ($ok && function_exists('deckeva_record_lead')) {
+        deckeva_record_lead('whatsapp', array('Cotización' => $c['numero'], 'Nombre' => $d['cliente']['nombre'], 'Email' => $d['cliente']['email'], 'Teléfono' => $d['cliente']['telefono'], 'Embarcación' => $d['embarcacion']['modelo'] . ' · ' . $d['embarcacion']['tamano'], 'Total' => $d['precio']['total'], 'Vía' => 'WhatsApp · ' . ($c['aprobada_por'] ?: 'JP')));
+    }
+    return $ok;
+}
+
+function deckeva_wa_cotiza_avisar_jp($num, array $c) {
+    $lnk = admin_url('options-general.php?page=deckeva-whatsapp');
+    if (($c['estado'] ?? '') === 'lista') {
+        $d = $c['datos'];
+        $html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#111">'
+            . '<p>Cotización lista para +' . esc_html($num) . ', armada con los datos que dejó por WhatsApp y el precio de la tabla del home.</p>'
+            . '<p><b>' . esc_html($d['cliente']['nombre']) . '</b> · ' . esc_html($d['embarcacion']['modelo']) . ' · ' . esc_html($d['embarcacion']['tamano']) . ' · ' . esc_html($d['embarcacion']['color']) . '<br>Total ' . esc_html($d['precio']['total']) . ' (IVA incluido)</p>'
+            . '<p>Sale al cliente cuando apretes «Enviar». El PDF va adjunto para que lo revises.</p>'
+            . '<p><a href="' . esc_url($lnk) . '" style="background:#0e6ba8;color:#fff;padding:9px 16px;border-radius:6px;text-decoration:none">Revisar y enviar</a></p></div>';
+        wp_mail(deckeva_wa_aprobador(), 'Cotización ' . $c['numero'] . ' lista · ' . $d['cliente']['nombre'], $html, deckeva_mail_headers(), array($c['pdf']));
+    } else {
+        $html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#111"><p>El chat de +' . esc_html($num) . ' pidió cotización y no se puede armar sola: ' . esc_html($c['falta']) . '.</p>'
+            . '<p><a href="' . esc_url($lnk) . '">WhatsApp Deckeva</a></p></div>';
+        wp_mail(deckeva_wa_aprobador(), '⚠ Cotización para revisar · +' . $num, $html, deckeva_mail_headers());
+    }
+}
+
+/** Enviar o descartar desde wp-admin · la cotización que JP estaba mirando. */
+add_action('admin_post_deckeva_wa_cotiza', function () {
+    if (!current_user_can('manage_options')) wp_die('No autorizado');
+    check_admin_referer('deckeva_wa_cotiza');
+    $accion = sanitize_key($_POST['accion'] ?? '');
+    $msg = '';
+    if ($accion === 'modo') {
+        update_option('deckeva_wa_cotiza_modo', ($_POST['modo'] ?? '') === 'automatico' ? 'automatico' : 'borrador', false);
+        $msg = 'Guardado.';
+    } else {
+        $num = preg_replace('/\D+/', '', (string) ($_POST['numero'] ?? ''));
+        $numero = sanitize_text_field(wp_unslash($_POST['cotizacion'] ?? ''));
+        deckeva_wa_con_candado(function ($chats) use ($num, $numero, $accion, &$msg) {
+            $c = $chats[$num]['cotizacion'] ?? null;
+            if (!is_array($c) || ($c['estado'] ?? '') !== 'lista' || ($c['numero'] ?? '') !== $numero) { $msg = 'Esa cotización ya no está esperando.'; return $chats; }
+            if ($accion === 'enviar') { $c['estado'] = 'aprobada'; $c['aprobada_por'] = 'JP · wp-admin'; $c['en'] = max((int) $c['en'], time()); $msg = 'Aprobada · sale en el próximo minuto hábil.'; }
+            elseif ($accion === 'descartar') { $c['estado'] = 'descartada'; $msg = 'Descartada · no sale.'; }
+            $chats[$num]['cotizacion'] = $c;
+            deckeva_wa_anotar($chats[$num], $numero . ' ' . ($accion === 'enviar' ? 'aprobada por JP' : 'descartada'));
+            return $chats;
+        });
+    }
+    wp_safe_redirect(add_query_arg('msg', rawurlencode($msg), admin_url('options-general.php?page=deckeva-whatsapp')));
+    exit;
+});
+
+/** La sección de cotizaciones en Ajustes → WhatsApp Deckeva. */
+function deckeva_wa_cotiza_pantalla() {
+    echo '<h2>Cotizaciones desde WhatsApp</h2><p>' . (deckeva_wa_cotiza_modo() === 'automatico'
+        ? '<b>Automático</b>: la cotización sale sola al correo del cliente, 1 a 40 minutos después de su último mensaje.'
+        : '<b>Borrador</b>: se arma sola y te espera acá; sale cuando aprietas «Enviar».') . '</p>';
+    foreach (deckeva_wa_chats() as $num => $chat) {
+        $c = $chat['cotizacion'] ?? null;
+        if (!is_array($c) || ($c['estado'] ?? '') !== 'lista') continue;
+        $d = $c['datos'];
+        echo '<div class="card" style="max-width:780px"><h3>+' . esc_html($num) . ' · ' . esc_html($c['numero']) . '</h3><p>'
+            . esc_html($d['cliente']['nombre'] . ' · ' . $d['cliente']['email']) . '<br>' . esc_html($d['embarcacion']['modelo'] . ' · ' . $d['embarcacion']['tamano'] . ' · ' . $d['embarcacion']['color'])
+            . '<br><b>Total ' . esc_html($d['precio']['total']) . '</b> · <a href="' . esc_url($c['pdf_url']) . '" target="_blank" rel="noopener">ver PDF</a></p>'
+            . '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
+        wp_nonce_field('deckeva_wa_cotiza');
+        echo '<input type="hidden" name="action" value="deckeva_wa_cotiza"><input type="hidden" name="numero" value="' . esc_attr($num) . '"><input type="hidden" name="cotizacion" value="' . esc_attr($c['numero']) . '">'
+            . '<button class="button button-primary" name="accion" value="enviar">Enviar al cliente</button> <button class="button" name="accion" value="descartar">Descartar</button></form></div>';
+    }
+    echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
+    wp_nonce_field('deckeva_wa_cotiza');
+    echo '<input type="hidden" name="action" value="deckeva_wa_cotiza"><input type="hidden" name="accion" value="modo"><p>Modo de las cotizaciones: <select name="modo">'
+        . '<option value="borrador"' . selected(deckeva_wa_cotiza_modo(), 'borrador', false) . '>Borrador · salen cuando las envío</option>'
+        . '<option value="automatico"' . selected(deckeva_wa_cotiza_modo(), 'automatico', false) . '>Automático · salen solas</option></select> '
+        . '<button class="button">Guardar</button></p></form>';
+}
