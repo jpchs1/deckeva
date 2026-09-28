@@ -114,7 +114,34 @@ function deckeva_wa_legible($t) {
 // LOS CHATS · una opción, sin autoload
 // =============================================
 
-function deckeva_wa_chats() { $c = get_option('deckeva_wa_chats', array()); return is_array($c) ? $c : array(); }
+function deckeva_wa_chats() {
+    // Lectura fresca: otra petición pudo escribir recién (la caché de opciones no se entera).
+    wp_cache_delete('deckeva_wa_chats', 'options');
+    $c = get_option('deckeva_wa_chats', array());
+    return is_array($c) ? $c : array();
+}
+
+/**
+ * Toda escritura pasa por acá, con un candado corto: la entrada, el panel y la
+ * pasada escriben la misma opción, y sin esto la última en guardar pisaba a
+ * las otras (un mensaje nuevo o una aprobación desaparecían). Lo lento, la
+ * llamada a Claude, queda FUERA del candado.
+ */
+function deckeva_wa_con_candado($cambio) {
+    $dir = wp_upload_dir(null, false);
+    $f = @fopen(trailingslashit($dir['basedir']) . '.deckeva-wa.lock', 'c');
+    if ($f) flock($f, LOCK_EX);
+    try {
+        deckeva_wa_guardar($cambio(deckeva_wa_chats()));
+    } finally {
+        if ($f) { flock($f, LOCK_UN); fclose($f); }
+    }
+}
+
+/** Lo que importa de un chat: si cambia entre leer y guardar, no se guarda. */
+function deckeva_wa_huella($chat) {
+    return md5(wp_json_encode(array($chat['mensajes'] ?? array(), $chat['pendiente'] ?? null)));
+}
 function deckeva_wa_guardar($chats) {
     // Se guardan los 200 chats más recientes: un historial infinito en una opción no escala.
     uasort($chats, function ($a, $b) { return ((int) ($b['actualizado'] ?? 0)) <=> ((int) ($a['actualizado'] ?? 0)); });
@@ -165,14 +192,23 @@ function deckeva_wa_entrada($d) {
     if (!preg_match('/^\d{8,15}$/', $num)) return;
     $msgs = array();
     foreach ((array) ($d['mensajes'] ?? array()) as $m) {
-        $msgs[] = array('ts' => (int) ($m['ts'] ?? 0), 'dir' => ($m['dir'] ?? '') === 'in' ? 'in' : 'out', 'texto' => mb_substr((string) ($m['texto'] ?? ''), 0, 2000));
+        $ts = (int) ($m['ts'] ?? 0);
+        // Una hora en el futuro alargaría la ventana de 24 h: no se acepta.
+        if ($ts <= 0 || $ts > time() + 300) continue;
+        $msgs[] = array('ts' => $ts, 'dir' => ($m['dir'] ?? '') === 'in' ? 'in' : 'out', 'texto' => mb_substr((string) ($m['texto'] ?? ''), 0, 2000));
     }
-    $chats = deckeva_wa_chats();
-    $chat = $chats[$num] ?? array('numero' => $num, 'pendiente' => null, 'historial' => array());
-    $chat['mensajes'] = array_slice($msgs, -30);
-    $chat['actualizado'] = time();
-    $chats[$num] = $chat;
-    deckeva_wa_guardar($chats);
+    if (!$msgs) return;
+    $ultimo = max(array_column($msgs, 'ts'));
+    deckeva_wa_con_candado(function ($chats) use ($num, $msgs, $ultimo) {
+        $chat = $chats[$num] ?? array('numero' => $num, 'pendiente' => null, 'historial' => array(), 'mensajes' => array());
+        $antes = !empty($chat['mensajes']) ? max(array_column($chat['mensajes'], 'ts')) : 0;
+        // Una foto más vieja que la que ya hay (entregas desordenadas) no pisa.
+        if ($ultimo < $antes) return $chats;
+        $chat['mensajes'] = array_slice($msgs, -30);
+        $chat['actualizado'] = time();
+        $chats[$num] = $chat;
+        return $chats;
+    });
 }
 
 // =============================================
@@ -181,68 +217,117 @@ function deckeva_wa_entrada($d) {
 
 function deckeva_wa_pasada() {
     if (deckeva_wa_llave() === '' || strlen(deckeva_wa_secreto()) < 24) return;
+    foreach (array_keys(deckeva_wa_chats()) as $num) {
+        deckeva_wa_un_chat((string) $num); // un número como clave de array PHP lo vuelve entero
+    }
+}
+
+/**
+ * Un chat: se lee, se decide (Claude, si toca, FUERA del candado) y se guarda
+ * sólo si nadie lo tocó mientras tanto. Si entró un mensaje o JP aprobó en el
+ * medio, no se guarda nada y la próxima pasada lo mira con lo nuevo.
+ */
+function deckeva_wa_un_chat($num) {
     $ahora = time();
     $chats = deckeva_wa_chats();
-    foreach ($chats as $num => $chat) {
-        $num = (string) $num; // un número como clave de array PHP lo vuelve entero
-        $ultIn = 0; $ultOut = 0;
-        foreach ((array) ($chat['mensajes'] ?? array()) as $m) {
-            if ($m['dir'] === 'in') $ultIn = max($ultIn, (int) $m['ts']); else $ultOut = max($ultOut, (int) $m['ts']);
-        }
-        $p = $chat['pendiente'] ?? null;
-        $activo = is_array($p) && in_array($p['estado'] ?? '', array('borrador', 'aprobado'), true);
-
-        if ($ultIn === 0) continue;
-        if ($ultOut >= $ultIn) {
-            if ($activo) { $p['estado'] = 'superado'; $chat['pendiente'] = $p; deckeva_wa_anotar($chat, $p['id'] . ' no sale · alguien le contestó antes'); }
-            $chats[$num] = $chat; continue;
-        }
-        if ($ahora - $ultIn > DECKEVA_WA_VENCE) {
-            if ($activo) { $p['estado'] = 'vencido'; $chat['pendiente'] = $p; deckeva_wa_anotar($chat, $p['id'] . ' vencido · más de 23 h'); }
-            $chats[$num] = $chat; continue;
-        }
-        if ($activo && (int) $p['para_ts'] < $ultIn) {
-            $p['estado'] = 'reemplazado'; deckeva_wa_anotar($chat, $p['id'] . ' reemplazado · el cliente volvió a escribir'); $activo = false;
-        }
-
-        // ¿Hay que redactar?
-        if (!is_array($p) || (int) $p['para_ts'] < $ultIn) {
-            if ($ahora - $ultIn < DECKEVA_WA_SILENCIO) { $chats[$num] = $chat; continue; }
-            $r = deckeva_wa_redactar((array) $chat['mensajes']);
-            if (!$r['ok']) { deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']); $chats[$num] = $chat; continue; }
-            $id = 'D-' . strtoupper(substr(base_convert(substr(hash('sha256', $num . '|' . $ultIn), 0, 10), 16, 36), 0, 4));
-            if (!$r['responder'] || $r['texto'] === '') {
-                $chat['pendiente'] = array('id' => $id, 'para_ts' => $ultIn, 'estado' => 'sin_respuesta', 'motivo' => $r['motivo']);
-                deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
-                $chats[$num] = $chat; continue;
+    if (!isset($chats[$num])) return;
+    $chat = $chats[$num];
+    $original = $chat;
+    $huella = deckeva_wa_huella($chat);
+    $salida = null;
+    $avisar = false;
+    do {
+            $ultIn = 0; $ultOut = 0;
+            foreach ((array) ($chat['mensajes'] ?? array()) as $m) {
+                if ($m['dir'] === 'in') $ultIn = max($ultIn, (int) $m['ts']); else $ultOut = max($ultOut, (int) $m['ts']);
             }
-            $regla = deckeva_wa_validar($r['texto']);
-            $auto = deckeva_wa_modo() === 'automatico' && !$r['necesita_humano'] && $regla === '';
-            $semilla = $num . '|' . $ultIn;
-            $p = array(
-                'id' => $id, 'para_ts' => $ultIn, 'texto' => $r['texto'],
-                'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
-                'estado' => $auto ? 'aprobado' : 'borrador', 'necesita_humano' => $r['necesita_humano'],
-                'motivo' => $r['motivo'], 'regla' => $regla,
-            );
-            if ($auto) $p['aprobado_por'] = 'automático';
-            $chat['pendiente'] = $p;
-            deckeva_wa_anotar($chat, $id . ' redactado · ' . ($auto ? 'sale solo ' . deckeva_wa_legible($p['en']) : 'espera a JP'));
-            if (!$auto) deckeva_wa_avisar_jp($chat);
-        }
+            $p = $chat['pendiente'] ?? null;
+            $activo = is_array($p) && in_array($p['estado'] ?? '', array('borrador', 'aprobado'), true);
 
-        // A su hora, mandar lo aprobado por la puerta de tourevo.cl.
-        if (($p['estado'] ?? '') === 'aprobado' && (int) $p['para_ts'] === $ultIn && $ahora >= (int) $p['en'] && deckeva_wa_habil($ahora)) {
-            $w = deckeva_wa_mandar($num, (string) $p['texto'], (string) $p['id'], (string) ($p['aprobado_por'] ?? 'JP'));
-            $p['estado'] = $w['ok'] ? 'enviado' : 'error';
-            if (!$w['ok']) $p['error'] = $w['error'];
-            $p['enviado_ts'] = $ahora;
-            $chat['pendiente'] = $p;
-            deckeva_wa_anotar($chat, $p['id'] . ($w['ok'] ? ' entregado a la puerta · sale en el próximo minuto' : ' NO salió · ' . $w['error']));
-        }
-        $chats[$num] = $chat;
+            if ($ultIn === 0) break;
+            if ($ultOut >= $ultIn) {
+                if ($activo) { $p['estado'] = 'superado'; $chat['pendiente'] = $p; deckeva_wa_anotar($chat, $p['id'] . ' no sale · alguien le contestó antes'); }
+                break;
+            }
+            if ($ahora - $ultIn > DECKEVA_WA_VENCE) {
+                if ($activo) { $p['estado'] = 'vencido'; $chat['pendiente'] = $p; deckeva_wa_anotar($chat, $p['id'] . ' vencido · más de 23 h'); }
+                break;
+            }
+            if ($activo && (int) $p['para_ts'] < $ultIn) {
+                $p['estado'] = 'reemplazado'; deckeva_wa_anotar($chat, $p['id'] . ' reemplazado · el cliente volvió a escribir'); $activo = false;
+            }
+
+            // ¿Hay que redactar?
+            if (!is_array($p) || (int) $p['para_ts'] < $ultIn) {
+                if ($ahora - $ultIn < DECKEVA_WA_SILENCIO) break;
+                $r = deckeva_wa_redactar((array) $chat['mensajes']);
+                if (!$r['ok']) { deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']); break; }
+                $id = 'D-' . strtoupper(substr(base_convert(substr(hash('sha256', $num . '|' . $ultIn), 0, 10), 16, 36), 0, 4));
+                if (!$r['responder'] || $r['texto'] === '') {
+                    $chat['pendiente'] = array('id' => $id, 'para_ts' => $ultIn, 'estado' => 'sin_respuesta', 'motivo' => $r['motivo']);
+                    deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
+                    break;
+                }
+                $regla = deckeva_wa_validar($r['texto']);
+                $auto = deckeva_wa_modo() === 'automatico' && !$r['necesita_humano'] && $regla === '';
+                $semilla = $num . '|' . $ultIn;
+                $p = array(
+                    'id' => $id, 'para_ts' => $ultIn, 'texto' => $r['texto'],
+                    'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
+                    'estado' => $auto ? 'aprobado' : 'borrador', 'necesita_humano' => $r['necesita_humano'],
+                    'motivo' => $r['motivo'], 'regla' => $regla,
+                );
+                if ($auto) $p['aprobado_por'] = 'automático';
+                $chat['pendiente'] = $p;
+                deckeva_wa_anotar($chat, $id . ' redactado · ' . ($auto ? 'sale solo ' . deckeva_wa_legible($p['en']) : 'espera a JP'));
+                $avisar = !$auto;
+            }
+
+            // A su hora, mandar lo aprobado por la puerta de tourevo.cl.
+            if (($p['estado'] ?? '') === 'aprobado' && (int) $p['para_ts'] === $ultIn && $ahora >= (int) $p['en'] && deckeva_wa_habil($ahora)) {
+                $salida = $p;
+            }
+    } while (false);
+
+    $guardado = false;
+    if ($chat !== $original) {
+        deckeva_wa_con_candado(function ($chats) use ($num, $chat, $huella, &$guardado) {
+            if (!isset($chats[$num]) || deckeva_wa_huella($chats[$num]) !== $huella) return $chats;
+            $chats[$num] = $chat;
+            $guardado = true;
+            return $chats;
+        });
+        // El correo a JP sale DESPUÉS de guardar: si el chat cambió en el medio
+        // no se guardó nada, y la próxima pasada redacta y avisa una sola vez.
+        if ($guardado && $avisar) deckeva_wa_avisar_jp($chat);
+        if (!$guardado) return;
     }
-    deckeva_wa_guardar($chats);
+    if ($salida === null) return;
+
+    // A su hora, lo aprobado sale por la puerta de tourevo.cl. El ref es el id
+    // del borrador y la puerta no encola dos veces el mismo: reintentar después
+    // de una caída no duplica el mensaje.
+    $w = deckeva_wa_mandar($num, (string) $salida['texto'], (string) $salida['id'], (string) ($salida['aprobado_por'] ?? 'JP'));
+    deckeva_wa_con_candado(function ($chats) use ($num, $salida, $w, $ahora) {
+        $c = $chats[$num] ?? null;
+        if (!is_array($c) || ($c['pendiente']['id'] ?? '') !== $salida['id']) return $chats;
+        $p = $c['pendiente'];
+        if ($w['ok']) {
+            $p['estado'] = 'enviado';
+            $p['enviado_ts'] = $ahora;
+            deckeva_wa_anotar($c, $p['id'] . ' entregado a la puerta · sale en el próximo minuto');
+        } else {
+            // Una caída de la puerta no pierde la respuesta: sigue aprobada y se
+            // reintenta en las pasadas siguientes, hasta 10 veces.
+            $p['intentos'] = (int) ($p['intentos'] ?? 0) + 1;
+            $p['error'] = $w['error'];
+            if ($p['intentos'] >= 10) $p['estado'] = 'error';
+            deckeva_wa_anotar($c, $p['id'] . ' no salió (intento ' . $p['intentos'] . ') · ' . $w['error']);
+        }
+        $c['pendiente'] = $p;
+        $chats[$num] = $c;
+        return $chats;
+    });
 }
 
 // =============================================
@@ -359,25 +444,32 @@ add_action('admin_post_deckeva_wa', function () {
         $msg = 'Guardado.';
     } else {
         $num = preg_replace('/\D+/', '', (string) ($_POST['numero'] ?? ''));
-        $chats = deckeva_wa_chats();
-        $chat = $chats[$num] ?? null;
-        $p = is_array($chat) ? ($chat['pendiente'] ?? null) : null;
-        if (!is_array($p) || ($p['estado'] ?? '') !== 'borrador') {
-            $msg = 'Ese borrador ya no está esperando.';
-        } elseif ($accion === 'descartar') {
-            $p['estado'] = 'descartado'; $chat['pendiente'] = $p; deckeva_wa_anotar($chat, $p['id'] . ' descartado'); $msg = 'Descartado · no sale nada.';
-        } elseif ($accion === 'aprobar') {
-            $texto = trim((string) wp_unslash($_POST['texto'] ?? ''));
-            $v = deckeva_wa_validar($texto);
-            if ($v !== '') {
-                $msg = 'No se aprobó: ' . $v . '.';
-            } else {
+        $id = sanitize_text_field(wp_unslash($_POST['id'] ?? ''));
+        $texto = trim((string) wp_unslash($_POST['texto'] ?? ''));
+        deckeva_wa_con_candado(function ($chats) use ($num, $id, $texto, $accion, &$msg) {
+            $chat = $chats[$num] ?? null;
+            $p = is_array($chat) ? ($chat['pendiente'] ?? null) : null;
+            // Se aprueba EL borrador que JP estaba mirando: si el cliente volvió
+            // a escribir y ya hay otro, el formulario viejo no lo aprueba.
+            if (!is_array($p) || ($p['estado'] ?? '') !== 'borrador' || ($p['id'] ?? '') !== $id) {
+                $msg = 'Ese borrador ya no está esperando (el cliente pudo volver a escribir). Mira el nuevo.';
+                return $chats;
+            }
+            if ($accion === 'descartar') {
+                $p['estado'] = 'descartado';
+                deckeva_wa_anotar($chat, $p['id'] . ' descartado');
+                $msg = 'Descartado · no sale nada.';
+            } elseif ($accion === 'aprobar') {
+                $v = deckeva_wa_validar($texto);
+                if ($v !== '') { $msg = 'No se aprobó: ' . $v . '.'; return $chats; }
                 $p['texto'] = $texto; $p['estado'] = 'aprobado'; $p['aprobado_por'] = 'JP · wp-admin';
-                $chat['pendiente'] = $p; deckeva_wa_anotar($chat, $p['id'] . ' aprobado · sale ' . deckeva_wa_legible(max((int) $p['en'], time())));
+                deckeva_wa_anotar($chat, $p['id'] . ' aprobado');
                 $msg = 'Aprobado · sale ' . deckeva_wa_legible(max((int) $p['en'], time())) . '.';
             }
-        }
-        if (is_array($chat)) { $chats[$num] = $chat; deckeva_wa_guardar($chats); }
+            $chat['pendiente'] = $p;
+            $chats[$num] = $chat;
+            return $chats;
+        });
     }
     wp_safe_redirect(add_query_arg('msg', rawurlencode($msg), admin_url('options-general.php?page=deckeva-whatsapp')));
     exit;
@@ -404,7 +496,7 @@ function deckeva_wa_pantalla() {
         if (!empty($p['regla'])) echo '<p style="color:#b45309">No pasa las reglas: ' . esc_html($p['regla']) . '</p>';
         echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
         wp_nonce_field('deckeva_wa');
-        echo '<input type="hidden" name="action" value="deckeva_wa"><input type="hidden" name="numero" value="' . esc_attr($num) . '">'
+        echo '<input type="hidden" name="action" value="deckeva_wa"><input type="hidden" name="numero" value="' . esc_attr($num) . '"><input type="hidden" name="id" value="' . esc_attr($p['id']) . '">'
             . '<textarea name="texto" rows="4" style="width:100%">' . esc_textarea($p['texto']) . '</textarea>'
             . '<p><button class="button button-primary" name="accion" value="aprobar">Aprobar · sale ' . esc_html(deckeva_wa_legible(max((int) $p['en'], time()))) . '</button> '
             . '<button class="button" name="accion" value="descartar">Descartar</button></p></form></div>';
