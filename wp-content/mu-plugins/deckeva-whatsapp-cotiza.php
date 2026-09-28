@@ -127,6 +127,10 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla) {
     $tipo = (string) ($d['tipo'] ?? '');
     if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · lo ve JP', 'jp' => true);
     if ($tipo === 'moto_normal' || $tipo === 'moto_grande') {
+        // El tamaño de la moto lo tiene que decir el cliente: «moto de agua» a
+        // secas no elige entre las dos tarifas.
+        $dijo = $tipo === 'moto_normal' ? '/\b(normal|est[aá]ndar|chica|peque[nñ]a)\b/u' : '/\b(grande|mediana)\b/u';
+        if (!preg_match('/\bmoto/u', $escrito) || !preg_match($dijo, $escrito)) return array('ok' => false, 'falta' => 'el tamaño de la moto de agua · lo ve JP', 'jp' => true);
         $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
     } else {
         $largo = str_replace(',', '.', trim((string) ($d['largo'] ?? '')));
@@ -179,21 +183,22 @@ function deckeva_wa_cotiza_pasada() {
         $chat = deckeva_wa_chats()[$num] ?? null;
         if (!is_array($chat)) continue;
         $c = $chat['cotizacion'] ?? null;
+        $ultIn = 0; $escrito = '';
+        foreach ((array) $chat['mensajes'] as $m) if (($m['dir'] ?? '') === 'in') { $ultIn = max($ultIn, (int) $m['ts']); $escrito .= ' ' . $m['texto']; }
+        // ¿Escribió algo desde la última vez que se leyó este chat? Si corrigió
+        // el largo, el color o el correo, la cotización se rehace (abajo).
+        $nuevo = !is_array($c) || $ultIn > (int) ($c['leido_hasta'] ?? 0);
 
-        // 1 · Mandar lo aprobado, a su hora.
-        if (is_array($c) && ($c['estado'] ?? '') === 'aprobada') {
+        // 1 · Mandar lo aprobado, a su hora · sólo si no escribió nada después.
+        if (is_array($c) && ($c['estado'] ?? '') === 'aprobada' && !$nuevo) {
             if (time() >= (int) $c['en'] && deckeva_wa_habil(time()) && deckeva_wa_cotiza_cupo()) deckeva_wa_cotiza_enviar($num);
             continue;
         }
-        if (is_array($c) && in_array($c['estado'] ?? '', array('lista', 'enviada', 'descartada', 'error'), true)) continue;
+        if (!$nuevo) continue;
 
-        // 2 · ¿Hay algo nuevo que leer? Sólo si el cliente dejó un correo y no
-        //     se leyó ya este mismo hilo.
-        $ultIn = 0; $escrito = '';
-        foreach ((array) $chat['mensajes'] as $m) if (($m['dir'] ?? '') === 'in') { $ultIn = max($ultIn, (int) $m['ts']); $escrito .= ' ' . $m['texto']; }
+        // 2 · Leer, sólo si el cliente dejó un correo y ya terminó de escribir.
         if ($ultIn === 0 || time() - $ultIn < DECKEVA_WA_SILENCIO || time() - $ultIn > 7 * 86400) continue;
         if (!preg_match('/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/', $escrito)) continue;
-        if (is_array($c) && (int) ($c['leido_hasta'] ?? 0) >= $ultIn) continue;
         if ($lecturas >= 2) break;
         $lecturas++;
 
@@ -202,6 +207,18 @@ function deckeva_wa_cotiza_pasada() {
         $r = deckeva_wa_cotiza_leer((array) $chat['mensajes']);
         if (!$r['ok']) continue;
         $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla);
+        $firma = $listo['ok'] ? implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])))) : '';
+        $armada = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada', 'enviada', 'descartada'), true);
+        // Ya hay una cotización y lo nuevo no cambia nada (un «gracias», una
+        // pregunta): se queda la que está, sin otro PDF ni otro correo. Si lo
+        // nuevo no alcanza para cotizar, tampoco se deshace la que había.
+        if ($armada && ($firma === '' || $firma === ($c['firma'] ?? ''))) {
+            deckeva_wa_con_candado(function ($chats) use ($num, $ultIn) {
+                if (isset($chats[$num]['cotizacion'])) $chats[$num]['cotizacion']['leido_hasta'] = max($ultIn, (int) ($chats[$num]['cotizacion']['leido_hasta'] ?? 0));
+                return $chats;
+            });
+            continue;
+        }
         $nueva = array('estado' => 'incompleta', 'leido_hasta' => $ultIn, 'falta' => $listo['falta'] ?? '', 'jp' => !empty($listo['jp']));
         $pdfBytes = null;
         if ($listo['ok']) {
@@ -227,7 +244,9 @@ function deckeva_wa_cotiza_pasada() {
                     'pdf' => $dir . '/' . $archivo,
                     'datos' => $datos, 'creada' => time(),
                     'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
-                    'aprobada_por' => $auto ? 'automático' : '',
+                    'aprobada_por' => $auto ? 'automático' : '', 'firma' => $firma,
+                    // La que reemplaza (el cliente cambió un dato), para que se vea.
+                    'reemplaza' => ($armada && ($c['estado'] ?? '') !== 'enviada') ? (string) ($c['numero'] ?? '') : '',
                 );
             }
         }
@@ -240,6 +259,7 @@ function deckeva_wa_cotiza_pasada() {
             return $chats;
         });
         if (!$guardado && isset($nueva['pdf'])) @unlink($nueva['pdf']);
+        if ($guardado && $armada && isset($nueva['pdf']) && ($c['estado'] ?? '') !== 'enviada' && !empty($c['pdf'])) @unlink((string) $c['pdf']);
         if ($guardado && ($nueva['estado'] === 'lista' || !empty($nueva['jp']))) deckeva_wa_cotiza_avisar_jp($num, $nueva);
     }
 }
