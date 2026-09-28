@@ -112,10 +112,16 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * inventó, no está, y no se cotiza.
  */
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla) {
-    $escrito = '';
-    foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') $escrito .= ' ' . mb_strtolower((string) $m['texto']);
+    $escrito = ''; $lineas = array();
+    foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') { $escrito .= ' ' . mb_strtolower((string) $m['texto']); $lineas[] = mb_strtolower(trim((string) $m['texto'])); }
+    // Sólo a quien la pidió: un cliente que dejó sus datos para otra cosa no
+    // recibe un PDF que nunca pidió.
+    if (empty($d['quiere_cotizacion'])) return array('ok' => false, 'falta' => 'que la pida (no pidió cotización)');
+    // El correo: el ÚLTIMO que escribió. Si corrigió uno mal escrito, gana el nuevo.
+    preg_match_all('/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/', $escrito, $mails);
+    $ultimo = $mails[0] ? end($mails[0]) : '';
     $email = strtolower(trim((string) ($d['email'] ?? '')));
-    if (!is_email($email) || strpos($escrito, $email) === false) return array('ok' => false, 'falta' => 'el correo');
+    if (!is_email($email) || $email !== $ultimo) return array('ok' => false, 'falta' => 'el correo');
     if (trim((string) ($d['nombre'] ?? '')) === '') return array('ok' => false, 'falta' => 'el nombre');
     if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
     $tipo = (string) ($d['tipo'] ?? '');
@@ -127,7 +133,14 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla) {
         if (!preg_match('/^(\d{1,2})(?:\.(\d+))?/', $largo, $lm)) return array('ok' => false, 'falta' => 'el largo en pies');
         if (isset($lm[2]) && (int) $lm[2] !== 0) return array('ok' => false, 'falta' => 'el largo es ' . $largo . ' pies, no un entero · lo ve JP', 'jp' => true);
         $clave = (string) (int) $lm[1];
-        if (!preg_match('/(?<!\d)' . preg_quote($clave, '/') . '(?!\d)/', $escrito)) return array('ok' => false, 'falta' => 'el largo en pies');
+        // El largo tiene que estar escrito COMO largo: «19 pies», «19 ft», «19'»,
+        // o el número solo en un mensaje. Un 19 dentro de «Glastron 195» o el 22
+        // de «22,4 pies» no cuentan. Si el cliente escribió decimales, va a JP.
+        $n = preg_quote($clave, '/');
+        if (preg_match('/(?<![\d.,])' . $n . '\s*[.,]\s*\d/', $escrito)) return array('ok' => false, 'falta' => 'el largo tiene decimales · lo ve JP', 'jp' => true);
+        $comoLargo = preg_match('/(?<![\d.,])' . $n . '(?![\d.,])\s*(pies|pie|ft|feet|\'|’)/u', $escrito);
+        foreach ($lineas as $l) if (preg_match('/^' . $n . '(\s*(pies|pie|ft|feet))?$/u', $l)) $comoLargo = true;
+        if (!$comoLargo) return array('ok' => false, 'falta' => 'el largo en pies');
     }
     if (!isset($tabla[$clave])) return array('ok' => false, 'falta' => $clave . ' no está en la tabla · lo ve JP', 'jp' => true);
     if (trim((string) ($d['color'] ?? '')) === '') return array('ok' => false, 'falta' => 'el color');
@@ -169,7 +182,7 @@ function deckeva_wa_cotiza_pasada() {
 
         // 1 · Mandar lo aprobado, a su hora.
         if (is_array($c) && ($c['estado'] ?? '') === 'aprobada') {
-            if (time() >= (int) $c['en'] && deckeva_wa_habil(time())) deckeva_wa_cotiza_enviar($num);
+            if (time() >= (int) $c['en'] && deckeva_wa_habil(time()) && deckeva_wa_cotiza_cupo()) deckeva_wa_cotiza_enviar($num);
             continue;
         }
         if (is_array($c) && in_array($c['estado'] ?? '', array('lista', 'enviada', 'descartada', 'error'), true)) continue;
@@ -198,16 +211,20 @@ function deckeva_wa_cotiza_pasada() {
             if (!is_string($pdfBytes) || strncmp($pdfBytes, '%PDF', 4) !== 0) {
                 $nueva = array('estado' => 'incompleta', 'leido_hasta' => $ultIn, 'falta' => 'no se pudo generar el PDF · lo ve JP', 'jp' => true);
             } else {
+                // Fuera de la web: la carpeta de leads está cerrada (Deny from all).
+                // El PDF tiene nombre, correo y teléfono; a JP y al cliente les
+                // llega adjunto, no por un link.
                 $up = wp_upload_dir(null, false);
-                $dir = trailingslashit($up['basedir']) . 'cotizaciones-intl';
+                $dir = trailingslashit($up['basedir']) . 'deckeva-leads/cotizaciones-wa';
                 if (!is_dir($dir)) wp_mkdir_p($dir);
-                $archivo = 'DECKEVA-Cotizacion-' . $numero . '-' . md5(wp_generate_password(32, false)) . '.pdf';
+                if (!file_exists($dir . '/.htaccess')) @file_put_contents($dir . '/.htaccess', "Order deny,allow\nDeny from all\n<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n");
+                $archivo = 'DECKEVA-Cotizacion-' . $numero . '.pdf';
                 file_put_contents($dir . '/' . $archivo, $pdfBytes);
                 $auto = deckeva_wa_cotiza_modo() === 'automatico';
                 $semilla = $num . '|' . $ultIn . '|cotiza';
                 $nueva = array(
                     'estado' => $auto ? 'aprobada' : 'lista', 'numero' => $numero, 'leido_hasta' => $ultIn,
-                    'pdf' => $dir . '/' . $archivo, 'pdf_url' => trailingslashit($up['baseurl']) . 'cotizaciones-intl/' . $archivo,
+                    'pdf' => $dir . '/' . $archivo,
                     'datos' => $datos, 'creada' => time(),
                     'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
                     'aprobada_por' => $auto ? 'automático' : '',
@@ -227,6 +244,22 @@ function deckeva_wa_cotiza_pasada() {
     }
 }
 
+/**
+ * El hosting deja de entregar correos externos pasados unos 25 por hora, y no
+ * avisa (CLAUDE.md). Cada cotización son dos (cliente y copia oculta), y hay
+ * formularios y avisos que comparten el cupo: a lo más 6 cotizaciones por hora.
+ * Las que no entran esperan a la hora siguiente.
+ */
+const DECKEVA_WA_COTIZA_POR_HORA = 6;
+function deckeva_wa_cotiza_cupo() {
+    $clave = 'deckeva_wa_cotiza_' . gmdate('YmdH');
+    return (int) get_transient($clave) < DECKEVA_WA_COTIZA_POR_HORA;
+}
+function deckeva_wa_cotiza_contar() {
+    $clave = 'deckeva_wa_cotiza_' . gmdate('YmdH');
+    set_transient($clave, (int) get_transient($clave) + 1, 2 * HOUR_IN_SECONDS);
+}
+
 /** El correo al cliente · desde contacto@deckeva.cl, con copia oculta a JP. */
 function deckeva_wa_cotiza_enviar($num) {
     $c = deckeva_wa_chats()[$num]['cotizacion'] ?? null;
@@ -241,6 +274,7 @@ function deckeva_wa_cotiza_enviar($num) {
         . "Juan Pablo\nDeckeva";
     $html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#1a2a3a">' . wpautop(esc_html($cuerpo)) . '</div>';
     $headers = function_exists('deckeva_mail_headers_cliente') ? deckeva_mail_headers_cliente($d['cliente']['email']) : array('Content-Type: text/html; charset=UTF-8');
+    deckeva_wa_cotiza_contar();
     $ok = wp_mail($d['cliente']['email'], 'Tu cotización Deckeva · ' . $c['numero'], $html, $headers, array($c['pdf']));
     deckeva_wa_con_candado(function ($chats) use ($num, $c, $ok) {
         $x = $chats[$num]['cotizacion'] ?? null;
@@ -311,7 +345,7 @@ function deckeva_wa_cotiza_pantalla() {
         $d = $c['datos'];
         echo '<div class="card" style="max-width:780px"><h3>+' . esc_html($num) . ' · ' . esc_html($c['numero']) . '</h3><p>'
             . esc_html($d['cliente']['nombre'] . ' · ' . $d['cliente']['email']) . '<br>' . esc_html($d['embarcacion']['modelo'] . ' · ' . $d['embarcacion']['tamano'] . ' · ' . $d['embarcacion']['color'])
-            . '<br><b>Total ' . esc_html($d['precio']['total']) . '</b> · <a href="' . esc_url($c['pdf_url']) . '" target="_blank" rel="noopener">ver PDF</a></p>'
+            . '<br><b>Total ' . esc_html($d['precio']['total']) . '</b> · el PDF te llegó al correo</p>'
             . '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
         wp_nonce_field('deckeva_wa_cotiza');
         echo '<input type="hidden" name="action" value="deckeva_wa_cotiza"><input type="hidden" name="numero" value="' . esc_attr($num) . '"><input type="hidden" name="cotizacion" value="' . esc_attr($c['numero']) . '">'
