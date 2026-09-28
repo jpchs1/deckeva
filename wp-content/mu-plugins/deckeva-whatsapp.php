@@ -245,6 +245,8 @@ function deckeva_wa_pasada() {
     foreach (array_keys(deckeva_wa_chats()) as $num) {
         deckeva_wa_un_chat((string) $num); // un número como clave de array PHP lo vuelve entero
     }
+    // La cotización formal en PDF (deckeva-whatsapp-cotiza.php).
+    if (function_exists('deckeva_wa_cotiza_pasada')) deckeva_wa_cotiza_pasada();
 }
 
 /**
@@ -287,7 +289,7 @@ function deckeva_wa_un_chat($num) {
                 if ($ahora - $ultIn < DECKEVA_WA_SILENCIO) break;
                 if (($GLOBALS['deckeva_wa_redacciones'] ?? 0) >= 5) break;
                 $GLOBALS['deckeva_wa_redacciones'] = ($GLOBALS['deckeva_wa_redacciones'] ?? 0) + 1;
-                $r = deckeva_wa_redactar((array) $chat['mensajes']);
+                $r = deckeva_wa_redactar((array) $chat['mensajes'], deckeva_wa_nota_cotizacion($chat));
                 if (!$r['ok']) { deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']); break; }
                 $id = 'D-' . strtoupper(substr(base_convert(substr(hash('sha256', $num . '|' . $ultIn), 0, 10), 16, 36), 0, 4));
                 if (!$r['responder'] || $r['texto'] === '') {
@@ -366,7 +368,7 @@ function deckeva_wa_sistema() {
         . "Lo que sabes de Deckeva:\n"
         . "- Fabrica pisos de goma EVA antideslizante a medida para lanchas, veleros, motos de agua y embarcaciones. Sitio: deckeva.cl, con cotizador en la web. Correo: contacto@deckeva.cl.\n"
         . "- Para cotizar un piso hace falta: marca, modelo, año y largo en pies de la embarcación, el color o diseño que quiere, dónde está la embarcación (ciudad o marina), y el nombre y el email del cliente.\n"
-        . "- La toma de medidas y la instalación se cobran aparte y su valor depende de dónde esté la embarcación; van detalladas en la cotización.\n"
+        . "- La toma de medidas y la instalación se coordinan aparte, según dónde esté la embarcación. Nunca digas su valor.\n"
         . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
         . "- La cotización formal llega por correo, en PDF. También la puede sacar solo en el cotizador de deckeva.cl.\n\n"
         . "Cómo se escribe:\n"
@@ -379,7 +381,19 @@ function deckeva_wa_sistema() {
         . "- motivo: una línea para el equipo, no para el cliente.";
 }
 
-function deckeva_wa_redactar($mensajes) {
+/** Lo que el que redacta tiene que saber de la cotización formal de este chat. */
+function deckeva_wa_nota_cotizacion($chat) {
+    $c = $chat['cotizacion'] ?? null;
+    if (!is_array($c)) return '';
+    switch ($c['estado'] ?? '') {
+        case 'enviada': return 'La cotización formal ' . $c['numero'] . ' ya se le mandó a su correo (' . deckeva_wa_legible((int) $c['enviada_ts']) . '). No digas el monto.';
+        case 'lista': case 'aprobada': return 'Su cotización formal ya está armada y le llega a su correo en breve. No digas el monto.';
+        case 'incompleta': return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
+    }
+    return '';
+}
+
+function deckeva_wa_redactar($mensajes, $nota = '') {
     $tz = new DateTimeZone('America/Santiago');
     $txt = '';
     foreach ($mensajes as $m) {
@@ -398,7 +412,7 @@ function deckeva_wa_redactar($mensajes) {
             'model' => DECKEVA_WA_MODELO, 'max_tokens' => 2000, 'fallbacks' => 'default',
             'output_config' => array('effort' => 'low', 'format' => array('type' => 'json_schema', 'schema' => $esquema)),
             'system' => deckeva_wa_sistema(),
-            'messages' => array(array('role' => 'user', 'content' => "<conversacion>\n" . $txt . '</conversacion>')),
+            'messages' => array(array('role' => 'user', 'content' => "<conversacion>\n" . $txt . '</conversacion>' . ($nota !== '' ? "\n<nota_del_equipo>" . $nota . '</nota_del_equipo>' : ''))),
         )),
     ));
     if (is_wp_error($res)) return array('ok' => false, 'error' => $res->get_error_message());
@@ -536,6 +550,8 @@ function deckeva_wa_pantalla() {
         echo '<tr><td>+' . esc_html($num) . '</td><td>' . esc_html($p['estado'] ?? 'nuevo') . '</td><td>' . esc_html($h['que']) . '</td><td>' . esc_html($h['ts'] ? deckeva_wa_legible($h['ts']) : '') . '</td></tr>';
     }
     echo '</tbody></table>';
+
+    if (function_exists('deckeva_wa_cotiza_pantalla')) deckeva_wa_cotiza_pantalla();
 
     echo '<h2>Configuración</h2><form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
     wp_nonce_field('deckeva_wa');
