@@ -89,7 +89,7 @@ function deckeva_wa_demora($semilla) {
     $h = hexdec(substr(hash('sha256', $semilla . '|espera'), 0, 8));
     $base = DECKEVA_WA_ESPERAS[$h % count(DECKEVA_WA_ESPERAS)] * 60;
     $extra = hexdec(substr(hash('sha256', $semilla . '|seg'), 0, 8)) % max(30, (int) ($base * 0.3));
-    return $base + $extra;
+    return min($base + $extra, 40 * 60); // la regla dice «hasta 40 minutos», y la variación no la pasa
 }
 
 /** La hora, llevada a 8:00–20:00 de Chile. */
@@ -177,10 +177,13 @@ add_action('init', function () {
     if ($ruta === 'entrada') {
         deckeva_wa_entrada($datos);
     } else {
-        // Una pasada a la vez: la llamada a Claude puede tardar más que el minuto.
-        if (get_transient('deckeva_wa_lock')) { echo '{"ok":true,"ocupado":true}'; exit; }
-        set_transient('deckeva_wa_lock', 1, 240);
-        try { deckeva_wa_pasada(); } finally { delete_transient('deckeva_wa_lock'); }
+        // Una pasada a la vez, durante TODA la pasada: un candado de archivo
+        // que se suelta cuando termina, no un transient que vence a los N
+        // minutos aunque la pasada siga (llamadas lentas a Claude).
+        $dir = wp_upload_dir(null, false);
+        $lock = @fopen(trailingslashit($dir['basedir']) . '.deckeva-wa-pasada.lock', 'c');
+        if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) { echo '{"ok":true,"ocupado":true}'; exit; }
+        try { deckeva_wa_pasada(); } finally { flock($lock, LOCK_UN); fclose($lock); }
     }
     echo '{"ok":true}';
     exit;
@@ -217,6 +220,9 @@ function deckeva_wa_entrada($d) {
 
 function deckeva_wa_pasada() {
     if (deckeva_wa_llave() === '' || strlen(deckeva_wa_secreto()) < 24) return;
+    // Tope de trabajo por pasada: a lo más 5 llamadas a Claude. Lo que quede
+    // lo toma la pasada del minuto siguiente; así una pasada nunca se estira.
+    $GLOBALS['deckeva_wa_redacciones'] = 0;
     foreach (array_keys(deckeva_wa_chats()) as $num) {
         deckeva_wa_un_chat((string) $num); // un número como clave de array PHP lo vuelve entero
     }
@@ -260,6 +266,8 @@ function deckeva_wa_un_chat($num) {
             // ¿Hay que redactar?
             if (!is_array($p) || (int) $p['para_ts'] < $ultIn) {
                 if ($ahora - $ultIn < DECKEVA_WA_SILENCIO) break;
+                if (($GLOBALS['deckeva_wa_redacciones'] ?? 0) >= 5) break;
+                $GLOBALS['deckeva_wa_redacciones'] = ($GLOBALS['deckeva_wa_redacciones'] ?? 0) + 1;
                 $r = deckeva_wa_redactar((array) $chat['mensajes']);
                 if (!$r['ok']) { deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']); break; }
                 $id = 'D-' . strtoupper(substr(base_convert(substr(hash('sha256', $num . '|' . $ultIn), 0, 10), 16, 36), 0, 4));
