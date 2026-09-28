@@ -180,14 +180,33 @@ add_action('init', function () {
         // Una pasada a la vez, durante TODA la pasada: un candado de archivo
         // que se suelta cuando termina, no un transient que vence a los N
         // minutos aunque la pasada siga (llamadas lentas a Claude).
+        // Se contesta al tiro y la pasada sigue después: con varios chats
+        // nuevos son minutos de Claude, Tourevo cuelga a los 20 s, y un
+        // hosting que corta el script cuando el cliente se va dejaría la
+        // pasada a medias.
+        deckeva_wa_contestar_y_seguir('{"ok":true}');
         $dir = wp_upload_dir(null, false);
         $lock = @fopen(trailingslashit($dir['basedir']) . '.deckeva-wa-pasada.lock', 'c');
-        if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) { echo '{"ok":true,"ocupado":true}'; exit; }
+        if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) exit;
         try { deckeva_wa_pasada(); } finally { flock($lock, LOCK_UN); fclose($lock); }
+        exit;
     }
     echo '{"ok":true}';
     exit;
 }, 1);
+
+/** Manda la respuesta y cierra la conexión; el script sigue corriendo. */
+function deckeva_wa_contestar_y_seguir($json) {
+    ignore_user_abort(true);
+    @set_time_limit(600);
+    while (ob_get_level() > 0) @ob_end_clean();
+    header('Content-Length: ' . strlen($json));
+    header('Connection: close');
+    echo $json;
+    if (function_exists('litespeed_finish_request')) litespeed_finish_request();
+    elseif (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+    else flush();
+}
 
 /** Tourevo derivó un chat: se guarda tal cual llegó (el hilo manda). */
 function deckeva_wa_entrada($d) {
