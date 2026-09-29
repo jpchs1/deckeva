@@ -63,9 +63,12 @@ Es el único producto que el contestador no cotiza ni le pone precio (JP,
 29-sep-2026). `deckeva_wa_es_muelle()` lo reconoce por una lista cerrada:
 «muelle flotante/modular», «pantalán flotante», «floating dock», o «muelle»
 junto a cotizar, precio, cuánto, quiero, necesito… «La lancha está en el
-muelle» NO cuenta: eso es dónde está, no lo que pide. Si lo reconoce, la
-respuesta queda en borrador con aviso a JP y la cotización automática no se
-arma.
+muelle (flotante)» NO cuenta: eso es dónde está, no lo que pide, y esas
+frases se sacan antes de mirar. Sólo cuenta el pedido vigente (las últimas
+6 h del cliente): un muelle de la semana pasada no bloquea el piso de hoy.
+Si lo reconoce, la respuesta queda en borrador con aviso a JP, la cotización
+automática no se arma, y una ya armada (lista o aprobada) antes del pedido
+del muelle queda «retenida» y no sale.
 
 ## Toma de medidas e instalación: opcionales, fuera del total (REGLA DEL DUEÑO)
 

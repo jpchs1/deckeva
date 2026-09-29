@@ -88,12 +88,28 @@ function deckeva_wa_validar($txt) {
  * ¿El cliente pregunta por muelles flotantes? (JP, 29-sep · T-017) Es el
  * único producto que no se cotiza ni se le pone precio en el chat: se escala
  * a JP al tiro. Lista cerrada de palabras, sobre lo que escribió el cliente.
+ *
+ * Sólo mira el pedido vigente: los mensajes del cliente desde `$desde`, o si
+ * no se da, las últimas 6 h antes de su último mensaje. Un muelle que pidió
+ * la semana pasada no bloquea el piso que pide hoy.
+ *
+ * Y la ubicación no es un pedido: «está en el muelle flotante de Pucón» dice
+ * dónde está la lancha. Esas frases se sacan antes de mirar.
  */
-function deckeva_wa_es_muelle($mensajes) {
-    foreach ((array) $mensajes as $m) {
-        if (($m['dir'] ?? '') !== 'in') continue;
+function deckeva_wa_es_muelle($mensajes, $desde = null) {
+    $in = array();
+    foreach ((array) $mensajes as $m) if (($m['dir'] ?? '') === 'in') $in[] = $m;
+    if (!$in) return false;
+    if ($desde === null) {
+        $ult = 0;
+        foreach ($in as $m) $ult = max($ult, (int) ($m['ts'] ?? 0));
+        $desde = $ult - 6 * 3600;
+    }
+    foreach ($in as $m) {
+        if ((int) ($m['ts'] ?? 0) < (int) $desde) continue;
         $t = (string) ($m['texto'] ?? '');
-        // «La lancha está en el muelle» no cuenta: es dónde está, no lo que pide.
+        // Dónde está la embarcación: «en el muelle…», «amarrada al muelle…», «at the dock».
+        $t = preg_replace('/\b(en|al|del|desde|junto\s+al|amarrad[ao]s?\s+(en|a|al)|at|in|on)\s+(el|la|un|una|the|a|our|my)?\s*(floating\s+)?(muelles?|pantal[aá]n(es)?|embarcaderos?|marina|docks?)\b(\s+(flotantes?|modular(es)?|floating))?/iu', ' ', $t) ?? $t;
         if (preg_match('/\b(muelles?|pantal[aá]n(es)?|embarcaderos?)\s+(flotantes?|modular(es)?)\b|\bfloating\s+docks?\b/iu', $t)) return true;
         if (preg_match('/\b(cotiz\w*|precios?|valor(es)?|cu[aá]nto|compr\w*|quiero|necesito|venden|hacen|fabrican)\b[^.?!\n]{0,20}\bmuelles?\b/iu', $t)) return true;
     }
