@@ -77,6 +77,37 @@ prefieras»).
 - En el PDF no usar `<u>`: con `fontHeightRatio` 0,83 DOMPDF dibuja el
   subrayado a media altura y el texto se lee tachado.
 
+## La cotización PDF: una página, y todo lo que dice es cierto
+
+`deckeva-assets/pdf-cotizacion.php`, rediseñada el 29-sep-2026. De arriba a
+abajo: total en tarjeta con neto e IVA, ficha de la embarcación, detalle, «Tu
+piso incluye», opcionales en tarjetas (o «lo haces tú» fuera de Chile), medios
+de pago y el cierre con los pasos numerados y botones clicables (WhatsApp con la
+cotización escrita, y correo).
+
+- **«Tu piso incluye» sólo repite lo que la web ya publica** (deckeva.com y el
+  correo del cotizador): EVA de celdas cerradas, antideslizante, UV y agua
+  salada, adhesivo 3M, diseño a medida, absorbe ruido y vibraciones. Ni plazos
+  ni garantías: eso lo confirma una persona.
+- **Medios de pago, sólo los que están habilitados en los portales:** en Chile
+  Webpay Plus, Mercado Pago y PayPal (`deckeva.cl/pago`); afuera PayPal y Wire
+  Transfer / ACH (`deckeva.com/wiretransfers`). Si se agrega o se apaga uno en
+  el portal, se cambia aquí también.
+- **Una página siempre.** DOMPDF no parte la hoja cuando el contenido se pasa:
+  lo dibuja **debajo del pie**, sin avisar, y el cliente recibe el cierre tapado.
+  Con datos largos la plantilla entra en modo compacto (saca la nota en inglés
+  de los opcionales). Antes de tocar el alto de cualquier bloque:
+
+  ```
+  composer require dompdf/dompdf:2.0.8 -d /tmp/dk
+  php .github/pdf/matriz.php /tmp/dk/vendor/autoload.php /tmp/dk/salida
+  python3 .github/pdf/medir.py /tmp/dk/salida     # pip install pymupdf
+  ```
+
+  Son 128 combinaciones (nombre, contacto, saludo, ≈ USD y modelo largos ×
+  Chile/afuera × precio/a consultar); sale en 1 si alguna queda con menos de
+  4 pt de aire sobre el pie. Al rediseño le quedaban 26 pt en la peor.
+
 ## Despliegue
 
 El hosting es **BanaHosting, plan compartido**: no tiene Git Version Control ni
