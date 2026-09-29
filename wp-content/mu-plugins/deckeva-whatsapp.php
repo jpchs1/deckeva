@@ -84,6 +84,22 @@ function deckeva_wa_validar($txt) {
     return '';
 }
 
+/**
+ * ¿El cliente pregunta por muelles flotantes? (JP, 29-sep · T-017) Es el
+ * único producto que no se cotiza ni se le pone precio en el chat: se escala
+ * a JP al tiro. Lista cerrada de palabras, sobre lo que escribió el cliente.
+ */
+function deckeva_wa_es_muelle($mensajes) {
+    foreach ((array) $mensajes as $m) {
+        if (($m['dir'] ?? '') !== 'in') continue;
+        $t = (string) ($m['texto'] ?? '');
+        // «La lancha está en el muelle» no cuenta: es dónde está, no lo que pide.
+        if (preg_match('/\b(muelles?|pantal[aá]n(es)?|embarcaderos?)\s+(flotantes?|modular(es)?)\b|\bfloating\s+docks?\b/iu', $t)) return true;
+        if (preg_match('/\b(cotiz\w*|precios?|valor(es)?|cu[aá]nto|compr\w*|quiero|necesito|venden|hacen|fabrican)\b[^.?!\n]{0,20}\bmuelles?\b/iu', $t)) return true;
+    }
+    return false;
+}
+
 /** Espera antes de contestar: 5 a 40 min, distinta por mensaje, sin patrón. */
 function deckeva_wa_demora($semilla) {
     $h = hexdec(substr(hash('sha256', $semilla . '|espera'), 0, 8));
@@ -297,6 +313,11 @@ function deckeva_wa_un_chat($num) {
                     deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
                     break;
                 }
+                // Muelles flotantes: nunca sale solo, lo ve JP (T-017).
+                if (deckeva_wa_es_muelle($chat['mensajes'] ?? array())) {
+                    $r['necesita_humano'] = true;
+                    $r['motivo'] = 'MUELLE FLOTANTE · no se cotiza, lo ve JP al tiro' . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : '');
+                }
                 $regla = deckeva_wa_validar($r['texto']);
                 $auto = deckeva_wa_modo() === 'automatico' && !$r['necesita_humano'] && $regla === '';
                 $semilla = $num . '|' . $ultIn;
@@ -369,6 +390,7 @@ function deckeva_wa_sistema() {
         . "- Fabrica pisos de goma EVA antideslizante a medida para lanchas, veleros, motos de agua y embarcaciones. Sitio: deckeva.cl, con cotizador en la web. Correo: contacto@deckeva.cl.\n"
         . "- Para cotizar un piso hace falta: marca, modelo, año y largo en pies de la embarcación, el color o diseño que quiere, dónde está la embarcación (ciudad o marina), y el nombre y el email del cliente. Para una moto de agua: si es normal o mediana a grande, el color, dónde está, y el nombre y el email.\n"
         . "- La toma de medidas y la instalación son servicios opcionales de Deckeva, con un valor fijo que va en la cotización formal (PDF), aparte del total del piso. El cliente también las puede hacer él mismo, fácil, con el video explicativo que le mandamos: como prefiera. Nunca digas su valor en el chat: si lo pregunta, dile que va en la cotización.\n"
+        . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que el encargado lo revisa personalmente y le escribe, y marca necesita_humano.\n"
         . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
         . "- La cotización formal llega por correo, en PDF. También la puede sacar solo en el cotizador de deckeva.cl.\n\n"
         . "Cómo se escribe:\n"

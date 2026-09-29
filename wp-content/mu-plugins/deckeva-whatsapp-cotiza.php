@@ -120,6 +120,9 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * que lee quien le contesta: «Para su cotización formal falta: …»).
  */
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
+    // Muelles flotantes: no se cotizan, se escalan a JP (T-017).
+    if (function_exists('deckeva_wa_es_muelle') && deckeva_wa_es_muelle($mensajes)) return array('ok' => false, 'falta' => 'muelle flotante · no se cotiza, lo ve JP', 'jp' => true);
+
     $escrito = ''; $lineas = array();
     foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') { $escrito .= ' ' . mb_strtolower((string) $m['texto']); $lineas[] = mb_strtolower(trim((string) $m['texto'])); }
     // Sólo a quien la pidió: un cliente que dejó sus datos para otra cosa no

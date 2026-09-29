@@ -57,6 +57,16 @@ Y una cotización por WhatsApp no se crea sin los datos obligatorios
 escribió el cliente), largo, color, dónde está, nombre y correo. Moto de agua:
 el tamaño, color, dónde está, nombre y correo. Lo que falte se le pide.
 
+## Muelles flotantes: no se cotizan, se escalan a JP al tiro (REGLA DEL DUEÑO)
+
+Es el único producto que el contestador no cotiza ni le pone precio (JP,
+29-sep-2026). `deckeva_wa_es_muelle()` lo reconoce por una lista cerrada:
+«muelle flotante/modular», «pantalán flotante», «floating dock», o «muelle»
+junto a cotizar, precio, cuánto, quiero, necesito… «La lancha está en el
+muelle» NO cuenta: eso es dónde está, no lo que pide. Si lo reconoce, la
+respuesta queda en borrador con aviso a JP y la cotización automática no se
+arma.
+
 ## Toma de medidas e instalación: opcionales, fuera del total (REGLA DEL DUEÑO)
 
 **$155.000 + IVA cada uno, mismo valor en todas las regiones y también para motos
