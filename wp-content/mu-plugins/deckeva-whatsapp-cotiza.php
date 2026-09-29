@@ -142,8 +142,10 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
         $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
     } else {
         // Marca, modelo y año: sin ellos no se busca el LOA ni se cotiza.
-        if (trim((string) ($d['marca'] ?? '')) === '') return array('ok' => false, 'falta' => 'la marca de la embarcación');
-        if (trim((string) ($d['modelo'] ?? '')) === '') return array('ok' => false, 'falta' => 'el modelo de la embarcación');
+        // Igual que el correo y el año: tienen que estar en lo que escribió el
+        // cliente. Una marca o un modelo que Claude dedujo buscan otro LOA.
+        if (!deckeva_wa_cotiza_en_texto($d['marca'] ?? '', $escrito)) return array('ok' => false, 'falta' => 'la marca de la embarcación');
+        if (!deckeva_wa_cotiza_en_texto($d['modelo'] ?? '', $escrito)) return array('ok' => false, 'falta' => 'el modelo de la embarcación');
         // El año se vuelve a buscar en lo escrito, como el largo: un año que
         // Claude dedujo cambia el LOA que se busca. Vale entero («2019») o
         // corto sólo si se nota que es un año («del 98», «año 98», «'98»): un
@@ -172,10 +174,32 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     // Dónde está (ciudad, lago o marina): lo pide JP para lancha y para moto de
     // agua. Es lo que decide cómo se hace la toma de medidas y la instalación.
     $ubicacion = trim((string) ($d['ubicacion'] ?? ''));
-    if ($ubicacion === '' || in_array(mb_strtolower($ubicacion), array('chile', 'no dice', 'no_dice'), true)) {
+    if ($ubicacion === '' || in_array(mb_strtolower($ubicacion), array('chile', 'no dice', 'no_dice'), true) || !deckeva_wa_cotiza_en_texto($ubicacion, $escrito, true)) {
         return array('ok' => false, 'falta' => 'dónde está la ' . ($clave === 'moto-normal' || $clave === 'moto-grande' ? 'moto de agua' : 'embarcación') . ' (ciudad, lago o marina)');
     }
     return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave], 'pies' => $pies ?? null, 'fuente_largo' => $fuente ?? 'moto');
+}
+
+/**
+ * ¿Este dato está en lo que escribió el cliente? Al menos una palabra suya
+ * (3+ letras, o con un dígito: «195», «LS2») aparece tal cual, sin tildes ni
+ * mayúsculas. Para un lugar no cuentan las palabras genéricas («lago»,
+ * «marina», «región»): «Lago Rapel» vale por «rapel».
+ */
+function deckeva_wa_cotiza_en_texto($valor, $escrito, $esLugar = false) {
+    $norm = static function ($t) {
+        $t = mb_strtolower((string) $t);
+        $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n'));
+        return ' ' . preg_replace('/[^a-z0-9]+/', ' ', $t) . ' ';
+    };
+    $texto = $norm($escrito);
+    $genericas = array('lago', 'laguna', 'marina', 'region', 'chile', 'ciudad', 'puerto', 'bahia', 'playa', 'club', 'nautico', 'costa', 'sector', 'provincia', 'comuna');
+    foreach (preg_split('/\s+/', trim($norm($valor))) as $w) {
+        if ($w === '' || (strlen($w) < 3 && !preg_match('/\d/', $w))) continue;
+        if ($esLugar && in_array($w, $genericas, true)) continue;
+        if (strpos($texto, ' ' . $w . ' ') !== false) return true;
+    }
+    return false;
 }
 
 /** Regla de JP: hasta ,4 baja al entero anterior; desde ,5 sube al siguiente. */
@@ -303,6 +327,10 @@ function deckeva_wa_cotiza_pasada() {
         // ¿Escribió algo desde la última vez que se leyó este chat? Si corrigió
         // el largo, el color o el correo, la cotización se rehace (abajo).
         $nuevo = !is_array($c) || $ultIn > (int) ($c['leido_hasta'] ?? 0);
+        // Una cotización sin enviar armada con las reglas de antes (29-sep:
+        // marca, modelo, año y ubicación obligatorios) se relee antes de salir.
+        $legado = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true) && strpos((string) ($c['firma'] ?? ''), 'v2|') !== 0;
+        $nuevo = $nuevo || $legado;
 
         // 1 · Mandar lo aprobado, a su hora · sólo si no escribió nada después.
         if (is_array($c) && ($c['estado'] ?? '') === 'aprobada' && !$nuevo) {
@@ -324,12 +352,16 @@ function deckeva_wa_cotiza_pasada() {
         $loa = null;
         if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
         $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla, $loa);
-        $firma = $listo['ok'] ? implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])))) : '';
+        // Todo lo que cambia el PDF: si el cliente corrige el año o dónde está,
+        // la cotización se rehace aunque el precio sea el mismo.
+        $firma = $listo['ok'] ? 'v2|' . implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])),
+            mb_strtolower(trim((string) ($r['d']['marca'] ?? ''))), mb_strtolower(trim((string) ($r['d']['modelo'] ?? ''))), trim((string) ($r['d']['anio'] ?? '')), mb_strtolower(trim((string) ($r['d']['ubicacion'] ?? ''))))) : '';
         $armada = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada', 'enviada', 'descartada'), true);
         // Ya hay una cotización y lo nuevo no cambia nada (un «gracias», una
         // pregunta): se queda la que está, sin otro PDF ni otro correo. Si lo
         // nuevo no alcanza para cotizar, tampoco se deshace la que había.
-        if ($armada && ($firma === '' || $firma === ($c['firma'] ?? ''))) {
+        // Una legada que ya no alcanza sí se deshace: no puede salir con las reglas de antes.
+        if ($armada && !$legado && ($firma === '' || $firma === ($c['firma'] ?? ''))) {
             deckeva_wa_con_candado(function ($chats) use ($num, $ultIn) {
                 if (isset($chats[$num]['cotizacion'])) $chats[$num]['cotizacion']['leido_hasta'] = max($ultIn, (int) ($chats[$num]['cotizacion']['leido_hasta'] ?? 0));
                 return $chats;
