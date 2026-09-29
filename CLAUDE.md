@@ -80,6 +80,22 @@ Si lo reconoce, la respuesta queda en borrador con aviso a JP, la cotización
 automática no se arma, y una ya armada (lista o aprobada) antes del pedido
 del muelle queda «retenida» y no sale.
 
+## Aprobar desde el WhatsApp de JP (desde el 29-sep-2026)
+
+JP: «¿estas solicitudes me pueden llegar a mi WhatsApp para aprobar desde el
+WhatsApp?». Cada borrador (`D-XXXX`) le llega también por WhatsApp, además del
+correo, en dos mensajes: el detalle y aparte sólo «ok D-XXXX».
+
+- El tick que manda Tourevo cada minuto recibe de vuelta los borradores que
+  esperan (`deckeva_wa_pendientes_para_jp`). Tourevo, que tiene el número, se
+  los pide a JP con su ventana de 24 h abierta (`Core/AprobacionWhatsApp`).
+- JP contesta «ok D-XXXX» o «D-XXXX: su texto» al número de Tourevo, y Tourevo
+  lo trae por la ruta firmada `whatsapp-puerta/aprobar`
+  (`deckeva_wa_aprobar_remoto`): mismas reglas que el botón de wp-admin. 409 si
+  ya no espera o no pasa las reglas, y no se reintenta.
+- Si la propuesta no parece castellano, a JP le llega sin texto y sin «ok»: se
+  ve en wp-admin. «Nada en otros idiomas en mi WhatsApp».
+
 ## Garantía, vida útil y espesor (REGLA DEL DUEÑO)
 
 JP, 29-sep-2026: el piso tiene **6 mm** de espesor, **5 a 7 años** de vida
