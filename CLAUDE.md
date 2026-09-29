@@ -57,6 +57,16 @@ Y una cotización por WhatsApp no se crea sin los datos obligatorios
 escribió el cliente), largo, color, dónde está, nombre y correo. Moto de agua:
 el tamaño, color, dónde está, nombre y correo. Lo que falte se le pide.
 
+## Moto de agua normal o mediana/grande: lo decide el largo (REGLA DEL DUEÑO)
+
+JP, 29-sep-2026: «el criterio es el largo». Con marca y modelo escritos por
+el cliente se busca el LOA (`deckeva_wa_cotiza_loa`, el mismo de las
+lanchas) y `DECKEVA_MOTO_CORTE_M` (3,25 m) decide la tarifa, aunque el
+cliente haya dicho otro tamaño. Sin LOA vale lo que dijo el cliente; sin
+nada, se le piden marca y modelo. La tabla que sostiene el corte está en el
+docblock de la constante: normal hasta ~3,15 m (Spark, STX 160, EX),
+mediana/grande desde ~3,32 m (GTI, Ultra, FX, GTX).
+
 ## Toma de medidas e instalación: opcionales, fuera del total (REGLA DEL DUEÑO)
 
 **$155.000 + IVA cada uno, mismo valor en todas las regiones y también para motos

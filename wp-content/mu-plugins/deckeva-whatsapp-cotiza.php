@@ -74,14 +74,14 @@ function deckeva_wa_cotiza_leer($mensajes) {
         'required' => array('nombre', 'apellido', 'email', 'largo', 'tipo', 'marca', 'modelo', 'anio', 'color', 'ubicacion', 'pais', 'quiere_cotizacion'),
         'properties' => array(
             'nombre' => $str, 'apellido' => $str, 'email' => $str, 'largo' => $str,
-            'tipo' => array('type' => 'string', 'enum' => array('lancha', 'moto_normal', 'moto_grande', 'otro', 'no_dice')),
+            'tipo' => array('type' => 'string', 'enum' => array('lancha', 'moto', 'moto_normal', 'moto_grande', 'otro', 'no_dice')),
             'marca' => $str, 'modelo' => $str, 'anio' => $str, 'color' => $str, 'ubicacion' => $str, 'pais' => $str,
             'quiere_cotizacion' => array('type' => 'boolean'),
         ));
     $sistema = "Te paso lo que escribió un cliente de Deckeva (pisos de goma EVA para embarcaciones) por WhatsApp. "
         . "Devuelve SOLO lo que el cliente escribió, sin deducir nada. Si un dato no está escrito, déjalo vacío.\n"
         . "- largo: el largo en pies TAL COMO LO ESCRIBIÓ el cliente (\"19\", \"22,4\", \"21 pies\"). Nunca lo deduzcas del modelo (una Sea Ray 185 NO es un dato de largo). Si dio metros, déjalo vacío.\n"
-        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto_normal o moto_grande si es moto de agua y lo dice; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
+        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto si es moto de agua; moto_normal o moto_grande sólo si además el cliente dijo el tamaño; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
         . "- email: exacto, como lo escribió.\n"
         . "- color: el que eligió (gris, beige, negro...).\n"
         . "- anio: el año de la embarcación tal como lo escribió (\"2019\", \"98\").\n"
@@ -119,6 +119,21 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * está, nombre y correo. Lo que falte se le pide al cliente ('falta' es lo
  * que lee quien le contesta: «Para su cotización formal falta: …»).
  */
+/**
+ * Moto de agua «normal» o «mediana a grande»: lo decide el largo total (LOA)
+ * de las especificaciones, buscado con marca, modelo y año (JP, 29-sep ·
+ * T-017: «el criterio es el largo»). La tabla que sostiene el corte, medida
+ * en las fichas de los fabricantes:
+ *
+ *   normal            Sea-Doo Spark 2,8–3,05 m · Kawasaki STX 160 3,15 m
+ *                     (124 in) · Yamaha EX ~3,1 m
+ *   mediana a grande  Sea-Doo GTI 3,32 m · Kawasaki Ultra 310 3,44–3,58 m
+ *                     · Yamaha FX 3,58 m (141 in) · Sea-Doo GTX/RXT ~3,5 m+
+ *
+ * Entre 3,15 y 3,32 m no hay modelos de catálogo: el corte va al medio.
+ */
+const DECKEVA_MOTO_CORTE_M = 3.25;
+
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
     $escrito = ''; $lineas = array();
     foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') { $escrito .= ' ' . mb_strtolower((string) $m['texto']); $lineas[] = mb_strtolower(trim((string) $m['texto'])); }
@@ -134,13 +149,25 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
     $tipo = (string) ($d['tipo'] ?? '');
     if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · lo ve JP', 'jp' => true);
-    if ($tipo === 'moto_normal' || $tipo === 'moto_grande') {
-        // El tamaño de la moto lo tiene que decir el cliente: «moto de agua» a
-        // secas no elige entre las dos tarifas.
-        $dijo = $tipo === 'moto_normal' ? '/\b(normal|est[aá]ndar|chica|peque[nñ]a)\b/u' : '/\b(grande|mediana)\b/u';
-        if (!preg_match('/\bmoto/u', $escrito) || !preg_match($dijo, $escrito)) return array('ok' => false, 'falta' => 'el tamaño de la moto de agua · lo ve JP', 'jp' => true);
-        $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
-    } else {
+    if ($tipo === 'moto' || $tipo === 'moto_normal' || $tipo === 'moto_grande') {
+        // Con marca y modelo escritos por el cliente y el LOA encontrado, el
+        // tamaño lo decide el largo (DECKEVA_MOTO_CORTE_M), aunque el cliente
+        // haya dicho otro. Sin LOA, vale el tamaño que el cliente dijo con sus
+        // palabras. Sin ninguno de los dos, se le pide marca y modelo.
+        $conModelo = deckeva_wa_cotiza_en_texto($d['marca'] ?? '', $escrito) && deckeva_wa_cotiza_en_texto($d['modelo'] ?? '', $escrito);
+        if ($conModelo && is_array($loa) && (float) ($loa['pies'] ?? 0) > 0) {
+            $pies = (float) $loa['pies'];
+            $fuente = 'specs';
+            $clave = $pies * 0.3048 < DECKEVA_MOTO_CORTE_M ? 'moto-normal' : 'moto-grande';
+        } else {
+            $dijoNormal = preg_match('/\b(normal|est[aá]ndar|chica|peque[nñ]a)\b/u', $escrito);
+            $dijoGrande = preg_match('/\b(grande|mediana)\b/u', $escrito);
+            if (!preg_match('/\bmoto/u', $escrito) || $dijoNormal === $dijoGrande) {
+                return array('ok' => false, 'falta' => $conModelo ? 'el tamaño de la moto de agua (no se encontró su largo) · lo ve JP' : 'la marca y el modelo de la moto de agua', 'jp' => $conModelo);
+            }
+            $clave = $dijoNormal ? 'moto-normal' : 'moto-grande';
+            $fuente = 'cliente';
+        }    } else {
         // Marca, modelo y año: sin ellos no se busca el LOA ni se cotiza.
         // Igual que el correo y el año: tienen que estar en lo que escribió el
         // cliente. Una marca o un modelo que Claude dedujo buscan otro LOA.
@@ -364,7 +391,7 @@ function deckeva_wa_cotiza_pasada() {
         $r = deckeva_wa_cotiza_leer((array) $chat['mensajes']);
         if (!$r['ok']) continue;
         $loa = null;
-        if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
+        if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice', 'moto', 'moto_normal', 'moto_grande'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
         $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla, $loa);
         // Todo lo que cambia el PDF: si el cliente corrige el año o dónde está,
         // la cotización se rehace aunque el precio sea el mismo.
