@@ -59,6 +59,15 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
     $icono_soporte = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 13 V11 A8 8 0 0 1 20 11 V13" fill="none" stroke="#00875a" stroke-width="1.9"/><rect x="2.5" y="12" width="4.5" height="7" rx="1.5" fill="#00875a"/><rect x="17" y="12" width="4.5" height="7" rx="1.5" fill="#00875a"/></svg>');
     $icono_mano = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#00875a" stroke-width="1.8"/><path d="M7.5 12.4 L10.6 15.4 L16.6 9" fill="none" stroke="#00875a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
     $icono_wa = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.5 A9.5 9.5 0 0 0 3.8 16.8 L2.6 21.4 L7.3 20.2 A9.5 9.5 0 1 0 12 2.5 Z" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.6 7.9 C8.3 8.6 8.4 10.2 10 12.2 C11.7 14.2 13.6 15.3 15 15.3 C15.8 15.3 16.4 14.6 16.4 14 L14.6 13 L13.6 13.9 C12.5 13.5 11 12.1 10.4 10.8 L11.2 9.9 L10.3 8 C9.6 7.6 9 7.5 8.6 7.9 Z" fill="#ffffff"/></svg>');
+    // Engranaje del sello «Taller propio»: el contorno se calcula aquí (12
+    // dientes) porque DOMPDF dibuja bien polígonos y mal los transform.
+    $dientes = array();
+    for ($k = 0; $k < 48; $k++) {
+        $r = ($k % 4 < 2) ? 11.2 : 8.6;
+        $ang = ($k + 0.5) * M_PI / 24;
+        $dientes[] = round(12 + $r * cos($ang), 2) . ',' . round(12 + $r * sin($ang), 2);
+    }
+    $icono_taller = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><polygon points="' . implode(' ', $dientes) . '" fill="#f5a623"/><circle cx="12" cy="12" r="4.2" fill="#0a1628"/><circle cx="12" cy="12" r="1.7" fill="#f5a623"/></svg>');
     $ola = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 40" preserveAspectRatio="none"><path d="M0 24 C 100 6 200 40 310 22 C 420 4 510 34 600 18 L600 40 L0 40 Z" fill="#0e6ba8"/><path d="M0 32 C 120 18 230 44 340 30 C 450 16 530 38 600 28 L600 40 L0 40 Z" fill="#1a9be3"/></svg>');
 
     $precio = $d['precio'];
@@ -146,6 +155,9 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
     foreach ($ficha as $i => $campo) {
         if (mb_strlen((string) $campo[1], 'UTF-8') > 16 * $anchos[$i]) { $largos++; break; }
     }
+    // Con medición e instalación incluidas el detalle suma dos filas: cuenta
+    // como un dato largo más.
+    $largos += $servicios ? 1 : 0;
     $compacta = $largos >= 2;
 
     // Medios de pago habilitados, tal como los publica el portal de pago
@@ -242,50 +254,62 @@ a { text-decoration: none; }
 .total-desglose .m { font-family: 'dk-medio'; color: #e2e8f0; text-align: right; white-space: nowrap; }
 .total-ref   { font-family: 'dk-medio'; font-size: 8pt; line-height: 10pt; color: #ffffff; margin-top: 3pt; }
 
-.seccion { font-family: 'dk-mono'; font-weight: bold; font-size: 6.1pt; line-height: 8pt; letter-spacing: 1.8pt; color: #0e6ba8; margin: 11pt 0 5pt 0; }
-.seccion span { color: #94a3b8; font-weight: normal; }
+.seccion { font-family: 'dk-mono'; font-weight: bold; font-size: 6.1pt; line-height: 8pt; letter-spacing: 1.8pt; color: #0e6ba8; margin: 10pt 0 5pt 0; }
+.seccion span { color: #7d8ca3; font-weight: normal; }
 
 .ficha { background: #f3f6f9; border-radius: 7pt; }
-.ficha td { padding: 8pt 12pt; }
+.ficha td { padding: 7pt 12pt; }
 .ficha .sep { border-left: 0.6pt solid #dde3ea; }
 .lbl { font-family: 'dk-mono'; font-size: 5.6pt; line-height: 7pt; letter-spacing: 1pt; color: #64748b; }
 .val { font-family: 'dk-titular'; font-size: 12pt; line-height: 13.5pt; color: #0a1628; margin-top: 3pt; }
 
 /* ── Detalle + lo que incluye ─────────────────────────── */
-.detalle td { padding: 5.5pt 0; border-bottom: 0.6pt solid #e2e8f0; vertical-align: middle; }
-.detalle .cab td { font-family: 'dk-mono'; font-weight: bold; font-size: 5.6pt; line-height: 7pt; letter-spacing: 1.2pt; color: #94a3b8; padding: 0 0 4pt 0; border-bottom: 0.9pt solid #0a1628; }
+.detalle td { padding: 4.6pt 0; border-bottom: 0.6pt solid #e2e8f0; vertical-align: middle; }
+.detalle .cab td { font-family: 'dk-mono'; font-weight: bold; font-size: 5.6pt; line-height: 7pt; letter-spacing: 1.2pt; color: #7d8ca3; padding: 0 0 4pt 0; border-bottom: 0.9pt solid #0a1628; }
 .detalle .desc  { font-family: 'dk-medio'; font-size: 8.8pt; line-height: 11pt; color: #1a2744; }
-.detalle .sub   { font-size: 7.1pt; line-height: 9pt; color: #94a3b8; }
+.detalle .sub   { font-size: 7.1pt; line-height: 9pt; color: #7d8ca3; }
 .detalle .monto { font-family: 'dk-medio'; font-size: 8.8pt; line-height: 11pt; color: #1a2744; text-align: right; white-space: nowrap; }
 .detalle .fila-total td { border-bottom: 0; padding-top: 7pt; }
 .detalle .fila-total .desc  { font-family: 'dk-titular'; font-weight: bold; font-size: 13pt; line-height: 14pt; color: #0a1628; }
 .detalle .fila-total .monto { font-family: 'dk-titular'; font-weight: bold; font-size: 13pt; line-height: 14pt; color: #0e6ba8; }
-.letra-chica { font-size: 6.8pt; line-height: 9pt; color: #94a3b8; margin-top: 4pt; }
+.letra-chica { font-size: 6.8pt; line-height: 9pt; color: #7d8ca3; margin-top: 3pt; }
 
+/* ── Taller propio: el sello de la casa ────────────────── */
+.taller { background: #0a1628; border-left: 3pt solid #f5a623; border-radius: 0 8pt 8pt 0; padding: 7pt 12pt 6.5pt 11pt; margin-top: 7pt; }
+.taller td { vertical-align: top; }
+.compacta .detalle td { padding: 3.8pt 0; }
+.compacta .aviso-ok { padding: 8pt 14pt 7pt 14pt; }
+.taller .celda-ico { width: 26pt; padding-top: 1pt; }
+.taller .ico { width: 19pt; height: 19pt; }
+.taller-tit { font-family: 'dk-mono'; font-weight: bold; font-size: 5.8pt; line-height: 8pt; letter-spacing: 1.5pt; color: #f5a623; }
+.taller-tit span { color: #8fa3bf; font-weight: normal; }
+.taller-es { font-family: 'dk-medio'; font-size: 8.2pt; line-height: 10.3pt; color: #ffffff; margin-top: 2pt; }
+.taller-es strong { font-family: 'dk-titular'; font-weight: bold; color: #f5a623; }
+.taller-en { font-size: 6.4pt; line-height: 8pt; color: #8fa3bf; margin-top: 2pt; }
 .incluye-caja { background: #f3f6f9; border-radius: 8pt; padding: 10pt 12pt 8pt 12pt; }
 .incluye-tit { font-family: 'dk-mono'; font-weight: bold; font-size: 5.8pt; line-height: 8pt; letter-spacing: 1.5pt; color: #0e6ba8; }
-.incluye-tit span { color: #94a3b8; font-weight: normal; }
+.incluye-tit span { color: #7d8ca3; font-weight: normal; }
 .incluye { margin-top: 4pt; }
 .incluye td { padding: 2.4pt 0; vertical-align: middle; }
 .incluye .celda-check { width: 14pt; }
 .incluye .es { font-family: 'dk-medio'; font-size: 7.9pt; line-height: 9.6pt; color: #1a2744; }
-.incluye .en { font-size: 6.5pt; line-height: 8pt; color: #94a3b8; }
+.incluye .en { font-size: 6.5pt; line-height: 8pt; color: #7d8ca3; }
 .check { width: 9pt; height: 9pt; }
 
 /* ── Tarjetas de servicios ────────────────────────────── */
-.bajada { font-size: 7.8pt; line-height: 10.5pt; color: #475569; margin: -2pt 0 7pt 0; }
+.bajada { font-size: 7.8pt; line-height: 10.5pt; color: #475569; margin: -2pt 0 6pt 0; }
 .tarjetas td.hueco { width: 8pt; }
 .tarjetas { page-break-inside: avoid; }
 .tarjeta { border: 0.8pt solid #dbe4ee; border-radius: 8pt; padding: 8pt 11pt 7pt 11pt; height: 66pt; }
 .tarjeta-gratis { border-color: #bfe8d6; background: #f2fbf7; }
 .t-ico { width: 13pt; height: 13pt; }
 .t-nombre { font-family: 'dk-titular'; font-weight: bold; font-size: 11.5pt; line-height: 12.5pt; color: #0a1628; margin-top: 5pt; }
-.t-en { font-family: 'dk-mono'; font-size: 5.4pt; line-height: 7pt; letter-spacing: 0.8pt; color: #94a3b8; }
+.t-en { font-family: 'dk-mono'; font-size: 5.4pt; line-height: 7pt; letter-spacing: 0.8pt; color: #7d8ca3; }
 .t-precio { font-family: 'dk-titular'; font-weight: bold; font-size: 14pt; line-height: 15pt; color: #0e6ba8; margin-top: 6pt; }
 .t-precio span { font-family: 'dk-texto'; font-weight: normal; font-size: 7pt; color: #64748b; }
 .t-gratis { color: #00875a; }
 .t-det { font-size: 6.9pt; line-height: 9pt; color: #64748b; margin-top: 2pt; }
-.nota-en { font-size: 6.6pt; line-height: 9pt; color: #94a3b8; margin-top: 6pt; }
+.nota-en { font-size: 6.6pt; line-height: 9pt; color: #7d8ca3; margin-top: 6pt; }
 
 .aviso-ok { background: #effaf5; border-left: 3pt solid #00b87a; border-radius: 0 8pt 8pt 0; padding: 10pt 14pt 9pt 14pt; }
 .aviso-tit { font-family: 'dk-titular'; font-weight: bold; font-size: 12pt; line-height: 14pt; color: #0b5d43; }
@@ -294,7 +318,7 @@ a { text-decoration: none; }
 .pasos-lista td { padding: 2pt 0; font-size: 7.9pt; line-height: 10.5pt; color: #3d3d3d; vertical-align: middle; }
 
 /* ── Medios de pago ───────────────────────────────────── */
-.pagos { margin-top: 10pt; border: 0.8pt solid #dbe4ee; border-radius: 8pt; padding: 0 10pt 0 12pt; }
+.pagos { margin-top: 8pt; border: 0.8pt solid #dbe4ee; border-radius: 8pt; padding: 0 10pt 0 12pt; }
 .pagos td { vertical-align: middle; }
 .pagos-izq { padding: 8pt 0; }
 .pagos-tit { font-family: 'dk-mono'; font-weight: bold; font-size: 5.8pt; line-height: 8pt; letter-spacing: 1.4pt; color: #0e6ba8; }
@@ -310,11 +334,11 @@ a { text-decoration: none; }
 .pagos-link { font-family: 'dk-medio'; font-size: 7pt; line-height: 9pt; color: #0e6ba8; text-align: right; white-space: nowrap; }
 
 /* ── Llamada a la acción y pie ────────────────────────── */
-.cta { page-break-inside: avoid; margin-top: 10pt; background: #0e6ba8; border-radius: 9pt; padding: 11pt 14pt; }
+.cta { page-break-inside: avoid; margin-top: 8pt; background: #0e6ba8; border-radius: 9pt; padding: 11pt 14pt; }
 .cta td { vertical-align: middle; }
 .cta-tit { font-family: 'dk-titular'; font-weight: bold; font-size: 13pt; line-height: 15pt; color: #ffffff; }
 .cta-txt { font-size: 7.8pt; line-height: 10.5pt; color: #cfe6f7; margin-top: 1pt; }
-.cta-pasos { font-family: 'dk-medio'; font-size: 7.3pt; line-height: 10.5pt; color: #e6f2fb; margin-top: 3pt; }
+.cta-pasos { font-family: 'dk-medio'; font-size: 7.1pt; line-height: 10.5pt; color: #e6f2fb; margin-top: 3pt; }
 .cta-n { font-family: 'dk-titular'; font-weight: bold; color: #f5a623; }
 .boton { display: block; background: #ffffff; border-radius: 6pt; padding: 6pt 10pt; font-family: 'dk-medio'; font-weight: bold; font-size: 8pt; line-height: 10pt; color: #0a1628; text-align: center; white-space: nowrap; }
 .boton-wa { background: #25d366; color: #ffffff; }
@@ -358,7 +382,7 @@ a { text-decoration: none; }
   <img class="ola" src="<?php echo $ola; ?>">
 </div>
 
-<div class="cuerpo">
+<div class="cuerpo<?php echo $compacta ? ' compacta' : ''; ?>">
 
   <table><tr>
     <td style="width:56%;padding-right:20pt;">
@@ -438,6 +462,16 @@ a { text-decoration: none; }
       <div class="letra-chica">* Precio referencial · Reference quote. Se confirma al hacer el pedido · Final confirmation upon order.<?php
         echo !empty($precio['tipo_cambio']) ? ' Tipo de cambio ref. · Reference rate: ' . $e($precio['tipo_cambio']) . '.' : '';
       ?></div>
+      <div class="taller">
+        <table><tr>
+          <td class="celda-ico"><img class="ico" src="<?php echo $icono_taller; ?>"></td>
+          <td>
+            <div class="taller-tit">TALLER PROPIO <span>· OUR OWN WORKSHOP</span></div>
+            <div class="taller-es">Trabajamos tu piso con nuestra propia máquina especial para pisos de lanchas. <strong>Nuestro único foco:</strong> la calidad del producto y la terminación.</div>
+            <?php if (!$compacta): ?><div class="taller-en">Our own marine-flooring machine. Sole focus: quality &amp; finish.</div><?php endif; ?>
+          </td>
+        </tr></table>
+      </div>
     </td>
     <td style="width:43%;">
       <div class="incluye-caja">
@@ -552,7 +586,7 @@ a { text-decoration: none; }
       <td>
         <div class="cta-tit">¿Listo para avanzar? · Ready to go?</div>
         <?php if (!$proximos): ?>
-        <div class="cta-pasos"><?php foreach ($pasos as $i => $paso): ?><span style="white-space:nowrap;"><span class="cta-n"><?php echo $i + 1; ?></span> <?php echo $e($paso[0]); ?></span><?php echo $i < count($pasos) - 1 ? ' &nbsp;&rsaquo; ' : ''; ?><?php endforeach; ?></div>
+        <div class="cta-pasos"><?php foreach ($pasos as $i => $paso): ?><span style="white-space:nowrap;"><span class="cta-n"><?php echo $i + 1; ?></span> <?php echo $e($paso[0]); ?></span><?php echo $i < count($pasos) - 1 ? ' &rsaquo; ' : ''; ?><?php endforeach; ?></div>
         <?php else: ?>
         <div class="cta-txt">Respóndenos por WhatsApp o correo y seguimos con tu piso.</div>
         <?php endif; ?>
