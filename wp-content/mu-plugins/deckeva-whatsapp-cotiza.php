@@ -135,6 +135,9 @@ function deckeva_wa_cotiza_leer($mensajes) {
 const DECKEVA_MOTO_CORTE_M = 3.25;
 
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
+    // Muelles flotantes: no se cotizan, se escalan a JP (T-017).
+    if (function_exists('deckeva_wa_es_muelle') && deckeva_wa_es_muelle($mensajes)) return array('ok' => false, 'falta' => 'muelle flotante · no se cotiza, lo ve JP', 'jp' => true);
+
     $escrito = ''; $lineas = array();
     foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') { $escrito .= ' ' . mb_strtolower((string) $m['texto']); $lineas[] = mb_strtolower(trim((string) $m['texto'])); }
     // Sólo a quien la pidió: un cliente que dejó sus datos para otra cosa no
@@ -372,6 +375,23 @@ function deckeva_wa_cotiza_pasada() {
         // marca, modelo, año y ubicación obligatorios) se relee antes de salir.
         $legado = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true) && strpos((string) ($c['firma'] ?? ''), 'v2|') !== 0;
         $nuevo = $nuevo || $legado;
+
+        // 0 · Pidió un muelle flotante DESPUÉS de que se armó su cotización:
+        // la que estaba no sale, la ve JP (T-017). Queda «retenida» y no vuelve
+        // a lista/aprobada sola: si pide el piso otra vez, se arma una nueva.
+        if (is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true)
+            && deckeva_wa_es_muelle((array) $chat['mensajes'], (int) ($c['creada'] ?? 0) + 1)) {
+            deckeva_wa_con_candado(function ($chats) use ($num) {
+                if (isset($chats[$num]['cotizacion']) && in_array($chats[$num]['cotizacion']['estado'] ?? '', array('lista', 'aprobada'), true)) {
+                    $chats[$num]['cotizacion']['estado'] = 'retenida';
+                    $chats[$num]['cotizacion']['falta'] = 'pidió un muelle flotante · lo ve JP';
+                    $chats[$num]['cotizacion']['jp'] = true;
+                    deckeva_wa_anotar($chats[$num], 'cotización ' . ($chats[$num]['cotizacion']['numero'] ?? '') . ' retenida · pidió un muelle flotante');
+                }
+                return $chats;
+            });
+            continue;
+        }
 
         // 1 · Mandar lo aprobado, a su hora · sólo si no escribió nada después.
         if (is_array($c) && ($c['estado'] ?? '') === 'aprobada' && !$nuevo) {

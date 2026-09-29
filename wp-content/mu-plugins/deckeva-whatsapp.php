@@ -84,6 +84,38 @@ function deckeva_wa_validar($txt) {
     return '';
 }
 
+/**
+ * ¿El cliente pregunta por muelles flotantes? (JP, 29-sep · T-017) Es el
+ * único producto que no se cotiza ni se le pone precio en el chat: se escala
+ * a JP al tiro. Lista cerrada de palabras, sobre lo que escribió el cliente.
+ *
+ * Sólo mira el pedido vigente: los mensajes del cliente desde `$desde`, o si
+ * no se da, las últimas 6 h antes de su último mensaje. Un muelle que pidió
+ * la semana pasada no bloquea el piso que pide hoy.
+ *
+ * Y la ubicación no es un pedido: «está en el muelle flotante de Pucón» dice
+ * dónde está la lancha. Esas frases se sacan antes de mirar.
+ */
+function deckeva_wa_es_muelle($mensajes, $desde = null) {
+    $in = array();
+    foreach ((array) $mensajes as $m) if (($m['dir'] ?? '') === 'in') $in[] = $m;
+    if (!$in) return false;
+    if ($desde === null) {
+        $ult = 0;
+        foreach ($in as $m) $ult = max($ult, (int) ($m['ts'] ?? 0));
+        $desde = $ult - 6 * 3600;
+    }
+    foreach ($in as $m) {
+        if ((int) ($m['ts'] ?? 0) < (int) $desde) continue;
+        $t = (string) ($m['texto'] ?? '');
+        // Dónde está la embarcación: «en el muelle…», «amarrada al muelle…», «at the dock».
+        $t = preg_replace('/\b(en|al|del|desde|junto\s+al|amarrad[ao]s?\s+(en|a|al)|at|in|on)\s+(el|la|un|una|the|a|our|my)?\s*(floating\s+)?(muelles?|pantal[aá]n(es)?|embarcaderos?|marina|docks?)\b(\s+(flotantes?|modular(es)?|floating))?/iu', ' ', $t) ?? $t;
+        if (preg_match('/\b(muelles?|pantal[aá]n(es)?|embarcaderos?)\s+(flotantes?|modular(es)?)\b|\bfloating\s+docks?\b/iu', $t)) return true;
+        if (preg_match('/\b(cotiz\w*|precios?|valor(es)?|cu[aá]nto|compr\w*|quiero|necesito|venden|hacen|fabrican)\b[^.?!\n]{0,20}\bmuelles?\b/iu', $t)) return true;
+    }
+    return false;
+}
+
 /** Espera antes de contestar: 5 a 40 min, distinta por mensaje, sin patrón. */
 function deckeva_wa_demora($semilla) {
     $h = hexdec(substr(hash('sha256', $semilla . '|espera'), 0, 8));
@@ -297,6 +329,11 @@ function deckeva_wa_un_chat($num) {
                     deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
                     break;
                 }
+                // Muelles flotantes: nunca sale solo, lo ve JP (T-017).
+                if (deckeva_wa_es_muelle($chat['mensajes'] ?? array())) {
+                    $r['necesita_humano'] = true;
+                    $r['motivo'] = 'MUELLE FLOTANTE · no se cotiza, lo ve JP al tiro' . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : '');
+                }
                 $regla = deckeva_wa_validar($r['texto']);
                 $auto = deckeva_wa_modo() === 'automatico' && !$r['necesita_humano'] && $regla === '';
                 $semilla = $num . '|' . $ultIn;
@@ -369,6 +406,7 @@ function deckeva_wa_sistema() {
         . "- Fabrica pisos de goma EVA antideslizante a medida para lanchas, veleros, motos de agua y embarcaciones. Sitio: deckeva.cl, con cotizador en la web. Correo: contacto@deckeva.cl.\n"
         . "- Para cotizar un piso hace falta: marca, modelo, año y largo en pies de la embarcación, el color o diseño que quiere, dónde está la embarcación (ciudad o marina), y el nombre y el email del cliente. Para una moto de agua: marca, modelo y año (el tamaño lo sacamos del largo de sus especificaciones), el color, dónde está, y el nombre y el email.\n"
         . "- La toma de medidas y la instalación son servicios opcionales de Deckeva, con un valor fijo que va en la cotización formal (PDF), aparte del total del piso. El cliente también las puede hacer él mismo, fácil, con el video explicativo que le mandamos: como prefiera. Nunca digas su valor en el chat: si lo pregunta, dile que va en la cotización.\n"
+        . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que el encargado lo revisa personalmente y le escribe, y marca necesita_humano.\n"
         . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
         . "- La cotización formal llega por correo, en PDF. También la puede sacar solo en el cotizador de deckeva.cl.\n\n"
         . "Cómo se escribe:\n"
