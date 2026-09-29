@@ -33,6 +33,25 @@ Publicar solo cuesta un clic; deshacer, no. Preguntar antes de:
 Y decirlo claro cuando algo salga mal o quede a medias. Un fallo silencioso aquí
 son clientes perdidos: es exactamente lo que pasó con los avisos de cotización.
 
+## El largo de una embarcación se saca de las especificaciones (REGLA DEL DUEÑO)
+
+**Para cotizar, el largo es el LOA del fabricante, buscado en internet con
+marca, modelo y año, y manda sobre lo que diga el cliente** (JP, 29-sep-2026).
+El cliente se equivoca o redondea («21 pies», y después «perdón, son 22,4»); la
+ficha técnica no.
+
+**Redondeo:** hasta ,4 baja al entero anterior; desde ,5 sube al siguiente.
+22,4 → 22 · 22,5 → 23 · 24' 6" (24,5) → 25.
+
+Si no hay especificaciones seguras (el modelo no aparece, las fuentes no
+coinciden, o el año cambia el largo y no se sabe), vale el largo que **escribió**
+el cliente, con el mismo redondeo. Sin ninguno de los dos no se cotiza: se le
+pide.
+
+Vive en `wp-content/mu-plugins/deckeva-whatsapp-cotiza.php`
+(`deckeva_wa_cotiza_loa`, `deckeva_wa_cotiza_redondear`). El correo a JP con
+cada cotización dice de dónde salió el largo y trae el link a la fuente.
+
 ## Despliegue
 
 El hosting es **BanaHosting, plan compartido**: no tiene Git Version Control ni

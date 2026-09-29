@@ -111,7 +111,7 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * destinatario se vuelve a buscar en lo que ESCRIBIÓ el cliente: si Claude lo
  * inventó, no está, y no se cotiza.
  */
-function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla) {
+function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
     $escrito = ''; $lineas = array();
     foreach ($mensajes as $m) if (($m['dir'] ?? '') === 'in') { $escrito .= ' ' . mb_strtolower((string) $m['texto']); $lineas[] = mb_strtolower(trim((string) $m['texto'])); }
     // Sólo a quien la pidió: un cliente que dejó sus datos para otra cosa no
@@ -133,22 +133,112 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla) {
         if (!preg_match('/\bmoto/u', $escrito) || !preg_match($dijo, $escrito)) return array('ok' => false, 'falta' => 'el tamaño de la moto de agua · lo ve JP', 'jp' => true);
         $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
     } else {
-        $largo = str_replace(',', '.', trim((string) ($d['largo'] ?? '')));
-        if (!preg_match('/^(\d{1,2})(?:\.(\d+))?/', $largo, $lm)) return array('ok' => false, 'falta' => 'el largo en pies');
-        if (isset($lm[2]) && (int) $lm[2] !== 0) return array('ok' => false, 'falta' => 'el largo es ' . $largo . ' pies, no un entero · lo ve JP', 'jp' => true);
-        $clave = (string) (int) $lm[1];
-        // El largo tiene que estar escrito COMO largo: «19 pies», «19 ft», «19'»,
-        // o el número solo en un mensaje. Un 19 dentro de «Glastron 195» o el 22
-        // de «22,4 pies» no cuentan. Si el cliente escribió decimales, va a JP.
-        $n = preg_quote($clave, '/');
-        if (preg_match('/(?<![\d.,])' . $n . '\s*[.,]\s*\d/', $escrito)) return array('ok' => false, 'falta' => 'el largo tiene decimales · lo ve JP', 'jp' => true);
-        $comoLargo = preg_match('/(?<![\d.,])' . $n . '(?![\d.,])\s*(pies|pie|ft|feet|\'|’)/u', $escrito);
-        foreach ($lineas as $l) if (preg_match('/^' . $n . '(\s*(pies|pie|ft|feet))?$/u', $l)) $comoLargo = true;
-        if (!$comoLargo) return array('ok' => false, 'falta' => 'el largo en pies');
+        // Regla de JP (29-sep): el largo lo dan las especificaciones del
+        // fabricante (LOA), buscadas con marca, modelo y año, y mandan sobre lo
+        // que diga el cliente. Sin specs, el largo que ESCRIBIÓ el cliente
+        // (leído del texto, no de lo que devolvió Claude). En los dos casos:
+        // hasta ,4 baja al entero anterior y desde ,5 sube al siguiente.
+        if (is_array($loa) && (float) ($loa['pies'] ?? 0) > 0) {
+            $pies = (float) $loa['pies'];
+            $fuente = 'specs';
+        } else {
+            $pies = deckeva_wa_cotiza_largo_escrito($escrito, $lineas);
+            $fuente = 'cliente';
+            if ($pies === null) return array('ok' => false, 'falta' => 'el largo en pies (o marca, modelo y año para buscarlo)');
+        }
+        $clave = (string) deckeva_wa_cotiza_redondear($pies);
     }
     if (!isset($tabla[$clave])) return array('ok' => false, 'falta' => $clave . ' no está en la tabla · lo ve JP', 'jp' => true);
     if (trim((string) ($d['color'] ?? '')) === '') return array('ok' => false, 'falta' => 'el color');
-    return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave]);
+    return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave], 'pies' => $pies ?? null, 'fuente_largo' => $fuente ?? 'moto');
+}
+
+/** Regla de JP: hasta ,4 baja al entero anterior; desde ,5 sube al siguiente. */
+function deckeva_wa_cotiza_redondear($pies) {
+    $pies = (float) $pies;
+    $entero = floor($pies);
+    // Tolerancia mínima, sólo para el ruido de coma flotante (24 + 6/12).
+    return (int) (($pies - $entero) >= 0.5 - 1e-9 ? $entero + 1 : $entero);
+}
+
+/**
+ * El largo que escribió el cliente, como largo: «19 pies», «22,4 ft», «19'»,
+ * «24' 6\"» (pies y pulgadas), o el número solo en un mensaje. Si lo dijo más
+ * de una vez, vale el último en el orden de la conversación (se corrigió:
+ * «perdón, son 22,4 pies»). null si no hay ninguno.
+ */
+function deckeva_wa_cotiza_largo_escrito($escrito, array $lineas) {
+    if (!$lineas) $lineas = array((string) $escrito);
+    $ultimo = null;
+    $re = '/(?<![\d.,])(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:pies|pie|ft|feet|\'|’)(?:\s*(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:"|”|\'\'|’’|pulgadas|pulgada|pulg|in)(?![\p{L}]))?/u';
+    foreach ($lineas as $l) {
+        $l = trim((string) $l);
+        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)$/u', $l, $mm)) { $ultimo = (float) str_replace(',', '.', $mm[1]); continue; }
+        if (preg_match_all($re, $l, $m, PREG_SET_ORDER)) {
+            $u = end($m);
+            $v = (float) str_replace(',', '.', $u[1]);
+            // Pulgadas: sólo si el pie es entero y son menos de 12.
+            if (isset($u[2]) && $u[2] !== '') {
+                $pul = (float) str_replace(',', '.', $u[2]);
+                if ($pul < 12 && floor($v) == $v) $v += $pul / 12;
+            }
+            $ultimo = $v;
+        }
+    }
+    return ($ultimo !== null && $ultimo >= 8 && $ultimo <= 60) ? $ultimo : null;
+}
+
+/**
+ * El largo total (LOA) según las especificaciones, buscado en internet con
+ * marca, modelo y año. Se guarda por modelo: el mismo bote no se busca dos
+ * veces. Devuelve array('pies' => 24.5, 'como_figura' => "24' 6\"", 'fuente' =>
+ * url) o array('pies' => 0, ...) si no hay un dato seguro.
+ */
+function deckeva_wa_cotiza_loa($marca, $modelo, $anio) {
+    $marca = trim((string) $marca); $modelo = trim((string) $modelo); $anio = trim((string) $anio);
+    if ($marca === '' || $modelo === '' || deckeva_wa_llave() === '') return array('pies' => 0);
+    $clave = 'deckeva_wa_loa_' . md5(mb_strtolower($marca . '|' . $modelo . '|' . $anio));
+    $cache = get_option($clave, null);
+    if (is_array($cache) && (($cache['pies'] ?? 0) > 0 || time() - (int) ($cache['ts'] ?? 0) < 7 * 86400)) return $cache;
+
+    $pedido = "Embarcación: marca «{$marca}», modelo «{$modelo}»" . ($anio !== '' ? ", año {$anio}" : ', año no informado') . ".\n"
+        . "Busca en internet su largo total (LOA, length overall) según las especificaciones del fabricante o de fichas técnicas confiables. "
+        . "Si el año cambia el largo y no está informado, o las fuentes no coinciden, o no encuentras ese modelo exacto, marca seguro=false.\n"
+        . "Termina tu respuesta con UN objeto JSON y nada después: "
+        . "{\"loa_pies\": número en pies decimales (las pulgadas divididas por 12) o null, \"como_figura\": el largo tal como aparece en la fuente, \"fuente\": la URL, \"seguro\": true o false}";
+    $mensajes = array(array('role' => 'user', 'content' => $pedido));
+    $texto = '';
+    for ($vuelta = 0; $vuelta < 3; $vuelta++) {
+        $res = wp_remote_post('https://api.anthropic.com/v1/messages', array(
+            'timeout' => 90,
+            'headers' => array('x-api-key' => deckeva_wa_llave(), 'anthropic-version' => '2023-06-01', 'anthropic-beta' => 'server-side-fallback-2026-07-01', 'content-type' => 'application/json'),
+            'body' => wp_json_encode(array(
+                'model' => DECKEVA_WA_MODELO, 'max_tokens' => 4000, 'fallbacks' => 'default',
+                'output_config' => array('effort' => 'medium'),
+                'tools' => array(array('type' => 'web_search_20260209', 'name' => 'web_search', 'max_uses' => 4)),
+                'messages' => $mensajes,
+            )),
+        ));
+        if (is_wp_error($res) || (int) wp_remote_retrieve_response_code($res) !== 200) return array('pies' => 0);
+        $j = json_decode((string) wp_remote_retrieve_body($res), true);
+        if (!is_array($j) || ($j['stop_reason'] ?? '') === 'refusal') return array('pies' => 0);
+        foreach ((array) ($j['content'] ?? array()) as $b) if (($b['type'] ?? '') === 'text') $texto .= (string) $b['text'];
+        // Una búsqueda larga puede volver en pausa: se sigue donde quedó.
+        if (($j['stop_reason'] ?? '') !== 'pause_turn') break;
+        $mensajes[] = array('role' => 'assistant', 'content' => $j['content']);
+    }
+    $out = array('pies' => 0, 'ts' => time());
+    if (preg_match_all('/\{[^{}]*"loa_pies"[^{}]*\}/s', $texto, $m)) {
+        $d = json_decode(end($m[0]), true);
+        $pies = is_array($d) ? (float) ($d['loa_pies'] ?? 0) : 0;
+        $fuente = is_array($d) ? trim((string) ($d['fuente'] ?? '')) : '';
+        if (is_array($d) && !empty($d['seguro']) && $pies >= 8 && $pies <= 60 && preg_match('#^https?://#', $fuente)) {
+            // Sin recortar decimales: 22,499 redondeado a 2 daría 22,50 y subiría de tarifa.
+            $out = array('pies' => $pies, 'como_figura' => substr((string) ($d['como_figura'] ?? ''), 0, 40), 'fuente' => $fuente, 'ts' => time());
+        }
+    }
+    update_option($clave, $out, false);
+    return $out;
 }
 
 /** Los datos del PDF, con la misma forma que usa el cotizador de la home. */
@@ -206,7 +296,9 @@ function deckeva_wa_cotiza_pasada() {
         $huella = deckeva_wa_huella($chat);
         $r = deckeva_wa_cotiza_leer((array) $chat['mensajes']);
         if (!$r['ok']) continue;
-        $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla);
+        $loa = null;
+        if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
+        $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla, $loa);
         $firma = $listo['ok'] ? implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])))) : '';
         $armada = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada', 'enviada', 'descartada'), true);
         // Ya hay una cotización y lo nuevo no cambia nada (un «gracias», una
@@ -245,6 +337,7 @@ function deckeva_wa_cotiza_pasada() {
                     'datos' => $datos, 'creada' => time(),
                     'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
                     'aprobada_por' => $auto ? 'automático' : '', 'firma' => $firma,
+                    'largo' => array('pies' => $listo['pies'], 'fuente' => $listo['fuente_largo'], 'como_figura' => $loa['como_figura'] ?? '', 'url' => $loa['fuente'] ?? ''),
                     // La que reemplaza (el cliente cambió un dato), para que se vea.
                     'reemplaza' => ($armada && ($c['estado'] ?? '') !== 'enviada') ? (string) ($c['numero'] ?? '') : '',
                 );
@@ -311,6 +404,17 @@ function deckeva_wa_cotiza_enviar($num) {
     return $ok;
 }
 
+/** De dónde salió el largo, para que JP lo pueda revisar. */
+function deckeva_wa_cotiza_largo_html(array $c) {
+    $l = $c['largo'] ?? null;
+    if (!is_array($l) || empty($l['pies'])) return '';
+    $txt = ($l['fuente'] ?? '') === 'specs'
+        ? 'Largo según especificaciones: ' . ($l['como_figura'] !== '' ? $l['como_figura'] . ' = ' : '') . str_replace('.', ',', (string) $l['pies']) . ' pies'
+        : 'Largo según lo que escribió el cliente: ' . str_replace('.', ',', (string) $l['pies']) . ' pies (no se encontraron especificaciones seguras)';
+    $txt .= ' → se cotiza a ' . deckeva_wa_cotiza_redondear($l['pies']) . ' pies.';
+    return '<p style="color:#555">' . esc_html($txt) . (($l['url'] ?? '') !== '' ? ' <a href="' . esc_url($l['url']) . '">Fuente</a>' : '') . '</p>';
+}
+
 function deckeva_wa_cotiza_avisar_jp($num, array $c) {
     $lnk = admin_url('options-general.php?page=deckeva-whatsapp');
     if (($c['estado'] ?? '') === 'lista') {
@@ -318,6 +422,7 @@ function deckeva_wa_cotiza_avisar_jp($num, array $c) {
         $html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#111">'
             . '<p>Cotización lista para +' . esc_html($num) . ', armada con los datos que dejó por WhatsApp y el precio de la tabla del home.</p>'
             . '<p><b>' . esc_html($d['cliente']['nombre']) . '</b> · ' . esc_html($d['embarcacion']['modelo']) . ' · ' . esc_html($d['embarcacion']['tamano']) . ' · ' . esc_html($d['embarcacion']['color']) . '<br>Total ' . esc_html($d['precio']['total']) . ' (IVA incluido)</p>'
+            . deckeva_wa_cotiza_largo_html($c)
             . '<p>Sale al cliente cuando apretes «Enviar». El PDF va adjunto para que lo revises.</p>'
             . '<p><a href="' . esc_url($lnk) . '" style="background:#0e6ba8;color:#fff;padding:9px 16px;border-radius:6px;text-decoration:none">Revisar y enviar</a></p></div>';
         wp_mail(deckeva_wa_aprobador(), 'Cotización ' . $c['numero'] . ' lista · ' . $d['cliente']['nombre'], $html, deckeva_mail_headers(), array($c['pdf']));
