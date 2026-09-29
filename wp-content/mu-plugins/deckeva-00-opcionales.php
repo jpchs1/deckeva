@@ -56,3 +56,16 @@ function deckeva_opcionales() {
 function deckeva_opcional_clp($monto, $en = false) {
     return 'CLP $' . number_format((int) $monto, 0, $en ? '.' : ',', $en ? ',' : '.');
 }
+
+/**
+ * ¿Se ofrecen los opcionales en este país? Sólo en Chile: «mismo valor en
+ * todas las regiones» son las regiones de Chile. A un cliente de afuera no se
+ * le promete ir a medir ni a instalar a precio chileno; se le ofrece hacerlo
+ * él con el video y el soporte. Sin país (WhatsApp, formulario de Chile) es
+ * Chile.
+ */
+function deckeva_opcionales_en_pais($pais) {
+    $p = strtolower(trim((string) $pais));
+    $p = function_exists('remove_accents') ? remove_accents($p) : $p;
+    return $p === '' || in_array($p, array('chile', 'cl'), true);
+}

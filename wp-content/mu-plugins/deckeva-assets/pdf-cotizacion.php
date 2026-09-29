@@ -312,6 +312,18 @@ td { vertical-align: top; }
     </table>
     <?php endif; ?>
   </div>
+  <?php elseif (!deckeva_opcionales_en_pais($d['cliente']['pais'] ?? '')): ?>
+  <?php // Fuera de Chile no se ofrece ir a medir ni a instalar: se hace con el video. ?>
+  <div class="aviso">
+    <div class="aviso-tit">Toma de medidas e instalación &nbsp;<span>LO HACES TÚ · DO IT YOURSELF</span></div>
+    <p>La toma de medidas y la instalación las puedes hacer tú mismo fácilmente. Deckeva te entrega <strong>sin costo</strong>:</p>
+    <table class="incluye">
+      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Video explicativo paso a paso para la <strong>toma de medidas</strong>.</td></tr>
+      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Video explicativo paso a paso para la <strong>instalación</strong>.</td></tr>
+      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.</td></tr>
+    </table>
+    <p class="en"><strong>EN:</strong> You can easily measure and install your flooring yourself with our free step-by-step videos and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>.</p>
+  </div>
   <?php else: ?>
   <?php
     // Decisión de JP (29-sep-2026): son opcionales y NO se suman al total del

@@ -153,6 +153,18 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
         $anio = trim((string) ($d['anio'] ?? ''));
         $anioOk = preg_match('/^(?:19|20)?(\d{2})$/', $anio, $am)
             && preg_match('/(?<!\d)(?:19|20)' . $am[1] . '(?!\d)|(?:(?:\bdel|\ba[nñ]o|\bmodelo|\byear)\s*|[\'’])' . $am[1] . '(?!\d)/u', $escrito);
+        // Un «98» suelto vale si es la respuesta a una pregunta por el año
+        // (Codex): el mensaje anterior nuestro preguntó el año y el cliente
+        // contestó sólo eso.
+        if (!$anioOk && isset($am[1])) {
+            $preguntoAnio = false;
+            foreach ($mensajes as $m) {
+                $txt = trim(mb_strtolower((string) ($m['texto'] ?? '')));
+                if (($m['dir'] ?? '') !== 'in') { $preguntoAnio = (bool) preg_match('/\ba[nñ]o\b|\byear\b/u', $txt); continue; }
+                if ($preguntoAnio && preg_match('/^(?:del\s+)?(?:19|20)?' . $am[1] . '\.?$/u', $txt)) { $anioOk = true; break; }
+                $preguntoAnio = false;
+            }
+        }
         if (!$anioOk) return array('ok' => false, 'falta' => 'el año de la embarcación');
         // Regla de JP (29-sep): el largo lo dan las especificaciones del
         // fabricante (LOA), buscadas con marca, modelo y año, y mandan sobre lo
@@ -222,7 +234,9 @@ function deckeva_wa_cotiza_largo_escrito($escrito, array $lineas) {
     $re = '/(?<![\d.,])(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:pies|pie|ft|feet|\'|’)(?:\s*(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:"|”|\'\'|’’|pulgadas|pulgada|pulg|in)(?![\p{L}]))?/u';
     foreach ($lineas as $l) {
         $l = trim((string) $l);
-        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)$/u', $l, $mm)) { $ultimo = (float) str_replace(',', '.', $mm[1]); continue; }
+        // Un número solo vale como largo si puede ser un largo: un «98» que
+        // contesta «¿de qué año es?» no pisa los «19 pies» de antes.
+        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)$/u', $l, $mm)) { $v = (float) str_replace(',', '.', $mm[1]); if ($v >= 8 && $v <= 60) $ultimo = $v; continue; }
         if (preg_match_all($re, $l, $m, PREG_SET_ORDER)) {
             $u = end($m);
             $v = (float) str_replace(',', '.', $u[1]);

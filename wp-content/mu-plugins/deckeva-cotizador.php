@@ -766,6 +766,32 @@ class Deckeva_Cotizador {
                 . '<td style="padding:6px 10px;color:#4a4a4a;text-align:right;font-weight:600;">' . esc_html(deckeva_opcional_clp($op['total'])) . '</td></tr>';
         }
 
+        // Opcionales sólo en Chile; afuera, hacerlo con el video (deckeva_opcionales_en_pais).
+        $bloque_opc = deckeva_opcionales_en_pais($country) ? '<div class="notice">
+  <h3>Toma de medidas e instalación · Opcionales / Optional</h3>
+  <p style="margin:0 0 6px;font-size:11px;color:#4a4a4a;"><strong>ES:</strong> Si prefieres que lo hagamos nosotros, vamos a tomar las medidas y a instalar tu piso. Son servicios <strong>opcionales</strong>, con el mismo valor en todas las regiones y también para motos de agua, y <strong>no están sumados al total</strong> de tu piso. Y si quieres, lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como prefieras.</p>
+  <table style="width:100%;margin-top:6px;border-collapse:collapse;font-size:11px;">
+    <tr style="background:#fff4d6;"><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Opcionales / Optional</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;text-align:right;">Neto / Net</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;text-align:right;">IVA 19%</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;text-align:right;">Total con IVA</td></tr>
+    ' . $opc_filas . '
+  </table>
+  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;">Si lo haces tú, Deckeva te entrega <strong>sin costo</strong>:</p>
+  <ul>
+    <li>Video explicativo paso a paso para la <strong>toma de medidas</strong>.</li>
+    <li>Video explicativo paso a paso para la <strong>instalación</strong>.</li>
+    <li>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.</li>
+  </ul>
+  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;"><strong>EN:</strong> Measurement and installation are <strong>optional</strong> services and are <strong>not added to the total</strong> of your flooring (net, VAT and total in the table above). Same price in every region, jet skis included. You can also easily do both yourself with our step-by-step videos and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>, whichever you prefer.</p>
+</div>' : '<div class="notice">
+  <h3>Toma de medidas e instalación · Lo haces tú / Do it yourself</h3>
+  <p style="margin:0 0 6px;font-size:11px;color:#4a4a4a;"><strong>ES:</strong> La toma de medidas y la instalación las puedes hacer tú mismo fácilmente. Deckeva te entrega <strong>sin costo</strong>:</p>
+  <ul>
+    <li>Video explicativo paso a paso para la <strong>toma de medidas</strong>.</li>
+    <li>Video explicativo paso a paso para la <strong>instalación</strong>.</li>
+    <li>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.</li>
+  </ul>
+  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;"><strong>EN:</strong> You can easily measure and install your flooring yourself with our free step-by-step videos and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>.</p>
+</div>';
+
         return '<!DOCTYPE html><html><head><meta charset="UTF-8">
 <style>
 body { font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 22px; color: #1a2a3a; font-size: 12px; line-height: 1.5; }
@@ -819,21 +845,7 @@ td { padding: 4px 10px; vertical-align: top; }
   <p style="margin:4px 0 0;font-size:10px;color:#888;">* Precio referencial / Reference quote · Final confirmation upon order.</p>
 </div>
 
-<div class="notice">
-  <h3>Toma de medidas e instalación · Opcionales / Optional</h3>
-  <p style="margin:0 0 6px;font-size:11px;color:#4a4a4a;"><strong>ES:</strong> Si prefieres que lo hagamos nosotros, vamos a tomar las medidas y a instalar tu piso. Son servicios <strong>opcionales</strong>, con el mismo valor en todas las regiones y también para motos de agua, y <strong>no están sumados al total</strong> de tu piso. Y si quieres, lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como prefieras.</p>
-  <table style="width:100%;margin-top:6px;border-collapse:collapse;font-size:11px;">
-    <tr style="background:#fff4d6;"><td style="padding:6px 10px;font-weight:700;color:#7a4a00;">Opcionales / Optional</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;text-align:right;">Neto / Net</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;text-align:right;">IVA 19%</td><td style="padding:6px 10px;font-weight:700;color:#7a4a00;text-align:right;">Total con IVA</td></tr>
-    ' . $opc_filas . '
-  </table>
-  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;">Si lo haces tú, Deckeva te entrega <strong>sin costo</strong>:</p>
-  <ul>
-    <li>Video explicativo paso a paso para la <strong>toma de medidas</strong>.</li>
-    <li>Video explicativo paso a paso para la <strong>instalación</strong>.</li>
-    <li>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.</li>
-  </ul>
-  <p style="margin:8px 0 4px;font-size:11px;color:#4a4a4a;"><strong>EN:</strong> Measurement and installation are <strong>optional</strong> services and are <strong>not added to the total</strong> of your flooring (net, VAT and total in the table above). Same price in every region, jet skis included. You can also easily do both yourself with our step-by-step videos and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>, whichever you prefer.</p>
-</div>
+' . $bloque_opc . '
 
 <div class="footer">
   <p>This quote is valid for 15 business days. / Esta cotización es válida por 15 días hábiles.<br>
@@ -919,8 +931,16 @@ td { padding: 4px 10px; vertical-align: top; }
         // total, en el idioma del cliente. El valor sale de deckeva-00-opcionales.php.
         $aviso_es = 'Si prefieres que lo hagamos nosotros, vamos a tomar las medidas y a instalar tu piso. Son servicios <strong>opcionales</strong>, con el mismo valor en todas las regiones y también para motos de agua, y <strong>no están sumados al total</strong> de tu piso. Y si quieres, lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como prefieras.';
         $apoyo_es = 'Si lo haces tú, Deckeva te entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.';
-        $aviso_en = 'Measurement and installation are <strong>optional</strong> services and are <u>not added to the total</u> of your flooring. Same price in every region, jet skis included.';
+        $aviso_en = 'Measurement and installation are <strong>optional</strong> services and are <strong>not added to the total</strong> of your flooring. Same price in every region, jet skis included.';
         $apoyo_en = 'You can also easily do both yourself with our free step-by-step videos + <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>, whichever you prefer.';
+        $en_chile = deckeva_opcionales_en_pais($country);
+        if (!$en_chile) {
+            // Fuera de Chile no se ofrece ir a medir ni a instalar: se hace con el video.
+            $aviso_es = 'La toma de medidas y la instalación las puedes hacer tú mismo fácilmente.';
+            $apoyo_es = 'Deckeva te entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.';
+            $aviso_en = 'You can easily measure and install your flooring yourself.';
+            $apoyo_en = 'Deckeva gives you, <strong>free of charge</strong>, step-by-step videos for both + <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>.';
+        }
         if ($idioma === 'en') {
             $aviso = $aviso_en;
             $apoyo = $apoyo_en;
@@ -934,7 +954,7 @@ td { padding: 4px 10px; vertical-align: top; }
             }
         }
         $opc_filas = '';
-        foreach (deckeva_opcionales() as $op) {
+        foreach ($en_chile ? deckeva_opcionales() : array() as $op) {
             $monto = function ($n) use ($idioma) { return esc_html(deckeva_opcional_clp($n, $idioma === 'en')); };
             $opc_filas .= '<tr><td style="padding:7px 10px;color:#4a4a4a;border-top:1px solid #f0d89a;">' . ($op['clave'] === 'medicion' ? '📐 ' : '🛠️ ') . esc_html($t($op['nombre'], $op['nombre_en'], $op['nombre'] . ' · ' . $op['nombre_en'])) . '</td>'
                 . '<td style="padding:7px 10px;color:#4a4a4a;text-align:right;border-top:1px solid #f0d89a;">' . $monto($op['neto']) . '</td>'
@@ -972,16 +992,16 @@ td { padding: 4px 10px; vertical-align: top; }
 </td></tr>
 <tr><td style="padding:16px 36px 10px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbee;border:1px solid #e8a735;border-radius:10px;padding:14px 18px;">
-<tr><td style="padding:0 0 6px;font-size:10px;color:#a56a00;font-weight:700;letter-spacing:2px;text-transform:uppercase;">' . $t('📐 Toma de medidas &amp; 🛠️ Instalación · Opcionales', '📐 Measurement &amp; 🛠️ Installation · Optional', '📐 Toma de medidas &amp; 🛠️ Instalación · Opcionales / Optional') . '</td></tr>
+<tr><td style="padding:0 0 6px;font-size:10px;color:#a56a00;font-weight:700;letter-spacing:2px;text-transform:uppercase;">' . ($en_chile ? $t('📐 Toma de medidas &amp; 🛠️ Instalación · Opcionales', '📐 Measurement &amp; 🛠️ Installation · Optional', '📐 Toma de medidas &amp; 🛠️ Instalación · Opcionales / Optional') : $t('📐 Toma de medidas &amp; 🛠️ Instalación · Lo haces tú', '📐 Measurement &amp; 🛠️ Installation · Do it yourself', '📐 Toma de medidas &amp; 🛠️ Instalación · Lo haces tú / Do it yourself')) . '</td></tr>
 <tr><td style="font-size:12px;color:#4a4a4a;line-height:1.6;">
 ' . $aviso . '
 </td></tr>
-<tr><td style="padding-top:8px;">
+' . ($opc_filas === '' ? '' : '<tr><td style="padding-top:8px;">
 <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #f0d89a;border-radius:6px;font-size:12px;">
 <tr style="background:#fff4d6;"><td style="padding:7px 10px;font-weight:700;color:#7a4a00;">' . $t('Opcionales', 'Optional', 'Opcionales / Optional') . '</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;text-align:right;">' . $t('Neto', 'Net', 'Neto / Net') . '</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;text-align:right;">' . $t('IVA 19%', 'VAT 19%', 'IVA / VAT 19%') . '</td><td style="padding:7px 10px;font-weight:700;color:#7a4a00;text-align:right;">' . $t('Total con IVA', 'Total incl. VAT', 'Total con IVA') . '</td></tr>
 ' . $opc_filas . '
 </table>
-</td></tr>
+</td></tr>') . '
 <tr><td style="padding-top:10px;font-size:12px;color:#4a4a4a;line-height:1.6;">
 ' . $apoyo . '
 </td></tr>
