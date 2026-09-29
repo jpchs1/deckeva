@@ -70,6 +70,15 @@ Si lo reconoce, la respuesta queda en borrador con aviso a JP, la cotización
 automática no se arma, y una ya armada (lista o aprobada) antes del pedido
 del muelle queda «retenida» y no sale.
 
+## Garantía, vida útil y espesor (REGLA DEL DUEÑO)
+
+JP, 29-sep-2026: el piso tiene **6 mm** de espesor, **5 a 7 años** de vida
+útil y **1 año de garantía, al costo**. «Al costo» va siempre pegado a la
+garantía: decir «1 año de garantía» a secas promete algo que no es. Vive en el
+prompt del contestador (`deckeva_wa_sistema`). Qué cubre y qué significa «al
+costo» no está definido por escrito, así que si el cliente lo pregunta, lo ve
+JP (`necesita_humano`).
+
 ## Toma de medidas e instalación: opcionales, fuera del total (REGLA DEL DUEÑO)
 
 **$155.000 + IVA cada uno, mismo valor en todas las regiones y también para motos
