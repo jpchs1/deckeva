@@ -116,7 +116,7 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
         $pasos = array(
             array('Te confirmamos el valor', 'We confirm your price'),
             array('Medidas de tu embarcación', 'Measuring your boat'),
-            array('Fabricación e instalación', 'Manufacturing & install'),
+            array($en_chile ? 'Fabricación e instalación' : 'Fabricación a medida', $en_chile ? 'Manufacturing & install' : 'Custom manufacturing'),
         );
     } else {
         $pasos = array(
@@ -147,19 +147,21 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
     // Aquí no se agrega un medio que no esté en esos portales.
     if ($en_chile) {
         $medios = array(
-            array('Webpay Plus', 'Transbank · débito y crédito'),
-            array('Mercado Pago', 'Tarjetas y saldo · CLP'),
-            array('PayPal', 'Tarjeta internacional · USD'),
+            array('Webpay Plus', 'Transbank · débito y crédito', 'https://deckeva.cl/pago/'),
+            array('Mercado Pago', 'Tarjetas y saldo · CLP', 'https://deckeva.cl/pago/'),
+            array('PayPal', 'Tarjeta internacional · USD', 'https://deckeva.cl/pago/'),
         );
         $pago_url = 'https://deckeva.cl/pago/';
         $pago_txt = 'deckeva.cl/pago';
     } else {
         $medios = array(
-            array('PayPal', 'Card or PayPal balance · USD'),
-            array('Wire Transfer / ACH', 'International bank transfer · USD'),
+            // PayPal está en el portal de pago; la página de transferencias
+            // sólo tiene los datos bancarios. Cada tarjeta lleva a su destino.
+            array('PayPal', 'Card or PayPal balance · USD', 'https://deckeva.cl/pago/'),
+            array('Wire Transfer / ACH', 'Bank details · deckeva.com/wiretransfers', 'https://www.deckeva.com/wiretransfers/'),
         );
-        $pago_url = 'https://www.deckeva.com/wiretransfers/';
-        $pago_txt = 'deckeva.com/wiretransfers';
+        $pago_url = 'https://deckeva.cl/pago/';
+        $pago_txt = 'deckeva.cl/pago';
     }
     $icono_candado = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="2.5" y="7" width="11" height="8" rx="1.6" fill="#00875a"/><path d="M5 7 V5 A3 3 0 0 1 11 5 V7" fill="none" stroke="#00875a" stroke-width="1.6"/></svg>');
 
@@ -351,8 +353,12 @@ a { text-decoration: none; }
             <div class="total-ref">≈ <?php echo $e($precio['ref_usd']); ?></div>
           <?php endif; ?>
           <table class="total-desglose">
-            <tr><td>Neto · Net</td><td class="m"><?php echo $e($precio['subtotal']); ?></td></tr>
-            <tr><td>IVA 19% · VAT</td><td class="m"><?php echo $e($precio['iva']); ?></td></tr>
+            <tr><td><?php echo $servicios ? 'Piso · neto' : 'Neto · Net'; ?></td><td class="m"><?php echo $e($precio['subtotal']); ?></td></tr>
+            <tr><td><?php echo $servicios ? 'IVA 19% del piso' : 'IVA 19% · VAT'; ?></td><td class="m"><?php echo $e($precio['iva']); ?></td></tr>
+            <?php // Los servicios extra van en el total: el desglose los muestra, o no suma. ?>
+            <?php foreach ($servicios as $sv): ?>
+            <tr><td><?php echo $e($sv['desc']); ?></td><td class="m"><?php echo $e($sv['monto']); ?></td></tr>
+            <?php endforeach; ?>
           </table>
         <?php endif; ?>
       </div>
@@ -506,9 +512,9 @@ a { text-decoration: none; }
       <div class="pagos-seg" style="margin-top:0;">Procesadores certificados</div>
     </td>
     <?php foreach ($medios as $m): ?>
-    <td style="padding:7pt 0 7pt 6pt;width:<?php echo $en_chile ? 94 : 128; ?>pt;"><div class="medio"><div class="medio-n"><?php echo $e($m[0]); ?></div><div class="medio-d"><?php echo $e($m[1]); ?></div></div></td>
+    <td style="padding:7pt 0 7pt 6pt;width:<?php echo $en_chile ? 94 : 128; ?>pt;"><a href="<?php echo $e($m[2]); ?>" style="display:block;"><div class="medio"><div class="medio-n"><?php echo $e($m[0]); ?></div><div class="medio-d"><?php echo $e($m[1]); ?></div></div></a></td>
     <?php endforeach; ?>
-    <td class="pagos-link" style="width:<?php echo $en_chile ? 70 : 100; ?>pt;"><a href="<?php echo $e($pago_url); ?>" style="color:#0e6ba8;">Pagar online &rsaquo;<br><?php echo $e($pago_txt); ?></a></td>
+    <td class="pagos-link" style="width:70pt;"><a href="<?php echo $e($pago_url); ?>" style="color:#0e6ba8;">Pagar online &rsaquo;<br><?php echo $e($pago_txt); ?></a></td>
   </tr></table></div>
 
   <div class="cta">
