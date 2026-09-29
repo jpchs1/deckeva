@@ -118,6 +118,13 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
             array('Medidas de tu embarcación', 'Measuring your boat'),
             array($en_chile ? 'Fabricación e instalación' : 'Fabricación a medida', $en_chile ? 'Manufacturing & install' : 'Custom manufacturing'),
         );
+    } elseif ($servicios_incluidos !== '') {
+        // Medición e instalación van incluidas: los pasos no ofrecen hacerlo tú.
+        $pasos = array(
+            array('Confirmas tu cotización', 'Confirm your quote'),
+            array('Medimos tu embarcación', 'We measure your boat'),
+            array('Fabricamos e instalamos', 'We make & install it'),
+        );
     } else {
         $pasos = array(
             array('Confirmas tu cotización', 'Confirm your quote'),
