@@ -917,7 +917,7 @@ td { padding: 4px 10px; vertical-align: top; }
 
         // Toma de medidas e instalación: opcionales (JP, 29-sep-2026), fuera del
         // total, en el idioma del cliente. El valor sale de deckeva-00-opcionales.php.
-        $aviso_es = 'Si prefieres que lo hagamos nosotros, vamos a tomar las medidas y a instalar tu piso. Son servicios <strong>opcionales</strong>, con el mismo valor en todas las regiones y también para motos de agua, y <u>no están sumados al total</u> de tu piso. Y si quieres, lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como prefieras.';
+        $aviso_es = 'Si prefieres que lo hagamos nosotros, vamos a tomar las medidas y a instalar tu piso. Son servicios <strong>opcionales</strong>, con el mismo valor en todas las regiones y también para motos de agua, y <strong>no están sumados al total</strong> de tu piso. Y si quieres, lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como prefieras.';
         $apoyo_es = 'Si lo haces tú, Deckeva te entrega <strong>sin costo</strong>: videos explicativos paso a paso para ambos procesos + <strong>soporte 24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.';
         $aviso_en = 'Measurement and installation are <strong>optional</strong> services and are <u>not added to the total</u> of your flooring. Same price in every region, jet skis included.';
         $apoyo_en = 'You can also easily do both yourself with our free step-by-step videos + <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>, whichever you prefer.';
