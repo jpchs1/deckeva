@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Deckeva - Respuestas por WhatsApp
- * Description: Contesta el WhatsApp de Deckeva con demora (1 a 40 minutos, 8:00 a 20:00) y con la aprobación de JP.
+ * Description: Contesta el WhatsApp de Deckeva con demora (5 a 40 minutos, 8:00 a 20:00) y con la aprobación de JP.
  * Version: 1.0.0
  * Author: Deckeva
  *
@@ -10,7 +10,7 @@
  * El +56 9 4021 1459 atiende a Tourevo, Deckeva e Imporlan, y cada negocio se
  * atiende y se cotiza desde su propio sistema (JP, 28-sep-2026). La IA de Meta
  * contesta al instante y no se puede demorar, y la regla es que a un cliente
- * nunca se le contesta al instante: se espera 1, 2, 3, 5, 7, 15 o 40 minutos.
+ * nunca se le contesta al instante: se espera 5, 7, 9, 12, 15, 25 o 40 minutos (nunca menos de 5).
  *
  * Meta entrega los mensajes del número a tourevo.cl, que reconoce los chats de
  * Deckeva y los DERIVA acá, firmados. Acá se redacta, se espera, JP aprueba en
@@ -38,7 +38,7 @@
 if (!defined('ABSPATH')) exit;
 
 const DECKEVA_WA_PUERTA_SALIDA = 'https://tourevo.cl/api/whatsapp-puerta.php?negocio=deckeva';
-const DECKEVA_WA_ESPERAS = array(1, 2, 3, 5, 7, 15, 40);
+const DECKEVA_WA_ESPERAS = array(5, 7, 9, 12, 15, 25, 40); // nunca menos de 5 min (JP, 29-sep)
 const DECKEVA_WA_SILENCIO = 90;
 const DECKEVA_WA_VENCE = 82800; // 23 h
 const DECKEVA_WA_MODELO = 'claude-opus-5';
@@ -84,7 +84,7 @@ function deckeva_wa_validar($txt) {
     return '';
 }
 
-/** Espera antes de contestar: 1 a 40 min, distinta por mensaje, sin patrón. */
+/** Espera antes de contestar: 5 a 40 min, distinta por mensaje, sin patrón. */
 function deckeva_wa_demora($semilla) {
     $h = hexdec(substr(hash('sha256', $semilla . '|espera'), 0, 8));
     $base = DECKEVA_WA_ESPERAS[$h % count(DECKEVA_WA_ESPERAS)] * 60;
@@ -522,7 +522,7 @@ function deckeva_wa_pantalla() {
     $listo = deckeva_wa_llave() !== '' && strlen(deckeva_wa_secreto()) >= 24;
     echo '<div class="wrap"><h1>WhatsApp Deckeva</h1>';
     if (!empty($_GET['msg'])) echo '<div class="notice notice-info"><p>' . esc_html(wp_unslash($_GET['msg'])) . '</p></div>';
-    echo '<p>Los chats de Deckeva que llegan al +56 9 4021 1459. Se contestan entre 1 y 40 minutos después del mensaje del cliente, de 8:00 a 20:00. '
+    echo '<p>Los chats de Deckeva que llegan al +56 9 4021 1459. Se contestan entre 5 y 40 minutos después del mensaje del cliente, de 8:00 a 20:00. '
         . (deckeva_wa_modo() === 'automatico' ? '<b>Modo automático</b>: salen solos; lo que necesita una persona te espera acá.' : '<b>Modo borrador</b>: ninguno sale sin que lo apruebes.') . '</p>';
     if (!$listo) echo '<div class="notice notice-warning"><p>Falta la llave de Claude o el secreto de la puerta: no se procesa ningún chat.</p></div>';
 
