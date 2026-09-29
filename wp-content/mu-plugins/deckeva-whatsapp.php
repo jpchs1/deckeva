@@ -193,7 +193,7 @@ add_action('init', function () {
     $uri = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
     if (strpos($uri, 'whatsapp-puerta/') !== 0) return;
     $ruta = substr($uri, strlen('whatsapp-puerta/'));
-    if (!in_array($ruta, array('entrada', 'tick'), true)) return;
+    if (!in_array($ruta, array('entrada', 'tick', 'aprobar'), true)) return;
     if (!defined('DONOTCACHEPAGE')) define('DONOTCACHEPAGE', true);
     nocache_headers();
     header('Content-Type: application/json; charset=UTF-8');
@@ -208,6 +208,13 @@ add_action('init', function () {
 
     if ($ruta === 'entrada') {
         deckeva_wa_entrada($datos);
+    } elseif ($ruta === 'aprobar') {
+        // JP contestó «ok D-XXXX» (o «D-XXXX: texto») en el WhatsApp y Tourevo
+        // lo trae acá. 409 = no se puede y no se va a poder: Tourevo no reintenta.
+        $r = deckeva_wa_aprobar_remoto($datos);
+        if (!$r['ok']) status_header(409);
+        echo wp_json_encode($r);
+        exit;
     } else {
         // Una pasada a la vez, durante TODA la pasada: un candado de archivo
         // que se suelta cuando termina, no un transient que vence a los N
@@ -216,7 +223,9 @@ add_action('init', function () {
         // nuevos son minutos de Claude, Tourevo cuelga a los 20 s, y un
         // hosting que corta el script cuando el cliente se va dejaría la
         // pasada a medias.
-        deckeva_wa_contestar_y_seguir('{"ok":true}');
+        // De vuelta van los borradores que esperan a JP: Tourevo se los pide
+        // por WhatsApp, en dos mensajes (JP, 29-sep).
+        deckeva_wa_contestar_y_seguir(wp_json_encode(array('ok' => true, 'pendientes' => deckeva_wa_pendientes_para_jp())));
         $dir = wp_upload_dir(null, false);
         $lock = @fopen(trailingslashit($dir['basedir']) . '.deckeva-wa-pasada.lock', 'c');
         if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) exit;
@@ -263,6 +272,74 @@ function deckeva_wa_entrada($d) {
         $chats[$num] = $chat;
         return $chats;
     });
+}
+
+// =============================================
+// APROBAR DESDE EL WHATSAPP DE JP (29-sep-2026)
+// =============================================
+
+/**
+ * «¿Estas solicitudes me pueden llegar a mi WhatsApp para aprobar desde el
+ * WhatsApp?» (JP). El borrador sigue viviendo acá; Tourevo, que tiene el
+ * número, se lo pide a JP en dos mensajes (el detalle y «ok D-XXXX») y
+ * trae su respuesta por la ruta `aprobar`. El correo sigue saliendo igual.
+ */
+function deckeva_wa_pendientes_para_jp() {
+    $out = array();
+    foreach (deckeva_wa_chats() as $num => $chat) {
+        $p = $chat['pendiente'] ?? null;
+        if (!is_array($p) || ($p['estado'] ?? '') !== 'borrador' || empty($p['id'])) continue;
+        // Meta no deja contestar pasadas 24 h: aprobarlo no serviría de nada.
+        if (time() - (int) ($p['para_ts'] ?? 0) > DECKEVA_WA_VENCE) continue;
+        $cliente = '';
+        foreach ((array) ($chat['mensajes'] ?? array()) as $m) if (($m['dir'] ?? '') === 'in' && trim((string) $m['texto']) !== '') $cliente = (string) $m['texto'];
+        $out[] = array(
+            'id' => (string) $p['id'], 'numero' => (string) $num,
+            'texto' => (string) ($p['texto'] ?? ''), 'cliente' => mb_substr($cliente, 0, 300),
+            'idioma' => deckeva_wa_es_castellano((string) ($p['texto'] ?? '')) ? 'es' : 'otro',
+            'en' => (int) ($p['en'] ?? 0), 'regla' => (string) ($p['regla'] ?? ''),
+            'necesita_humano' => !empty($p['necesita_humano']), 'motivo' => (string) ($p['motivo'] ?? ''),
+        );
+        if (count($out) >= 20) break;
+    }
+    return $out;
+}
+
+/**
+ * ¿La propuesta está en castellano? JP no quiere otros idiomas en su WhatsApp:
+ * lo que no lo parezca se le muestra sin texto y sin «ok», para verlo acá.
+ */
+function deckeva_wa_es_castellano($t) {
+    $t = ' ' . mb_strtolower($t) . ' ';
+    if (preg_match('/[ñ¿¡áéíóú]/u', $t)) return true;
+    $es = preg_match_all('/\s(el|la|los|las|de|que|para|con|tu|te|tus|una?|y|es|piso|lancha|cotización|gracias|hola)\s/u', $t);
+    $en = preg_match_all('/\s(the|and|you|your|for|with|is|are|to|of|boat|thanks|hello|hi)\s/u', $t);
+    // Sin pistas de ningún lado vale castellano: casi todo Deckeva es Chile.
+    return $es >= $en;
+}
+
+/** Lo aprueba Tourevo en nombre de JP: mismas reglas que el botón de wp-admin. */
+function deckeva_wa_aprobar_remoto($d) {
+    $num = preg_replace('/\D+/', '', (string) ($d['numero'] ?? ''));
+    $id = preg_replace('/[^A-Z0-9-]/', '', strtoupper((string) ($d['id'] ?? '')));
+    $texto = isset($d['texto']) && $d['texto'] !== null ? trim((string) $d['texto']) : '';
+    $quien = mb_substr(trim((string) ($d['quien'] ?? 'JP · WhatsApp')), 0, 60);
+    $res = array('ok' => false, 'error' => 'no hay un borrador ' . $id . ' esperando');
+    deckeva_wa_con_candado(function ($chats) use ($num, $id, $texto, $quien, &$res) {
+        $chat = $chats[$num] ?? null;
+        $p = is_array($chat) ? ($chat['pendiente'] ?? null) : null;
+        if (!is_array($p) || ($p['estado'] ?? '') !== 'borrador' || ($p['id'] ?? '') !== $id) return $chats;
+        $t = $texto !== '' ? $texto : (string) ($p['texto'] ?? '');
+        $v = deckeva_wa_validar($t);
+        if ($v !== '') { $res = array('ok' => false, 'error' => 'no pasa las reglas · ' . $v); return $chats; }
+        $p['texto'] = $t; $p['estado'] = 'aprobado'; $p['aprobado_por'] = $quien;
+        deckeva_wa_anotar($chat, $id . ' aprobado por WhatsApp' . ($texto !== '' ? ' con el texto de JP' : ''));
+        $chat['pendiente'] = $p;
+        $chats[$num] = $chat;
+        $res = array('ok' => true, 'en' => max((int) $p['en'], time()));
+        return $chats;
+    });
+    return $res;
 }
 
 // =============================================
