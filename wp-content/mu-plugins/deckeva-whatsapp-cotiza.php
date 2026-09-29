@@ -84,6 +84,8 @@ function deckeva_wa_cotiza_leer($mensajes) {
         . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto_normal o moto_grande si es moto de agua y lo dice; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
         . "- email: exacto, como lo escribió.\n"
         . "- color: el que eligió (gris, beige, negro...).\n"
+        . "- anio: el año de la embarcación tal como lo escribió (\"2019\", \"98\").\n"
+        . "- ubicacion: dónde está la embarcación o la moto (ciudad, lago o marina), tal como lo escribió. El país solo no es una ubicación.\n"
         . "- pais: Chile salvo que diga otro.\n"
         . "- quiere_cotizacion: true si pidió precio o cotización.";
     $res = wp_remote_post('https://api.anthropic.com/v1/messages', array(
@@ -110,6 +112,12 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * o array('ok' => false, 'falta' => '…'). Cada dato que decide el precio o el
  * destinatario se vuelve a buscar en lo que ESCRIBIÓ el cliente: si Claude lo
  * inventó, no está, y no se cotiza.
+ *
+ * Regla de JP (29-sep-2026): sin los datos obligatorios no se crea la
+ * cotización. Lancha: marca, modelo, año, largo (LOA o el que escribió),
+ * color, dónde está, nombre y correo. Moto de agua: el tamaño, color, dónde
+ * está, nombre y correo. Lo que falte se le pide al cliente ('falta' es lo
+ * que lee quien le contesta: «Para su cotización formal falta: …»).
  */
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
     $escrito = ''; $lineas = array();
@@ -133,6 +141,17 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
         if (!preg_match('/\bmoto/u', $escrito) || !preg_match($dijo, $escrito)) return array('ok' => false, 'falta' => 'el tamaño de la moto de agua · lo ve JP', 'jp' => true);
         $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
     } else {
+        // Marca, modelo y año: sin ellos no se busca el LOA ni se cotiza.
+        if (trim((string) ($d['marca'] ?? '')) === '') return array('ok' => false, 'falta' => 'la marca de la embarcación');
+        if (trim((string) ($d['modelo'] ?? '')) === '') return array('ok' => false, 'falta' => 'el modelo de la embarcación');
+        // El año se vuelve a buscar en lo escrito, como el largo: un año que
+        // Claude dedujo cambia el LOA que se busca. Vale entero («2019») o
+        // corto sólo si se nota que es un año («del 98», «año 98», «'98»): un
+        // «19» suelto casi siempre es el largo.
+        $anio = trim((string) ($d['anio'] ?? ''));
+        $anioOk = preg_match('/^(?:19|20)?(\d{2})$/', $anio, $am)
+            && preg_match('/(?<!\d)(?:19|20)' . $am[1] . '(?!\d)|(?:(?:\bdel|\ba[nñ]o|\bmodelo|\byear)\s*|[\'’])' . $am[1] . '(?!\d)/u', $escrito);
+        if (!$anioOk) return array('ok' => false, 'falta' => 'el año de la embarcación');
         // Regla de JP (29-sep): el largo lo dan las especificaciones del
         // fabricante (LOA), buscadas con marca, modelo y año, y mandan sobre lo
         // que diga el cliente. Sin specs, el largo que ESCRIBIÓ el cliente
@@ -144,12 +163,18 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
         } else {
             $pies = deckeva_wa_cotiza_largo_escrito($escrito, $lineas);
             $fuente = 'cliente';
-            if ($pies === null) return array('ok' => false, 'falta' => 'el largo en pies (o marca, modelo y año para buscarlo)');
+            if ($pies === null) return array('ok' => false, 'falta' => 'el largo en pies de la embarcación');
         }
         $clave = (string) deckeva_wa_cotiza_redondear($pies);
     }
     if (!isset($tabla[$clave])) return array('ok' => false, 'falta' => $clave . ' no está en la tabla · lo ve JP', 'jp' => true);
     if (trim((string) ($d['color'] ?? '')) === '') return array('ok' => false, 'falta' => 'el color');
+    // Dónde está (ciudad, lago o marina): lo pide JP para lancha y para moto de
+    // agua. Es lo que decide cómo se hace la toma de medidas y la instalación.
+    $ubicacion = trim((string) ($d['ubicacion'] ?? ''));
+    if ($ubicacion === '' || in_array(mb_strtolower($ubicacion), array('chile', 'no dice', 'no_dice'), true)) {
+        return array('ok' => false, 'falta' => 'dónde está la ' . ($clave === 'moto-normal' || $clave === 'moto-grande' ? 'moto de agua' : 'embarcación') . ' (ciudad, lago o marina)');
+    }
     return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave], 'pies' => $pies ?? null, 'fuente_largo' => $fuente ?? 'moto');
 }
 
@@ -382,7 +407,7 @@ function deckeva_wa_cotiza_enviar($num) {
     $bote = trim((string) $d['embarcacion']['modelo']) !== '' ? 'tu ' . $d['embarcacion']['modelo'] : 'tu embarcación';
     $cuerpo = "Hola {$nombre},\n\n"
         . "Te adjunto la cotización del piso de goma EVA para {$bote}, en {$d['embarcacion']['color']}, como me contaste por WhatsApp.\n\n"
-        . "La toma de medidas y la instalación las coordinamos contigo según dónde esté la embarcación.\n\n"
+        . "La toma de medidas y la instalación son opcionales: en el PDF va su valor por si prefieres que las hagamos nosotros, y si quieres hacerlas tú mismo, te mandamos el video explicativo paso a paso.\n\n"
         . "Cualquier duda, respóndeme este correo o escríbeme por WhatsApp.\n\n"
         . "Juan Pablo\nDeckeva";
     $html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#1a2a3a">' . wpautop(esc_html($cuerpo)) . '</div>';

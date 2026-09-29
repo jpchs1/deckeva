@@ -52,6 +52,31 @@ Vive en `wp-content/mu-plugins/deckeva-whatsapp-cotiza.php`
 (`deckeva_wa_cotiza_loa`, `deckeva_wa_cotiza_redondear`). El correo a JP con
 cada cotización dice de dónde salió el largo y trae el link a la fuente.
 
+Y una cotización por WhatsApp no se crea sin los datos obligatorios
+(`deckeva_wa_cotiza_listo`, JP, 29-sep-2026). Lancha: marca, modelo, año (el que
+escribió el cliente), largo, color, dónde está, nombre y correo. Moto de agua:
+el tamaño, color, dónde está, nombre y correo. Lo que falte se le pide.
+
+## Toma de medidas e instalación: opcionales, fuera del total (REGLA DEL DUEÑO)
+
+**$155.000 + IVA cada uno, mismo valor en todas las regiones y también para motos
+de agua** (JP, 29-sep-2026). Son opcionales: el cliente puede medir e instalar él
+mismo con el video explicativo que le mandamos, y el PDF se lo dice así, con
+cariño («lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como
+prefieras»).
+
+- **No se suman al total del piso.** Van en su propia sección «Opcionales», cada
+  uno con neto, IVA 19% y total con IVA (155.000 + 29.450 = 184.450).
+- **El valor vive en un solo lugar:** `deckeva-00-opcionales.php`
+  (`DECKEVA_PRECIO_MEDICION`, `DECKEVA_PRECIO_INSTALACION`, `deckeva_opcionales()`).
+  El PDF, el PDF de respaldo y el correo del cotizador lo leen de ahí.
+- Ya no se dice en ninguna parte del PDF ni del correo que el cliente contrata
+  a un técnico por su cuenta, ni la referencia vieja de $145.000.
+- **El chat de WhatsApp no dice montos:** dice que existen y que van en la
+  cotización.
+- En el PDF no usar `<u>`: con `fontHeightRatio` 0,83 DOMPDF dibuja el
+  subrayado a media altura y el texto se lee tachado.
+
 ## Despliegue
 
 El hosting es **BanaHosting, plan compartido**: no tiene Git Version Control ni
@@ -175,6 +200,8 @@ Cargan por orden alfabético, por eso el núcleo va con `00`:
 - `deckeva-rescate-cotizaciones.php` — campaña única de reenvío a los clientes
   sin respuesta, gobernada por `DECKEVA_RESCATE_FASE` (`muestra` → `enviar` solo
   con aprobación del dueño). Se borra al terminar.
+- `deckeva-00-opcionales.php` — valor de la toma de medidas y la instalación
+  (opcionales). Único lugar donde se escribe.
 - `deckeva-assets/` — plantilla y tipografías del PDF de cotización. Está en una
   subcarpeta a propósito: WordPress solo carga los PHP de la raíz de mu-plugins.
 

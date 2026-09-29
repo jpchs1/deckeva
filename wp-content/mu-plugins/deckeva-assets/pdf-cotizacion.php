@@ -28,6 +28,9 @@
 
 if (!defined('ABSPATH')) exit;
 
+// El valor de la toma de medidas y de la instalación vive en un solo lugar.
+require_once dirname(__DIR__) . '/deckeva-00-opcionales.php';
+
 /**
  * @param array  $d       Datos ya formateados. Ver deckeva_pdf_cotizacion_datos_ejemplo().
  * @param string $assets  Ruta absoluta a deckeva-assets (fuentes y emblema).
@@ -58,7 +61,8 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
 
     // Campos opcionales para cotizaciones hechas a mano (no los usa el
     // formulario web): servicios extra en el detalle, forma de pago, y la
-    // variante en que Deckeva sí hace la toma de medidas y la instalación.
+    // variante en que la toma de medidas y la instalación ya van incluidas
+    // (sin ella, salen como opcionales aparte, fuera del total).
     $servicios = isset($d['servicios']) && is_array($d['servicios']) ? $d['servicios'] : array();
     $forma_pago = isset($d['forma_pago']) && is_array($d['forma_pago']) ? $d['forma_pago'] : array();
     $servicios_incluidos = isset($d['servicios_incluidos']) ? trim((string) $d['servicios_incluidos']) : '';
@@ -150,7 +154,7 @@ td { vertical-align: top; }
 .detalle .fila-total .monto { font-family: 'dk-mono'; font-weight: bold; font-size: 10.4pt; line-height: 13pt; color: #0a1628; }
 .letra-chica { font-size: 7.2pt; line-height: 9.5pt; color: #94a3b8; margin-top: 5pt; }
 
-/* ── Medición e instalación ───────────────────────────── */
+/* ── Opcionales: toma de medidas e instalación ────────── */
 .aviso { background: #fff8ec; border-left: 3pt solid #f5a623; border-radius: 0 8pt 8pt 0; padding: 11pt 15pt 10pt 15pt; margin-top: 16pt; }
 .aviso-tit { font-family: 'dk-titular'; font-weight: bold; font-size: 12.5pt; line-height: 14pt; color: #7a4a00; }
 .aviso-tit span { font-family: 'dk-mono'; font-weight: bold; font-size: 6pt; letter-spacing: 1.4pt; color: #b7791f; }
@@ -309,32 +313,38 @@ td { vertical-align: top; }
     <?php endif; ?>
   </div>
   <?php else: ?>
+  <?php
+    // Decisión de JP (29-sep-2026): son opcionales y NO se suman al total del
+    // piso. Cada uno con su neto, su IVA y su total con IVA. El valor sale de
+    // deckeva-00-opcionales.php, no se escribe aquí.
+    // Sin <u>: con fontHeightRatio 0,83 DOMPDF dibuja el subrayado a media
+    // altura y «no están sumados al total» se leía tachado.
+    $opcionales = deckeva_opcionales();
+  ?>
   <div class="aviso">
-    <div class="aviso-tit">Toma de medidas e instalación &nbsp;<span>IMPORTANTE · IMPORTANT</span></div>
-    <p><strong>ES:</strong> La <strong>toma de medidas</strong> (para envíos dentro de Chile) y la <strong>instalación</strong> del piso deben ser contratadas por el cliente con un técnico o persona de su confianza. Deckeva no realiza estas tareas presencialmente. Estos costos <u>no están incluidos</u> en la cotización y deben ser considerados aparte.</p>
+    <div class="aviso-tit">Toma de medidas e instalación &nbsp;<span>OPCIONALES · OPTIONAL</span></div>
+    <p>Si prefieres que lo hagamos nosotros, vamos a tomar las medidas y a instalar tu piso. Son servicios <strong>opcionales</strong>, con el mismo valor en todas las regiones y también para motos de agua, y <strong>no están sumados al total</strong> de tu piso. Y si quieres, lo puedes hacer tú mismo fácilmente con nuestro video explicativo, como prefieras.</p>
 
     <table class="costos">
-      <tr class="cab"><td>ÍTEM · ITEM</td><td>COSTO REF. · REF. COST</td><td>TIEMPO · TIME</td></tr>
+      <tr class="cab"><td>OPCIONALES · OPTIONAL</td><td style="text-align:right;">NETO · NET</td><td style="text-align:right;">IVA 19% · VAT</td><td style="text-align:right;">TOTAL CON IVA</td></tr>
+      <?php foreach ($opcionales as $i => $item): ?>
       <tr>
-        <td><img class="ico" src="<?php echo $icono_regla; ?>"> &nbsp;Toma de medidas · Measurement</td>
-        <td><strong>CLP $145.000</strong> &nbsp;<span class="ref">REF. SANTIAGO</span></td>
-        <td>4–6 hrs aprox.</td>
+        <td><img class="ico" src="<?php echo $i === 0 ? $icono_regla : $icono_llave; ?>"> &nbsp;<?php echo $e($item['nombre'] . ' · ' . $item['nombre_en']); ?> &nbsp;<span class="ref"><?php echo $e(mb_strtoupper($item['tiempo'], 'UTF-8')); ?></span></td>
+        <td style="text-align:right;white-space:nowrap;"><?php echo $e(deckeva_opcional_clp($item['neto'])); ?></td>
+        <td style="text-align:right;white-space:nowrap;"><?php echo $e(deckeva_opcional_clp($item['iva'])); ?></td>
+        <td style="text-align:right;white-space:nowrap;"><strong><?php echo $e(deckeva_opcional_clp($item['total'])); ?></strong></td>
       </tr>
-      <tr>
-        <td><img class="ico" src="<?php echo $icono_llave; ?>"> &nbsp;Instalación · Installation</td>
-        <td><strong>CLP $145.000</strong> &nbsp;<span class="ref">REF. SANTIAGO</span></td>
-        <td>3–5 hrs aprox.</td>
-      </tr>
+      <?php endforeach; ?>
     </table>
 
-    <p>Para acompañarte en ambos procesos, Deckeva entrega <strong>sin costo</strong>:</p>
+    <p>Si lo haces tú, Deckeva te entrega <strong>sin costo</strong>:</p>
     <table class="incluye">
       <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Video explicativo paso a paso para la <strong>toma de medidas</strong>.</td></tr>
       <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Video explicativo paso a paso para la <strong>instalación</strong>.</td></tr>
-      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver dudas o asesorar a tu técnico en vivo.</td></tr>
+      <tr><td class="celda-check"><img class="check" src="<?php echo $icono_check; ?>"></td><td>Soporte <strong>24/7 por WhatsApp y teléfono (+56 9 4021 1459)</strong> para resolver cualquier duda mientras trabajas.</td></tr>
     </table>
 
-    <p class="en"><strong>EN:</strong> Measurement (shipments to Chile) and installation must be arranged by the customer with a technician or trusted person. These costs are <u>not included</u> in the quote. Reference: <strong>CLP $145,000</strong> each in Santiago, measurement ~4–6 hrs, installation ~3–5 hrs (varies per vessel). Deckeva provides <strong>step-by-step explainer videos</strong> and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong> at no extra cost.</p>
+    <p class="en"><strong>EN:</strong> Measurement (<?php echo $e(deckeva_opcional_clp($opcionales[0]['neto'], true)); ?> + VAT) and installation (<?php echo $e(deckeva_opcional_clp($opcionales[1]['neto'], true)); ?> + VAT) are <strong>optional</strong> services and are <strong>not added to the total</strong> of your flooring. Same price in every region, jet skis included. You can also easily do both yourself with our step-by-step videos and <strong>24/7 WhatsApp &amp; phone support (+56 9 4021 1459)</strong>, whichever you prefer.</p>
   </div>
   <?php endif; ?>
 
