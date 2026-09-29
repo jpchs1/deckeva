@@ -570,7 +570,8 @@ a { text-decoration: none; }
 
 /**
  * «Válida hasta»: 15 días hábiles (lunes a viernes) desde la fecha de la
- * cotización, que llega escrita en castellano («23 de septiembre de 2026»).
+ * cotización, que llega escrita en castellano («23 de septiembre de 2026») o,
+ * en los reenvíos en inglés, como «Reissued · September 29, 2026».
  * No descuenta feriados, así que la fecha nunca queda después del plazo
  * real: si cae un feriado en medio, el cliente tiene un día más, no uno
  * menos. Si la fecha no se puede leer, devuelve '' y el PDF no la muestra.
@@ -578,10 +579,19 @@ a { text-decoration: none; }
 function deckeva_pdf_valida_hasta($fecha, $habiles = 15) {
     $meses = array('enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4, 'mayo' => 5, 'junio' => 6,
         'julio' => 7, 'agosto' => 8, 'septiembre' => 9, 'setiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12);
-    if (!preg_match('/(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})/iu', (string) $fecha, $m)) return '';
-    $mes = $meses[mb_strtolower($m[2], 'UTF-8')] ?? 0;
-    if (!$mes || !checkdate($mes, (int) $m[1], (int) $m[3])) return '';
-    $d = new DateTimeImmutable(sprintf('%04d-%02d-%02d', $m[3], $mes, $m[1]));
+    // Castellano («23 de septiembre de 2026») o inglés, como la escribe el
+    // reenvío de cotizaciones perdidas («Reissued · September 29, 2026»).
+    $en = array('january' => 1, 'february' => 2, 'march' => 3, 'april' => 4, 'may' => 5, 'june' => 6,
+        'july' => 7, 'august' => 8, 'september' => 9, 'october' => 10, 'november' => 11, 'december' => 12);
+    if (preg_match('/(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})/iu', (string) $fecha, $m)) {
+        $dia = (int) $m[1]; $mes = $meses[mb_strtolower($m[2], 'UTF-8')] ?? 0; $anio = (int) $m[3];
+    } elseif (preg_match('/\b([a-z]+)\s+(\d{1,2}),?\s+(\d{4})/i', (string) $fecha, $m)) {
+        $dia = (int) $m[2]; $mes = $en[strtolower($m[1])] ?? 0; $anio = (int) $m[3];
+    } else {
+        return '';
+    }
+    if (!$mes || !checkdate($mes, $dia, $anio)) return '';
+    $d = new DateTimeImmutable(sprintf('%04d-%02d-%02d', $anio, $mes, $dia));
     for ($n = 0; $n < $habiles; ) {
         $d = $d->modify('+1 day');
         if ((int) $d->format('N') <= 5) $n++;
