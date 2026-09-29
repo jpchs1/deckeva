@@ -154,9 +154,9 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
     // Aquí no se agrega un medio que no esté en esos portales.
     if ($en_chile) {
         $medios = array(
-            array('Webpay Plus', 'Transbank · débito y crédito', 'https://deckeva.cl/pago/'),
-            array('Mercado Pago', 'Tarjetas y saldo · CLP', 'https://deckeva.cl/pago/'),
-            array('PayPal', 'Tarjeta internacional · USD', 'https://deckeva.cl/pago/'),
+            array('Webpay Plus', 'Transbank · débito y crédito', 'https://deckeva.cl/pago/', 'webpay'),
+            array('Mercado Pago', 'Tarjetas y saldo · CLP', 'https://deckeva.cl/pago/', 'mp'),
+            array('PayPal', 'Tarjeta internacional · USD', 'https://deckeva.cl/pago/', 'paypal'),
         );
         $pago_url = 'https://deckeva.cl/pago/';
         $pago_txt = 'deckeva.cl/pago';
@@ -164,13 +164,30 @@ function deckeva_pdf_cotizacion_html(array $d, $assets) {
         $medios = array(
             // PayPal está en el portal de pago; la página de transferencias
             // sólo tiene los datos bancarios. Cada tarjeta lleva a su destino.
-            array('PayPal', 'Card or PayPal balance · USD', 'https://deckeva.cl/pago/'),
-            array('Wire Transfer / ACH', 'Bank details · deckeva.com/wiretransfers', 'https://www.deckeva.com/wiretransfers/'),
+            array('PayPal', 'Card or PayPal balance · USD', 'https://deckeva.cl/pago/', 'paypal'),
+            array('Wire Transfer / ACH', 'Bank details · deckeva.com/wiretransfers', 'https://www.deckeva.com/wiretransfers/', 'wire'),
         );
         $pago_url = 'https://deckeva.cl/pago/';
         $pago_txt = 'deckeva.cl/pago';
     }
+    // Los logos de cada medio, con los colores de marca que usa el portal de
+    // pago (pago/index.html). Van con las tipografías del PDF y no como SVG
+    // con <text>: DOMPDF no dibuja bien el texto dentro de un SVG. Los íconos
+    // sí son SVG, pero sólo formas.
+    $icono_mp = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><circle cx="14" cy="14" r="13" fill="#009ee3"/><path d="M6.5 16 q7.5 8.5 15 0" stroke="#fff200" stroke-width="3" fill="none" stroke-linecap="round"/></svg>');
+    $icono_banco = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 9 L12 3 L22 9 Z" fill="#0a1628"/><rect x="4" y="10.5" width="2.6" height="7.5" fill="#0a1628"/><rect x="10.7" y="10.5" width="2.6" height="7.5" fill="#0a1628"/><rect x="17.4" y="10.5" width="2.6" height="7.5" fill="#0a1628"/><rect x="2" y="19.5" width="20" height="2.5" fill="#0a1628"/></svg>');
+    $logo = function ($clave) use ($icono_mp, $icono_banco) {
+        switch ($clave) {
+            case 'webpay': return '<span class="lg" style="color:#ee2737;">webpay</span><span class="lg" style="color:#0a1628;"> plus</span>';
+            case 'mp':     return '<img class="lg-ico" src="' . $icono_mp . '"> <span class="lg" style="color:#003a5d;">mercado</span><span class="lg lg-fino" style="color:#009ee3;"> pago</span>';
+            case 'paypal': return '<span class="lg lg-pp" style="color:#003087;">Pay</span><span class="lg lg-pp" style="color:#009cde;">Pal</span>';
+            case 'wire':   return '<img class="lg-ico" src="' . $icono_banco . '"> <span class="lg" style="color:#0a1628;">Wire</span><span class="lg lg-fino" style="color:#0e6ba8;"> · ACH</span>';
+        }
+        return '';
+    };
     $icono_candado = $svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect x="2.5" y="7" width="11" height="8" rx="1.6" fill="#00875a"/><path d="M5 7 V5 A3 3 0 0 1 11 5 V7" fill="none" stroke="#00875a" stroke-width="1.6"/></svg>');
+
+    $valida = !empty($d['valida_hasta']) ? (string) $d['valida_hasta'] : deckeva_pdf_valida_hasta($d['fecha'] ?? '');
 
     $wa_link = 'https://wa.me/56940211459?text=' . rawurlencode('Hola, quiero avanzar con mi cotización ' . $d['numero']);
     $mail_link = 'mailto:contacto@deckeva.cl?subject=' . rawurlencode('Cotización ' . $d['numero']);
@@ -204,6 +221,7 @@ a { text-decoration: none; }
 .doc span { font-family: 'dk-mono'; font-weight: bold; font-size: 6.4pt; letter-spacing: 2pt; color: #f5a623; }
 .numero { font-family: 'dk-mono'; font-size: 7.4pt; line-height: 10pt; color: #cbd5e1; margin-top: 5pt; }
 .fecha  { font-size: 8pt; line-height: 10pt; color: #8fa3bd; margin-top: 1pt; }
+.valida { font-family: 'dk-medio'; font-size: 7.4pt; line-height: 10pt; color: #f5a623; margin-top: 1pt; }
 
 /* ── Cuerpo ───────────────────────────────────────────── */
 .cuerpo { padding: 15pt 38pt 0 38pt; }
@@ -283,7 +301,11 @@ a { text-decoration: none; }
 .pagos-seg { font-size: 6.8pt; line-height: 9pt; color: #64748b; margin-top: 2pt; }
 .pagos-seg img { width: 7pt; height: 7pt; }
 .medio { border: 0.8pt solid #dbe4ee; border-radius: 5pt; padding: 4pt 7pt 3pt 7pt; background: #f8fafc; }
-.medio-n { font-family: 'dk-medio'; font-weight: bold; font-size: 8pt; line-height: 9.5pt; color: #0a1628; white-space: nowrap; }
+.medio-n { font-family: 'dk-medio'; font-weight: bold; font-size: 8pt; line-height: 12pt; color: #0a1628; white-space: nowrap; }
+.lg { font-family: 'dk-titular'; font-weight: bold; font-size: 11.5pt; line-height: 12pt; letter-spacing: -0.2pt; }
+.lg-fino { font-family: 'dk-titular'; font-weight: normal; }
+.lg-pp { font-size: 12.5pt; letter-spacing: -0.4pt; }
+.lg-ico { width: 10pt; height: 10pt; }
 .medio-d { font-size: 6.2pt; line-height: 8pt; color: #64748b; white-space: nowrap; }
 .pagos-link { font-family: 'dk-medio'; font-size: 7pt; line-height: 9pt; color: #0e6ba8; text-align: right; white-space: nowrap; }
 
@@ -308,7 +330,7 @@ a { text-decoration: none; }
 
 <div class="pie">
   <table><tr>
-    <td class="pie-txt">Cotización válida por 15 días hábiles · This quote is valid for 15 business days.</td>
+    <td class="pie-txt">Cotización válida por 15 días hábiles<?php echo $valida !== '' ? ', hasta el ' . $e($valida) : ''; ?> · Valid for 15 business days.</td>
     <td class="pie-web">deckeva.cl · deckeva.com · contacto@deckeva.cl</td>
   </tr></table>
 </div>
@@ -330,6 +352,7 @@ a { text-decoration: none; }
       <div class="doc">COTIZACIÓN <span>QUOTE</span></div>
       <div class="numero">N.º <?php echo $e($d['numero']); ?></div>
       <div class="fecha"><?php echo $e($d['fecha']); ?></div>
+      <?php if ($valida !== ''): ?><div class="valida">Válida hasta el <?php echo $e($valida); ?></div><?php endif; ?>
     </td>
   </tr></table>
   <img class="ola" src="<?php echo $ola; ?>">
@@ -519,7 +542,7 @@ a { text-decoration: none; }
       <div class="pagos-seg" style="margin-top:0;">Procesadores certificados</div>
     </td>
     <?php foreach ($medios as $m): ?>
-    <td style="padding:7pt 0 7pt 6pt;width:<?php echo $en_chile ? 94 : 128; ?>pt;"><a href="<?php echo $e($m[2]); ?>" style="display:block;"><div class="medio"><div class="medio-n"><?php echo $e($m[0]); ?></div><div class="medio-d"><?php echo $e($m[1]); ?></div></div></a></td>
+    <td style="padding:7pt 0 7pt 6pt;width:<?php echo $en_chile ? 94 : 128; ?>pt;"><a href="<?php echo $e($m[2]); ?>" style="display:block;"><div class="medio"><div class="medio-n"><?php echo $logo($m[3]); ?></div><div class="medio-d"><?php echo $e($m[1]); ?></div></div></a></td>
     <?php endforeach; ?>
     <td class="pagos-link" style="width:70pt;"><a href="<?php echo $e($pago_url); ?>" style="color:#0e6ba8;">Pagar online &rsaquo;<br><?php echo $e($pago_txt); ?></a></td>
   </tr></table></div>
@@ -543,6 +566,38 @@ a { text-decoration: none; }
 </body></html>
 <?php
     return ob_get_clean();
+}
+
+/**
+ * «Válida hasta»: 15 días hábiles (lunes a viernes) desde la fecha de la
+ * cotización, que llega escrita en castellano («23 de septiembre de 2026») o,
+ * en los reenvíos en inglés, como «Reissued · September 29, 2026».
+ * No descuenta feriados, así que la fecha nunca queda después del plazo
+ * real: si cae un feriado en medio, el cliente tiene un día más, no uno
+ * menos. Si la fecha no se puede leer, devuelve '' y el PDF no la muestra.
+ */
+function deckeva_pdf_valida_hasta($fecha, $habiles = 15) {
+    $meses = array('enero' => 1, 'febrero' => 2, 'marzo' => 3, 'abril' => 4, 'mayo' => 5, 'junio' => 6,
+        'julio' => 7, 'agosto' => 8, 'septiembre' => 9, 'setiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12);
+    // Castellano («23 de septiembre de 2026») o inglés, como la escribe el
+    // reenvío de cotizaciones perdidas («Reissued · September 29, 2026»).
+    $en = array('january' => 1, 'february' => 2, 'march' => 3, 'april' => 4, 'may' => 5, 'june' => 6,
+        'july' => 7, 'august' => 8, 'september' => 9, 'october' => 10, 'november' => 11, 'december' => 12);
+    if (preg_match('/(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})/iu', (string) $fecha, $m)) {
+        $dia = (int) $m[1]; $mes = $meses[mb_strtolower($m[2], 'UTF-8')] ?? 0; $anio = (int) $m[3];
+    } elseif (preg_match('/\b([a-z]+)\s+(\d{1,2}),?\s+(\d{4})/i', (string) $fecha, $m)) {
+        $dia = (int) $m[2]; $mes = $en[strtolower($m[1])] ?? 0; $anio = (int) $m[3];
+    } else {
+        return '';
+    }
+    if (!$mes || !checkdate($mes, $dia, $anio)) return '';
+    $d = new DateTimeImmutable(sprintf('%04d-%02d-%02d', $anio, $mes, $dia));
+    for ($n = 0; $n < $habiles; ) {
+        $d = $d->modify('+1 day');
+        if ((int) $d->format('N') <= 5) $n++;
+    }
+    $nombres = array_flip(array_diff_key($meses, array('setiembre' => 1)));
+    return (int) $d->format('j') . ' de ' . $nombres[(int) $d->format('n')] . ' de ' . $d->format('Y');
 }
 
 /**
