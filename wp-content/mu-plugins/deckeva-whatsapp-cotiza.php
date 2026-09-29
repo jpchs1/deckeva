@@ -74,14 +74,14 @@ function deckeva_wa_cotiza_leer($mensajes) {
         'required' => array('nombre', 'apellido', 'email', 'largo', 'tipo', 'marca', 'modelo', 'anio', 'color', 'ubicacion', 'pais', 'quiere_cotizacion'),
         'properties' => array(
             'nombre' => $str, 'apellido' => $str, 'email' => $str, 'largo' => $str,
-            'tipo' => array('type' => 'string', 'enum' => array('lancha', 'moto_normal', 'moto_grande', 'otro', 'no_dice')),
+            'tipo' => array('type' => 'string', 'enum' => array('lancha', 'moto', 'moto_normal', 'moto_grande', 'otro', 'no_dice')),
             'marca' => $str, 'modelo' => $str, 'anio' => $str, 'color' => $str, 'ubicacion' => $str, 'pais' => $str,
             'quiere_cotizacion' => array('type' => 'boolean'),
         ));
     $sistema = "Te paso lo que escribió un cliente de Deckeva (pisos de goma EVA para embarcaciones) por WhatsApp. "
         . "Devuelve SOLO lo que el cliente escribió, sin deducir nada. Si un dato no está escrito, déjalo vacío.\n"
         . "- largo: el largo en pies TAL COMO LO ESCRIBIÓ el cliente (\"19\", \"22,4\", \"21 pies\"). Nunca lo deduzcas del modelo (una Sea Ray 185 NO es un dato de largo). Si dio metros, déjalo vacío.\n"
-        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto_normal o moto_grande si es moto de agua y lo dice; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
+        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto si es moto de agua; moto_normal o moto_grande sólo si además el cliente dijo el tamaño; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
         . "- email: exacto, como lo escribió.\n"
         . "- color: el que eligió (gris, beige, negro...).\n"
         . "- anio: el año de la embarcación tal como lo escribió (\"2019\", \"98\").\n"
@@ -119,6 +119,21 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * está, nombre y correo. Lo que falte se le pide al cliente ('falta' es lo
  * que lee quien le contesta: «Para su cotización formal falta: …»).
  */
+/**
+ * Moto de agua «normal» o «mediana a grande»: lo decide el largo total (LOA)
+ * de las especificaciones, buscado con marca, modelo y año (JP, 29-sep ·
+ * T-017: «el criterio es el largo»). La tabla que sostiene el corte, medida
+ * en las fichas de los fabricantes:
+ *
+ *   normal            Sea-Doo Spark 2,8–3,05 m · Kawasaki STX 160 3,15 m
+ *                     (124 in) · Yamaha EX ~3,1 m
+ *   mediana a grande  Sea-Doo GTI 3,32 m · Kawasaki Ultra 310 3,44–3,58 m
+ *                     · Yamaha FX 3,58 m (141 in) · Sea-Doo GTX/RXT ~3,5 m+
+ *
+ * Entre 3,15 y 3,32 m no hay modelos de catálogo: el corte va al medio.
+ */
+const DECKEVA_MOTO_CORTE_M = 3.25;
+
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
     // Muelles flotantes: no se cotizan, se escalan a JP (T-017).
     if (function_exists('deckeva_wa_es_muelle') && deckeva_wa_es_muelle($mensajes)) return array('ok' => false, 'falta' => 'muelle flotante · no se cotiza, lo ve JP', 'jp' => true);
@@ -137,12 +152,27 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
     $tipo = (string) ($d['tipo'] ?? '');
     if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · lo ve JP', 'jp' => true);
-    if ($tipo === 'moto_normal' || $tipo === 'moto_grande') {
-        // El tamaño de la moto lo tiene que decir el cliente: «moto de agua» a
-        // secas no elige entre las dos tarifas.
-        $dijo = $tipo === 'moto_normal' ? '/\b(normal|est[aá]ndar|chica|peque[nñ]a)\b/u' : '/\b(grande|mediana)\b/u';
-        if (!preg_match('/\bmoto/u', $escrito) || !preg_match($dijo, $escrito)) return array('ok' => false, 'falta' => 'el tamaño de la moto de agua · lo ve JP', 'jp' => true);
-        $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
+    if ($tipo === 'moto' || $tipo === 'moto_normal' || $tipo === 'moto_grande') {
+        // Con marca y modelo escritos por el cliente y el LOA encontrado, el
+        // tamaño lo decide el largo (DECKEVA_MOTO_CORTE_M), aunque el cliente
+        // haya dicho otro. Sin LOA, vale el tamaño que el cliente dijo con sus
+        // palabras. Sin ninguno de los dos, se le pide marca y modelo.
+        // El modelo acepta dos letras (Yamaha EX, FX): son familias de la tabla.
+        $conModelo = deckeva_wa_cotiza_en_texto($d['marca'] ?? '', $escrito) && deckeva_wa_cotiza_en_texto($d['modelo'] ?? '', $escrito, false, 2);
+        if ($conModelo && is_array($loa) && (float) ($loa['pies'] ?? 0) > 0) {
+            $pies = (float) $loa['pies'];
+            $fuente = 'specs';
+            $clave = $pies * 0.3048 < DECKEVA_MOTO_CORTE_M ? 'moto-normal' : 'moto-grande';
+        } else {
+            // Vale lo ÚLTIMO que dijo: «es normal… perdón, es grande» es grande.
+            $ultNormal = preg_match_all('/\b(normal|est[aá]ndar|chica|peque[nñ]a)\b/u', $escrito, $mn, PREG_OFFSET_CAPTURE) ? end($mn[0])[1] : -1;
+            $ultGrande = preg_match_all('/\b(grande|mediana)\b/u', $escrito, $mg, PREG_OFFSET_CAPTURE) ? end($mg[0])[1] : -1;
+            if (!preg_match('/\bmoto/u', $escrito) || $ultNormal === $ultGrande) {
+                return array('ok' => false, 'falta' => $conModelo ? 'el tamaño de la moto de agua (no se encontró su largo) · lo ve JP' : 'la marca y el modelo de la moto de agua', 'jp' => $conModelo);
+            }
+            $clave = $ultNormal > $ultGrande ? 'moto-normal' : 'moto-grande';
+            $fuente = 'cliente';
+        }
     } else {
         // Marca, modelo y año: sin ellos no se busca el LOA ni se cotiza.
         // Igual que el correo y el año: tienen que estar en lo que escribió el
@@ -198,10 +228,11 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
 /**
  * ¿Este dato está en lo que escribió el cliente? Al menos una palabra suya
  * (3+ letras, o con un dígito: «195», «LS2») aparece tal cual, sin tildes ni
- * mayúsculas. Para un lugar no cuentan las palabras genéricas («lago»,
+ * mayúsculas. Con $minimo = 2 vale también una palabra de dos letras, para
+ * modelos como el Yamaha EX o FX. Para un lugar no cuentan las palabras genéricas («lago»,
  * «marina», «región»): «Lago Rapel» vale por «rapel».
  */
-function deckeva_wa_cotiza_en_texto($valor, $escrito, $esLugar = false) {
+function deckeva_wa_cotiza_en_texto($valor, $escrito, $esLugar = false, $minimo = 3) {
     $norm = static function ($t) {
         $t = mb_strtolower((string) $t);
         $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n'));
@@ -210,7 +241,7 @@ function deckeva_wa_cotiza_en_texto($valor, $escrito, $esLugar = false) {
     $texto = $norm($escrito);
     $genericas = array('lago', 'laguna', 'marina', 'region', 'chile', 'ciudad', 'puerto', 'bahia', 'playa', 'club', 'nautico', 'costa', 'sector', 'provincia', 'comuna');
     foreach (preg_split('/\s+/', trim($norm($valor))) as $w) {
-        if ($w === '' || (strlen($w) < 3 && !preg_match('/\d/', $w))) continue;
+        if ($w === '' || (strlen($w) < $minimo && !preg_match('/\d/', $w))) continue;
         if ($esLugar && in_array($w, $genericas, true)) continue;
         if (strpos($texto, ' ' . $w . ' ') !== false) return true;
     }
@@ -346,7 +377,12 @@ function deckeva_wa_cotiza_pasada() {
         $nuevo = !is_array($c) || $ultIn > (int) ($c['leido_hasta'] ?? 0);
         // Una cotización sin enviar armada con las reglas de antes (29-sep:
         // marca, modelo, año y ubicación obligatorios) se relee antes de salir.
-        $legado = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true) && strpos((string) ($c['firma'] ?? ''), 'v2|') !== 0;
+        // v3 (29-sep, T-017): el tamaño de la moto lo decide el largo. Una moto
+        // armada con v2 (el tamaño que dijo el cliente) se rehace; una lancha
+        // v2 no cambió de regla y se queda.
+        $firmaC = (string) ($c['firma'] ?? '');
+        $vigente = strpos($firmaC, 'v3|') === 0 || (strpos($firmaC, 'v2|') === 0 && strpos($firmaC, 'v2|moto-') !== 0);
+        $legado = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true) && !$vigente;
         $nuevo = $nuevo || $legado;
 
         // 0 · Pidió un muelle flotante DESPUÉS de que se armó su cotización:
@@ -384,11 +420,11 @@ function deckeva_wa_cotiza_pasada() {
         $r = deckeva_wa_cotiza_leer((array) $chat['mensajes']);
         if (!$r['ok']) continue;
         $loa = null;
-        if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
+        if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice', 'moto', 'moto_normal', 'moto_grande'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
         $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla, $loa);
         // Todo lo que cambia el PDF: si el cliente corrige el año o dónde está,
         // la cotización se rehace aunque el precio sea el mismo.
-        $firma = $listo['ok'] ? 'v2|' . implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])),
+        $firma = $listo['ok'] ? 'v3|' . implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])),
             mb_strtolower(trim((string) ($r['d']['marca'] ?? ''))), mb_strtolower(trim((string) ($r['d']['modelo'] ?? ''))), trim((string) ($r['d']['anio'] ?? '')), mb_strtolower(trim((string) ($r['d']['ubicacion'] ?? ''))))) : '';
         $armada = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada', 'enviada', 'descartada'), true);
         // Ya hay una cotización y lo nuevo no cambia nada (un «gracias», una
@@ -428,7 +464,7 @@ function deckeva_wa_cotiza_pasada() {
                     'datos' => $datos, 'creada' => time(),
                     'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),
                     'aprobada_por' => $auto ? 'automático' : '', 'firma' => $firma,
-                    'largo' => array('pies' => $listo['pies'], 'fuente' => $listo['fuente_largo'], 'como_figura' => $loa['como_figura'] ?? '', 'url' => $loa['fuente'] ?? ''),
+                    'largo' => array('pies' => $listo['pies'], 'clave' => $listo['clave'], 'fuente' => $listo['fuente_largo'], 'como_figura' => $loa['como_figura'] ?? '', 'url' => $loa['fuente'] ?? ''),
                     // La que reemplaza (el cliente cambió un dato), para que se vea.
                     'reemplaza' => ($armada && ($c['estado'] ?? '') !== 'enviada') ? (string) ($c['numero'] ?? '') : '',
                 );
@@ -502,7 +538,13 @@ function deckeva_wa_cotiza_largo_html(array $c) {
     $txt = ($l['fuente'] ?? '') === 'specs'
         ? 'Largo según especificaciones: ' . ($l['como_figura'] !== '' ? $l['como_figura'] . ' = ' : '') . str_replace('.', ',', (string) $l['pies']) . ' pies'
         : 'Largo según lo que escribió el cliente: ' . str_replace('.', ',', (string) $l['pies']) . ' pies (no se encontraron especificaciones seguras)';
-    $txt .= ' → se cotiza a ' . deckeva_wa_cotiza_redondear($l['pies']) . ' pies.';
+    // Una moto no se cotiza por pies: el largo decide normal o mediana/grande.
+    if (strpos((string) ($l['clave'] ?? ''), 'moto-') === 0) {
+        $m = round((float) $l['pies'] * 0.3048, 2);
+        $txt .= ' (' . str_replace('.', ',', (string) $m) . ' m) → ' . ($m < DECKEVA_MOTO_CORTE_M ? 'bajo' : 'sobre') . ' el corte de ' . str_replace('.', ',', (string) DECKEVA_MOTO_CORTE_M) . ' m: se cotiza como moto ' . ($l['clave'] === 'moto-normal' ? 'normal' : 'mediana a grande') . '.';
+    } else {
+        $txt .= ' → se cotiza a ' . deckeva_wa_cotiza_redondear($l['pies']) . ' pies.';
+    }
     return '<p style="color:#555">' . esc_html($txt) . (($l['url'] ?? '') !== '' ? ' <a href="' . esc_url($l['url']) . '">Fuente</a>' : '') . '</p>';
 }
 
