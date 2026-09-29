@@ -84,6 +84,8 @@ function deckeva_wa_cotiza_leer($mensajes) {
         . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto_normal o moto_grande si es moto de agua y lo dice; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
         . "- email: exacto, como lo escribió.\n"
         . "- color: el que eligió (gris, beige, negro...).\n"
+        . "- anio: el año de la embarcación tal como lo escribió (\"2019\", \"98\").\n"
+        . "- ubicacion: dónde está la embarcación o la moto (ciudad, lago o marina), tal como lo escribió. El país solo no es una ubicación.\n"
         . "- pais: Chile salvo que diga otro.\n"
         . "- quiere_cotizacion: true si pidió precio o cotización.";
     $res = wp_remote_post('https://api.anthropic.com/v1/messages', array(
@@ -110,6 +112,12 @@ function deckeva_wa_cotiza_leer($mensajes) {
  * o array('ok' => false, 'falta' => '…'). Cada dato que decide el precio o el
  * destinatario se vuelve a buscar en lo que ESCRIBIÓ el cliente: si Claude lo
  * inventó, no está, y no se cotiza.
+ *
+ * Regla de JP (29-sep-2026): sin los datos obligatorios no se crea la
+ * cotización. Lancha: marca, modelo, año, largo (LOA o el que escribió),
+ * color, dónde está, nombre y correo. Moto de agua: el tamaño, color, dónde
+ * está, nombre y correo. Lo que falte se le pide al cliente ('falta' es lo
+ * que lee quien le contesta: «Para su cotización formal falta: …»).
  */
 function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa = null) {
     $escrito = ''; $lineas = array();
@@ -133,6 +141,31 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
         if (!preg_match('/\bmoto/u', $escrito) || !preg_match($dijo, $escrito)) return array('ok' => false, 'falta' => 'el tamaño de la moto de agua · lo ve JP', 'jp' => true);
         $clave = $tipo === 'moto_normal' ? 'moto-normal' : 'moto-grande';
     } else {
+        // Marca, modelo y año: sin ellos no se busca el LOA ni se cotiza.
+        // Igual que el correo y el año: tienen que estar en lo que escribió el
+        // cliente. Una marca o un modelo que Claude dedujo buscan otro LOA.
+        if (!deckeva_wa_cotiza_en_texto($d['marca'] ?? '', $escrito)) return array('ok' => false, 'falta' => 'la marca de la embarcación');
+        if (!deckeva_wa_cotiza_en_texto($d['modelo'] ?? '', $escrito)) return array('ok' => false, 'falta' => 'el modelo de la embarcación');
+        // El año se vuelve a buscar en lo escrito, como el largo: un año que
+        // Claude dedujo cambia el LOA que se busca. Vale entero («2019») o
+        // corto sólo si se nota que es un año («del 98», «año 98», «'98»): un
+        // «19» suelto casi siempre es el largo.
+        $anio = trim((string) ($d['anio'] ?? ''));
+        $anioOk = preg_match('/^(?:19|20)?(\d{2})$/', $anio, $am)
+            && preg_match('/(?<!\d)(?:19|20)' . $am[1] . '(?!\d)|(?:(?:\bdel|\ba[nñ]o|\bmodelo|\byear)\s*|[\'’])' . $am[1] . '(?!\d)/u', $escrito);
+        // Un «98» suelto vale si es la respuesta a una pregunta por el año
+        // (Codex): el mensaje anterior nuestro preguntó el año y el cliente
+        // contestó sólo eso.
+        if (!$anioOk && isset($am[1])) {
+            $preguntoAnio = false;
+            foreach ($mensajes as $m) {
+                $txt = trim(mb_strtolower((string) ($m['texto'] ?? '')));
+                if (($m['dir'] ?? '') !== 'in') { $preguntoAnio = (bool) preg_match('/\ba[nñ]o\b|\byear\b/u', $txt); continue; }
+                if ($preguntoAnio && preg_match('/^(?:del\s+)?(?:19|20)?' . $am[1] . '\.?$/u', $txt)) { $anioOk = true; break; }
+                $preguntoAnio = false;
+            }
+        }
+        if (!$anioOk) return array('ok' => false, 'falta' => 'el año de la embarcación');
         // Regla de JP (29-sep): el largo lo dan las especificaciones del
         // fabricante (LOA), buscadas con marca, modelo y año, y mandan sobre lo
         // que diga el cliente. Sin specs, el largo que ESCRIBIÓ el cliente
@@ -144,13 +177,41 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
         } else {
             $pies = deckeva_wa_cotiza_largo_escrito($escrito, $lineas);
             $fuente = 'cliente';
-            if ($pies === null) return array('ok' => false, 'falta' => 'el largo en pies (o marca, modelo y año para buscarlo)');
+            if ($pies === null) return array('ok' => false, 'falta' => 'el largo en pies de la embarcación');
         }
         $clave = (string) deckeva_wa_cotiza_redondear($pies);
     }
     if (!isset($tabla[$clave])) return array('ok' => false, 'falta' => $clave . ' no está en la tabla · lo ve JP', 'jp' => true);
     if (trim((string) ($d['color'] ?? '')) === '') return array('ok' => false, 'falta' => 'el color');
+    // Dónde está (ciudad, lago o marina): lo pide JP para lancha y para moto de
+    // agua. Es lo que decide cómo se hace la toma de medidas y la instalación.
+    $ubicacion = trim((string) ($d['ubicacion'] ?? ''));
+    if ($ubicacion === '' || in_array(mb_strtolower($ubicacion), array('chile', 'no dice', 'no_dice'), true) || !deckeva_wa_cotiza_en_texto($ubicacion, $escrito, true)) {
+        return array('ok' => false, 'falta' => 'dónde está la ' . ($clave === 'moto-normal' || $clave === 'moto-grande' ? 'moto de agua' : 'embarcación') . ' (ciudad, lago o marina)');
+    }
     return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave], 'pies' => $pies ?? null, 'fuente_largo' => $fuente ?? 'moto');
+}
+
+/**
+ * ¿Este dato está en lo que escribió el cliente? Al menos una palabra suya
+ * (3+ letras, o con un dígito: «195», «LS2») aparece tal cual, sin tildes ni
+ * mayúsculas. Para un lugar no cuentan las palabras genéricas («lago»,
+ * «marina», «región»): «Lago Rapel» vale por «rapel».
+ */
+function deckeva_wa_cotiza_en_texto($valor, $escrito, $esLugar = false) {
+    $norm = static function ($t) {
+        $t = mb_strtolower((string) $t);
+        $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n'));
+        return ' ' . preg_replace('/[^a-z0-9]+/', ' ', $t) . ' ';
+    };
+    $texto = $norm($escrito);
+    $genericas = array('lago', 'laguna', 'marina', 'region', 'chile', 'ciudad', 'puerto', 'bahia', 'playa', 'club', 'nautico', 'costa', 'sector', 'provincia', 'comuna');
+    foreach (preg_split('/\s+/', trim($norm($valor))) as $w) {
+        if ($w === '' || (strlen($w) < 3 && !preg_match('/\d/', $w))) continue;
+        if ($esLugar && in_array($w, $genericas, true)) continue;
+        if (strpos($texto, ' ' . $w . ' ') !== false) return true;
+    }
+    return false;
 }
 
 /** Regla de JP: hasta ,4 baja al entero anterior; desde ,5 sube al siguiente. */
@@ -173,7 +234,9 @@ function deckeva_wa_cotiza_largo_escrito($escrito, array $lineas) {
     $re = '/(?<![\d.,])(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:pies|pie|ft|feet|\'|’)(?:\s*(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:"|”|\'\'|’’|pulgadas|pulgada|pulg|in)(?![\p{L}]))?/u';
     foreach ($lineas as $l) {
         $l = trim((string) $l);
-        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)$/u', $l, $mm)) { $ultimo = (float) str_replace(',', '.', $mm[1]); continue; }
+        // Un número solo vale como largo si puede ser un largo: un «98» que
+        // contesta «¿de qué año es?» no pisa los «19 pies» de antes.
+        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)$/u', $l, $mm)) { $v = (float) str_replace(',', '.', $mm[1]); if ($v >= 8 && $v <= 60) $ultimo = $v; continue; }
         if (preg_match_all($re, $l, $m, PREG_SET_ORDER)) {
             $u = end($m);
             $v = (float) str_replace(',', '.', $u[1]);
@@ -278,6 +341,10 @@ function deckeva_wa_cotiza_pasada() {
         // ¿Escribió algo desde la última vez que se leyó este chat? Si corrigió
         // el largo, el color o el correo, la cotización se rehace (abajo).
         $nuevo = !is_array($c) || $ultIn > (int) ($c['leido_hasta'] ?? 0);
+        // Una cotización sin enviar armada con las reglas de antes (29-sep:
+        // marca, modelo, año y ubicación obligatorios) se relee antes de salir.
+        $legado = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true) && strpos((string) ($c['firma'] ?? ''), 'v2|') !== 0;
+        $nuevo = $nuevo || $legado;
 
         // 1 · Mandar lo aprobado, a su hora · sólo si no escribió nada después.
         if (is_array($c) && ($c['estado'] ?? '') === 'aprobada' && !$nuevo) {
@@ -299,12 +366,16 @@ function deckeva_wa_cotiza_pasada() {
         $loa = null;
         if (in_array($r['d']['tipo'] ?? '', array('lancha', 'no_dice'), true)) $loa = deckeva_wa_cotiza_loa($r['d']['marca'] ?? '', $r['d']['modelo'] ?? '', $r['d']['anio'] ?? '');
         $listo = deckeva_wa_cotiza_listo($r['d'], (array) $chat['mensajes'], $tabla, $loa);
-        $firma = $listo['ok'] ? implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])))) : '';
+        // Todo lo que cambia el PDF: si el cliente corrige el año o dónde está,
+        // la cotización se rehace aunque el precio sea el mismo.
+        $firma = $listo['ok'] ? 'v2|' . implode('|', array($listo['clave'], strtolower(trim($r['d']['email'])), mb_strtolower(trim($r['d']['color'])), mb_strtolower(trim($r['d']['nombre'] . ' ' . $r['d']['apellido'])),
+            mb_strtolower(trim((string) ($r['d']['marca'] ?? ''))), mb_strtolower(trim((string) ($r['d']['modelo'] ?? ''))), trim((string) ($r['d']['anio'] ?? '')), mb_strtolower(trim((string) ($r['d']['ubicacion'] ?? ''))))) : '';
         $armada = is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada', 'enviada', 'descartada'), true);
         // Ya hay una cotización y lo nuevo no cambia nada (un «gracias», una
         // pregunta): se queda la que está, sin otro PDF ni otro correo. Si lo
         // nuevo no alcanza para cotizar, tampoco se deshace la que había.
-        if ($armada && ($firma === '' || $firma === ($c['firma'] ?? ''))) {
+        // Una legada que ya no alcanza sí se deshace: no puede salir con las reglas de antes.
+        if ($armada && !$legado && ($firma === '' || $firma === ($c['firma'] ?? ''))) {
             deckeva_wa_con_candado(function ($chats) use ($num, $ultIn) {
                 if (isset($chats[$num]['cotizacion'])) $chats[$num]['cotizacion']['leido_hasta'] = max($ultIn, (int) ($chats[$num]['cotizacion']['leido_hasta'] ?? 0));
                 return $chats;
@@ -382,7 +453,7 @@ function deckeva_wa_cotiza_enviar($num) {
     $bote = trim((string) $d['embarcacion']['modelo']) !== '' ? 'tu ' . $d['embarcacion']['modelo'] : 'tu embarcación';
     $cuerpo = "Hola {$nombre},\n\n"
         . "Te adjunto la cotización del piso de goma EVA para {$bote}, en {$d['embarcacion']['color']}, como me contaste por WhatsApp.\n\n"
-        . "La toma de medidas y la instalación las coordinamos contigo según dónde esté la embarcación.\n\n"
+        . "La toma de medidas y la instalación son opcionales: en el PDF va su valor por si prefieres que las hagamos nosotros, y si quieres hacerlas tú mismo, te mandamos el video explicativo paso a paso.\n\n"
         . "Cualquier duda, respóndeme este correo o escríbeme por WhatsApp.\n\n"
         . "Juan Pablo\nDeckeva";
     $html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#1a2a3a">' . wpautop(esc_html($cuerpo)) . '</div>';
