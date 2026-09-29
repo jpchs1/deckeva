@@ -157,21 +157,33 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
 function deckeva_wa_cotiza_redondear($pies) {
     $pies = (float) $pies;
     $entero = floor($pies);
+    // Tolerancia mínima, sólo para el ruido de coma flotante (24 + 6/12).
     return (int) (($pies - $entero) >= 0.5 - 1e-9 ? $entero + 1 : $entero);
 }
 
 /**
- * El largo que escribió el cliente, como largo: «19 pies», «22,4 ft», «19'», o
- * el número solo en un mensaje. Si lo dijo más de una vez, vale el último (se
- * corrigió: «perdón, son 22,4 pies»). null si no hay ninguno.
+ * El largo que escribió el cliente, como largo: «19 pies», «22,4 ft», «19'»,
+ * «24' 6\"» (pies y pulgadas), o el número solo en un mensaje. Si lo dijo más
+ * de una vez, vale el último en el orden de la conversación (se corrigió:
+ * «perdón, son 22,4 pies»). null si no hay ninguno.
  */
 function deckeva_wa_cotiza_largo_escrito($escrito, array $lineas) {
+    if (!$lineas) $lineas = array((string) $escrito);
     $ultimo = null;
-    if (preg_match_all('/(?<![\d.,])(\d{1,2}(?:[.,]\d{1,2})?)\s*(pies|pie|ft|feet|\'|’)/u', $escrito, $m)) {
-        $ultimo = (float) str_replace(',', '.', end($m[1]));
-    }
+    $re = '/(?<![\d.,])(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:pies|pie|ft|feet|\'|’)(?:\s*(\d{1,2}(?:[.,]\d{1,2})?)\s*(?:"|”|\'\'|’’|pulgadas|pulgada|pulg|in)(?![\p{L}]))?/u';
     foreach ($lineas as $l) {
-        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)(\s*(pies|pie|ft|feet))?$/u', $l, $mm)) $ultimo = (float) str_replace(',', '.', $mm[1]);
+        $l = trim((string) $l);
+        if (preg_match('/^(\d{1,2}(?:[.,]\d{1,2})?)$/u', $l, $mm)) { $ultimo = (float) str_replace(',', '.', $mm[1]); continue; }
+        if (preg_match_all($re, $l, $m, PREG_SET_ORDER)) {
+            $u = end($m);
+            $v = (float) str_replace(',', '.', $u[1]);
+            // Pulgadas: sólo si el pie es entero y son menos de 12.
+            if (isset($u[2]) && $u[2] !== '') {
+                $pul = (float) str_replace(',', '.', $u[2]);
+                if ($pul < 12 && floor($v) == $v) $v += $pul / 12;
+            }
+            $ultimo = $v;
+        }
     }
     return ($ultimo !== null && $ultimo >= 8 && $ultimo <= 60) ? $ultimo : null;
 }
@@ -221,7 +233,8 @@ function deckeva_wa_cotiza_loa($marca, $modelo, $anio) {
         $pies = is_array($d) ? (float) ($d['loa_pies'] ?? 0) : 0;
         $fuente = is_array($d) ? trim((string) ($d['fuente'] ?? '')) : '';
         if (is_array($d) && !empty($d['seguro']) && $pies >= 8 && $pies <= 60 && preg_match('#^https?://#', $fuente)) {
-            $out = array('pies' => round($pies, 2), 'como_figura' => substr((string) ($d['como_figura'] ?? ''), 0, 40), 'fuente' => $fuente, 'ts' => time());
+            // Sin recortar decimales: 22,499 redondeado a 2 daría 22,50 y subiría de tarifa.
+            $out = array('pies' => $pies, 'como_figura' => substr((string) ($d['como_figura'] ?? ''), 0, 40), 'fuente' => $fuente, 'ts' => time());
         }
     }
     update_option($clave, $out, false);
