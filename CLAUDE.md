@@ -134,9 +134,15 @@ cotización escrita, y correo).
   python3 .github/pdf/medir.py /tmp/dk/salida     # pip install pymupdf
   ```
 
-  Son 128 combinaciones (nombre, contacto, saludo, ≈ USD y modelo largos ×
-  Chile/afuera × precio/a consultar); sale en 1 si alguna queda con menos de
-  4 pt de aire sobre el pie. Al rediseño le quedaban 26 pt en la peor.
+  Son 256 combinaciones (nombre, contacto, saludo, ≈ USD, medición e
+  instalación incluidas y modelo largos × Chile/afuera × precio/a consultar);
+  sale en 1 si alguna queda con menos de 4 pt de aire sobre el pie. Con el sello
+  «Taller propio» a la peor le quedan 8,8 pt.
+- **El sello «Taller propio» es de JP** (29-sep-2026): Deckeva trabaja los pisos
+  con su propia máquina especial para pisos de lanchas, y su único foco es la
+  calidad del producto y la terminación. Va en la columna del detalle, con fondo
+  navy y borde dorado. En modo compacto pierde la línea en inglés (el título ya
+  la trae), y medición e instalación incluidas cuentan como dato largo.
 
 ## Despliegue
 

@@ -2,7 +2,7 @@
 /**
  * Renderiza la cotización PDF con el mismo DOMPDF y las mismas opciones del
  * servidor, sobre los datos de ejemplo y todas las combinaciones de datos
- * largos (nombre, contacto, saludo, ≈ USD, modelo/color) × Chile/extranjero ×
+ * largos (nombre, contacto, saludo, ≈ USD, servicios incluidos, modelo/color) × Chile/extranjero ×
  * precio/a consultar. Después, medir.py dice si algo quedó bajo el pie.
  *
  * Sólo CLI. Vive en .github/ para que el deploy no lo publique.
@@ -29,6 +29,7 @@ $extras = array(
     'contacto' => function ($d) { return array_replace_recursive($d, array('cliente' => array('email' => 'maria.fernanda.valenzuela.etchegaray@empresa-ejemplo.cl'))); },
     'saludo'   => function ($d) { return $d + array('saludo' => str_repeat('Gracias por cotizar con Deckeva, conversamos por WhatsApp. ', 3)); },
     'usd'      => function ($d) { return array_replace_recursive($d, array('precio' => array('ref_usd' => 'USD $1,512', 'tipo_cambio' => '1 USD = CLP $935'))); },
+    'servicios'=> function ($d) { return $d + array('servicios' => array(array('desc' => 'Toma de medidas', 'sub' => 'Measurement · IVA incluido', 'monto' => 'CLP $184.450'), array('desc' => 'Instalación', 'sub' => 'Installation · IVA incluido', 'monto' => 'CLP $184.450')), 'servicios_incluidos' => 'La toma de medidas y la instalación van incluidas en esta cotización: vamos a tu marina, medimos e instalamos.'); },
     'ficha'    => function ($d) { return array_replace_recursive($d, array('embarcacion' => array('modelo' => 'Chaparral 267 SSX Sport Deck Outboard Edition', 'color' => 'Arena con borde negro / Sand with black'))); },
 );
 $claves = array_keys($extras);
