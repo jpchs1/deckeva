@@ -20,7 +20,7 @@
  * Modo (Ajustes → WhatsApp Deckeva → Cotizaciones):
  * - borrador (por defecto): la cotización se arma y se le manda a JP con el PDF;
  *   sale al cliente cuando JP aprieta «Enviar».
- * - automático: sale sola, 1 a 40 minutos después del último mensaje del cliente,
+ * - automático: sale sola, 5 a 40 minutos después del último mensaje del cliente,
  *   de 8:00 a 20:00. Lo prende JP, no el código.
  *
  * El repo es público: acá no hay ningún dato de cliente. Todo vive en la opción
@@ -462,7 +462,7 @@ add_action('admin_post_deckeva_wa_cotiza', function () {
 /** La sección de cotizaciones en Ajustes → WhatsApp Deckeva. */
 function deckeva_wa_cotiza_pantalla() {
     echo '<h2>Cotizaciones desde WhatsApp</h2><p>' . (deckeva_wa_cotiza_modo() === 'automatico'
-        ? '<b>Automático</b>: la cotización sale sola al correo del cliente, 1 a 40 minutos después de su último mensaje.'
+        ? '<b>Automático</b>: la cotización sale sola al correo del cliente, 5 a 40 minutos después de su último mensaje.'
         : '<b>Borrador</b>: se arma sola y te espera acá; sale cuando aprietas «Enviar».') . '</p>';
     foreach (deckeva_wa_chats() as $num => $chat) {
         $c = $chat['cotizacion'] ?? null;
