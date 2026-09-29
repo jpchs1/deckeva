@@ -93,6 +93,14 @@ cotización escrita, y correo).
   Webpay Plus, Mercado Pago y PayPal (`deckeva.cl/pago`); afuera PayPal y Wire
   Transfer / ACH (`deckeva.com/wiretransfers`). Si se agrega o se apaga uno en
   el portal, se cambia aquí también.
+  Cada medio va con su logo, con los colores de marca del portal de pago
+  (`pago/index.html`). Van armados con las tipografías del PDF y no como SVG
+  con `<text>`, porque DOMPDF no dibuja bien el texto dentro de un SVG. Los
+  íconos (Mercado Pago, banco) sí son SVG, pero sólo formas.
+- **«Válida hasta» con fecha**, en la cabecera y en el pie:
+  `deckeva_pdf_valida_hasta()`, 15 días hábiles desde la fecha de la
+  cotización. No descuenta feriados, a propósito: así la fecha nunca queda
+  después del plazo real.
 - **Una página siempre.** DOMPDF no parte la hoja cuando el contenido se pasa:
   lo dibuja **debajo del pie**, sin avisar, y el cliente recibe el cierre tapado.
   Con datos largos la plantilla entra en modo compacto (saca la nota en inglés
