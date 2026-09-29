@@ -57,3 +57,6 @@ jobs:
           fi
 
           echo "Sin errores de sintaxis."
+
+      - name: El precio de los opcionales es el mismo en la web y en el PDF
+        run: php .github/checks/precios-web.php

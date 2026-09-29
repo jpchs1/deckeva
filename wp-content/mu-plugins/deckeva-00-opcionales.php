@@ -19,6 +19,9 @@
  * - El valor se escribe SOLO aquí. El PDF (deckeva-assets/pdf-cotizacion.php),
  *   el PDF de respaldo y el correo del cotizador lo leen de estas constantes.
  *   El chat de WhatsApp no dice montos: dice que van en la cotización.
+ *   La home de deckeva.cl (staging/index-cl.html) es HTML estático y lo lleva
+ *   escrito: si cambias el valor aquí, cámbialo allá. CI falla si no coinciden
+ *   (.github/checks/precios-web.php).
  *
  * Lleva «00» para cargar antes que los demás mu-plugins, y la plantilla del
  * PDF lo incluye con require_once para poder previsualizarse sin WordPress.
