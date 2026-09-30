@@ -152,6 +152,16 @@ correo igual cuenta.
 - **Si JP tomó el chat a mano en el teléfono**, Tourevo no lo manda por
   WhatsApp salvo que la cotización la haya aprobado él (`JP · wp-admin`).
 
+## Colores: café claro y gris claro, nada más (REGLA DEL DUEÑO · 30-sep-2026)
+
+JP: «en stock tenemos café claro y gris claro, ambos pueden ser con líneas
+negras, es parte del diseño que podemos trabajar. No manejamos otros
+colores». El contestador ofrecía «gris, beige (teak) y negro»; ya no. Si el
+cliente pide otro color, se le dice con cariño que trabajamos esos dos y se le
+ofrece el más parecido. La cotización automática no se arma con otro color
+(`deckeva_wa_cotiza_color_ok`): queda esperando que el cliente elija uno de los
+dos. «Con líneas negras» no cuenta como pedir negro.
+
 ## Dónde conviene tener la lancha: en Santiago, si puede (REGLA DEL DUEÑO · 30-sep-2026)
 
 Si el cliente pregunta dónde conviene tenerla para la toma de medidas y la
