@@ -231,6 +231,9 @@ add_action('init', function () {
         // pasada a medias.
         // De vuelta van los borradores que esperan a JP: Tourevo se los pide
         // por WhatsApp, en dos mensajes (JP, 29-sep).
+        // Y queda anotado que Tourevo está pidiendo: mientras lo haga, las
+        // aprobaciones le llegan a JP por WhatsApp y el correo no sale.
+        update_option('deckeva_wa_tick_ts', time(), false);
         deckeva_wa_contestar_y_seguir(wp_json_encode(array('ok' => true, 'pendientes' => deckeva_wa_pendientes_para_jp())));
         $dir = wp_upload_dir(null, false);
         $lock = @fopen(trailingslashit($dir['basedir']) . '.deckeva-wa-pasada.lock', 'c');
@@ -318,18 +321,25 @@ function deckeva_wa_borrador_vigente($chat) {
  * «¿Estas solicitudes me pueden llegar a mi WhatsApp para aprobar desde el
  * WhatsApp?» (JP). El borrador sigue viviendo acá; Tourevo, que tiene el
  * número, se lo pide a JP en dos mensajes (el detalle y «ok D-XXXX») y
- * trae su respuesta por la ruta `aprobar`. El correo sigue saliendo igual.
+ * trae su respuesta por la ruta `aprobar`. Mientras Tourevo pida (el tick
+ * de los últimos 15 min) el correo no sale: JP lo pidió por WhatsApp y no en
+ * los dos lados (30-sep). Si Tourevo deja de pedir, vuelve el correo.
  */
 function deckeva_wa_pendientes_para_jp() {
     $out = array();
+    $entregados = array(); // número → id que Tourevo se lleva: su correo diferido ya no hace falta
     foreach (deckeva_wa_chats() as $num => $chat) {
-        if (!deckeva_wa_borrador_vigente($chat)) continue;
-        $p = $chat['pendiente'];
+        $p = $chat['pendiente'] ?? null;
+        // Lo escalado («lo ves tú») también le llega por WhatsApp, sin texto
+        // propuesto, durante el día en que el cliente escribió.
+        $escalado = deckeva_wa_escalado_vigente($chat);
+        if (!$escalado && !deckeva_wa_borrador_vigente($chat)) continue;
+        if (!empty($p['correo_diferido'])) $entregados[$num] = (string) $p['id'];
         $cliente = '';
         foreach ((array) ($chat['mensajes'] ?? array()) as $m) if (($m['dir'] ?? '') === 'in' && trim((string) $m['texto']) !== '') $cliente = (string) $m['texto'];
         $out[] = array(
             'id' => (string) $p['id'], 'numero' => (string) $num,
-            'texto' => mb_substr((string) ($p['texto'] ?? ''), 0, 1000), 'cliente' => mb_substr($cliente, 0, 300),
+            'texto' => $escalado ? '' : mb_substr((string) ($p['texto'] ?? ''), 0, 1000), 'cliente' => mb_substr($cliente, 0, 300),
             'idioma' => deckeva_wa_es_castellano((string) ($p['texto'] ?? '')) ? 'es' : 'otro',
             'en' => (int) ($p['en'] ?? 0), 'regla' => (string) ($p['regla'] ?? ''),
             'necesita_humano' => !empty($p['necesita_humano']), 'motivo' => (string) ($p['motivo'] ?? ''),
@@ -339,8 +349,62 @@ function deckeva_wa_pendientes_para_jp() {
     // Los más nuevos primero y un tope holgado: un borrador viejo sin aprobar
     // no le quita el lugar a uno recién redactado.
     usort($out, function ($a, $b) { return $b['para_ts'] <=> $a['para_ts']; });
-    return array_slice($out, 0, 40);
+    $out = array_slice($out, 0, 40);
+    $enLista = array();
+    foreach ($out as $x) $enLista[$x['numero']] = $x['id'];
+    $entregados = array_intersect_assoc($entregados, $enLista);
+    if ($entregados) {
+        // Tourevo los recibe en esta respuesta y, si WhatsApp no le llega a JP,
+        // manda él el correo de respaldo.
+        deckeva_wa_con_candado(function ($chats) use ($entregados) {
+            foreach ($entregados as $n => $id) {
+                if ((string) ($chats[$n]['pendiente']['id'] ?? '') === $id) unset($chats[$n]['pendiente']['correo_diferido']);
+            }
+            return $chats;
+        });
+    }
+    return $out;
 }
+
+/** Un «lo ves tú» que todavía nadie atendió: es de su último mensaje, nadie le escribió después, y es de hoy. */
+function deckeva_wa_escalado_vigente($chat) {
+    $p = $chat['pendiente'] ?? null;
+    if (!is_array($p) || ($p['estado'] ?? '') !== 'escalado' || empty($p['id'])) return false;
+    $ultIn = 0; $ultOut = 0;
+    foreach ((array) ($chat['mensajes'] ?? array()) as $m) {
+        if (($m['dir'] ?? '') === 'in') $ultIn = max($ultIn, (int) $m['ts']); else $ultOut = max($ultOut, (int) $m['ts']);
+    }
+    return $ultIn > 0 && (int) ($p['para_ts'] ?? 0) === $ultIn && $ultOut < $ultIn && time() - $ultIn <= DAY_IN_SECONDS;
+}
+
+/**
+ * El respaldo del correo diferido. La pasada sólo corre cuando Tourevo pide,
+ * así que si Tourevo deja de pedir justo después de crear un borrador, nadie
+ * más lo avisaría: esto corre en cualquier visita al sitio (a lo más cada 5
+ * min) y, con el tick de Tourevo parado hace 15 min, manda el correo de lo
+ * que Tourevo nunca se llevó.
+ */
+function deckeva_wa_correos_diferidos() {
+    if (time() - (int) get_option('deckeva_wa_tick_ts', 0) < 15 * MINUTE_IN_SECONDS) return;
+    if (get_transient('deckeva_wa_diferidos')) return;
+    set_transient('deckeva_wa_diferidos', 1, 5 * MINUTE_IN_SECONDS);
+    $hay = false;
+    foreach (deckeva_wa_chats() as $c) if (!empty($c['pendiente']['correo_diferido'])) { $hay = true; break; }
+    if (!$hay) return;
+    $mandar = array();
+    deckeva_wa_con_candado(function ($chats) use (&$mandar) {
+        foreach ($chats as $n => $c) {
+            if (empty($c['pendiente']['correo_diferido'])) continue;
+            unset($chats[$n]['pendiente']['correo_diferido']);
+            if (deckeva_wa_borrador_vigente($c) || deckeva_wa_escalado_vigente($c)) $mandar[] = $chats[$n];
+        }
+        return $chats;
+    });
+    foreach ($mandar as $c) {
+        if (($c['pendiente']['estado'] ?? '') === 'escalado') deckeva_wa_avisar_escalado($c); else deckeva_wa_avisar_jp($c);
+    }
+}
+add_action('init', 'deckeva_wa_correos_diferidos', 20);
 
 /**
  * ¿La propuesta está en castellano? JP no quiere otros idiomas en su WhatsApp:
@@ -511,6 +575,11 @@ function deckeva_wa_un_chat($num) {
     } while (false);
 
     $guardado = false;
+    // Con Tourevo pidiendo, le llega a JP por WhatsApp (deckeva_wa_pendientes_para_jp)
+    // y el correo queda DIFERIDO, no descartado: si Tourevo no lo retira en la
+    // lista, sale igual (deckeva_wa_correos_diferidos). Codex, #158.
+    $porWhatsApp = time() - (int) get_option('deckeva_wa_tick_ts', 0) < 15 * MINUTE_IN_SECONDS;
+    if ($porWhatsApp && ($avisar || $escalar) && is_array($chat['pendiente'] ?? null)) $chat['pendiente']['correo_diferido'] = time();
     if ($chat !== $original) {
         deckeva_wa_con_candado(function ($chats) use ($num, $chat, $huella, &$guardado) {
             if (!isset($chats[$num]) || deckeva_wa_huella($chats[$num]) !== $huella) return $chats;
@@ -520,8 +589,8 @@ function deckeva_wa_un_chat($num) {
         });
         // El correo a JP sale DESPUÉS de guardar: si el chat cambió en el medio
         // no se guardó nada, y la próxima pasada redacta y avisa una sola vez.
-        if ($guardado && $avisar) deckeva_wa_avisar_jp($chat);
-        if ($guardado && $escalar) deckeva_wa_avisar_escalado($chat);
+        if ($guardado && $avisar && !$porWhatsApp) deckeva_wa_avisar_jp($chat);
+        if ($guardado && $escalar && !$porWhatsApp) deckeva_wa_avisar_escalado($chat);
         if (!$guardado) return;
     }
     if ($salida === null) return;
