@@ -457,6 +457,11 @@ function deckeva_wa_un_chat($num) {
                     deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
                     break;
                 }
+                // ¿Habla con una máquina? Eso lo contesta JP en persona, siempre.
+                if (deckeva_wa_pregunta_si_es_bot($chat['mensajes'] ?? array())) {
+                    $r['necesita_humano'] = true;
+                    $r['motivo'] = 'pregunta si habla con un bot · lo contestas tú' . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : '');
+                }
                 // Muelles flotantes: nunca sale solo, lo ve JP (T-017).
                 if (deckeva_wa_es_muelle($chat['mensajes'] ?? array())) {
                     $r['necesita_humano'] = true;
@@ -572,6 +577,16 @@ function deckeva_wa_voz() {
         . "- Si algo no lo hacemos, dilo claro y, si puedes, recomienda a quién ir.\n\n";
 }
 
+/** ¿Lo último que escribió el cliente pregunta si habla con una máquina? Entonces contesta JP, no la IA. */
+function deckeva_wa_pregunta_si_es_bot($mensajes) {
+    $ult = '';
+    foreach ((array) $mensajes as $m) {
+        if (($m['dir'] ?? '') === 'in') $ult .= ' ' . (string) ($m['texto'] ?? '');
+        else $ult = '';
+    }
+    return (bool) preg_match('/\b(bot|robot|chatbot|ia|inteligencia artificial|m[aá]quina|autom[aá]tic[oa]s?|humano|persona real|AI|human|real person)\b|\b(eres|es|hablo con|habla con|hablando con) (un |una )?persona\b/iu', $ult);
+}
+
 /** '' si suena a persona; si no, qué lo delata. Lista cerrada: puede no reconocer una frase robótica, no puede marcar una normal. */
 function deckeva_wa_suena_a_robot($txt) {
     $reglas = array(
@@ -580,6 +595,8 @@ function deckeva_wa_suena_a_robot($txt) {
         '/\b(asistente virtual|soy (el|la|un|una) asistente|chatbot|inteligencia artificial)\b/iu' => 'se presenta como asistente o IA',
         '/(en (mis|nuestros) (archivos|registros)|en la ficha|la ficha que|en el tarifario|en nuestro sistema|no tengo (esa|ese) (informaci[oó]n|dato))/iu' => 'habla de fichas o registros',
         '/(gracias por ponerte en contacto|te he conectado|te conect[eé] con|hemos pasado la conversaci[oó]n|no puedo ayudarte con eso|no puedo abrir (enlaces|links))/iu' => 'frase de respuesta automática',
+        // Decir qué es: ni negar ser un bot ni jurar ser una persona. Eso lo contesta JP.
+        '/(no soy (un |una )?(bot|robot|ia|m[aá]quina|programa)|soy (una )?persona|soy (un )?humano|persona real|de carne y hueso|not a (bot|robot)|real person|I\'m human|I am human)/iu' => 'dice qué es (bot o persona) · eso lo contesta JP',
     );
     foreach ($reglas as $re => $por) if (preg_match($re, (string) $txt)) return 'suena a robot: ' . $por;
     return '';
