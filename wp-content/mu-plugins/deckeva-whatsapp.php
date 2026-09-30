@@ -200,7 +200,7 @@ add_action('init', function () {
 
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') { status_header(405); echo '{"ok":false}'; exit; }
     $raw = (string) file_get_contents('php://input');
-    if (strlen($raw) > 65536 || !deckeva_wa_firma_valida($raw, $_SERVER['HTTP_X_PUERTA_FIRMA'] ?? '', $_SERVER['HTTP_X_PUERTA_TS'] ?? '')) {
+    if (strlen($raw) > 262144 || !deckeva_wa_firma_valida($raw, $_SERVER['HTTP_X_PUERTA_FIRMA'] ?? '', $_SERVER['HTTP_X_PUERTA_TS'] ?? '')) {
         status_header(401); echo '{"ok":false,"error":"firma"}'; exit;
     }
     // Una firma sirve UNA vez: el tick ahora devuelve borradores con números y
@@ -273,7 +273,7 @@ function deckeva_wa_entrada($d) {
         $antes = !empty($chat['mensajes']) ? max(array_column($chat['mensajes'], 'ts')) : 0;
         // Una foto más vieja que la que ya hay (entregas desordenadas) no pisa.
         if ($ultimo < $antes) return $chats;
-        $chat['mensajes'] = array_slice($msgs, -30);
+        $chat['mensajes'] = array_slice($msgs, -80);
         $chat['actualizado'] = time();
         $chats[$num] = $chat;
         return $chats;
@@ -411,6 +411,7 @@ function deckeva_wa_un_chat($num) {
     $huella = deckeva_wa_huella($chat);
     $salida = null;
     $avisar = false;
+    $escalar = false;
     do {
             $ultIn = 0; $ultOut = 0;
             foreach ((array) ($chat['mensajes'] ?? array()) as $m) {
@@ -441,6 +442,17 @@ function deckeva_wa_un_chat($num) {
                 if (!$r['ok']) { deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']); break; }
                 $id = 'D-' . strtoupper(substr(base_convert(substr(hash('sha256', $num . '|' . $ultIn), 0, 10), 16, 36), 0, 4));
                 if (!$r['responder'] || $r['texto'] === '') {
+                    // No se le escribe, pero si necesita a una persona (el cliente
+                    // está molesto, pidió que no le manden nada) JP se entera, y la
+                    // cotización formal queda retenida hasta que él decida: no se le
+                    // manda por correo el PDF que acaba de rechazar (30-sep, Gustavo).
+                    if (!empty($r['necesita_humano'])) {
+                        $chat['pendiente'] = array('id' => $id, 'para_ts' => $ultIn, 'estado' => 'escalado', 'necesita_humano' => true, 'motivo' => $r['motivo']);
+                        $chat['no_cotizar'] = array('ts' => $ahora, 'motivo' => $r['motivo']);
+                        deckeva_wa_anotar($chat, $id . ' no se le escribe · lo ve JP · ' . $r['motivo']);
+                        $escalar = true;
+                        break;
+                    }
                     $chat['pendiente'] = array('id' => $id, 'para_ts' => $ultIn, 'estado' => 'sin_respuesta', 'motivo' => $r['motivo']);
                     deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
                     break;
@@ -482,6 +494,7 @@ function deckeva_wa_un_chat($num) {
         // El correo a JP sale DESPUÉS de guardar: si el chat cambió en el medio
         // no se guardó nada, y la próxima pasada redacta y avisa una sola vez.
         if ($guardado && $avisar) deckeva_wa_avisar_jp($chat);
+        if ($guardado && $escalar) deckeva_wa_avisar_escalado($chat);
         if (!$guardado) return;
     }
     if ($salida === null) return;
@@ -522,6 +535,9 @@ function deckeva_wa_sistema() {
         . "- Fabrica pisos de goma EVA antideslizante a medida para lanchas, veleros, motos de agua y embarcaciones. Sitio: deckeva.cl, con cotizador en la web. Correo: contacto@deckeva.cl.\n"
         . "- Para cotizar un piso hace falta: marca, modelo, año y largo en pies de la embarcación, el color o diseño que quiere, dónde está la embarcación (ciudad o marina), y el nombre y el email del cliente. Para una moto de agua: marca, modelo y año (el tamaño lo sacamos del largo de sus especificaciones), el color, dónde está, y el nombre y el email.\n"
         . "- La toma de medidas y la instalación son servicios opcionales de Deckeva, con un valor fijo que va en la cotización formal (PDF), aparte del total del piso. El cliente también las puede hacer él mismo, fácil, con el video explicativo que le mandamos: como prefiera. Nunca digas su valor en el chat: si lo pregunta, dile que va en la cotización.\n"
+        . "- La toma de medidas y la instalación pueden ser en lugares distintos: por ejemplo, medir en Rapel e instalar en Pucón, o medir en Santiago e instalar en la marina. Si el cliente lo plantea, dile que sí se puede y anota los dos lugares.\n"
+        . "- Si la embarcación está en Curacaví, la toma de medidas y la instalación llevan un recargo por traslado que va en la cotización formal. Nunca digas el monto en el chat.\n"
+        . "- El logo de la marca de la embarcación (por ejemplo Cobalt o Sea Ray) se puede grabar en el piso sin costo extra: va incluido. Si el cliente lo pide, dile que sí y anótalo para la cotización.\n"
         . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que el encargado lo revisa personalmente y le escribe, y marca necesita_humano.\n"
         . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
         . "- La cotización formal llega por correo, en PDF. También la puede sacar solo en el cotizador de deckeva.cl.\n"
@@ -532,6 +548,9 @@ function deckeva_wa_sistema() {
         . "- Nunca escribas un precio ni un importe. Si pregunta cuánto cuesta, dile que le mandas la cotización por correo y pide lo que falte.\n"
         . "- No inventes. Plazos, stock, fechas de instalación, fotos, formas de pago, un cambio, un reclamo o un pago: responde que lo revisas y le confirmas, y marca necesita_humano.\n"
         . "- No saludes de nuevo si ya se saludaron. No repitas lo ya dicho.\n"
+        . "- ANTES de preguntar algo, lee el chat entero, desde el primer mensaje: lo que el cliente ya dijo, aunque haya sido hace días o con otras palabras, NO se vuelve a pedir. Úsalo. Preguntarle dos veces lo mismo es lo peor que le puede pasar a un cliente: le hace sentir que habla con una máquina que no lo escucha. Si ya tienes un dato, confírmalo en una frase («tu Sea Ray Sundancer de 27 pies en Valdivia») y pide sólo lo que de verdad falta.\n"
+        . "- Si en el chat se le dijeron dos cosas distintas (por ejemplo, sobre el traslado o el plazo), no elijas una: dile que lo revisas y le confirmas, y marca necesita_humano.\n"
+        . "- Si el cliente dice que está molesto o que no quiere hablar con una máquina, no le mandes nada más: responder = false y necesita_humano = true, con el motivo.\n"
         . "- Si lo último no necesita respuesta (un gracias, un ok), responder = false y texto vacío.\n"
         . "- motivo: una línea para el equipo, no para el cliente.";
 }
@@ -614,6 +633,20 @@ function deckeva_wa_avisar_jp($chat) {
         . $avisos . '<p>Sale ' . esc_html(deckeva_wa_legible($p['en'])) . ' si la apruebas antes.</p>'
         . '<p><a href="' . esc_url($lnk) . '" style="background:#0e6ba8;color:#fff;padding:9px 16px;border-radius:6px;text-decoration:none">Revisar, corregir o aprobar</a></p></div>';
     wp_mail(deckeva_wa_aprobador(), (($avisos !== '') ? '⚠ ' : '') . 'Respuesta ' . $p['id'] . ' · Deckeva · +' . $chat['numero'], $html, deckeva_mail_headers());
+}
+
+/** Un chat que no se contesta pero que JP tiene que mirar: correo corto, con el final del chat. */
+function deckeva_wa_avisar_escalado($chat) {
+    $p = $chat['pendiente'];
+    $chatH = '';
+    foreach (array_slice((array) $chat['mensajes'], -8) as $m) {
+        $chatH .= '<p style="margin:4px 0"><span style="color:#666">' . ($m['dir'] === 'in' ? 'Cliente' : 'Deckeva') . ' ' . esc_html(deckeva_wa_legible($m['ts'])) . ' ·</span> ' . nl2br(esc_html($m['texto'])) . '</p>';
+    }
+    $html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#111">'
+        . '<p><b>No le escribimos nada a +' . esc_html($chat['numero']) . ' (Deckeva). Necesita que lo mires tú.</b></p>'
+        . '<p style="color:#b45309">' . esc_html($p['motivo']) . '</p>'
+        . '<p>Su cotización formal quedó retenida: no sale sola hasta que decidas.</p>' . $chatH . '</div>';
+    wp_mail(deckeva_wa_aprobador(), '⚠ Lo ves tú · ' . $p['id'] . ' · Deckeva · +' . $chat['numero'], $html, deckeva_mail_headers());
 }
 
 // =============================================

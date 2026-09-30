@@ -370,6 +370,22 @@ function deckeva_wa_cotiza_pasada() {
         $chat = deckeva_wa_chats()[$num] ?? null;
         if (!is_array($chat)) continue;
         $c = $chat['cotizacion'] ?? null;
+        // El cliente pidió que no le manden nada, o está molesto (30-sep): la
+        // cotización no se arma ni sale sola. La que estaba lista queda retenida.
+        if (!empty($chat['no_cotizar'])) {
+            if (is_array($c) && in_array($c['estado'] ?? '', array('lista', 'aprobada'), true)) {
+                deckeva_wa_con_candado(function ($chats) use ($num) {
+                    if (isset($chats[$num]['cotizacion']) && in_array($chats[$num]['cotizacion']['estado'] ?? '', array('lista', 'aprobada'), true)) {
+                        $chats[$num]['cotizacion']['estado'] = 'retenida';
+                        $chats[$num]['cotizacion']['falta'] = 'el cliente pidió que no le manden nada · lo ve JP';
+                        $chats[$num]['cotizacion']['jp'] = true;
+                        deckeva_wa_anotar($chats[$num], 'cotización ' . ($chats[$num]['cotizacion']['numero'] ?? '') . ' retenida · el cliente no quiere que le escribamos');
+                    }
+                    return $chats;
+                });
+            }
+            continue;
+        }
         $ultIn = 0; $escrito = '';
         foreach ((array) $chat['mensajes'] as $m) if (($m['dir'] ?? '') === 'in') { $ultIn = max($ultIn, (int) $m['ts']); $escrito .= ' ' . $m['texto']; }
         // ¿Escribió algo desde la última vez que se leyó este chat? Si corrigió
