@@ -53,6 +53,19 @@ function deckeva_wa_cotiza_tabla($html = null) {
     return $out;
 }
 
+/**
+ * ¿Es un color que hay en stock? Café claro o gris claro, con o sin líneas
+ * negras (JP, 30-sep-2026: «no manejamos otros colores»). Las líneas negras
+ * no cuentan como pedir negro: se sacan antes de mirar.
+ */
+function deckeva_wa_cotiza_color_ok($color) {
+    $c = mb_strtolower(trim((string) $color));
+    $c = preg_replace('/\bcon\s+(las\s+)?l[ií]neas?\s+negras?\b|\bl[ií]neas?\s+negras?\b/u', ' ', $c);
+    $base = (bool) preg_match('/\b(caf[eé]|gris)\b/u', $c);
+    $otro = (bool) preg_match('/\b(beige|negro|negra|blanco|blanca|azul|verde|rojo|roja|teca|teak|arena|marr[oó]n|caf[eé]\s+oscuro|gris\s+oscuro|grafito)\b/u', $c);
+    return $base && !$otro;
+}
+
 function deckeva_wa_cotiza_clp($n) {
     return 'CLP $' . number_format((int) $n, 0, ',', '.');
 }
@@ -84,7 +97,7 @@ function deckeva_wa_cotiza_leer($mensajes) {
         . "- largo: el largo en pies TAL COMO LO ESCRIBIÓ el cliente (\"19\", \"22,4\", \"21 pies\"). Nunca lo deduzcas del modelo (una Sea Ray 185 NO es un dato de largo). Si dio metros, déjalo vacío.\n"
         . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto si es moto de agua; moto_normal o moto_grande sólo si además el cliente dijo el tamaño; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
         . "- email: exacto, como lo escribió.\n"
-        . "- color: el que eligió (gris, beige, negro...).\n"
+        . "- color: el que eligió, tal como lo escribió (en stock hay café claro y gris claro, con o sin líneas negras; si pidió otro, escríbelo igual).\n"
         . "- anio: el año de la embarcación tal como lo escribió (\"2019\", \"98\").\n"
         . "- ubicacion: dónde está la embarcación o la moto (ciudad, lago o marina), tal como lo escribió. El país solo no es una ubicación.\n"
         . "- pais: Chile salvo que diga otro.\n"
@@ -220,6 +233,10 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     }
     if (!isset($tabla[$clave])) return array('ok' => false, 'falta' => $clave . ' no está en la tabla · lo ve JP', 'jp' => true);
     if (trim((string) ($d['color'] ?? '')) === '') return array('ok' => false, 'falta' => 'el color');
+    // Sólo los colores que hay en stock (JP, 30-sep-2026): café claro y gris
+    // claro, con o sin líneas negras. Otro color no se cotiza solo: se le
+    // ofrece al cliente el más parecido y lo que elija vuelve a entrar.
+    if (!deckeva_wa_cotiza_color_ok((string) $d['color'])) return array('ok' => false, 'falta' => 'el color (pidió «' . trim((string) $d['color']) . '»; en stock hay café claro o gris claro)');
     // Dónde está (ciudad, lago o marina): lo pide JP para lancha y para moto de
     // agua. Es lo que decide cómo se hace la toma de medidas y la instalación.
     $ubicacion = trim((string) ($d['ubicacion'] ?? ''));
