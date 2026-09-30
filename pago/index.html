@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO -->
-  <title>Pago Online | DECKEVA — Webpay · Mercado Pago · PayPal</title>
-  <meta name="description" content="Portal de pago seguro DECKEVA · Webpay Plus, Mercado Pago y PayPal. Pague su pedido de pisos nauticos de goma EVA en CLP o USD con procesadores certificados." />
+  <title>Pago online | DECKEVA — Webpay · Mercado Pago · PayPal</title>
+  <meta name="description" content="Portal de pago seguro de DECKEVA: paga tu pedido de pisos náuticos de goma EVA con Webpay Plus, Mercado Pago (CLP) o PayPal (USD)." />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="author" content="DECKEVA" />
   <link rel="canonical" href="https://deckeva.cl/pago/" />
@@ -15,7 +15,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="DECKEVA" />
   <meta property="og:title" content="DECKEVA — Pago Online (Webpay · Mercado Pago · PayPal)" />
-  <meta property="og:description" content="Pague su pedido DECKEVA por Webpay Plus, Mercado Pago o PayPal. Conexion SSL y procesadores certificados." />
+  <meta property="og:description" content="Paga tu pedido DECKEVA con Webpay Plus, Mercado Pago o PayPal. Conexión cifrada y procesadores certificados." />
   <meta property="og:url" content="https://deckeva.cl/pago/" />
   <meta property="og:image" content="https://deckeva.com/wp-content/uploads/2023/08/pisos-antideslizante.jpg" />
   <meta property="og:locale" content="es_CL" />
@@ -27,11 +27,11 @@
   <link rel="preconnect" href="https://www.paypalobjects.com" crossorigin />
   <link rel="preconnect" href="https://tourevo.cl" crossorigin />
   <link rel="preconnect" href="https://translate.google.com" crossorigin />
-  <link rel="preconnect" href="https://flagcdn.com" crossorigin />
+  <link rel="preconnect" href="https://flagcdn.com" />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="/pago/deckeva-pago.css" />
+  <link rel="stylesheet" href="/pago/deckeva-pago.css?v=2" />
 
   <!-- Runtime config (sobreescribible por el host) -->
   <script>
@@ -60,18 +60,41 @@
   <meta name="theme-color" content="#0f2240">
 </head>
 <body>
+  <a class="skip-link" href="#paso-1">Saltar al formulario de pago</a>
 
   <!-- HEADER -->
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <a class="brand" href="https://deckeva.cl/" aria-label="Volver a deckeva.cl">
-        <span class="dot" aria-hidden="true"></span>
-        DECKEVA
+      <a class="brand" href="https://deckeva.cl/" aria-label="DECKEVA · volver a deckeva.cl">
+        <span class="brand-badge" aria-hidden="true">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="brandClip"><circle cx="40" cy="40" r="36"/></clipPath>
+              <linearGradient id="brandWave" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1bb3a3"/><stop offset="100%" stop-color="#0e8e85"/></linearGradient>
+            </defs>
+            <path d="M 12 40 A 28 28 0 1 0 68 40" fill="none" stroke="#0f2240" stroke-width="3" stroke-linecap="round"/>
+            <g clip-path="url(#brandClip)">
+              <path d="M -4 60 C 14 50 30 64 40 60 C 52 56 66 64 84 56 L 84 84 L -4 84 Z" fill="url(#brandWave)"/>
+              <path d="M -4 66 C 14 58 30 70 40 66 C 52 62 66 70 84 64 L 84 84 L -4 84 Z" fill="#16a3a3" opacity="0.55"/>
+            </g>
+            <path d="M 8 50 C 22 50 50 50 72 48 C 64 58 50 60 40 60 C 28 60 16 56 8 50 Z" fill="#0f2240"/>
+            <g fill="#c4ccd6">
+              <path d="M 14 50 L 18 50 L 17 56 L 14 56 Z"/><path d="M 20 50 L 26 50 L 25 57 L 20 57 Z"/><path d="M 28 50 L 35 50 L 34 58 L 27 58 Z"/>
+              <path d="M 37 50 L 45 50 L 44 58 L 35 58 Z"/><path d="M 47 50 L 55 50 L 54 57 L 45 57 Z"/><path d="M 57 49 L 64 49 L 62 55 L 55 55 Z"/>
+            </g>
+            <path d="M 18 50 C 24 38 36 30 50 32 C 60 33 66 40 70 47 L 65 47 C 60 40 50 36 42 38 C 32 40 26 47 24 50 Z" fill="#0f2240"/>
+          </svg>
+        </span>
+        <span class="brand-text">DECK<b>EVA</b></span>
       </a>
+      <span class="header-secure" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Pago seguro
+      </span>
       <div class="header-right">
         <div class="lang-switcher" id="langSwitcher">
           <button type="button" class="lang-trigger" id="langTrigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Idioma / Language">
-            <img class="lang-flag" src="https://flagcdn.com/w40/cl.png" alt="" width="20" height="15" loading="lazy" />
+            <img class="lang-flag" src="https://flagcdn.com/w40/cl.png" alt="" width="20" height="15" />
             <span class="lang-name">Español</span>
             <svg class="lang-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 8 10 12 14 8"/></svg>
           </button>
@@ -96,407 +119,347 @@
             <button type="button" class="lang-item" data-lang="he"    data-flag="il" role="option"><img src="https://flagcdn.com/w40/il.png" alt="" width="22" height="16" loading="lazy" /><span>עברית</span></button>
           </div>
         </div>
-        <!-- Hidden Google Translate widget — drives the translation -->
-        <div id="google_translate_element" class="gt-hidden" aria-hidden="true"></div>
-        <a class="header-link" href="https://deckeva.cl/">&larr; Volver al sitio</a>
+        </div>
+        <!-- Widget oculto de Google Translate: el selector de arriba lo maneja -->
+        <div id="google_translate_element" class="gt-hidden" aria-hidden="true" inert></div>
+        <a class="header-link" href="https://deckeva.cl/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Volver al sitio
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <span class="eyebrow">Pago Online · Procesadores Certificados</span>
-      <h1>Pago seguro: <span class="accent">Webpay · Mercado Pago · PayPal</span></h1>
-      <p class="lead">
-        Complete los datos de su pedido y elija el medio de pago que prefiera.
-        Webpay Plus y Mercado Pago en CLP para Chile, PayPal en USD para pagos internacionales.
-        Conexion SSL 256-bit y procesamiento directo del banco.
-      </p>
-      <p class="lead en">
-        Fill in your order details and choose your preferred payment method.
-        Webpay Plus and Mercado Pago in CLP for Chile, PayPal in USD for international payments.
-      </p>
-
-      <div class="pay-badges">
-        <span class="pay-badge ssl">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          SSL 256-bit
-        </span>
-        <span class="pay-badge logo">
-          <svg class="brand-svg" viewBox="0 0 132 26" xmlns="http://www.w3.org/2000/svg" aria-label="Webpay Plus">
-            <text x="0" y="20" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="20" letter-spacing="-0.5">
-              <tspan fill="#ee2737">webpay</tspan><tspan dx="5" fill="#0a1628">Plus</tspan>
-            </text>
-          </svg>
-        </span>
-        <span class="pay-badge logo">
-          <svg class="brand-svg" viewBox="0 0 170 26" xmlns="http://www.w3.org/2000/svg" aria-label="Mercado Pago">
-            <circle cx="11" cy="13" r="11" fill="#009ee3"/>
-            <path d="M5 15 q6 7 12 0" stroke="#fff200" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-            <text x="28" y="18" font-family="Helvetica, Arial, sans-serif" font-size="14">
-              <tspan font-weight="700" fill="#003a5d">mercado</tspan><tspan dx="4" font-weight="300" fill="#009ee3">pago</tspan>
-            </text>
-          </svg>
-        </span>
-        <span class="pay-badge logo">
-          <svg class="brand-svg" viewBox="0 0 100 26" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
-            <text x="0" y="21" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.8">
-              <tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan>
-            </text>
-          </svg>
-        </span>
-        <span class="pay-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Pago encriptado
-        </span>
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div>
+          <span class="eyebrow">Portal de pago oficial · Deckeva</span>
+          <h1>Paga tu pedido <span class="accent">en minutos</span></h1>
+          <p class="lead">Completa tus datos, elige cómo pagar y listo. Webpay Plus y Mercado Pago cobran en pesos chilenos; PayPal cobra en dólares, ideal si pagas desde el extranjero.</p>
+        </div>
+        <ul class="hero-trust" aria-label="Garantías del pago">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <span><b>Conexión cifrada</b>SSL 256-bit de punta a punta</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <span><b>No vemos tu tarjeta</b>La procesan Transbank, Mercado Pago o PayPal</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+            <span><b>Comprobante al correo</b>Y te contactamos para coordinar</span>
+          </li>
+        </ul>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- PAY SECTION -->
-  <section class="section" id="pay">
-    <div class="container">
+    <section class="section" id="pay">
+      <div class="container">
 
-      <!-- STEPPER -->
-      <div class="stepper" role="list">
-        <div class="step active" id="step-1" role="listitem">
-          <span class="step-num">1</span>
-          <span class="step-text">
-            <span class="step-label">Paso 1</span>
-            <span class="step-title">Tus datos</span>
-          </span>
-        </div>
-        <div class="step" id="step-2" role="listitem">
-          <span class="step-num">2</span>
-          <span class="step-text">
-            <span class="step-label">Paso 2</span>
-            <span class="step-title">Metodo</span>
-          </span>
-        </div>
-        <div class="step" id="step-3" role="listitem">
-          <span class="step-num">3</span>
-          <span class="step-text">
-            <span class="step-label">Paso 3</span>
-            <span class="step-title">Confirmar</span>
-          </span>
-        </div>
-      </div>
+        <!-- STEPPER -->
+        <ol class="stepper" aria-label="Pasos del pago">
+          <li class="step active" id="step-1"><a href="#paso-1"><span class="step-num" aria-hidden="true"><i>1</i></span><span class="step-text"><span class="step-label">Paso 1</span><span class="step-title">Tus datos</span></span></a></li>
+          <li class="step" id="step-2"><a href="#paso-2"><span class="step-num" aria-hidden="true"><i>2</i></span><span class="step-text"><span class="step-label">Paso 2</span><span class="step-title">Método de pago</span></span></a></li>
+          <li class="step" id="step-3"><a href="#paso-3"><span class="step-num" aria-hidden="true"><i>3</i></span><span class="step-text"><span class="step-label">Paso 3</span><span class="step-title">Confirma y paga</span></span></a></li>
+        </ol>
 
-      <!-- FORM + SUMMARY -->
-      <div class="pay-shell">
+        <div class="checkout">
+          <div class="checkout-main">
 
-        <!-- LEFT — Datos -->
-        <article class="card" id="payer-card">
-          <h2>Datos del pago</h2>
-          <p class="card-sub">Esta informacion viaja al recibo. Verifiquela antes de pagar.</p>
+            <!-- PASO 1 — Datos -->
+            <article class="card" id="payer-card">
+              <header class="card-head" id="paso-1">
+                <span class="card-step" aria-hidden="true">1</span>
+                <div>
+                  <h2>Tus datos</h2>
+                  <p class="card-sub">Van en el comprobante. Revísalos antes de pagar.</p>
+                </div>
+              </header>
 
-          <form id="pay-form" novalidate onsubmit="return false">
-            <div class="field-grid">
-              <div class="field-block">
-                <label for="payerName">Nombre completo *</label>
-                <input type="text" id="payerName" name="nombre" required autocomplete="name" placeholder="Ej: Maria Fernandez" />
-                <span class="err">Ingrese su nombre (minimo 2 letras).</span>
+              <form id="pay-form" novalidate onsubmit="return false">
+                <div class="field-grid">
+                  <div class="field-block">
+                    <label for="payerName">Nombre completo <span class="req" aria-hidden="true">*</span></label>
+                    <input type="text" id="payerName" name="nombre" required autocomplete="name" enterkeyhint="next" placeholder="Ej: María Fernández" aria-describedby="err-name" />
+                    <span class="err" id="err-name">Ingresa tu nombre (mínimo 2 letras).</span>
+                  </div>
+                  <div class="field-block">
+                    <label for="payerEmail">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+                    <input type="email" id="payerEmail" name="email" required autocomplete="email" inputmode="email" enterkeyhint="next" spellcheck="false" placeholder="tu@correo.com" aria-describedby="err-email" />
+                    <span class="err" id="err-email">Ingresa un correo válido. Ahí te llega el comprobante.</span>
+                  </div>
+                  <div class="field-block">
+                    <label for="payerPhone">Teléfono <em>(opcional)</em></label>
+                    <input type="tel" id="payerPhone" name="telefono" autocomplete="tel" inputmode="tel" enterkeyhint="next" placeholder="+56 9 1234 5678" />
+                  </div>
+                  <div class="field-block">
+                    <label for="bookingCode">N° de pedido o cotización <em>(opcional)</em></label>
+                    <input type="text" id="bookingCode" name="pedido" autocomplete="off" enterkeyhint="next" placeholder="Ej: DECK-2026-015" />
+                  </div>
+
+                  <div class="field-block full">
+                    <label for="amount">Monto a pagar <span class="req" aria-hidden="true">*</span></label>
+                    <div class="amount-wrap">
+                      <span class="amount-cur" aria-hidden="true">$</span>
+                      <input type="text" id="amount" name="monto" required inputmode="numeric" autocomplete="off" enterkeyhint="next" placeholder="0" aria-describedby="amountHint err-amount" />
+                      <span class="amount-code" aria-hidden="true">CLP</span>
+                    </div>
+                    <small class="hint" id="amountHint">En pesos chilenos, como figura en tu cotización. Si pagas con PayPal, lo convertimos a dólares.</small>
+                    <small class="amount-aux" id="amountAux" aria-live="polite"></small>
+                    <span class="err" id="err-amount">Ingresa el monto en pesos (solo números).</span>
+                  </div>
+
+                  <div class="field-block full">
+                    <label for="description">Concepto del pago <span class="req" aria-hidden="true">*</span></label>
+                    <textarea id="description" name="concepto" rows="2" required maxlength="240" placeholder="Ej: 50% inicio · piso EVA lancha Cobalt 220, gris claro" aria-describedby="descHint err-desc"></textarea>
+                    <small class="hint" id="descHint">¿Necesitas factura? Indícalo aquí junto al RUT de la empresa.</small>
+                    <span class="err" id="err-desc">Cuéntanos brevemente qué estás pagando (mínimo 3 caracteres).</span>
+                  </div>
+                </div>
+              </form>
+            </article>
+
+            <!-- PASO 2 — Método -->
+            <article class="card" id="methods-card">
+              <header class="card-head" id="paso-2">
+                <span class="card-step" aria-hidden="true">2</span>
+                <div>
+                  <h2>Método de pago</h2>
+                  <p class="card-sub">Los tres son igual de seguros. Elige el que te acomode.</p>
+                </div>
+              </header>
+
+              <div class="methods-grid" id="methods" role="radiogroup" aria-label="Método de pago">
+
+                <!-- Webpay -->
+                <label class="method" for="m-webpay">
+                  <input type="radio" id="m-webpay" name="method" value="webpay" />
+                  <span class="method-logo wp" aria-hidden="true">
+                    <svg class="brand-svg" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg"><text x="2" y="22" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="22" textLength="144" lengthAdjust="spacingAndGlyphs"><tspan fill="#ee2737">webpay</tspan><tspan dx="6" fill="#0a1628">Plus</tspan></text></svg>
+                  </span>
+                  <span class="method-meta">
+                    <span class="method-title">Webpay Plus</span>
+                    <span class="method-sub">Débito, crédito y prepago de bancos chilenos · <b>CLP</b></span>
+                    <span class="method-features"><span>3-D Secure</span><span>Cuotas según tu banco</span><span>Boleta electrónica</span></span>
+                  </span>
+                  <span class="method-brands" role="img" aria-label="Redcompra, Visa, Mastercard, American Express">
+                    <svg class="brand-icon" viewBox="0 0 58 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="58" height="22" rx="3" fill="#ee2737"/><text x="29" y="14.5" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#fff" text-anchor="middle" textLength="48" lengthAdjust="spacingAndGlyphs">REDCOMPRA</text></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#fff" text-anchor="middle">AMEX</text></svg>
+                  </span>
+                  <span class="method-select" aria-hidden="true"></span>
+                </label>
+
+                <!-- Mercado Pago -->
+                <label class="method" for="m-mp">
+                  <input type="radio" id="m-mp" name="method" value="mercadopago" />
+                  <span class="method-logo mp" aria-hidden="true">
+                    <svg class="brand-svg" viewBox="0 0 172 32" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="16" r="14" fill="#009ee3"/><path d="M7 19 q8 9 16 0" stroke="#fff200" stroke-width="3" fill="none" stroke-linecap="round"/><text x="36" y="22" font-family="Helvetica, Arial, sans-serif" font-size="18" textLength="132" lengthAdjust="spacingAndGlyphs"><tspan font-weight="700" fill="#003a5d">mercado</tspan><tspan dx="5" font-weight="300" fill="#009ee3">pago</tspan></text></svg>
+                  </span>
+                  <span class="method-meta">
+                    <span class="method-title">Mercado Pago</span>
+                    <span class="method-sub">Tarjetas o saldo en tu cuenta Mercado Pago · <b>CLP</b></span>
+                    <span class="method-features"><span>Crédito y débito</span><span>Cuotas según tu banco</span><span>Saldo Mercado Pago</span></span>
+                  </span>
+                  <span class="method-brands" role="img" aria-label="Visa, Mastercard, American Express, saldo Mercado Pago">
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#fff" text-anchor="middle">AMEX</text></svg>
+                    <svg class="brand-icon" viewBox="0 0 54 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="54" height="22" rx="3" fill="#009ee3"/><text x="27" y="14.5" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#fff" text-anchor="middle" textLength="44" lengthAdjust="spacingAndGlyphs">SALDO MP</text></svg>
+                  </span>
+                  <span class="method-select" aria-hidden="true"></span>
+                </label>
+
+                <!-- PayPal -->
+                <label class="method" for="m-pp">
+                  <input type="radio" id="m-pp" name="method" value="paypal" />
+                  <span class="method-logo pp" aria-hidden="true">
+                    <svg class="brand-svg" viewBox="0 0 110 32" xmlns="http://www.w3.org/2000/svg"><text x="2" y="25" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="26" letter-spacing="-0.8" textLength="104" lengthAdjust="spacingAndGlyphs"><tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan></text></svg>
+                  </span>
+                  <span class="method-meta">
+                    <span class="method-title">PayPal <span class="method-badge">Desde el extranjero</span></span>
+                    <span class="method-sub">Cuenta PayPal o tarjeta internacional · <b>USD</b></span>
+                    <span class="method-features"><span>Sin cuenta PayPal</span><span>Protección al comprador</span><span>Conversión automática</span></span>
+                  </span>
+                  <span class="method-brands" role="img" aria-label="Visa, Mastercard, American Express, Discover">
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+                    <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#fff" text-anchor="middle">AMEX</text></svg>
+                    <svg class="brand-icon" viewBox="0 0 44 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="44" height="22" rx="3" fill="#fff"/><text x="4" y="13" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="7.5" fill="#191919" textLength="34" lengthAdjust="spacingAndGlyphs">DISCOVER</text><ellipse cx="34" cy="17" rx="6" ry="2.2" fill="#f47216"/></svg>
+                  </span>
+                  <span class="method-select" aria-hidden="true"></span>
+                </label>
+
               </div>
-              <div class="field-block">
-                <label for="payerEmail">Correo electronico *</label>
-                <input type="email" id="payerEmail" name="email" required autocomplete="email" placeholder="tu@correo.com" />
-                <span class="err">Ingrese un correo valido.</span>
+            </article>
+
+            <!-- PASO 3 — Confirmar y pagar -->
+            <article class="card" id="confirm-card">
+              <header class="card-head" id="paso-3">
+                <span class="card-step" aria-hidden="true">3</span>
+                <div>
+                  <h2>Confirma y paga</h2>
+                  <p class="card-sub">Te llevamos a la plataforma segura del medio que elegiste.</p>
+                </div>
+              </header>
+
+              <label class="terms-row" id="termsRow">
+                <input type="checkbox" id="acceptTerms" name="terminos" required form="pay-form" />
+                <span class="terms-box" aria-hidden="true"></span>
+                <span>Acepto las <a href="#terms" id="termsLink">condiciones del pago</a> y autorizo el cargo a través del medio seleccionado.</span>
+              </label>
+
+              <div class="pay-area disabled" id="payArea" aria-live="polite">
+
+                <div class="pay-area-empty" id="payAreaEmpty">
+                  <span class="pae-title" id="payMissingTitle">Para habilitar el pago falta:</span>
+                  <ul class="pay-missing" id="payMissing"></ul>
+                </div>
+
+                <!-- Webpay -->
+                <div class="pay-action-grid" id="payWebpay" hidden>
+                  <div class="pay-action-block">
+                    <button type="button" id="btnWebpay" class="btn-pay wp">Pagar con Webpay</button>
+                    <span class="pay-action-help">Te redirigimos a la pasarela segura de Transbank.</span>
+                  </div>
+                </div>
+
+                <!-- Mercado Pago -->
+                <div class="pay-action-grid" id="payMP" hidden>
+                  <div class="pay-action-block">
+                    <button type="button" id="btnMP" class="btn-pay mp">Pagar con Mercado Pago</button>
+                    <span class="pay-action-help">Te redirigimos a Mercado Pago para completar el pago.</span>
+                  </div>
+                </div>
+
+                <!-- PayPal -->
+                <div class="pay-action-grid pp" id="payPayPal" hidden>
+                  <div class="pay-action-block">
+                    <div class="pay-action-caption">Con tu cuenta PayPal</div>
+                    <div id="paypal-btn-paypal" class="paypal-wrap"></div>
+                  </div>
+                  <div class="pay-action-block">
+                    <div class="pay-action-caption">Con tarjeta de crédito o débito, sin cuenta PayPal</div>
+                    <div id="paypal-btn-card" class="paypal-wrap"></div>
+                  </div>
+                  <span class="pay-action-help">Se cobra en dólares (USD) a través de PayPal.</span>
+                </div>
+
               </div>
-              <div class="field-block">
-                <label for="payerPhone">Telefono <em>(opcional)</em></label>
-                <input type="tel" id="payerPhone" name="telefono" autocomplete="tel" placeholder="+56 9 ..." />
+
+              <!-- STATUS -->
+              <div id="statusMessage" class="status" role="status" aria-live="polite"></div>
+            </article>
+
+            <!-- CONDICIONES + PREGUNTAS -->
+            <section class="card faq" id="terms" aria-labelledby="terms-title">
+              <h2 id="terms-title">Condiciones y preguntas frecuentes</h2>
+              <details open>
+                <summary>Condiciones del pago</summary>
+                <ul>
+                  <li>El monto a pagar es el de tu cotización o del pedido que acordaste con Deckeva.</li>
+                  <li>Webpay Plus y Mercado Pago cobran en pesos chilenos (CLP). PayPal cobra en dólares (USD) con la tasa referencial que ves en el resumen; tu banco o PayPal pueden aplicar su propio tipo de cambio.</li>
+                  <li>Deckeva no ve ni guarda los datos de tu tarjeta: el pago lo procesan Transbank, Mercado Pago o PayPal.</li>
+                  <li>Con el pago confirmado te llega el comprobante por correo y te contactamos para coordinar la fabricación y el envío o la instalación.</li>
+                </ul>
+              </details>
+              <details>
+                <summary>¿Puedo pagar en cuotas?</summary>
+                <p>Sí, con Webpay Plus o Mercado Pago, si tu tarjeta de crédito lo permite. Las cuotas y sus intereses dependen de tu banco.</p>
+              </details>
+              <details>
+                <summary>¿Necesito una cuenta PayPal?</summary>
+                <p>No. En PayPal puedes elegir «Tarjeta de crédito o débito» y pagar sin crear una cuenta.</p>
+              </details>
+              <details>
+                <summary>¿Cómo pido factura?</summary>
+                <p>Escríbelo en «Concepto del pago» junto al RUT de la empresa, o avísanos por WhatsApp.</p>
+              </details>
+              <details>
+                <summary>Me cobraron pero no vi la confirmación</summary>
+                <p>Escríbenos por WhatsApp con tu nombre y el monto, y lo revisamos con el comprobante de tu banco.</p>
+              </details>
+            </section>
+
+          </div>
+
+          <!-- RESUMEN (sticky en escritorio) -->
+          <aside class="checkout-side" aria-label="Resumen del pago">
+            <div class="card card-summary" id="checkout-card">
+              <h2>Resumen</h2>
+              <div id="summary">
+                <div id="summaryEmpty" class="summary-empty">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+                  <span>Aquí verás el detalle de tu pago a medida que completas tus datos.</span>
+                </div>
+                <div id="summaryFilled" hidden>
+                  <dl class="summary-list">
+                    <div class="summary-row"><dt class="lbl">Cliente</dt><dd class="val compact" id="sumName">—</dd></div>
+                    <div class="summary-row" id="sumOrderRow" hidden><dt class="lbl">Pedido</dt><dd class="val compact" id="sumOrder">—</dd></div>
+                    <div class="summary-row"><dt class="lbl">Concepto</dt><dd class="val compact" id="sumDesc">—</dd></div>
+                    <div class="summary-row"><dt class="lbl">Medio</dt><dd class="val compact" id="sumMethod">Por elegir</dd></div>
+                  </dl>
+                  <div class="summary-total">
+                    <span class="lbl">Total a pagar</span>
+                    <span class="val" id="sumTotal">CLP 0</span>
+                  </div>
+                  <div class="summary-usd" id="sumUsdRow" hidden>
+                    <span class="lbl">Se cobra en PayPal</span>
+                    <span class="val" id="sumUsd">USD 0.00</span>
+                  </div>
+                </div>
               </div>
-              <div class="field-block">
-                <label for="bookingCode">N&deg; de pedido / Cotizacion <em>(opcional)</em></label>
-                <input type="text" id="bookingCode" name="pedido" placeholder="DECK-2026-..." />
+              <p class="summary-secure">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                Pago cifrado y procesado por Transbank, Mercado Pago o PayPal.
+              </p>
+              <div class="summary-brands" role="img" aria-label="Tarjetas aceptadas: Redcompra, Visa, Mastercard, American Express, Diners Club, Discover">
+                <svg class="brand-icon" viewBox="0 0 58 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="58" height="22" rx="3" fill="#ee2737"/><text x="29" y="14.5" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#fff" text-anchor="middle" textLength="48" lengthAdjust="spacingAndGlyphs">REDCOMPRA</text></svg>
+                <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
+                <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#fff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
+                <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#fff" text-anchor="middle">AMEX</text></svg>
+                <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="38" height="22" rx="3" fill="#0079be"/><circle cx="19" cy="11" r="6.5" fill="#fff"/><circle cx="17" cy="11" r="3.2" fill="#0079be"/><circle cx="21" cy="11" r="3.2" fill="none" stroke="#0079be" stroke-width="1.4"/></svg>
+                <svg class="brand-icon" viewBox="0 0 44 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="44" height="22" rx="3" fill="#fff"/><text x="4" y="13" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="7.5" fill="#191919" textLength="34" lengthAdjust="spacingAndGlyphs">DISCOVER</text><ellipse cx="34" cy="17" rx="6" ry="2.2" fill="#f47216"/></svg>
               </div>
             </div>
 
-            <div class="field-block full">
-              <label for="amount">Monto a pagar (CLP) *</label>
-              <div class="amount-wrap">
-                <span class="amount-cur" aria-label="Moneda">CLP</span>
-                <input type="text" id="amount" name="monto" required inputmode="numeric" autocomplete="off" placeholder="250000" />
-              </div>
-              <small class="hint">Monto en pesos chilenos. Para PayPal se convierte automaticamente a USD.</small>
-              <small class="amount-aux" id="amountAux"></small>
-              <span class="err">Ingrese un monto en CLP (minimo 1).</span>
-            </div>
-
-            <div class="field-block full">
-              <label for="description">Concepto / Descripcion *</label>
-              <textarea id="description" name="concepto" rows="2" required placeholder="Ej: Pago pedido pisos EVA — 12 m2 color teak"></textarea>
-              <span class="err">Describa brevemente el concepto del pago (minimo 3 caracteres).</span>
-            </div>
-
-            <label class="terms-row">
-              <input type="checkbox" id="acceptTerms" name="terminos" required />
-              <span>Acepto los <a href="#terms">terminos del servicio</a> y autorizo el cargo a traves del procesador seleccionado.</span>
-            </label>
-          </form>
-        </article>
-
-        <!-- RIGHT — Resumen -->
-        <aside class="card card-summary" id="checkout-card">
-          <h2>Resumen del pago</h2>
-          <p class="card-sub">Total a cobrar segun el metodo seleccionado.</p>
-
-          <div id="summary">
-            <div id="summaryEmpty" class="summary-empty">
-              Ingrese el monto y los datos para habilitar el pago.
-            </div>
-            <div id="summaryFilled" hidden>
-              <div class="summary-row">
-                <span class="lbl">Cliente</span>
-                <span class="val compact" id="sumName">—</span>
-              </div>
-              <div class="summary-row">
-                <span class="lbl">Concepto</span>
-                <span class="val compact" id="sumDesc">—</span>
-              </div>
-              <div class="summary-row summary-total">
-                <span class="lbl">Total</span>
-                <span class="val" id="sumTotal">CLP 0</span>
-              </div>
-              <div class="summary-row summary-usd" id="sumUsdRow" hidden>
-                <span class="lbl">Equivalente</span>
-                <span class="val" id="sumUsd">USD 0.00</span>
+            <div class="help-card">
+              <span class="help-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+              </span>
+              <div>
+                <b>¿Dudas con el pago?</b>
+                <span>Te ayudamos por WhatsApp.</span>
+                <a href="https://wa.me/56940211459?text=Hola%20Deckeva%2C%20tengo%20una%20consulta%20sobre%20el%20pago." target="_blank" rel="noopener">+56 9 4021 1459 →</a>
               </div>
             </div>
-          </div>
-        </aside>
-
-      </div>
-
-      <!-- METHODS -->
-      <div class="methods-head">
-        <h2>Elige tu metodo</h2>
-        <span class="methods-sub">Tres opciones, mismo nivel de seguridad.</span>
-      </div>
-
-      <div class="methods-grid" id="methods">
-
-        <!-- Webpay -->
-        <label class="method" for="m-webpay">
-          <input type="radio" id="m-webpay" name="method" value="webpay" />
-          <span class="method-select" aria-hidden="true"></span>
-
-          <div class="method-logo wp" aria-hidden="true">
-            <svg class="brand-svg" viewBox="0 0 160 36" xmlns="http://www.w3.org/2000/svg" aria-label="Webpay Plus">
-              <text x="6" y="26" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="22" letter-spacing="-0.5">
-                <tspan fill="#ee2737">webpay</tspan><tspan dx="6" fill="#0a1628">Plus</tspan>
-              </text>
-            </svg>
-          </div>
-
-          <div class="method-meta">
-            <span class="method-title">Webpay Plus</span>
-            <span class="method-sub">Debito y credito Chile &middot; Transbank &middot; CLP</span>
-          </div>
-
-          <ul class="method-features">
-            <li>3-D Secure incluido</li>
-            <li>Cuotas con o sin interes (segun banco)</li>
-            <li>Boleta electronica disponible</li>
-          </ul>
-
-          <div class="method-brands" aria-label="Tarjetas aceptadas">
-            <svg class="brand-icon" viewBox="0 0 50 22" xmlns="http://www.w3.org/2000/svg" aria-label="Redcompra"><rect width="50" height="22" rx="3" fill="#ee2737"/><text x="25" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#ffffff" text-anchor="middle">REDCOMPRA</text></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="22" rx="3" fill="#ffffff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
-          </div>
-        </label>
-
-        <!-- Mercado Pago -->
-        <label class="method" for="m-mp">
-          <input type="radio" id="m-mp" name="method" value="mercadopago" />
-          <span class="method-select" aria-hidden="true"></span>
-
-          <div class="method-logo mp" aria-hidden="true">
-            <svg class="brand-svg" viewBox="0 0 200 36" xmlns="http://www.w3.org/2000/svg" aria-label="Mercado Pago">
-              <circle cx="15" cy="18" r="14" fill="#009ee3"/>
-              <path d="M7 21 q8 9 16 0" stroke="#fff200" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <text x="36" y="24" font-family="Helvetica, Arial, sans-serif" font-size="18">
-                <tspan font-weight="700" fill="#003a5d">mercado</tspan><tspan dx="5" font-weight="300" fill="#009ee3">pago</tspan>
-              </text>
-            </svg>
-          </div>
-
-          <div class="method-meta">
-            <span class="method-title">Mercado Pago</span>
-            <span class="method-sub">Tarjetas y saldo Mercado Pago &middot; CLP</span>
-          </div>
-
-          <ul class="method-features">
-            <li>Credito y debito nacionales</li>
-            <li>Cuotas con o sin interes (segun banco)</li>
-            <li>Saldo Mercado Pago</li>
-          </ul>
-
-          <div class="method-brands" aria-label="Tarjetas aceptadas">
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="22" rx="3" fill="#ffffff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
-            <svg class="brand-icon" viewBox="0 0 50 22" xmlns="http://www.w3.org/2000/svg" aria-label="Saldo Mercado Pago"><rect width="50" height="22" rx="3" fill="#009ee3"/><text x="25" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="8" fill="#ffffff" text-anchor="middle">SALDO MP</text></svg>
-          </div>
-        </label>
-
-        <!-- PayPal -->
-        <label class="method" for="m-pp">
-          <input type="radio" id="m-pp" name="method" value="paypal" />
-          <span class="method-select" aria-hidden="true"></span>
-          <span class="method-badge">Recomendado &middot; Internacional</span>
-
-          <div class="method-logo pp" aria-hidden="true">
-            <svg class="brand-svg" viewBox="0 0 130 36" xmlns="http://www.w3.org/2000/svg" aria-label="PayPal">
-              <text x="6" y="28" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="26" letter-spacing="-0.8">
-                <tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan>
-              </text>
-            </svg>
-          </div>
-
-          <div class="method-meta">
-            <span class="method-title">PayPal</span>
-            <span class="method-sub">Saldo PayPal o tarjeta internacional &middot; USD</span>
-          </div>
-
-          <ul class="method-features">
-            <li>Conversion automatica a USD</li>
-            <li>Proteccion al comprador PayPal</li>
-            <li>No requiere cuenta PayPal para pagar con tarjeta</li>
-          </ul>
-
-          <div class="method-brands" aria-label="Tarjetas aceptadas">
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="19" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="10" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="22" rx="3" fill="#ffffff"/><circle cx="16" cy="11" r="6.2" fill="#eb001b"/><circle cx="22" cy="11" r="6.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="22" rx="3" fill="#006fcf"/><text x="19" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
-            <svg class="brand-icon" viewBox="0 0 38 22" xmlns="http://www.w3.org/2000/svg" aria-label="Discover"><rect width="38" height="22" rx="3" fill="#ffffff"/><text x="4" y="14" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="7" fill="#191919">Discover</text><ellipse cx="29" cy="17" rx="6" ry="2.4" fill="#f47216"/></svg>
-          </div>
-        </label>
-
-      </div>
-
-      <!-- PAY AREA -->
-      <div class="pay-area disabled" id="payArea" aria-live="polite">
-
-        <div class="pay-area-empty" id="payAreaEmpty">
-          <span>Complete sus datos arriba y elija un metodo para continuar.</span>
-        </div>
-
-        <!-- Webpay -->
-        <div class="pay-action-grid" id="payWebpay" hidden>
-          <div class="pay-action-block">
-            <div class="pay-action-caption">Confirmar pago con Webpay Plus (CLP)</div>
-            <button type="button" id="btnWebpay" class="btn-pay wp">Pagar con Webpay</button>
-            <span class="pay-action-help">Sera redirigido a la pasarela segura de Transbank.</span>
-          </div>
-        </div>
-
-        <!-- Mercado Pago -->
-        <div class="pay-action-grid" id="payMP" hidden>
-          <div class="pay-action-block">
-            <div class="pay-action-caption">Confirmar pago con Mercado Pago (CLP)</div>
-            <button type="button" id="btnMP" class="btn-pay mp">Pagar con Mercado Pago</button>
-            <span class="pay-action-help">Sera redirigido a Mercado Pago para completar el pago.</span>
-          </div>
-        </div>
-
-        <!-- PayPal -->
-        <div class="pay-action-grid" id="payPayPal" hidden>
-          <div class="pay-action-block">
-            <div class="pay-action-caption">Paga con cuenta PayPal</div>
-            <div id="paypal-btn-paypal" class="paypal-wrap"></div>
-          </div>
-          <div class="pay-action-block">
-            <div class="pay-action-caption">Paga con tarjeta internacional · Visa · MasterCard · Amex · Discover</div>
-            <div id="paypal-btn-card" class="paypal-wrap"></div>
-            <span class="pay-action-help">Procesado en USD por PayPal. No requiere cuenta PayPal.</span>
-          </div>
+          </aside>
         </div>
 
       </div>
+    </section>
+  </main>
 
-      <!-- STATUS -->
-      <div id="statusMessage" class="status" role="status" aria-live="polite"></div>
-
-      <!-- TRUST STRIP 4-col -->
-      <div class="trust-strip">
-        <div class="trust-col">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <div class="trust-text">
-            <span class="trust-title">SSL 256-bit</span>
-            <span class="trust-sub">Conexion encriptada extremo a extremo.</span>
-          </div>
-        </div>
-        <div class="trust-col">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
-          <div class="trust-text">
-            <span class="trust-title">Procesadores certificados</span>
-            <span class="trust-sub">Transbank · Mercado Pago · PayPal.</span>
-          </div>
-        </div>
-        <div class="trust-col">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 22 12 17.27 5.79 22l2.39-8.15L2 9.36h7.61z"/></svg>
-          <div class="trust-text">
-            <span class="trust-title">Reviews verificadas</span>
-            <span class="trust-sub">Clientes satisfechos · Pago instantaneo.</span>
-          </div>
-        </div>
-        <div class="trust-col">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
-          <div class="trust-text">
-            <span class="trust-title">Soporte directo</span>
-            <span class="trust-sub"><a href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20tengo%20una%20consulta%20sobre%20el%20pago." target="_blank" rel="noopener">WhatsApp +56 9 4021 1459</a></span>
-          </div>
-        </div>
-
-        <div class="trust-strip-brands" aria-label="Tarjetas y medios aceptados">
-          <span class="trust-strip-label">Aceptamos</span>
-          <svg class="brand-icon brand-lg" viewBox="0 0 50 24" xmlns="http://www.w3.org/2000/svg" aria-label="Redcompra"><rect width="50" height="24" rx="3" fill="#ee2737"/><text x="25" y="16" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">REDCOMPRA</text></svg>
-          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="42" height="24" rx="3" fill="#ffffff"/><text x="21" y="17" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="12" fill="#1a1f71" letter-spacing="0.5" text-anchor="middle">VISA</text></svg>
-          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="42" height="24" rx="3" fill="#ffffff"/><circle cx="17" cy="12" r="7.2" fill="#eb001b"/><circle cx="25" cy="12" r="7.2" fill="#f79e1b" fill-opacity="0.88"/></svg>
-          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="42" height="24" rx="3" fill="#006fcf"/><text x="21" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="900" font-size="11" fill="#ffffff" text-anchor="middle">AMEX</text></svg>
-          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Discover"><rect width="42" height="24" rx="3" fill="#ffffff"/><text x="5" y="15" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="8" fill="#191919">Discover</text><ellipse cx="32" cy="19" rx="7" ry="2.8" fill="#f47216"/></svg>
-          <svg class="brand-icon brand-lg" viewBox="0 0 42 24" xmlns="http://www.w3.org/2000/svg" aria-label="Diners Club"><rect width="42" height="24" rx="3" fill="#0079be"/><circle cx="21" cy="12" r="7" fill="#ffffff"/><circle cx="19" cy="12" r="3.5" fill="#0079be"/></svg>
-        </div>
-      </div>
-
-      <!-- NOTE -->
-      <div class="note">
-        <strong>Importante:</strong> Una vez confirmado el pago, recibira el comprobante por correo y nos
-        contactaremos para coordinar la fabricacion y el envio. Si requiere factura, indiquelo en el campo
-        &laquo;Concepto&raquo;.
-        <br/><br/>
-        <strong>Important:</strong> Once your payment is confirmed, you will receive the receipt by email and we
-        will contact you to coordinate manufacturing and shipping. If you need an invoice, please mention it in the
-        &ldquo;Concepto&rdquo; field.
-      </div>
-
-      <!-- CONTACT CTA -->
-      <div class="contact">
-        <h3>&iquest;Dudas? / Questions?</h3>
-        <p>Escribanos por WhatsApp para coordinar el pago o aclarar cualquier dato.</p>
-        <a class="btn btn-primary" href="https://wa.me/56940211459?text=Hola%20DECKEVA%2C%20tengo%20una%20duda%20sobre%20el%20pago." target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.48 2 2 6.48 2 12c0 1.74.447 3.373 1.232 4.797L2 22l5.343-1.202A9.953 9.953 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
-          WhatsApp +56 9 4021 1459
-        </a>
-      </div>
-
-    </div>
-  </section>
+  <!-- Barra fija en celular: total + ir a pagar -->
+  <div class="mobile-bar" id="mobileBar" hidden>
+    <div class="mb-total"><span>Total</span><b id="mbTotal">CLP 0</b></div>
+    <a class="mb-btn" href="#paso-3" id="mbBtn">Ir a pagar</a>
+  </div>
 
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container">
-      <span>&copy; <span id="year"></span> DECKEVA &middot; Pisos Nauticos de Goma EVA</span>
-      <span><a href="https://deckeva.cl/">www.deckeva.cl</a> &middot; <a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></span>
+      <span>&copy; <span id="year"></span> DECKEVA · Pisos náuticos de goma EVA</span>
+      <span><a href="https://deckeva.cl/">deckeva.cl</a> · <a href="mailto:contacto@deckeva.cl">contacto@deckeva.cl</a></span>
     </div>
   </footer>
 
   <!-- App JS -->
-  <script src="/pago/deckeva-pago.js"></script>
+  <script src="/pago/deckeva-pago.js?v=2"></script>
 
   <!-- Google Translate Element (motor de traduccion, oculto) -->
   <script>
