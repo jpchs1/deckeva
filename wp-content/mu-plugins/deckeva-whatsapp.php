@@ -736,7 +736,10 @@ function deckeva_wa_nota_cotizacion($chat) {
     switch ($c['estado'] ?? '') {
         case 'enviada': return 'La cotización formal ' . $c['numero'] . ' ya se le mandó a su correo (' . deckeva_wa_legible((int) $c['enviada_ts']) . '). No digas el monto.';
         case 'lista': case 'aprobada': return 'Su cotización formal ya está armada y le llega a su correo en breve. No digas el monto.';
-        case 'incompleta': return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
+        case 'incompleta':
+            // Pidió algo que no es un piso EVA: no le falta un dato, no se cotiza.
+            if (strpos((string) ($c['falta'] ?? ''), 'no es un piso EVA') === 0) return 'Lo que pidió no es un piso EVA: no se cotiza. Dile en una frase que Deckeva hace sólo pisos de goma EVA.';
+            return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
     }
     return '';
 }
