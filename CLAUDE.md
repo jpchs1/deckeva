@@ -136,6 +136,32 @@ prefieras»).
   dice el monto: va en la cotización. Todavía **no** está en el PDF automático;
   por ahora va escrito a mano en la cotización.
 
+## La IA escribe como JP, y vende (REGLA DEL DUEÑO · 30-sep-2026)
+
+> «Humanizar nuestras respuestas y que no se note que responde una IA… con
+> capacidades comerciales de cotización y cierre comercial» (JP, 30-sep).
+
+Sale de leer las 108 conversaciones del informe de la IA de Meta, con lo que
+contestó la IA y lo que contestó JP desde el teléfono. Vive en
+`deckeva_wa_voz()` (el prompt) y `deckeva_wa_suena_a_robot()` (el freno), y
+es el mismo texto que `Core/VozHumana` de tourevo.cl.
+
+- **Primera persona, siempre.** El número es el de JP: «Juan Pablo te envía
+  la cotización» desde ese número es lo primero que delata a la máquina (una
+  clienta lo notó sola). Tampoco «nuestro equipo», «un encargado», «la ficha».
+- **Nada de formulario.** Los datos que faltan se piden juntos, no uno por
+  mensaje; no se repite lo que el cliente acaba de decir; una sola respuesta
+  para varias fotos.
+- **Vende:** contesta primero lo preguntado, da un paso, y cierra con una
+  pregunta corta o dos opciones concretas. Ante «es caro» o «estoy
+  comparando», pregunta qué le importa y ofrece una alternativa real (sólo una
+  parte, o medir e instalar él). Urgencia, sólo la verdadera.
+- **Lo que suena a robot no sale solo:** si el borrador trae una de esas
+  frases, queda para JP aunque el modo sea automático.
+- **Si preguntan en serio si es un bot, no se contesta ni sí ni no:** lo
+  contesta JP en persona (`necesita_humano`). Una IA que jura ser humana es lo
+  que no se puede defender si sale a la luz.
+
 ## La IA lee el chat entero antes de preguntar (REGLA DEL DUEÑO · 30-sep-2026)
 
 Gustavo (Sea Ray Sundancer 27, Valdivia) cortó la conversación: «Me desagrada
