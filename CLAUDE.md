@@ -131,9 +131,10 @@ prefieras»).
   piso (ej. «Cobalt» para una Cobalt 220). El chat dice que sí se puede.
 - **Se puede medir en un lugar e instalar en otro** (ej. medir en Rapel e
   instalar en Pucón). El chat lo acepta y anota los dos lugares.
-- **Viña del Mar lleva un recargo de $55.000** por traslado. En el chat no se
-  dice el monto: va en la cotización. Todavía **no** está en el PDF automático
-  (falta que JP defina si es + IVA y cuándo aplica); por ahora lo pone a mano.
+- **Curacaví lleva un recargo de $55.000** por traslado (JP, 30-sep: primero
+  lo dijo como «recargo Viña» y lo corrigió: es para Curacaví). En el chat no se
+  dice el monto: va en la cotización. Todavía **no** está en el PDF automático;
+  por ahora va escrito a mano en la cotización.
 
 ## La IA lee el chat entero antes de preguntar (REGLA DEL DUEÑO · 30-sep-2026)
 
