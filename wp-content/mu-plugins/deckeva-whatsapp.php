@@ -703,7 +703,7 @@ function deckeva_wa_sistema() {
         . "- Si la embarcación está en Curacaví, la toma de medidas y la instalación llevan un recargo por traslado que va en la cotización formal. Nunca digas el monto en el chat.\n"
         . "- El logo de la marca de la embarcación (por ejemplo Cobalt o Sea Ray) se puede grabar en el piso sin costo extra: va incluido. Si el cliente lo pide, dile que sí y anótalo para la cotización.\n"
         . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que lo revisas personalmente y le escribes, y marca necesita_humano.\n"
-        . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
+        . "- Deckeva hace SÓLO pisos de goma EVA antideslizante. No hace carpas, toldos, lonas, tapicería ni pintura. Si el cliente pide otra cosa, díselo claro y amable en una frase y, si calza, ofrécele el piso para esa misma embarcación. No lo marques necesita_humano por eso.\n"
         . "- La cotización formal le llega en PDF por acá mismo, por WhatsApp, y también a su correo. También la puede sacar solo en el cotizador de deckeva.cl.\n"
             . "- Si pregunta dónde conviene tener la embarcación para la toma de medidas y la instalación, o duda entre dos lugares: si tiene la posibilidad de traerla a Santiago, es lo ideal, porque ahí la trabajamos de forma más rápida. Díselo así, sin obligarlo: si no puede, se coordina donde esté.\n"
         . "- El piso: espesor de 6 mm y vida útil de 5 a 7 años. La garantía es de 1 año, al costo: dilo siempre así, con «al costo». Si pregunta qué cubre la garantía o qué significa al costo, dile que lo revisas y le confirmas, y marca necesita_humano.\n"
@@ -738,7 +738,10 @@ function deckeva_wa_nota_cotizacion($chat) {
     switch ($c['estado'] ?? '') {
         case 'enviada': return 'La cotización formal ' . $c['numero'] . ' ya se le mandó (' . deckeva_wa_legible((int) $c['enviada_ts']) . ')' . (!empty($c['wa_ts']) ? ' en PDF por este WhatsApp y a su correo' : ' a su correo') . '. No digas el monto.';
         case 'lista': case 'aprobada': return 'Su cotización formal ya está armada y le llega en breve en PDF por este WhatsApp y a su correo. No digas el monto.';
-        case 'incompleta': return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
+        case 'incompleta':
+            // Pidió algo que no es un piso EVA: no le falta un dato, no se cotiza.
+            if (strpos((string) ($c['falta'] ?? ''), 'no es un piso EVA') === 0) return 'Lo que pidió no es un piso EVA: no se cotiza. Dile en una frase que Deckeva hace sólo pisos de goma EVA.';
+            return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
     }
     return '';
 }

@@ -152,7 +152,10 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     if (trim((string) ($d['nombre'] ?? '')) === '') return array('ok' => false, 'falta' => 'el nombre');
     if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
     $tipo = (string) ($d['tipo'] ?? '');
-    if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · lo ve JP', 'jp' => true);
+    // Algo que no es un piso EVA (una carpa, un tapiz): no se cotiza, y tampoco
+    // se le escala a JP. «No hacemos carpas, solo pisos de goma eva
+    // antideslizante» (JP, 30-sep): lo contesta la IA en una frase (Codex, #159).
+    if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · no se cotiza');
     if ($tipo === 'moto' || $tipo === 'moto_normal' || $tipo === 'moto_grande') {
         // Con marca y modelo escritos por el cliente y el LOA encontrado, el
         // tamaño lo decide el largo (DECKEVA_MOTO_CORTE_M), aunque el cliente
