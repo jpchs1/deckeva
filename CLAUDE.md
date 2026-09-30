@@ -125,6 +125,31 @@ prefieras»).
 - En el PDF no usar `<u>`: con `fontHeightRatio` 0,83 DOMPDF dibuja el
   subrayado a media altura y el texto se lee tachado.
 
+## Tres reglas más de la cotización (REGLA DEL DUEÑO · 30-sep-2026)
+
+- **El logo de la marca de la embarcación se graba sin costo**, incluido en el
+  piso (ej. «Cobalt» para una Cobalt 220). El chat dice que sí se puede.
+- **Se puede medir en un lugar e instalar en otro** (ej. medir en Rapel e
+  instalar en Pucón). El chat lo acepta y anota los dos lugares.
+- **Viña del Mar lleva un recargo de $55.000** por traslado. En el chat no se
+  dice el monto: va en la cotización. Todavía **no** está en el PDF automático
+  (falta que JP defina si es + IVA y cuándo aplica); por ahora lo pone a mano.
+
+## La IA lee el chat entero antes de preguntar (REGLA DEL DUEÑO · 30-sep-2026)
+
+Gustavo (Sea Ray Sundancer 27, Valdivia) cortó la conversación: «Me desagrada
+profundamente conversar con una máquina y después volver a cero en las
+indicaciones». Se le pidieron los mismos datos varias veces y se le dijo algo
+distinto sobre el traslado. Desde ahora:
+
+- Tourevo deriva hasta **80 mensajes** del chat (antes 30) y Deckeva guarda
+  80, para que el que redacta vea la conversación completa.
+- El prompt obliga a leer todo antes de preguntar, a confirmar en una frase lo
+  que ya sabe y a pedir sólo lo que falta.
+- Si en el chat se dijeron dos cosas distintas, no elige: `necesita_humano`.
+- Si el cliente está molesto con «la máquina», no se le escribe más:
+  `responder = false`, `necesita_humano = true`.
+
 ## La cotización PDF: una página, y todo lo que dice es cierto
 
 `deckeva-assets/pdf-cotizacion.php`, rediseñada el 29-sep-2026. De arriba a

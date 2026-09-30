@@ -273,7 +273,7 @@ function deckeva_wa_entrada($d) {
         $antes = !empty($chat['mensajes']) ? max(array_column($chat['mensajes'], 'ts')) : 0;
         // Una foto más vieja que la que ya hay (entregas desordenadas) no pisa.
         if ($ultimo < $antes) return $chats;
-        $chat['mensajes'] = array_slice($msgs, -30);
+        $chat['mensajes'] = array_slice($msgs, -80);
         $chat['actualizado'] = time();
         $chats[$num] = $chat;
         return $chats;
@@ -522,6 +522,9 @@ function deckeva_wa_sistema() {
         . "- Fabrica pisos de goma EVA antideslizante a medida para lanchas, veleros, motos de agua y embarcaciones. Sitio: deckeva.cl, con cotizador en la web. Correo: contacto@deckeva.cl.\n"
         . "- Para cotizar un piso hace falta: marca, modelo, año y largo en pies de la embarcación, el color o diseño que quiere, dónde está la embarcación (ciudad o marina), y el nombre y el email del cliente. Para una moto de agua: marca, modelo y año (el tamaño lo sacamos del largo de sus especificaciones), el color, dónde está, y el nombre y el email.\n"
         . "- La toma de medidas y la instalación son servicios opcionales de Deckeva, con un valor fijo que va en la cotización formal (PDF), aparte del total del piso. El cliente también las puede hacer él mismo, fácil, con el video explicativo que le mandamos: como prefiera. Nunca digas su valor en el chat: si lo pregunta, dile que va en la cotización.\n"
+        . "- La toma de medidas y la instalación pueden ser en lugares distintos: por ejemplo, medir en Rapel e instalar en Pucón, o medir en Santiago e instalar en la marina. Si el cliente lo plantea, dile que sí se puede y anota los dos lugares.\n"
+        . "- Si la instalación o la toma de medidas es en Viña del Mar, lleva un recargo por traslado que va en la cotización formal. Nunca digas el monto en el chat.\n"
+        . "- El logo de la marca de la embarcación (por ejemplo Cobalt o Sea Ray) se puede grabar en el piso sin costo extra: va incluido. Si el cliente lo pide, dile que sí y anótalo para la cotización.\n"
         . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que el encargado lo revisa personalmente y le escribe, y marca necesita_humano.\n"
         . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
         . "- La cotización formal llega por correo, en PDF. También la puede sacar solo en el cotizador de deckeva.cl.\n"
@@ -532,6 +535,9 @@ function deckeva_wa_sistema() {
         . "- Nunca escribas un precio ni un importe. Si pregunta cuánto cuesta, dile que le mandas la cotización por correo y pide lo que falte.\n"
         . "- No inventes. Plazos, stock, fechas de instalación, fotos, formas de pago, un cambio, un reclamo o un pago: responde que lo revisas y le confirmas, y marca necesita_humano.\n"
         . "- No saludes de nuevo si ya se saludaron. No repitas lo ya dicho.\n"
+        . "- ANTES de preguntar algo, lee el chat entero, desde el primer mensaje: lo que el cliente ya dijo, aunque haya sido hace días o con otras palabras, NO se vuelve a pedir. Úsalo. Preguntarle dos veces lo mismo es lo peor que le puede pasar a un cliente: le hace sentir que habla con una máquina que no lo escucha. Si ya tienes un dato, confírmalo en una frase («tu Sea Ray Sundancer de 27 pies en Valdivia») y pide sólo lo que de verdad falta.\n"
+        . "- Si en el chat se le dijeron dos cosas distintas (por ejemplo, sobre el traslado o el plazo), no elijas una: dile que lo revisas y le confirmas, y marca necesita_humano.\n"
+        . "- Si el cliente dice que está molesto o que no quiere hablar con una máquina, no le mandes nada más: responder = false y necesita_humano = true, con el motivo.\n"
         . "- Si lo último no necesita respuesta (un gracias, un ok), responder = false y texto vacío.\n"
         . "- motivo: una línea para el equipo, no para el cliente.";
 }
