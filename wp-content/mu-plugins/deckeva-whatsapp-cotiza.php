@@ -3,7 +3,8 @@
  * Plugin Name: Deckeva - Cotización formal desde WhatsApp
  * Description: Cuando un chat de WhatsApp ya trae lo necesario, arma la cotización
  *              formal en PDF con el mismo diseño y el mismo precio que el cotizador
- *              de la home, y se la manda al cliente por correo desde contacto@deckeva.cl.
+ *              de la home, y se la manda al cliente por correo desde contacto@deckeva.cl
+ *              y por WhatsApp como documento (JP, 30-sep-2026).
  *
  * El caso (28-sep-2026): once clientes pidieron cotización por WhatsApp en un día,
  * cinco dejaron todos sus datos (nombre, correo, largo, color) y a ninguno le llegó
@@ -535,9 +536,23 @@ function deckeva_wa_cotiza_enviar($num) {
     $headers = function_exists('deckeva_mail_headers_cliente') ? deckeva_mail_headers_cliente($d['cliente']['email']) : array('Content-Type: text/html; charset=UTF-8');
     deckeva_wa_cotiza_contar();
     $ok = wp_mail($d['cliente']['email'], 'Tu cotización Deckeva · ' . $c['numero'], $html, $headers, array($c['pdf']));
-    deckeva_wa_con_candado(function ($chats) use ($num, $c, $ok) {
+    // Y el mismo PDF por WhatsApp, como documento (JP, 30-sep-2026). Una sola
+    // vez por cotización (`wa_ts`): si el correo falla y se reintenta, el
+    // WhatsApp no se repite. Si WhatsApp falla (la ventana de 24 h ya se
+    // cerró, la puerta no contesta), el correo igual cuenta como enviado.
+    $wa = null;
+    if (empty($c['wa_ts'])) {
+        $pie = 'Hola ' . $nombre . ', te dejo la cotización del piso para ' . $bote . '. También te la mandé al correo.';
+        $wa = deckeva_wa_mandar($num, $pie, $c['numero'], $c['aprobada_por'] ?: 'JP', $c['pdf']);
+    }
+    deckeva_wa_con_candado(function ($chats) use ($num, $c, $ok, $wa) {
         $x = $chats[$num]['cotizacion'] ?? null;
         if (!is_array($x) || ($x['numero'] ?? '') !== $c['numero']) return $chats;
+        if (is_array($wa)) {
+            if ($wa['ok']) $x['wa_ts'] = time();
+            else $x['wa_error'] = (string) ($wa['error'] ?? '?');
+            deckeva_wa_anotar($chats[$num], $c['numero'] . ($wa['ok'] ? ' · el PDF quedó en cola para salir por WhatsApp' : ' · el PDF NO salió por WhatsApp · ' . ($wa['error'] ?? '?')));
+        }
         if ($ok) { $x['estado'] = 'enviada'; $x['enviada_ts'] = time(); }
         else { $x['intentos'] = (int) ($x['intentos'] ?? 0) + 1; if ($x['intentos'] >= 5) $x['estado'] = 'error'; }
         $chats[$num]['cotizacion'] = $x;
