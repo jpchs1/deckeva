@@ -136,6 +136,30 @@ prefieras»).
   dice el monto: va en la cotización. Todavía **no** está en el PDF automático;
   por ahora va escrito a mano en la cotización.
 
+## La cotización formal sale también por WhatsApp, en PDF (REGLA DEL DUEÑO · 30-sep-2026)
+
+JP: «Deckeva averigua y luego envía la cotización formal PDF por WSP». Cuando
+`deckeva_wa_cotiza_enviar` manda el correo, manda además el mismo PDF por la
+puerta de Tourevo (`deckeva_wa_mandar(..., $pdf)`), con un pie corto y sin
+montos. Una sola vez por cotización (`wa_ts`); si falla queda `wa_error` y el
+correo igual cuenta.
+
+- **El PDF no va por un link:** trae nombre, correo y teléfono del cliente y la
+  carpeta está cerrada. Viaja dentro del pedido firmado; Tourevo lo sube a Meta,
+  lo manda como documento y lo borra de su cola.
+- **Ventana de 24 h:** si el cliente escribió hace más de un día, Meta no deja
+  mandar el documento. El correo sale igual.
+- **Si JP tomó el chat a mano en el teléfono**, Tourevo no lo manda por
+  WhatsApp salvo que la cotización la haya aprobado él (`JP · wp-admin`).
+
+## Dónde conviene tener la lancha: en Santiago, si puede (REGLA DEL DUEÑO · 30-sep-2026)
+
+Si el cliente pregunta dónde conviene tenerla para la toma de medidas y la
+instalación, o duda entre dos lugares (Daniel, San Vicente de Tagua Tagua o
+Santiago o Rapel): **si tiene la chance de traerla a Santiago, es lo ideal**,
+porque ahí se trabaja más rápido. Se dice sin obligar: si no puede, se coordina
+donde esté. Vive en `deckeva_wa_sistema()`.
+
 ## La IA escribe como JP, y vende (REGLA DEL DUEÑO · 30-sep-2026)
 
 > «Humanizar nuestras respuestas y que no se note que responde una IA… con

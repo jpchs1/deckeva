@@ -27,7 +27,8 @@
  * ── LO QUE NO SE NEGOCIA ─────────────────────────────────────────────────
  *
  * - Modo borrador por defecto: nada sale sin que JP lo apruebe.
- * - Nunca un precio por WhatsApp: la cotización formal va por correo, en PDF.
+ * - Nunca un precio escrito en el chat: la cotización formal va en PDF, por
+ *   WhatsApp (como documento) y por correo.
  * - Un texto con importe, guion largo o voseo no sale nunca, ni en automático.
  * - Si alguien le contestó al cliente después de su mensaje, lo nuestro no sale.
  * - Pasadas 23 horas no sale: Meta sólo acepta texto libre dentro de 24 h.
@@ -703,7 +704,8 @@ function deckeva_wa_sistema() {
         . "- El logo de la marca de la embarcación (por ejemplo Cobalt o Sea Ray) se puede grabar en el piso sin costo extra: va incluido. Si el cliente lo pide, dile que sí y anótalo para la cotización.\n"
         . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que lo revisas personalmente y le escribes, y marca necesita_humano.\n"
         . "- También hace remodelación y reacondicionamiento de lanchas en Santiago (pisos, tapicería, pintura) y servicio técnico eléctrico náutico.\n"
-        . "- La cotización formal llega por correo, en PDF. También la puede sacar solo en el cotizador de deckeva.cl.\n"
+        . "- La cotización formal le llega en PDF por acá mismo, por WhatsApp, y también a su correo. También la puede sacar solo en el cotizador de deckeva.cl.\n"
+            . "- Si pregunta dónde conviene tener la embarcación para la toma de medidas y la instalación, o duda entre dos lugares: si tiene la posibilidad de traerla a Santiago, es lo ideal, porque ahí la trabajamos de forma más rápida. Díselo así, sin obligarlo: si no puede, se coordina donde esté.\n"
         . "- El piso: espesor de 6 mm y vida útil de 5 a 7 años. La garantía es de 1 año, al costo: dilo siempre así, con «al costo». Si pregunta qué cubre la garantía o qué significa al costo, dile que lo revisas y le confirmas, y marca necesita_humano.\n"
         . "- Desde la toma de medidas hasta la instalación son 12 días corridos.\n"
         . "- Estamos en Santiago, en La Dehesa. No hay sala de venta: vamos a medir donde esté la embarcación (en Santiago, en La Dehesa o Los Dominicos). No se vende por metro cuadrado: el piso se fabrica a la medida exacta.\n"
@@ -720,7 +722,7 @@ function deckeva_wa_sistema() {
         . "Reglas fijas:\n"
         . "- En el idioma del cliente. En castellano, chileno y con tú: tienes, puedes, cuéntame. Nunca vos, tenés, podés.\n"
         . "- Corto, como desde el celular: una a tres frases. Sin listas, sin guiones largos (— o –).\n"
-        . "- Nunca escribas un precio ni un importe. Si pregunta cuánto cuesta, dile que le mandas la cotización por correo y pide lo que falte.\n"
+        . "- Nunca escribas un precio ni un importe. Si pregunta cuánto cuesta, dile que le mandas la cotización en PDF por acá y al correo, y pide lo que falte.\n"
         . "- No inventes. Plazos distintos de los de arriba, stock, fechas de instalación, formas de pago, un cambio, un reclamo o un pago: responde que lo revisas y le confirmas, y marca necesita_humano.\n"
         . "- ANTES de preguntar algo, lee el chat entero, desde el primer mensaje: lo que el cliente ya dijo, aunque haya sido hace días o con otras palabras, NO se vuelve a pedir. Úsalo. Preguntarle dos veces lo mismo es lo peor que le puede pasar a un cliente: le hace sentir que habla con una máquina que no lo escucha. Si ya tienes un dato, confírmalo en media frase y pide sólo lo que de verdad falta.\n"
         . "- Si en el chat se le dijeron dos cosas distintas (por ejemplo, sobre el traslado o el plazo), no elijas una: dile que lo revisas y le confirmas, y marca necesita_humano.\n"
@@ -734,8 +736,8 @@ function deckeva_wa_nota_cotizacion($chat) {
     $c = $chat['cotizacion'] ?? null;
     if (!is_array($c)) return '';
     switch ($c['estado'] ?? '') {
-        case 'enviada': return 'La cotización formal ' . $c['numero'] . ' ya se le mandó a su correo (' . deckeva_wa_legible((int) $c['enviada_ts']) . '). No digas el monto.';
-        case 'lista': case 'aprobada': return 'Su cotización formal ya está armada y le llega a su correo en breve. No digas el monto.';
+        case 'enviada': return 'La cotización formal ' . $c['numero'] . ' ya se le mandó (' . deckeva_wa_legible((int) $c['enviada_ts']) . ')' . (!empty($c['wa_ts']) ? ' en PDF por este WhatsApp y a su correo' : ' a su correo') . '. No digas el monto.';
+        case 'lista': case 'aprobada': return 'Su cotización formal ya está armada y le llega en breve en PDF por este WhatsApp y a su correo. No digas el monto.';
         case 'incompleta': return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
     }
     return '';
@@ -778,12 +780,26 @@ function deckeva_wa_redactar($mensajes, $nota = '') {
 // SALIDA · por la puerta de tourevo.cl, que tiene el número
 // =============================================
 
-function deckeva_wa_mandar($num, $texto, $ref, $aprobo) {
-    $v = deckeva_wa_validar($texto);
+/**
+ * Manda por la puerta de Tourevo. Con `$pdf` (la ruta de la cotización formal)
+ * el archivo viaja dentro del pedido firmado y sale como documento de
+ * WhatsApp, con `$texto` de pie (JP, 30-sep: «Deckeva averigua y luego envía
+ * la cotización formal PDF por WhatsApp»). No va por un link: el PDF trae el
+ * nombre, el correo y el teléfono del cliente, y la carpeta está cerrada.
+ */
+function deckeva_wa_mandar($num, $texto, $ref, $aprobo, $pdf = null) {
+    $pedido = array('para' => (string) $num, 'texto' => $texto, 'ref' => $ref, 'aprobo' => $aprobo);
+    if ($pdf !== null) {
+        $bytes = is_readable((string) $pdf) ? (string) file_get_contents((string) $pdf) : '';
+        if (strncmp($bytes, '%PDF', 4) !== 0) return array('ok' => false, 'error' => 'el PDF no se puede leer');
+        if (strlen($bytes) > 4 * 1024 * 1024) return array('ok' => false, 'error' => 'el PDF pasa de 4 MB');
+        $pedido['documento'] = array('nombre' => basename((string) $pdf), 'base64' => base64_encode($bytes));
+    }
+    $v = ($pdf !== null && trim((string) $texto) === '') ? '' : deckeva_wa_validar($texto);
     if ($v !== '') return array('ok' => false, 'error' => 'el texto no pasa las reglas · ' . $v);
-    $cuerpo = wp_json_encode(array('para' => (string) $num, 'texto' => $texto, 'ref' => $ref, 'aprobo' => $aprobo));
+    $cuerpo = wp_json_encode($pedido);
     $ts = time();
-    $res = wp_remote_post(DECKEVA_WA_PUERTA_SALIDA, array('timeout' => 20, 'headers' => array(
+    $res = wp_remote_post(DECKEVA_WA_PUERTA_SALIDA, array('timeout' => $pdf !== null ? 45 : 20, 'headers' => array(
         'Content-Type' => 'application/json', 'X-Puerta-Ts' => (string) $ts, 'X-Puerta-Firma' => deckeva_wa_firmar($cuerpo, $ts),
     ), 'body' => $cuerpo));
     if (is_wp_error($res)) return array('ok' => false, 'error' => $res->get_error_message());
