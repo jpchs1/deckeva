@@ -44,6 +44,14 @@
   var sumUsd        = $("sumUsd");
   var summaryEmpty  = $("summaryEmpty");
   var summaryFilled = $("summaryFilled");
+  var sumMethod     = $("sumMethod");
+  var sumOrder      = $("sumOrder");
+  var sumOrderRow   = $("sumOrderRow");
+  var payMissing    = $("payMissing");
+  var termsRow      = $("termsRow");
+  var mobileBar     = $("mobileBar");
+  var mbTotal       = $("mbTotal");
+  var confirmCard   = $("confirm-card");
 
   var statusMsg     = $("statusMessage");
   var payArea       = $("payArea");
@@ -86,10 +94,15 @@
     var el = document.querySelector('input[name="method"]:checked');
     return el ? el.value : "";
   }
-  function showStatus(kind, text) {
+  function showStatus(kind, text, scroll) {
     if (!statusMsg) return;
     statusMsg.className = "status " + kind + " show";
     statusMsg.textContent = text;
+    if (scroll) {
+      setTimeout(function () {
+        try { statusMsg.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+      }, 60);
+    }
   }
   function clearStatus() {
     if (!statusMsg) return;
@@ -106,49 +119,75 @@
 
   // -------------------------------------------------------------------------
   // VALIDATION
+  // Un campo muestra su error recien cuando la persona paso por el (blur) o
+  // cuando intenta pagar; antes, el primer blur marcaba en rojo todo el form.
   // -------------------------------------------------------------------------
+  var touched = {};
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function checks() {
+    return {
+      name:   (nameInput.value || "").trim().length >= 2,
+      email:  EMAIL_RE.test((emailInput.value || "").trim()),
+      amount: getAmountCLP() >= 1,
+      desc:   (descInput.value || "").trim().length >= 3,
+      terms:  !!termsInput.checked
+    };
+  }
+  var FIELD_OF = { name: nameInput, email: emailInput, amount: amountInput, desc: descInput };
+
   function validateField(el, ok) {
     var block = el.closest(".field-block");
     if (!block) return ok;
-    if (ok) {
-      block.classList.remove("has-error");
-      el.classList.remove("is-invalid");
-    } else {
-      block.classList.add("has-error");
-      el.classList.add("is-invalid");
-    }
+    block.classList.toggle("has-error", !ok);
+    el.classList.toggle("is-invalid", !ok);
+    el.classList.toggle("is-valid", ok);
+    el.setAttribute("aria-invalid", ok ? "false" : "true");
     return ok;
+  }
+  function markField(key) {
+    var c = checks();
+    if (FIELD_OF[key]) validateField(FIELD_OF[key], c[key]);
   }
   function isFormValid(opts) {
     opts = opts || { mark: false };
-    var nameOk   = (nameInput.value || "").trim().length >= 2;
-    var emailOk  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((emailInput.value || "").trim());
-    var amountOk = getAmountCLP() >= 1;
-    var descOk   = (descInput.value || "").trim().length >= 3;
-    var termsOk  = !!termsInput.checked;
-
+    var c = checks();
     if (opts.mark) {
-      validateField(nameInput,  nameOk);
-      validateField(emailInput, emailOk);
-      validateField(amountInput, amountOk);
-      validateField(descInput,  descOk);
+      Object.keys(FIELD_OF).forEach(function (k) { touched[k] = true; validateField(FIELD_OF[k], c[k]); });
+      if (termsRow) termsRow.classList.toggle("has-error", !c.terms);
+      var first = ["name", "email", "amount", "desc"].filter(function (k) { return !c[k]; })[0];
+      if (first) {
+        try { FIELD_OF[first].focus({ preventScroll: true }); FIELD_OF[first].scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+      } else if (!c.terms && termsRow) {
+        try { termsRow.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+      }
     }
-    return nameOk && emailOk && amountOk && descOk && termsOk;
+    return c.name && c.email && c.amount && c.desc && c.terms;
+  }
+
+  // Monto con separador de miles mientras se escribe (250000 -> 250.000).
+  function formatAmountInput() {
+    var raw = (amountInput.value || "").replace(/[^0-9]/g, "").replace(/^0+(?=\d)/, "").slice(0, 12);
+    var fmt = raw ? Number(raw).toLocaleString("es-CL") : "";
+    if (fmt === amountInput.value) return;
+    var fromEnd = amountInput.value.length - (amountInput.selectionEnd || 0);
+    amountInput.value = fmt;
+    var pos = Math.max(0, fmt.length - fromEnd);
+    try { amountInput.setSelectionRange(pos, pos); } catch (e) {}
   }
 
   // -------------------------------------------------------------------------
   // STEPPER + UI STATE
   // -------------------------------------------------------------------------
+  var paidDone = false;
   function refreshStepper() {
-    var step1Done = (nameInput.value || "").trim().length >= 2
-                 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((emailInput.value || "").trim())
-                 && getAmountCLP() >= 1
-                 && (descInput.value || "").trim().length >= 3;
+    var c = checks();
+    var step1Done = c.name && c.email && c.amount && c.desc;
     var step2Done = !!getSelectedMethod();
 
     setStep(steps.s1, step1Done, !step1Done);
     setStep(steps.s2, step2Done, step1Done && !step2Done);
-    setStep(steps.s3, false, step1Done && step2Done);
+    setStep(steps.s3, paidDone, !paidDone && step1Done && step2Done);
   }
   function setStep(el, isDone, isActive) {
     if (!el) return;
@@ -168,8 +207,14 @@
     sumName.textContent = name || "—";
     sumDesc.textContent = desc || "—";
     sumTotal.textContent = fmtCLP(clp);
+    if (mbTotal) mbTotal.textContent = fmtCLP(clp);
+
+    var pedido = (bookingInput.value || "").trim();
+    if (sumOrderRow) sumOrderRow.hidden = !pedido;
+    if (sumOrder) sumOrder.textContent = pedido;
 
     var method = getSelectedMethod();
+    if (sumMethod) sumMethod.textContent = METHOD_NAME[method] || "Por elegir";
     var showUsd = (method === "paypal" && clp > 0);
     if (sumUsdRow) sumUsdRow.hidden = !showUsd;
     if (sumUsd)    sumUsd.textContent = fmtUSD(clpToUSD(clp));
@@ -177,7 +222,7 @@
     if (amountAux) {
       if (clp > 0) {
         amountAux.classList.add("show");
-        amountAux.textContent = "≈ " + fmtUSD(clpToUSD(clp)) + "  (tasa referencial 1 USD = " + Number(CFG.usdRate).toLocaleString("es-CL") + " CLP)";
+        amountAux.textContent = "Equivale a " + fmtUSD(clpToUSD(clp)) + " (tasa referencial: 1 USD = " + Number(CFG.usdRate).toLocaleString("es-CL") + " CLP)";
       } else {
         amountAux.classList.remove("show");
       }
@@ -185,23 +230,72 @@
 
     refreshStepper();
     refreshPayArea();
+    refreshMobileBar();
   }
+
+  var METHOD_NAME = { webpay: "Webpay Plus", mercadopago: "Mercado Pago", paypal: "PayPal (USD)" };
+
+  var MISSING = [
+    { key: "name",   label: "Tu nombre",           target: "payerName" },
+    { key: "email",  label: "Tu correo",           target: "payerEmail" },
+    { key: "amount", label: "El monto",            target: "amount" },
+    { key: "desc",   label: "El concepto",         target: "description" },
+    { key: "method", label: "Elegir método",       target: "paso-2" },
+    { key: "terms",  label: "Aceptar condiciones", target: "termsRow" }
+  ];
 
   function refreshPayArea() {
     var method = getSelectedMethod();
-    var ok = isFormValid();
+    var c = checks();
+    c.method = !!method;
+    var missing = MISSING.filter(function (m) { return !c[m.key]; });
+    var ready = missing.length === 0;
 
-    if (payArea) payArea.classList.toggle("disabled", !ok || !method);
+    if (payArea) payArea.classList.toggle("disabled", !ready);
+    if (payAreaEmpty) payAreaEmpty.hidden = ready;
+    if (payMissing) {
+      var sig = missing.map(function (m) { return m.key; }).join(",");
+      if (payMissing.getAttribute("data-sig") !== sig) {
+        payMissing.setAttribute("data-sig", sig);
+        payMissing.innerHTML = "";
+        missing.forEach(function (m) {
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = "#" + m.target;
+          a.textContent = m.label;
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+            var el = $(m.target);
+            if (!el) return;
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            var f = el.matches("input, textarea") ? el : el.querySelector("input");
+            if (f) setTimeout(function () { try { f.focus({ preventScroll: true }); } catch (err) {} }, 350);
+          });
+          li.appendChild(a);
+          payMissing.appendChild(li);
+        });
+      }
+    }
+    if (termsRow && c.terms) termsRow.classList.remove("has-error");
 
-    if (payAreaEmpty) payAreaEmpty.hidden = !!method;
     if (payWebpay)    payWebpay.hidden    = method !== "webpay";
     if (payMP)        payMP.hidden        = method !== "mercadopago";
     if (payPayPal)    payPayPal.hidden    = method !== "paypal";
 
     document.querySelectorAll(".method").forEach(function (card) {
       var input = card.querySelector('input[name="method"]');
-      card.classList.toggle("is-active", input && input.checked);
+      card.classList.toggle("is-active", !!(input && input.checked));
     });
+  }
+
+  // Barra fija en celular con el total y "Ir a pagar": aparece cuando hay
+  // monto y el paso 3 no esta a la vista.
+  var confirmVisible = false;
+  function refreshMobileBar() {
+    if (!mobileBar) return;
+    var show = getAmountCLP() > 0 && !confirmVisible && window.innerWidth <= 980;
+    mobileBar.hidden = !show;
+    document.body.classList.toggle("has-mobile-bar", show);
   }
 
   // -------------------------------------------------------------------------
@@ -216,7 +310,7 @@
       var email = p.get("email");
       var phone = p.get("phone");
       var pedido = p.get("pedido");
-      if (amt && /^[0-9]+(\.[0-9]+)?$/.test(amt)) amountInput.value = String(Math.round(Number(amt)));
+      if (amt && /^[0-9]+(\.[0-9]+)?$/.test(amt)) amountInput.value = Math.round(Number(amt)).toLocaleString("es-CL");
       if (desc)   descInput.value    = safe(desc, 240);
       if (name)   nameInput.value    = safe(name, 80);
       if (email)  emailInput.value   = safe(email, 120);
@@ -270,11 +364,11 @@
   function payWithWebpay() {
     clearStatus();
     if (!isFormValid({ mark: true })) {
-      showStatus("error", "Complete sus datos, monto, descripcion y acepte los terminos antes de pagar.");
+      showStatus("error", "Completa tus datos, el monto y el concepto, y acepta las condiciones antes de pagar.");
       return;
     }
     var clp = getAmountCLP();
-    if (clp < 100) { showStatus("error", "Monto minimo Webpay: CLP 100."); return; }
+    if (clp < 100) { showStatus("error", "El monto mínimo para Webpay es CLP 100."); return; }
 
     var orderId = uniqueOrderId("DECK");
     var sessionId = "S-" + Date.now();
@@ -307,7 +401,7 @@
       btnWebpay.disabled = false;
       btnWebpay.classList.remove("is-loading");
       btnWebpay.textContent = "Pagar con Webpay";
-      showStatus("error", "No fue posible iniciar el pago Webpay. Reintente o coordine por WhatsApp.");
+      showStatus("error", "No pudimos conectar con Webpay. Inténtalo de nuevo en un momento o escríbenos por WhatsApp.");
     });
   }
 
@@ -327,11 +421,23 @@
   function handleWebpayReturn() {
     var p = new URLSearchParams(window.location.search);
     var token = p.get("webpay_token");
+    var wpStatus = p.get("webpay_status");
+    if (!token && wpStatus) {
+      // webpay-return.php manda aqui cuando la persona anula en Transbank
+      // (TBK_TOKEN) o vuelve sin token. Antes no se mostraba nada.
+      history.replaceState({}, document.title, CFG.returnBase);
+      if (wpStatus === "aborted") {
+        showStatus("info", "Anulaste el pago en Webpay; no se hizo ningún cargo. Puedes intentarlo de nuevo o elegir otro medio.", true);
+      } else {
+        showStatus("info", "No recibimos la confirmación de Webpay. Si se hizo un cargo en tu tarjeta, escríbenos por WhatsApp y lo revisamos.", true);
+      }
+      return true;
+    }
     if (!token) return false;
 
     // Limpiar URL (sacar query) para que un reload no re-commite
     history.replaceState({}, document.title, CFG.returnBase);
-    showStatus("info", "Confirmando pago Webpay…");
+    showStatus("info", "Confirmando tu pago con Webpay…", true);
 
     apiPost("webpay.php", { action: "commit_transaction", token: token })
       .then(function (data) {
@@ -340,16 +446,19 @@
           var bo  = data.buy_order || data.buyOrder || "";
           showStatus(
             "success",
-            "Pago aprobado. Orden " + bo + " · " + fmtCLP(amt) + " · Cod. autorizacion " +
-            (data.authorization_code || data.authorizationCode || "—") + ". Recibira confirmacion por correo."
+            "¡Pago aprobado! Orden " + bo + " · " + fmtCLP(amt) + " · Cód. de autorización " +
+            (data.authorization_code || data.authorizationCode || "—") + ". Te llegará la confirmación por correo.",
+            true
           );
+          paidDone = true; refreshStepper();
         } else {
-          showStatus("error", "Pago Webpay rechazado o cancelado. Codigo: " + (data && data.response_code) + ".");
+          var code = data && data.response_code;
+          showStatus("error", "Webpay no aprobó el pago" + (code !== undefined && code !== null ? " (código " + code + ")" : "") + ". Puedes intentarlo de nuevo o usar otro medio.", true);
         }
       })
       .catch(function (err) {
         console.error(err);
-        showStatus("error", "No fue posible confirmar el pago Webpay. Si su tarjeta fue cobrada, contactenos por WhatsApp.");
+        showStatus("error", "No pudimos confirmar el pago con Webpay. Si se hizo un cargo en tu tarjeta, escríbenos por WhatsApp y lo revisamos.", true);
       });
     return true;
   }
@@ -360,11 +469,11 @@
   function payWithMP() {
     clearStatus();
     if (!isFormValid({ mark: true })) {
-      showStatus("error", "Complete sus datos, monto, descripcion y acepte los terminos antes de pagar.");
+      showStatus("error", "Completa tus datos, el monto y el concepto, y acepta las condiciones antes de pagar.");
       return;
     }
     var clp = getAmountCLP();
-    if (clp < 100) { showStatus("error", "Monto minimo Mercado Pago: CLP 100."); return; }
+    if (clp < 100) { showStatus("error", "El monto mínimo para Mercado Pago es CLP 100."); return; }
 
     var orderId = uniqueOrderId("DECK");
     btnMP.disabled = true;
@@ -404,7 +513,7 @@
         btnMP.disabled = false;
         btnMP.classList.remove("is-loading");
         btnMP.textContent = "Pagar con Mercado Pago";
-        showStatus("error", "No fue posible iniciar el pago Mercado Pago. Reintente o coordine por WhatsApp.");
+        showStatus("error", "No pudimos conectar con Mercado Pago. Inténtalo de nuevo en un momento o escríbenos por WhatsApp.");
       });
   }
 
@@ -419,18 +528,21 @@
 
     if (status === "success" || status === "approved") {
       showStatus("success",
-        "Pago Mercado Pago aprobado." + (orderId ? " Orden " + orderId : "") + (paymentId ? " · ID " + paymentId : "") +
-        ". Recibira el comprobante por correo."
+        "¡Pago aprobado en Mercado Pago!" + (orderId ? " Orden " + orderId : "") + (paymentId ? " · ID " + paymentId : "") +
+        ". Te llegará el comprobante por correo.",
+        true
       );
     } else if (status === "pending") {
       showStatus("info",
-        "Pago Mercado Pago pendiente de acreditacion." + (orderId ? " Orden " + orderId : "") +
-        " Le confirmaremos por correo cuando se acredite."
+        "Tu pago en Mercado Pago está pendiente de acreditación." + (orderId ? " Orden " + orderId + "." : "") +
+        " Te avisamos por correo cuando se acredite.",
+        true
       );
     } else {
       showStatus("error",
-        "Pago Mercado Pago no completado." + (orderId ? " Orden " + orderId : "") +
-        " Puede reintentar o coordinar por WhatsApp."
+        "El pago en Mercado Pago no se completó." + (orderId ? " Orden " + orderId + "." : "") +
+        " Puedes intentarlo de nuevo o escribirnos por WhatsApp.",
+        true
       );
     }
     return true;
@@ -515,7 +627,7 @@
     if (paypalRendered) return;
     var paypal = window.paypal_deckeva || window.paypal;
     if (!paypal || !paypal.Buttons) {
-      showStatus("error", "PayPal no se cargo correctamente. Recargue la pagina o use WhatsApp.");
+      showStatus("error", "PayPal no cargó bien. Recarga la página o escríbenos por WhatsApp.");
       return;
     }
 
@@ -523,7 +635,7 @@
       onClick: function (data, actions) {
         clearStatus();
         if (!isFormValid({ mark: true })) {
-          showStatus("error", "Complete sus datos, monto, descripcion y acepte los terminos antes de pagar.");
+          showStatus("error", "Completa tus datos, el monto y el concepto, y acepta las condiciones antes de pagar.");
           return actions.reject();
         }
         return actions.resolve();
@@ -537,22 +649,24 @@
                || (nameInput.value || "").trim();
           var id = details && details.id ? details.id : "—";
           showStatus("success",
-            "Pago PayPal confirmado, " + (n || "gracias") + ". " +
-            "Recibira el comprobante de PayPal por correo. " +
-            "ID de transaccion: " + id
+            "¡Pago confirmado" + (n ? ", " + n : "") + "! " +
+            "PayPal te enviará el comprobante por correo. " +
+            "ID de transacción: " + id,
+            true
           );
+          paidDone = true; refreshStepper();
           if (payArea) payArea.classList.add("disabled");
         }).catch(function (err) {
           console.error(err);
-          showStatus("error", "No fue posible capturar el pago. Si su tarjeta fue cobrada, contactenos por WhatsApp con el ID de orden.");
+          showStatus("error", "No pudimos completar el cobro en PayPal. Si se hizo un cargo en tu tarjeta, escríbenos por WhatsApp con el ID de la orden.", true);
         });
       },
       onCancel: function () {
-        showStatus("info", "Pago PayPal cancelado. Puede intentarlo nuevamente.");
+        showStatus("info", "Cancelaste el pago en PayPal. Puedes intentarlo de nuevo cuando quieras.");
       },
       onError: function (err) {
         console.error(err);
-        showStatus("error", "Ocurrio un error con PayPal. Revise sus datos o use WhatsApp.");
+        showStatus("error", "Hubo un error con PayPal. Revisa tus datos o escríbenos por WhatsApp.");
       }
     };
 
@@ -581,13 +695,18 @@
     if (paypalRendered) return;
     loadPayPalSDK().then(renderPayPalButtons).catch(function (err) {
       console.error(err);
-      showStatus("error", "No fue posible cargar PayPal. Revise su conexion o use WhatsApp.");
+      showStatus("error", "No pudimos cargar PayPal. Revisa tu conexión o escríbenos por WhatsApp.");
     });
   }
 
   // -------------------------------------------------------------------------
   // WIRING
   // -------------------------------------------------------------------------
+  function keyOf(el) {
+    for (var k in FIELD_OF) if (FIELD_OF[k] === el) return k;
+    return "";
+  }
+
   function onMethodChange() {
     refreshSummary();
     var method = getSelectedMethod();
@@ -598,12 +717,36 @@
     if (!nameInput) return; // safety
 
     applyURLPrefill();
+    // Lo que vino en el link (monto de la cotizacion, etc.) ya se valida.
+    Object.keys(FIELD_OF).forEach(function (k) {
+      if ((FIELD_OF[k].value || "").trim()) { touched[k] = true; markField(k); }
+    });
 
+    amountInput.addEventListener("input", formatAmountInput);
     [nameInput, emailInput, phoneInput, bookingInput, amountInput, descInput].forEach(function (el) {
-      el.addEventListener("input", refreshSummary);
-      el.addEventListener("blur", function () { isFormValid({ mark: true }); });
+      el.addEventListener("input", function () {
+        var key = keyOf(el);
+        if (key && touched[key]) markField(key);
+        refreshSummary();
+      });
+      el.addEventListener("blur", function () {
+        var key = keyOf(el);
+        if (!key) return;
+        // Un campo vacio que nunca se lleno no se marca solo por pasar por el.
+        if (!touched[key] && !(el.value || "").trim()) return;
+        touched[key] = true;
+        markField(key);
+      });
     });
     termsInput.addEventListener("change", refreshSummary);
+
+    if (confirmCard && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        confirmVisible = entries[0].isIntersecting;
+        refreshMobileBar();
+      }, { threshold: 0.15 }).observe(confirmCard);
+    }
+    window.addEventListener("resize", refreshMobileBar);
 
     document.querySelectorAll('input[name="method"]').forEach(function (el) {
       el.addEventListener("change", onMethodChange);
