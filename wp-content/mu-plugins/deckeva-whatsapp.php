@@ -441,6 +441,22 @@ function deckeva_wa_un_chat($num) {
                 $r = deckeva_wa_redactar((array) $chat['mensajes'], deckeva_wa_nota_cotizacion($chat));
                 if (!$r['ok']) { deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']); break; }
                 $id = 'D-' . strtoupper(substr(base_convert(substr(hash('sha256', $num . '|' . $ultIn), 0, 10), 16, 36), 0, 4));
+                // Pregunta si es un bot, o mandó un audio: lo contesta JP, siempre.
+                // Va antes de «no hace falta contestar», que si no lo archivaba
+                // callado (Codex, tourevo-cl#1698).
+                $persona = '';
+                $ultimoIn = '';
+                foreach ((array) ($chat['mensajes'] ?? array()) as $m) if (($m['dir'] ?? '') === 'in') $ultimoIn = (string) ($m['texto'] ?? '');
+                if (deckeva_wa_pregunta_si_es_bot($chat['mensajes'] ?? array())) $persona = 'pregunta si habla con un bot · lo contestas tú';
+                elseif (strpos($ultimoIn, '[mandó un audio]') === 0) $persona = 'mandó un audio · escúchalo tú';
+                if ($persona !== '') { $r['necesita_humano'] = true; $r['motivo'] = $persona . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : ''); }
+                if ($persona !== '' && (!$r['responder'] || $r['texto'] === '')) {
+                    // A JP por correo, sin retener la cotización: no es un cliente molesto.
+                    $chat['pendiente'] = array('id' => $id, 'para_ts' => $ultIn, 'estado' => 'escalado', 'necesita_humano' => true, 'motivo' => $r['motivo']);
+                    deckeva_wa_anotar($chat, $id . ' no se le escribe · lo ve JP · ' . $r['motivo']);
+                    $escalar = true;
+                    break;
+                }
                 if (!$r['responder'] || $r['texto'] === '') {
                     // No se le escribe, pero si necesita a una persona (el cliente
                     // está molesto, pidió que no le manden nada) JP se entera, y la
@@ -456,11 +472,6 @@ function deckeva_wa_un_chat($num) {
                     $chat['pendiente'] = array('id' => $id, 'para_ts' => $ultIn, 'estado' => 'sin_respuesta', 'motivo' => $r['motivo']);
                     deckeva_wa_anotar($chat, 'no hace falta contestar · ' . $r['motivo']);
                     break;
-                }
-                // ¿Habla con una máquina? Eso lo contesta JP en persona, siempre.
-                if (deckeva_wa_pregunta_si_es_bot($chat['mensajes'] ?? array())) {
-                    $r['necesita_humano'] = true;
-                    $r['motivo'] = 'pregunta si habla con un bot · lo contestas tú' . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : '');
                 }
                 // Muelles flotantes: nunca sale solo, lo ve JP (T-017).
                 if (deckeva_wa_es_muelle($chat['mensajes'] ?? array())) {
@@ -729,7 +740,7 @@ function deckeva_wa_avisar_escalado($chat) {
     $html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#111">'
         . '<p><b>No le escribimos nada a +' . esc_html($chat['numero']) . ' (Deckeva). Necesita que lo mires tú.</b></p>'
         . '<p style="color:#b45309">' . esc_html($p['motivo']) . '</p>'
-        . '<p>Su cotización formal quedó retenida: no sale sola hasta que decidas.</p>' . $chatH . '</div>';
+        . (!empty($chat['no_cotizar']) ? '<p>Su cotización formal quedó retenida: no sale sola hasta que decidas.</p>' : '') . $chatH . '</div>';
     wp_mail(deckeva_wa_aprobador(), '⚠ Lo ves tú · ' . $p['id'] . ' · Deckeva · +' . $chat['numero'], $html, deckeva_mail_headers());
 }
 
