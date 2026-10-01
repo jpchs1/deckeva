@@ -81,6 +81,9 @@ copiar_dir staging/img/lifestyle "${COM}/staging/img/lifestyle"
 copiar_dir staging/img/proyectos "${COM}/staging/img/proyectos"
 # Fotos de la sección #motos-de-agua de la home (se sirven desde .com).
 copiar_dir staging/img/motos-de-agua "${COM}/staging/img/motos-de-agua"
+# Las capturas del cotizador que el contestador de WhatsApp manda según el
+# largo de la lancha (deckeva-whatsapp-valores.php). Se sirven desde .com.
+copiar_dir staging/img/valores-wa "${COM}/staging/img/valores-wa"
 
 copiar staging/index-com.html "${COM}/preview-2026/index.html"
 
