@@ -60,3 +60,6 @@ jobs:
 
       - name: El precio de los opcionales es el mismo en la web y en el PDF
         run: php .github/checks/precios-web.php
+
+      - name: Las capturas de valores para WhatsApp muestran el precio del home
+        run: php .github/checks/valores-wa.php

@@ -152,6 +152,25 @@ correo igual cuenta.
 - **Si JP tomó el chat a mano en el teléfono**, Tourevo no lo manda por
   WhatsApp salvo que la cotización la haya aprobado él (`JP · wp-admin`).
 
+## Los valores por largo: la captura del cotizador por WhatsApp (REGLA DEL DUEÑO · 1-oct-2026)
+
+JP: «cuando detectes que es para piso de lancha, pregúntale qué tamaño es su
+lancha; una vez te dé el largo, envíale el screenshot de deckeva.cl/#cotizar
+según el tamaño, y luego pregúntale si quiere avanzar con la cotización formal».
+
+- Hay una captura por tamaño (14 a 30 pies, moto normal y mediana/grande) en
+  `staging/img/valores-wa/`, servidas desde deckeva.com. Las saca
+  `.github/capturas-valores/capturas.js` del sitio publicado.
+- El que redacta marca `valores` («20», «moto-normal») cuando el cliente
+  confirma el largo; el código adjunta la captura y la manda como foto por la
+  puerta de Tourevo, con el texto de pie (sin montos). Una vez por tamaño
+  (`valores_enviados`).
+- **Una captura con un precio viejo no sale**: `deckeva_wa_valores_url()`
+  compara el precio que muestra (`DECKEVA_WA_VALORES`) con la tabla del home
+  publicado; si no calza, el chat queda para JP. En CI,
+  `.github/checks/valores-wa.php` hace lo mismo contra `staging/index-cl.html`:
+  **si cambias un precio del cotizador, vuelve a sacar las capturas.**
+
 ## Colores: café claro y gris claro, nada más (REGLA DEL DUEÑO · 30-sep-2026)
 
 JP: «en stock tenemos café claro y gris claro, ambos pueden ser con líneas

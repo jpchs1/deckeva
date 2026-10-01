@@ -340,7 +340,7 @@ function deckeva_wa_pendientes_para_jp() {
         foreach ((array) ($chat['mensajes'] ?? array()) as $m) if (($m['dir'] ?? '') === 'in' && trim((string) $m['texto']) !== '') $cliente = (string) $m['texto'];
         $out[] = array(
             'id' => (string) $p['id'], 'numero' => (string) $num,
-            'texto' => $escalado ? '' : mb_substr((string) ($p['texto'] ?? ''), 0, 1000), 'cliente' => mb_substr($cliente, 0, 300),
+            'texto' => $escalado ? '' : mb_substr((string) ($p['texto'] ?? ''), 0, 1000) . (($p['valores'] ?? '') !== '' ? "\n\n[va con la captura del cotizador para " . $p['valores'] . ']' : ''), 'cliente' => mb_substr($cliente, 0, 300),
             'idioma' => deckeva_wa_es_castellano((string) ($p['texto'] ?? '')) ? 'es' : 'otro',
             'en' => (int) ($p['en'] ?? 0), 'regla' => (string) ($p['regla'] ?? ''),
             'necesita_humano' => !empty($p['necesita_humano']), 'motivo' => (string) ($p['motivo'] ?? ''),
@@ -513,7 +513,7 @@ function deckeva_wa_un_chat($num) {
                 foreach ((array) ($chat['mensajes'] ?? array()) as $m) if (($m['dir'] ?? '') === 'in') $ultimoIn = (string) ($m['texto'] ?? '');
                 if (deckeva_wa_pregunta_si_es_bot($chat['mensajes'] ?? array())) $persona = 'pregunta si habla con un bot · lo contestas tú';
                 elseif (strpos($ultimoIn, '[mandó un audio]') === 0) $persona = 'mandó un audio · escúchalo tú';
-                $r = deckeva_wa_redactar((array) $chat['mensajes'], deckeva_wa_nota_cotizacion($chat));
+                $r = deckeva_wa_redactar((array) $chat['mensajes'], deckeva_wa_nota_chat($chat));
                 if (!$r['ok']) {
                     deckeva_wa_anotar($chat, 'no se pudo redactar · ' . $r['error']);
                     if ($persona === '') break;
@@ -553,6 +553,20 @@ function deckeva_wa_un_chat($num) {
                     $r['necesita_humano'] = true;
                     $r['motivo'] = 'MUELLE FLOTANTE · no se cotiza, lo ve JP al tiro' . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : '');
                 }
+                // Los valores por largo (JP, 1-oct): la captura del cotizador
+                // para el tamaño que dio el cliente. Sólo si la captura sigue
+                // mostrando el precio publicado y no se le mandó antes; si no,
+                // el texto promete una imagen que no va: lo ve JP.
+                $imagen = '';
+                $valores = '';
+                if (($r['valores'] ?? '') !== '' && function_exists('deckeva_wa_valores_clave')) {
+                    $valores = deckeva_wa_valores_clave($r['valores']);
+                    $imagen = $valores !== '' && empty($chat['valores_enviados'][$valores]) ? deckeva_wa_valores_url($valores) : '';
+                    if ($imagen === '') {
+                        $r['necesita_humano'] = true;
+                        $r['motivo'] = 'iba con los valores de ' . ($valores !== '' ? $valores : $r['valores']) . ' y no hay captura vigente (o ya se mandó) · revisa' . ($r['motivo'] !== '' ? ' · ' . $r['motivo'] : '');
+                    }
+                }
                 $regla = deckeva_wa_validar($r['texto']);
                 if ($regla === '') $regla = deckeva_wa_suena_a_robot($r['texto']);
                 $auto = deckeva_wa_modo() === 'automatico' && !$r['necesita_humano'] && $regla === '';
@@ -564,6 +578,7 @@ function deckeva_wa_un_chat($num) {
                     'motivo' => $r['motivo'], 'regla' => $regla,
                 );
                 if ($auto) $p['aprobado_por'] = 'automático';
+                if ($imagen !== '') { $p['imagen'] = $imagen; $p['valores'] = $valores; }
                 $chat['pendiente'] = $p;
                 deckeva_wa_anotar($chat, $id . ' redactado · ' . ($auto ? 'sale solo ' . deckeva_wa_legible($p['en']) : 'espera a JP'));
                 $avisar = !$auto;
@@ -599,7 +614,7 @@ function deckeva_wa_un_chat($num) {
     // A su hora, lo aprobado sale por la puerta de tourevo.cl. El ref es el id
     // del borrador y la puerta no encola dos veces el mismo: reintentar después
     // de una caída no duplica el mensaje.
-    $w = deckeva_wa_mandar($num, (string) $salida['texto'], (string) $salida['id'], (string) ($salida['aprobado_por'] ?? 'JP'));
+    $w = deckeva_wa_mandar($num, (string) $salida['texto'], (string) $salida['id'], (string) ($salida['aprobado_por'] ?? 'JP'), null, (string) ($salida['imagen'] ?? ''));
     deckeva_wa_con_candado(function ($chats) use ($num, $salida, $w, $ahora) {
         $c = $chats[$num] ?? null;
         if (!is_array($c) || ($c['pendiente']['id'] ?? '') !== $salida['id']) return $chats;
@@ -607,6 +622,8 @@ function deckeva_wa_un_chat($num) {
         if ($w['ok']) {
             $p['estado'] = 'enviado';
             $p['enviado_ts'] = $ahora;
+            // Los valores de ese tamaño ya van: no se le vuelven a mandar.
+            if (($p['valores'] ?? '') !== '') $c['valores_enviados'][(string) $p['valores']] = $ahora;
             deckeva_wa_anotar($c, $p['id'] . ' entregado a la puerta · sale en el próximo minuto');
         } else {
             // Una caída de la puerta no pierde la respuesta: sigue aprobada y se
@@ -711,6 +728,7 @@ function deckeva_wa_sistema() {
         . "- Estamos en Santiago, en La Dehesa. No hay sala de venta: vamos a medir donde esté la embarcación (en Santiago, en La Dehesa o Los Dominicos). No se vende por metro cuadrado: el piso se fabrica a la medida exacta.\n"
         . "- Colores: en stock tenemos café claro y gris claro, y los dos se pueden hacer con líneas negras, que es parte del diseño que trabajamos. No manejamos otros colores: si el cliente pide beige, negro, teca, azul u otro, dile con cariño que trabajamos esos dos y ofrécele el más parecido. Nunca ofrezcas un color que no sea café claro o gris claro. Se puede grabar el nombre o la patente. Fotos de trabajos hechos: deckeva.cl/#proyectos.\n"
         . "- Se puede hacer sólo una parte (la plataforma de nado, la popa, la zona de los esquís): se cotiza aparte, con fotos de esa zona.\n"
+        . "- Los valores por largo (JP, 1-oct): si el cliente quiere un piso para su lancha y todavía no sabes el largo en pies, lo primero es preguntárselo, corto. Si te dio la marca y el modelo, puedes confirmarlo tú: «¿Es de 20 pies, correcto?». Apenas tengas el largo confirmado (de 14 a 30 pies), o sepas que es una moto de agua normal o mediana a grande, y todavía no le mandaste los valores de ese tamaño (mira la nota del equipo), pon en «valores» el tamaño («20», «moto-normal» o «moto-grande») y en «texto» algo como «Te mando los valores para una lancha de 20 pies. Si quieres avanzar, te preparo la cotización formal». Con eso se le adjunta la captura del cotizador de la web. Nunca escribas el monto. Si mide menos de 14 o más de 30 pies, «valores» va vacío y necesita_humano. En cualquier otra respuesta, «valores» va vacío.\n"
         . "- Si el cliente mide o instala él: videos paso a paso en deckeva.com/guia/medir y deckeva.com/guia/instalar. Fuera de Chile se manda embalado con el video de instalación.\n"
         . "- No vendemos seguros para embarcaciones: si preguntan, recomienda Mapfre Seguros.\n\n"
         . "Ejemplos del tono de Juan Pablo (el tono, no los datos; nunca los copies literal):\n"
@@ -729,6 +747,16 @@ function deckeva_wa_sistema() {
         . "- Si el cliente dice que está molesto o que no quiere hablar con una máquina, no le mandes nada más: responder = false y necesita_humano = true, con el motivo.\n"
         . "- Si lo último no necesita respuesta (un gracias, un ok, un sticker), responder = false y texto vacío.\n"
         . "- motivo: una línea para el equipo, no para el cliente.";
+}
+
+/** Lo que el que redacta tiene que saber de este chat: los valores ya mandados y la cotización formal. */
+function deckeva_wa_nota_chat($chat) {
+    $notas = array();
+    $v = array_keys((array) ($chat['valores_enviados'] ?? array()));
+    if ($v) $notas[] = 'Ya se le mandaron los valores (la captura del cotizador) para: ' . implode(', ', $v) . '. No los vuelvas a mandar.';
+    $c = deckeva_wa_nota_cotizacion($chat);
+    if ($c !== '') $notas[] = $c;
+    return implode(' ', $notas);
 }
 
 /** Lo que el que redacta tiene que saber de la cotización formal de este chat. */
@@ -756,8 +784,10 @@ function deckeva_wa_redactar($mensajes, $nota = '') {
     }
     if ($txt === '') return array('ok' => false, 'error' => 'chat sin texto');
     $esquema = array('type' => 'object', 'additionalProperties' => false,
-        'required' => array('responder', 'texto', 'necesita_humano', 'motivo'),
-        'properties' => array('responder' => array('type' => 'boolean'), 'texto' => array('type' => 'string'), 'necesita_humano' => array('type' => 'boolean'), 'motivo' => array('type' => 'string')));
+        'required' => array('responder', 'texto', 'necesita_humano', 'motivo', 'valores'),
+        'properties' => array('responder' => array('type' => 'boolean'), 'texto' => array('type' => 'string'), 'necesita_humano' => array('type' => 'boolean'), 'motivo' => array('type' => 'string'),
+            // El tamaño cuyos valores van con esta respuesta («20», «moto-normal») o ''.
+            'valores' => array('type' => 'string')));
     $res = wp_remote_post('https://api.anthropic.com/v1/messages', array(
         'timeout' => 60,
         'headers' => array('x-api-key' => deckeva_wa_llave(), 'anthropic-version' => '2023-06-01', 'anthropic-beta' => 'server-side-fallback-2026-07-01', 'content-type' => 'application/json'),
@@ -776,7 +806,7 @@ function deckeva_wa_redactar($mensajes, $nota = '') {
     foreach ((array) ($j['content'] ?? array()) as $b) if (($b['type'] ?? '') === 'text') $out .= (string) $b['text'];
     $d = json_decode($out, true);
     if (!is_array($d)) return array('ok' => false, 'error' => 'respuesta no es JSON');
-    return array('ok' => true, 'responder' => !empty($d['responder']), 'texto' => trim((string) ($d['texto'] ?? '')), 'necesita_humano' => !empty($d['necesita_humano']), 'motivo' => trim((string) ($d['motivo'] ?? '')));
+    return array('ok' => true, 'responder' => !empty($d['responder']), 'texto' => trim((string) ($d['texto'] ?? '')), 'necesita_humano' => !empty($d['necesita_humano']), 'motivo' => trim((string) ($d['motivo'] ?? '')), 'valores' => trim((string) ($d['valores'] ?? '')));
 }
 
 // =============================================
@@ -790,15 +820,18 @@ function deckeva_wa_redactar($mensajes, $nota = '') {
  * la cotización formal PDF por WhatsApp»). No va por un link: el PDF trae el
  * nombre, el correo y el teléfono del cliente, y la carpeta está cerrada.
  */
-function deckeva_wa_mandar($num, $texto, $ref, $aprobo, $pdf = null) {
+function deckeva_wa_mandar($num, $texto, $ref, $aprobo, $pdf = null, $imagen = '') {
     $pedido = array('para' => (string) $num, 'texto' => $texto, 'ref' => $ref, 'aprobo' => $aprobo);
+    // La captura del cotizador por link (deckeva-whatsapp-valores.php): sale como
+    // foto con el texto de pie. No trae datos del cliente.
+    if ((string) $imagen !== '') $pedido['imagen'] = array('url' => (string) $imagen);
     if ($pdf !== null) {
         $bytes = is_readable((string) $pdf) ? (string) file_get_contents((string) $pdf) : '';
         if (strncmp($bytes, '%PDF', 4) !== 0) return array('ok' => false, 'error' => 'el PDF no se puede leer');
         if (strlen($bytes) > 4 * 1024 * 1024) return array('ok' => false, 'error' => 'el PDF pasa de 4 MB');
         $pedido['documento'] = array('nombre' => basename((string) $pdf), 'base64' => base64_encode($bytes));
     }
-    $v = ($pdf !== null && trim((string) $texto) === '') ? '' : deckeva_wa_validar($texto);
+    $v = (($pdf !== null || (string) $imagen !== '') && trim((string) $texto) === '') ? '' : deckeva_wa_validar($texto);
     if ($v !== '') return array('ok' => false, 'error' => 'el texto no pasa las reglas · ' . $v);
     $cuerpo = wp_json_encode($pedido);
     $ts = time();
