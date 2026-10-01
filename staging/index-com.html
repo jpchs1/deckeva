@@ -8255,6 +8255,124 @@ html[data-lang="es"] span.footer-partners__eyebrow[data-en], html[data-lang="en"
 </section>
 
 <!-- SHIPPING -->
+
+<section class="lg-section" id="logos" aria-labelledby="logos-title">
+<style>
+/* ── Sección «Logos»: simulaciones de logos grabados en piso EVA ── */
+.lg-section{background:radial-gradient(1000px 420px at 12% -10%,rgba(22,163,163,.22),transparent 60%),linear-gradient(160deg,#0a1628 0%,#0f2240 60%,#0a1628 100%);color:#fff;padding:88px 0;position:relative;overflow:hidden}
+.lg-wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.lg-head{display:grid;grid-template-columns:1.1fr 1fr;gap:28px 48px;align-items:end;margin-bottom:28px}
+.lg-kicker{display:inline-block;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#f5a623;margin-bottom:12px}
+.lg-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(36px,5vw,58px);line-height:.98;text-transform:uppercase;margin:0;color:#fff}
+.lg-title em{font-style:normal;color:#16a3a3}
+.lg-lead{font-size:16.5px;line-height:1.6;color:#c7d3e3;margin:0}
+.lg-lead b{color:#fff}
+.lg-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.lg-filters{display:flex;flex-wrap:wrap;gap:8px}
+.lg-filter{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 'DM Sans',system-ui,sans-serif;color:#dce6f2;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:9px 15px;cursor:pointer;transition:all .2s}
+.lg-filter:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.lg-filter[aria-pressed="true"]{background:#f5a623;border-color:#f5a623;color:#0a1628}
+.lg-filter i{width:13px;height:13px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,.3)}
+.lg-count{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8fa3bd}
+.lg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.lg-item{position:relative;margin:0;border-radius:14px;overflow:hidden;background:#0f2240;aspect-ratio:3/2;box-shadow:0 14px 34px rgba(0,0,0,.35)}
+.lg-item button{all:unset;display:block;width:100%;height:100%;cursor:zoom-in}
+.lg-item button:focus-visible{outline:3px solid #f5a623;outline-offset:-3px;border-radius:14px}
+.lg-item img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.lg-item:hover img{transform:scale(1.05)}
+.lg-item figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;padding:28px 12px 10px;background:linear-gradient(180deg,transparent,rgba(10,22,40,.85));pointer-events:none}
+.lg-item figcaption b{font-size:14px;font-weight:700;color:#fff}
+.lg-item figcaption span{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0a1628;background:#c9a27a;border-radius:999px;padding:3px 8px}
+.lg-item[data-color="gris"] figcaption span{background:#cfd5dc}
+.lg-item[hidden]{display:none}
+.lg-foot{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;margin-top:22px}
+.lg-note{font-size:12.5px;line-height:1.5;color:#8fa3bd;max-width:640px;margin:0}
+.lg-ctas{display:flex;flex-wrap:wrap;gap:10px}
+.lg-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;transition:transform .15s}
+.lg-btn:hover{transform:translateY(-2px);text-decoration:none}
+.lg-btn.primary{background:#f5a623;color:#0a1628;box-shadow:0 10px 26px rgba(245,166,35,.3)}
+.lg-btn.ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.2);color:#fff}
+.lg-btn.wa{background:#25d366;color:#07311b}
+.lg-lb{position:fixed;inset:0;z-index:10000;background:rgba(5,10,20,.92);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.lg-lb.open{opacity:1;pointer-events:auto}
+.lg-lb figure{margin:0;max-width:min(1200px,100%);text-align:center}
+.lg-lb img{max-width:100%;max-height:78vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.6);display:block;margin:0 auto}
+.lg-lb figcaption{color:#dce6f2;font-size:14px;margin-top:12px}
+.lg-lb-btn{position:absolute;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:grid;place-items:center}
+.lg-lb-btn:hover{background:rgba(255,255,255,.25)}
+.lg-lb-btn:focus-visible{outline:3px solid #f5a623}
+.lg-lb-close{top:16px;right:16px}
+.lg-lb-prev{left:16px;top:50%;transform:translateY(-50%)}
+.lg-lb-next{right:16px;top:50%;transform:translateY(-50%)}
+@media (max-width:900px){.lg-section{padding:64px 0}.lg-head{grid-template-columns:1fr}.lg-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+@media (max-width:520px){.lg-wrap{padding:0 16px}.lg-item figcaption{padding:22px 8px 7px}.lg-item figcaption b{font-size:12.5px}.lg-item figcaption span{display:none}.lg-btn{width:100%;justify-content:center}.lg-lb-prev,.lg-lb-next{top:auto;bottom:18px;transform:none}}
+</style>
+  <div class="lg-wrap">
+    <div class="lg-head">
+      <div>
+        <span class="lg-kicker" data-es>✦ Logos</span><span class="lg-kicker" data-en>✦ Logos</span>
+        <h2 class="lg-title" id="logos-title"><span data-es>Tu marca,<br><em>grabada en el piso</em></span><span data-en>Your brand,<br><em>engraved on the deck</em></span></h2>
+      </div>
+      <div>
+        <p class="lg-lead" data-es>Grabamos el logo de tu empresa, club, viña o embarcación directo en la goma EVA, en <b>café claro</b> o <b>gris claro</b> con líneas negras. Ideal para flotas, hoteles, clubes náuticos y regalos corporativos.</p>
+        <p class="lg-lead" data-en>We engrave your company, club, winery or boat logo straight into the EVA foam, in <b>light brown</b> or <b>light gray</b> with black lines. Ideal for fleets, hotels, yacht clubs and corporate gifts.</p>
+      </div>
+    </div>
+      <div class="lg-grid">
+        <figure class="lg-item" data-color="cafe" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-02.jpg"><button type="button" aria-label="Ampliar diseño Deckeva"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-02-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-02-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-02.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA café claro con el logo «Deckeva» grabado"></button><figcaption><b>Deckeva</b><span data-es>Café claro</span><span data-en>Light brown</span></figcaption></figure>
+        <figure class="lg-item" data-color="gris" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-14.jpg"><button type="button" aria-label="Ampliar diseño Imporlan"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-14-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-14-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-14.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA gris claro con el logo «Imporlan» grabado"></button><figcaption><b>Imporlan</b><span data-es>Gris claro</span><span data-en>Light gray</span></figcaption></figure>
+        <figure class="lg-item" data-color="cafe" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-29.jpg"><button type="button" aria-label="Ampliar diseño Jester"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-29-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-29-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-29.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA café claro con el logo «Jester» grabado"></button><figcaption><b>Jester</b><span data-es>Café claro</span><span data-en>Light brown</span></figcaption></figure>
+        <figure class="lg-item" data-color="gris" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-31.jpg"><button type="button" aria-label="Ampliar diseño Kross"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-31-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-31-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-31.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA gris claro con el logo «Kross» grabado"></button><figcaption><b>Kross</b><span data-es>Gris claro</span><span data-en>Light gray</span></figcaption></figure>
+        <figure class="lg-item" data-color="cafe" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-04.jpg"><button type="button" aria-label="Ampliar diseño Tourevo"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-04-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-04-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-04.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA café claro con el logo «Tourevo» grabado"></button><figcaption><b>Tourevo</b><span data-es>Café claro</span><span data-en>Light brown</span></figcaption></figure>
+        <figure class="lg-item" data-color="gris" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-12.jpg"><button type="button" aria-label="Ampliar diseño Muelle Flotante"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-12-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-12-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-12.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA gris claro con el logo «Muelle Flotante» grabado"></button><figcaption><b>Muelle Flotante</b><span data-es>Gris claro</span><span data-en>Light gray</span></figcaption></figure>
+        <figure class="lg-item" data-color="cafe" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-22.jpg"><button type="button" aria-label="Ampliar diseño Karün"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-22-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-22-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-22.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA café claro con el logo «Karün» grabado"></button><figcaption><b>Karün</b><span data-es>Café claro</span><span data-en>Light brown</span></figcaption></figure>
+        <figure class="lg-item" data-color="gris" data-full="https://www.deckeva.com/staging/img/proyectos/logos/logo-35.jpg"><button type="button" aria-label="Ampliar diseño Clos de Luz"><img src="https://www.deckeva.com/staging/img/proyectos/logos/logo-35-600.jpg" srcset="https://www.deckeva.com/staging/img/proyectos/logos/logo-35-600.jpg 600w, https://www.deckeva.com/staging/img/proyectos/logos/logo-35.jpg 1200w" sizes="(max-width:900px) 50vw, 290px" width="600" height="400" loading="lazy" decoding="async" alt="Simulación de piso EVA gris claro con el logo «Clos de Luz» grabado"></button><figcaption><b>Clos de Luz</b><span data-es>Gris claro</span><span data-en>Light gray</span></figcaption></figure>
+      </div>
+      <div class="lg-foot">
+        <p class="lg-note" data-es>Simulaciones de diseño: muestran cómo se vería un logo grabado en un piso EVA Deckeva. Las marcas que aparecen son referenciales y no implican relación comercial con Deckeva.</p>
+        <p class="lg-note" data-en>Design mock-ups showing how a logo would look engraved on a Deckeva EVA deck. The brands shown are for reference only and do not imply any business relationship with Deckeva.</p>
+        <div class="lg-ctas">
+          <a class="lg-btn ghost" href="https://deckeva.cl/proyectos/#logos"><span data-es>Ver los 40 diseños</span><span data-en>See all 40 designs</span> →</a>
+          <a class="lg-btn primary" href="#cotizar"><span data-es>Cotizar con mi logo</span><span data-en>Quote with my logo</span> →</a>
+          <a class="lg-btn wa" href="https://wa.me/56940211459?text=Hola%20Deckeva%2C%20quiero%20cotizar%20un%20piso%20EVA%20con%20mi%20logo%20grabado" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+  </div>
+<script>
+/* Sección «Logos»: filtro por color + lightbox. Independiente del resto de la página. */
+(function(){
+  var sec=document.getElementById('logos'); if(!sec) return;
+  var items=[].slice.call(sec.querySelectorAll('.lg-item'));
+  var count=sec.querySelector('.lg-count-n');
+  sec.querySelectorAll('.lg-filter').forEach(function(b){
+    b.addEventListener('click',function(){
+      var f=b.getAttribute('data-filter'), n=0;
+      sec.querySelectorAll('.lg-filter').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+      items.forEach(function(it){var show=f==='todos'||it.getAttribute('data-color')===f; it.hidden=!show; if(show) n++;});
+      if(count) count.textContent=n;
+    });
+  });
+  var lb=document.createElement('div');
+  lb.className='lg-lb'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true'); lb.setAttribute('aria-label','Diseño de logo');
+  lb.innerHTML='<button type="button" class="lg-lb-btn lg-lb-close" aria-label="Cerrar">×</button><button type="button" class="lg-lb-btn lg-lb-prev" aria-label="Anterior">‹</button><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lg-lb-btn lg-lb-next" aria-label="Siguiente">›</button>';
+  document.body.appendChild(lb);
+  var img=lb.querySelector('img'), cap=lb.querySelector('figcaption'), cur=0, last=null;
+  function visibles(){return items.filter(function(it){return !it.hidden;});}
+  function show(i){var v=visibles(); if(!v.length) return; cur=(i+v.length)%v.length; var it=v[cur], im=it.querySelector('img');
+    img.src=it.getAttribute('data-full'); img.alt=im.alt; var sp=[].filter.call(it.querySelectorAll('figcaption span'),function(x){return x.offsetParent!==null;})[0]; cap.textContent=it.querySelector('figcaption b').textContent+(sp?' · '+sp.textContent:'');}
+  function open(it){last=document.activeElement; show(visibles().indexOf(it)); lb.classList.add('open'); document.documentElement.style.overflow='hidden'; lb.querySelector('.lg-lb-close').focus();}
+  function close(){lb.classList.remove('open'); document.documentElement.style.overflow=''; if(last) last.focus();}
+  items.forEach(function(it){it.querySelector('button').addEventListener('click',function(){open(it);});});
+  lb.querySelector('.lg-lb-close').addEventListener('click',close);
+  lb.querySelector('.lg-lb-prev').addEventListener('click',function(){show(cur-1);});
+  lb.querySelector('.lg-lb-next').addEventListener('click',function(){show(cur+1);});
+  lb.addEventListener('click',function(e){if(e.target===lb) close();});
+  document.addEventListener('keydown',function(e){if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') close(); else if(e.key==='ArrowLeft') show(cur-1); else if(e.key==='ArrowRight') show(cur+1);});
+})();
+</script>
+</section>
+
 <section class="section shipping-bg" id="envios">
   <div class="container">
 
