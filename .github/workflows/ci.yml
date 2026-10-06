@@ -63,3 +63,6 @@ jobs:
 
       - name: Las capturas de valores para WhatsApp muestran el precio del home
         run: php .github/checks/valores-wa.php
+
+      - name: El contestador queda en automático y lo que no sabe sigue yendo a JP
+        run: php .github/checks/whatsapp-auto.php

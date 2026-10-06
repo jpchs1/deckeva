@@ -55,7 +55,37 @@ function deckeva_wa_opcion($clave, $def = '') {
 }
 function deckeva_wa_secreto() { return deckeva_wa_opcion('secreto'); }
 function deckeva_wa_llave() { return deckeva_wa_opcion('anthropic_key'); }
-function deckeva_wa_modo() { return deckeva_wa_opcion('modo', 'borrador') === 'automatico' ? 'automatico' : 'borrador'; }
+/**
+ * Borrador o automático.
+ *
+ * Por defecto AUTOMÁTICO desde el 6-oct-2026 (JP): «pon a Deckeva en modo
+ * automático, y lo que no sepa responder que me lo pregunte por WhatsApp».
+ * Lo que la IA no sabe sigue pasando por él: `necesita_humano`, lo que suena
+ * a robot y lo que no pasa las reglas quedan en borrador y se le piden por
+ * WhatsApp con su código D-XXXX. Automático no es «sale cualquier cosa»: es
+ * «lo que ya sabe contestar no te espera».
+ *
+ * El selector de wp-admin sigue mandando: si JP elige «borrador», se guarda y
+ * esto lee eso.
+ */
+function deckeva_wa_modo() { return deckeva_wa_opcion('modo', 'automatico') === 'borrador' ? 'borrador' : 'automatico'; }
+
+/**
+ * El cambio a automático, una sola vez.
+ *
+ * Cambiar el default no alcanza: el formulario de wp-admin guarda SIEMPRE la
+ * clave `deckeva_wa_modo` al apretar «Guardar» (incluso si nadie tocó el
+ * selector), así que en la base ya dice «borrador» y el default no se mira.
+ * Esto lo pone en automático una vez y deja la marca; después el selector
+ * vuelve a mandar y JP puede volver a borrador cuando quiera, sin que esto se
+ * lo pise en la carga siguiente.
+ */
+add_action('init', function () {
+    if (defined('DECKEVA_WA_MODO')) return;                       // una constante manda sobre todo
+    if (get_option('deckeva_wa_auto_2026_10_06') === 'listo') return;
+    update_option('deckeva_wa_auto_2026_10_06', 'listo', false);
+    if (get_option('deckeva_wa_modo', '') !== 'automatico') update_option('deckeva_wa_modo', 'automatico', false);
+});
 function deckeva_wa_aprobador() { $a = deckeva_wa_opcion('aprobador', 'jpchs1@gmail.com'); return is_email($a) ? $a : 'jpchs1@gmail.com'; }
 
 // =============================================
@@ -436,8 +466,11 @@ function deckeva_wa_aprobar_remoto($d) {
         $t = $texto !== '' ? $texto : (string) ($p['texto'] ?? '');
         $v = deckeva_wa_validar($t);
         if ($v !== '') { $res = array('ok' => false, 'error' => 'no pasa las reglas · ' . $v); return $chats; }
+        // Si JP lo reescribió, su texto es la respuesta correcta a un caso
+        // real: queda para el prompt de las próximas (deckeva_wa_aprender).
+        if ($texto !== '') deckeva_wa_aprender($chat, (string) ($p['texto'] ?? ''), $texto);
         $p['texto'] = $t; $p['estado'] = 'aprobado'; $p['aprobado_por'] = $quien;
-        deckeva_wa_anotar($chat, $id . ' aprobado por WhatsApp' . ($texto !== '' ? ' con el texto de JP' : ''));
+        deckeva_wa_anotar($chat, $id . ' aprobado por WhatsApp' . ($texto !== '' ? ' con el texto de JP · aprendido' : ''));
         $chat['pendiente'] = $p;
         $chats[$num] = $chat;
         $res = array('ok' => true, 'en' => max((int) $p['en'], time()));
@@ -746,7 +779,66 @@ function deckeva_wa_sistema() {
         . "- Si en el chat se le dijeron dos cosas distintas (por ejemplo, sobre el traslado o el plazo), no elijas una: dile que lo revisas y le confirmas, y marca necesita_humano.\n"
         . "- Si el cliente dice que está molesto o que no quiere hablar con una máquina, no le mandes nada más: responder = false y necesita_humano = true, con el motivo.\n"
         . "- Si lo último no necesita respuesta (un gracias, un ok, un sticker), responder = false y texto vacío.\n"
-        . "- motivo: una línea para el equipo, no para el cliente.";
+        . "- motivo: una línea para el equipo, no para el cliente."
+        . deckeva_wa_correcciones_prompt();
+}
+
+// =============================================
+// LO QUE JP CORRIGE, LA IA LO APRENDE (6-oct-2026)
+// =============================================
+//
+// «Lo que no sepa responder que me lo pregunte por WhatsApp, así yo le voy
+// contestando y él va aprendiendo y respondiendo a clientes» (JP, 6-oct).
+//
+// Cuando JP no aprueba el borrador tal cual sino que lo reescribe —«D-XXXX:
+// su texto» desde el WhatsApp, o el textarea de wp-admin—, esa corrección es
+// la respuesta correcta a un caso real. Se guarda el trío (lo que preguntó el
+// cliente · lo que propuso la IA · lo que mandó JP) y entra en el prompt de
+// las respuestas siguientes.
+//
+// LO QUE NO ES: no cambia ninguna regla del código. Lo que sale sigue pasando
+// por `deckeva_wa_validar()` (sin importes, sin guiones largos, largo máximo)
+// y por `deckeva_wa_suena_a_robot()`. Una corrección enseña a REDACTAR, no
+// abre la puerta a decir un precio.
+//
+// Se guardan las 20 últimas: el prompt no puede crecer sin techo, y una
+// corrección de hace tres meses vale menos que la de ayer. Lo que se repite
+// se escribe en `deckeva_wa_sistema()`, que es donde vive lo permanente.
+
+const DECKEVA_WA_CORRECCIONES_MAX = 20;
+const DECKEVA_WA_CORRECCION_LARGO = 400;
+
+function deckeva_wa_correcciones() {
+    $x = get_option('deckeva_wa_correcciones', array());
+    return is_array($x) ? $x : array();
+}
+
+/** Guarda la corrección de JP · sólo si de verdad cambió el texto. */
+function deckeva_wa_aprender($chat, $propuesta, $jp) {
+    $jp = trim((string) $jp);
+    $propuesta = trim((string) $propuesta);
+    if ($jp === '' || $jp === $propuesta) return;          // aprobó tal cual: no hay nada que aprender
+    $cliente = '';
+    foreach ((array) ($chat['mensajes'] ?? array()) as $m) {
+        if (($m['dir'] ?? '') === 'in' && trim((string) ($m['texto'] ?? '')) !== '') $cliente = (string) $m['texto'];
+    }
+    $corta = function ($t) { return mb_substr(trim(preg_replace('/\s+/u', ' ', (string) $t)), 0, DECKEVA_WA_CORRECCION_LARGO); };
+    $todas = deckeva_wa_correcciones();
+    $todas[] = array('ts' => time(), 'cliente' => $corta($cliente), 'antes' => $corta($propuesta), 'jp' => $corta($jp));
+    update_option('deckeva_wa_correcciones', array_slice($todas, -DECKEVA_WA_CORRECCIONES_MAX), false);
+}
+
+/** El bloque que va al prompt, o '' si JP todavía no corrigió nada. */
+function deckeva_wa_correcciones_prompt() {
+    $todas = deckeva_wa_correcciones();
+    if (!$todas) return '';
+    $t = "\n\nCómo contesta Juan Pablo cuando corrige, de casos reales. Lo último manda: si una de éstas contradice un ejemplo de arriba, vale ésta. No las copies literal, copia el criterio.\n";
+    foreach ($todas as $c) {
+        $t .= '- Cliente: «' . $c['cliente'] . '»';
+        if (($c['antes'] ?? '') !== '') $t .= ' · la IA iba a decir: «' . $c['antes'] . '»';
+        $t .= ' · JP mandó: «' . $c['jp'] . "»\n";
+    }
+    return $t;
 }
 
 /** Lo que el que redacta tiene que saber de este chat: los valores ya mandados y la cotización formal. */
@@ -917,8 +1009,10 @@ add_action('admin_post_deckeva_wa', function () {
             } elseif ($accion === 'aprobar') {
                 $v = deckeva_wa_validar($texto);
                 if ($v !== '') { $msg = 'No se aprobó: ' . $v . '.'; return $chats; }
+                $cambio = $texto !== trim((string) ($p['texto'] ?? ''));
+                if ($cambio) deckeva_wa_aprender($chat, (string) ($p['texto'] ?? ''), $texto);
                 $p['texto'] = $texto; $p['estado'] = 'aprobado'; $p['aprobado_por'] = 'JP · wp-admin';
-                deckeva_wa_anotar($chat, $p['id'] . ' aprobado');
+                deckeva_wa_anotar($chat, $p['id'] . ' aprobado' . ($cambio ? ' con el texto de JP · aprendido' : ''));
                 $msg = 'Aprobado · sale ' . deckeva_wa_legible(max((int) $p['en'], time())) . '.';
             }
             $chat['pendiente'] = $p;
@@ -964,6 +1058,19 @@ function deckeva_wa_pantalla() {
         echo '<tr><td>+' . esc_html($num) . '</td><td>' . esc_html($p['estado'] ?? 'nuevo') . '</td><td>' . esc_html($h['que']) . '</td><td>' . esc_html($h['ts'] ? deckeva_wa_legible($h['ts']) : '') . '</td></tr>';
     }
     echo '</tbody></table>';
+
+    // Lo que aprendió de JP · a la vista, porque si no es una caja negra: lo
+    // que la IA usa para contestar tiene que poder leerlo una persona.
+    $corr = deckeva_wa_correcciones();
+    if ($corr) {
+        echo '<h2>Lo que aprendió de ti · ' . count($corr) . ' de ' . DECKEVA_WA_CORRECCIONES_MAX . '</h2>'
+            . '<p>Cada vez que corriges un borrador en vez de aprobarlo tal cual, tu texto queda acá y entra en las respuestas siguientes. Las más nuevas abajo; al llegar al tope se cae la más vieja.</p>'
+            . '<table class="widefat striped"><thead><tr><th>Cuándo</th><th>El cliente dijo</th><th>Iba a decir</th><th>Tú dijiste</th></tr></thead><tbody>';
+        foreach ($corr as $c) {
+            echo '<tr><td>' . esc_html(deckeva_wa_legible((int) $c['ts'])) . '</td><td>' . esc_html($c['cliente']) . '</td><td style="color:#666">' . esc_html($c['antes']) . '</td><td><b>' . esc_html($c['jp']) . '</b></td></tr>';
+        }
+        echo '</tbody></table>';
+    }
 
     if (function_exists('deckeva_wa_cotiza_pantalla')) deckeva_wa_cotiza_pantalla();
 

@@ -96,6 +96,57 @@ correo, en dos mensajes: el detalle y aparte sólo «ok D-XXXX».
 - Si la propuesta no parece castellano, a JP le llega sin texto y sin «ok»: se
   ve en wp-admin. «Nada en otros idiomas en mi WhatsApp».
 
+## Automático, y lo que no sabe se lo pregunta a JP (REGLA DEL DUEÑO · 6-oct-2026)
+
+> «Pon a Deckeva en modo automático, y lo que no sepa responder que me lo
+> pregunte por WhatsApp, así yo le voy contestando y él va aprendiendo y
+> respondiendo a clientes.»
+
+**El contestador quedó en automático.** Lo que ya sabe contestar sale solo, con
+la espera de siempre (5 a 40 min, de 8:00 a 20:00). Lo que no sabe sigue
+llegándole a JP por WhatsApp como `D-XXXX`:
+
+| Queda para JP | |
+|---|---|
+| `necesita_humano` | muelles flotantes, qué cubre la garantía, un reclamo, un plazo que no está escrito, dos respuestas distintas en el mismo chat |
+| suena a robot | `deckeva_wa_suena_a_robot()` |
+| no pasa las reglas | un importe, un guion largo, un texto largo |
+
+**Automático NO es «sale cualquier cosa», y eso lo cobra
+`.github/checks/whatsapp-auto.php` en CI**: si alguien saca una de esas tres
+condiciones del `$auto`, el chequeo se pone rojo. Tiene canario propio —se
+probó rompiéndolo— porque un chequeo que recorre un archivo puede dejar de
+encontrar sin dejar de pasar.
+
+### El cambio de modo fue una migración, no sólo un default
+
+Cambiar el default de `deckeva_wa_modo()` no alcanzaba: el formulario de
+wp-admin guarda **siempre** la clave `deckeva_wa_modo` al apretar «Guardar»,
+aunque nadie toque el selector, así que en la base ya decía «borrador». Un
+`add_action('init', …)` lo pone en automático **una vez** y deja la marca
+`deckeva_wa_auto_2026_10_06`. Después manda el selector otra vez: JP puede
+volver a borrador cuando quiera y esto no se lo pisa en la carga siguiente.
+
+### Lo que JP corrige, la IA lo aprende
+
+Cuando JP no aprueba el borrador tal cual sino que lo reescribe —«D-XXXX: su
+texto» desde el WhatsApp, o el textarea de wp-admin—, se guarda el trío **lo
+que preguntó el cliente · lo que iba a decir la IA · lo que mandó JP**, y entra
+en el prompt de las respuestas siguientes (`deckeva_wa_aprender()`,
+`deckeva_wa_correcciones_prompt()`). Aprobar tal cual no guarda nada: no hay
+nada que aprender.
+
+Se ven en wp-admin, bajo «Lo que aprendió de ti», porque lo que la IA usa para
+contestar tiene que poder leerlo una persona.
+
+> ⚠️ **Una corrección enseña a REDACTAR, no abre la puerta a decir un precio.**
+> Entra en el prompt y nada más: lo que sale sigue pasando por
+> `deckeva_wa_validar()` y por el detector de robot. Y tiene techo —las 20
+> últimas—, porque el prompt no puede crecer sin fin y una corrección de hace
+> tres meses vale menos que la de ayer. **Lo que se repite se escribe en
+> `deckeva_wa_sistema()`**, que es donde vive lo permanente y lo cobra el
+> chequeo; esto es la vía rápida mientras tanto.
+
 ## Garantía, vida útil y espesor (REGLA DEL DUEÑO)
 
 JP, 29-sep-2026: el piso tiene **6 mm** de espesor, **5 a 7 años** de vida
