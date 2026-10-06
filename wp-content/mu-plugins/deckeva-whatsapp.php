@@ -531,6 +531,26 @@ function deckeva_wa_un_chat($num) {
                 $p['estado'] = 'reemplazado'; deckeva_wa_anotar($chat, $p['id'] . ' reemplazado · el cliente volvió a escribir'); $activo = false;
             }
 
+            // En automático, un borrador SIN reparos no espera a nadie.
+            //
+            // El modo se mira al redactar, así que los borradores escritos
+            // mientras estaba en «borrador» se quedaban esperando una
+            // aprobación que ya no hace falta: al prender el automático el
+            // 6-oct había clientes de la noche anterior con su respuesta
+            // escrita y sin salir. Esto los suelta, y sólo a ellos: los tres
+            // reparos van guardados en el propio borrador, así que lo que
+            // necesita a JP lo sigue necesitando.
+            //
+            // Va después de los cortes de arriba a propósito: si el cliente
+            // volvió a escribir, si ya le contestaron o si pasaron 23 h, este
+            // borrador ya se marcó y no llega hasta acá.
+            if ($activo && ($p['estado'] ?? '') === 'borrador' && deckeva_wa_modo() === 'automatico'
+                && empty($p['necesita_humano']) && ($p['regla'] ?? '') === '') {
+                $p['estado'] = 'aprobado';
+                $p['aprobado_por'] = 'automático';
+                deckeva_wa_anotar($chat, $p['id'] . ' sale solo · modo automático, sin reparos que mirar');
+            }
+
             // ¿Hay que redactar?
             if (!is_array($p) || (int) $p['para_ts'] < $ultIn) {
                 if ($ahora - $ultIn < DECKEVA_WA_SILENCIO) break;
