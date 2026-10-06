@@ -44,6 +44,15 @@ if (preg_match('/\$auto = deckeva_wa_modo\(\) === .automatico.(.*?);\n/s', $src,
     $exigir(false, 'se encontró la condición de salida automática');
 }
 $exigir((bool) preg_match('/\$regla = deckeva_wa_suena_a_robot\(/', $src), 'lo que suena a robot sigue frenando el borrador');
+// Un borrador escrito mientras el modo era «borrador» se suelta en automático,
+// pero con los MISMOS tres reparos: si no, al prender el modo saldría también
+// lo que había quedado esperando a JP justamente por tener uno.
+if (preg_match("/=== 'borrador' && deckeva_wa_modo\(\) === 'automatico'(.*?)\) \{/s", $src, $m2)) {
+    $exigir(strpos($m2[1], "empty(\$p['necesita_humano'])") !== false, 'al soltar un borrador viejo se respeta necesita_humano');
+    $exigir(strpos($m2[1], "(\$p['regla'] ?? '') === ''") !== false, 'al soltar un borrador viejo se respeta la regla que lo frenó');
+} else {
+    $exigir(false, 'en automático, un borrador sin reparos no se queda esperando');
+}
 
 // 3 · aprende de las correcciones de JP, con techo
 $exigir(strpos($src, 'function deckeva_wa_aprender(') !== false, 'existe deckeva_wa_aprender()');
