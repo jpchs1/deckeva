@@ -127,6 +127,33 @@ aunque nadie toque el selector, así que en la base ya decía «borrador». Un
 `deckeva_wa_auto_2026_10_06`. Después manda el selector otra vez: JP puede
 volver a borrador cuando quiera y esto no se lo pisa en la carga siguiente.
 
+### Corregir sin reescribir · «Rehacer con mi indicación» (JP, 8-oct-2026)
+
+> «Yo sólo debería poner "Sí podemos, pero deben ser casas rodantes, motorhome
+> usadas ya no se puede" y la misma IA redactar nuevamente el mensaje con ese
+> input nuevo.»
+
+Cada borrador del panel tiene, además del textarea y «Aprobar», un campo
+**«O dile qué corregir»** con el botón **«Rehacer con mi indicación»**. JP
+escribe la corrección en una línea, la IA reescribe el mensaje al cliente con
+eso, y el borrador **sigue siendo borrador**: él lee el texto nuevo y recién
+ahí aprueba.
+
+| | |
+|---|---|
+| Rehacer **no manda** | no toca el estado · sólo cambia el texto |
+| El texto nuevo **se vuelve a validar** | `deckeva_wa_validar()` **y** `deckeva_wa_suena_a_robot()` · una indicación no es una puerta para que salga un precio |
+| Si el modelo falla | el borrador queda **exactamente** como estaba |
+| La indicación **se aprende** | `deckeva_wa_aprender()`, igual que una corrección escrita a mano |
+
+La indicación va en el **mensaje** y no en el prompt de sistema, a propósito:
+el sistema es lo que vale para todos los chats; esto es sobre éste. Y se le
+dice al modelo que **manda sobre lo que creía saber**, porque para eso la
+escribió JP.
+
+Lo cobra `.github/checks/whatsapp-auto.php`, con canario: sacando la
+revalidación, el chequeo sale rojo nombrando las dos.
+
 ### Lo que JP corrige, la IA lo aprende
 
 Cuando JP no aprueba el borrador tal cual sino que lo reescribe —«D-XXXX: su

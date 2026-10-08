@@ -886,7 +886,7 @@ function deckeva_wa_nota_cotizacion($chat) {
     return '';
 }
 
-function deckeva_wa_redactar($mensajes, $nota = '') {
+function deckeva_wa_redactar($mensajes, $nota = '', $indicacion = '') {
     $tz = new DateTimeZone('America/Santiago');
     $txt = '';
     foreach ($mensajes as $m) {
@@ -907,7 +907,15 @@ function deckeva_wa_redactar($mensajes, $nota = '') {
             'model' => DECKEVA_WA_MODELO, 'max_tokens' => 2000, 'fallbacks' => 'default',
             'output_config' => array('effort' => 'low', 'format' => array('type' => 'json_schema', 'schema' => $esquema)),
             'system' => deckeva_wa_sistema(),
-            'messages' => array(array('role' => 'user', 'content' => "<conversacion>\n" . $txt . '</conversacion>' . ($nota !== '' ? "\n<nota_del_equipo>" . $nota . '</nota_del_equipo>' : ''))),
+            // La indicación de JP (el botón «Rehacer» del panel) va en el MENSAJE
+            // y no en el sistema: el sistema es lo que vale para todos los chats,
+            // esto es sobre éste. Y pesa más que lo que la IA creía saber.
+            'messages' => array(array('role' => 'user', 'content' => "<conversacion>\n" . $txt . '</conversacion>'
+                . ($nota !== '' ? "\n<nota_del_equipo>" . $nota . '</nota_del_equipo>' : '')
+                . (trim((string) $indicacion) !== ''
+                    ? "\n\n<indicacion_de_juan_pablo>\n" . trim((string) $indicacion)
+                      . "\n</indicacion_de_juan_pablo>\n\nJuan Pablo leyó tu borrador y te dice esto. Reescribe la respuesta al cliente aplicándolo: su indicación es el dato correcto, aunque contradiga lo que creías saber. No la copies literal ni la menciones; dísela al cliente con tus palabras, en el tono de siempre."
+                    : ''))),
         )),
     ));
     if (is_wp_error($res)) return array('ok' => false, 'error' => $res->get_error_message());
@@ -1013,7 +1021,8 @@ add_action('admin_post_deckeva_wa', function () {
         $num = preg_replace('/\D+/', '', (string) ($_POST['numero'] ?? ''));
         $id = sanitize_text_field(wp_unslash($_POST['id'] ?? ''));
         $texto = trim((string) wp_unslash($_POST['texto'] ?? ''));
-        deckeva_wa_con_candado(function ($chats) use ($num, $id, $texto, $accion, &$msg) {
+        $indicacion = trim((string) wp_unslash($_POST['indicacion'] ?? ''));
+        deckeva_wa_con_candado(function ($chats) use ($num, $id, $texto, $indicacion, $accion, &$msg) {
             $chat = $chats[$num] ?? null;
             $p = is_array($chat) ? ($chat['pendiente'] ?? null) : null;
             // Se aprueba EL borrador que JP estaba mirando: si el cliente volvió
@@ -1026,6 +1035,26 @@ add_action('admin_post_deckeva_wa', function () {
                 $p['estado'] = 'descartado';
                 deckeva_wa_anotar($chat, $p['id'] . ' descartado');
                 $msg = 'Descartado · no sale nada.';
+            } elseif ($accion === 'rehacer') {
+                // JP no reescribe el mensaje: escribe QUÉ corregir y lo rehace la
+                // IA (JP, 8-oct-2026). Queda en borrador —él lee el nuevo y
+                // aprueba— y la indicación se aprende para las próximas.
+                if ($indicacion === '') { $msg = 'Escribe qué corregir y vuelve a apretar «Rehacer».'; return $chats; }
+                $r = deckeva_wa_redactar((array) $chat['mensajes'], deckeva_wa_nota_chat($chat), $indicacion);
+                if (!$r['ok'] || trim((string) $r['texto']) === '') {
+                    $msg = 'No se pudo rehacer' . ($r['ok'] ? ' (la IA no escribió nada)' : ': ' . $r['error']) . '. El borrador queda como estaba.';
+                    return $chats;
+                }
+                deckeva_wa_aprender($chat, (string) ($p['texto'] ?? ''), $indicacion);
+                if (!isset($p['texto_original'])) $p['texto_original'] = (string) $p['texto'];
+                $p['texto'] = trim((string) $r['texto']);
+                $p['indicacion'] = $indicacion;
+                $p['necesita_humano'] = !empty($r['necesita_humano']);
+                $p['motivo'] = (string) $r['motivo'];
+                $p['regla'] = deckeva_wa_validar($p['texto']);
+                if ($p['regla'] === '') $p['regla'] = deckeva_wa_suena_a_robot($p['texto']);
+                deckeva_wa_anotar($chat, $p['id'] . ' rehecho con la indicación de JP · «' . mb_substr($indicacion, 0, 80) . '»');
+                $msg = 'Listo, lo reescribí con tu indicación. Léelo y aprueba si va.';
             } elseif ($accion === 'aprobar') {
                 $v = deckeva_wa_validar($texto);
                 if ($v !== '') { $msg = 'No se aprobó: ' . $v . '.'; return $chats; }
@@ -1061,6 +1090,7 @@ function deckeva_wa_pantalla() {
         foreach (array_slice((array) $chat['mensajes'], -6) as $m) {
             echo '<p style="margin:4px 0"><span style="color:#666">' . ($m['dir'] === 'in' ? 'Cliente' : 'Deckeva') . ' ' . esc_html(deckeva_wa_legible($m['ts'])) . ':</span> ' . esc_html($m['texto']) . '</p>';
         }
+        if (!empty($p['indicacion'])) echo '<p style="color:#15803d">Rehecho con tu indicación: «' . esc_html($p['indicacion']) . '»</p>';
         if (!empty($p['necesita_humano'])) echo '<p style="color:#b45309">Necesita que lo mires: ' . esc_html($p['motivo']) . '</p>';
         if (!empty($p['regla'])) echo '<p style="color:#b45309">No pasa las reglas: ' . esc_html($p['regla']) . '</p>';
         echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
@@ -1068,7 +1098,12 @@ function deckeva_wa_pantalla() {
         echo '<input type="hidden" name="action" value="deckeva_wa"><input type="hidden" name="numero" value="' . esc_attr($num) . '"><input type="hidden" name="id" value="' . esc_attr($p['id']) . '">'
             . '<textarea name="texto" rows="4" style="width:100%">' . esc_textarea($p['texto']) . '</textarea>'
             . '<p><button class="button button-primary" name="accion" value="aprobar">Aprobar · sale ' . esc_html(deckeva_wa_legible(max((int) $p['en'], time()))) . '</button> '
-            . '<button class="button" name="accion" value="descartar">Descartar</button></p></form></div>';
+            . '<button class="button" name="accion" value="descartar">Descartar</button></p>'
+            // Lo que JP usa casi siempre: en vez de reescribir el mensaje entero,
+            // dice qué corregir y lo rehace la IA.
+            . '<p style="margin:12px 0 4px"><b>O dile qué corregir</b> y lo reescribe la IA:</p>'
+            . '<input name="indicacion" class="regular-text" style="width:100%" placeholder="Ej: el café claro con líneas negras sí lo tenemos en stock">'
+            . '<p><button class="button" name="accion" value="rehacer">Rehacer con mi indicación</button></p></form></div>';
     }
 
     echo '<h2>Últimos movimientos</h2><table class="widefat striped"><tbody>';

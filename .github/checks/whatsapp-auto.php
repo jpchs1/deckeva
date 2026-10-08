@@ -54,6 +54,26 @@ if (preg_match("/=== 'borrador' && deckeva_wa_modo\(\) === 'automatico'(.*?)\) \
     $exigir(false, 'en automático, un borrador sin reparos no se queda esperando');
 }
 
+// 2b · «Rehacer con mi indicación» (JP, 8-oct-2026): JP dice QUÉ corregir y la
+// IA reescribe. No puede convertirse en una puerta para que salga lo que no
+// pasa las reglas, y no manda: deja el borrador en borrador.
+if (preg_match('/elseif \(\$accion === .rehacer.\) \{(.*?)\} elseif/s', $src, $m3)) {
+    $rehacer = $m3[1];
+    $exigir(strpos($rehacer, '$p[\'estado\']') === false, 'rehacer NO aprueba ni manda: el borrador sigue en borrador');
+    $exigir(strpos($rehacer, 'deckeva_wa_validar($p[\'texto\'])') !== false, 'el texto rehecho se vuelve a validar');
+    $exigir(strpos($rehacer, 'deckeva_wa_suena_a_robot($p[\'texto\'])') !== false, 'y vuelve a pasar por el detector de robot');
+    $exigir(strpos($rehacer, 'deckeva_wa_aprender(') !== false, 'la indicación se aprende');
+    $exigir(strpos($rehacer, 'if ($indicacion === \'\')') !== false, 'sin indicación no se llama al modelo');
+} else {
+    $exigir(false, 'existe la rama «rehacer» en el panel');
+}
+$exigir(strpos($src, 'function deckeva_wa_redactar($mensajes, $nota = \'\', $indicacion = \'\')') !== false,
+    'el redactor recibe la indicación, y sin ella sigue igual');
+$exigir(strpos($src, '<indicacion_de_juan_pablo>') !== false && strpos($src, 'su indicación es el dato correcto') !== false,
+    'la indicación va marcada y pesa sobre lo que la IA creía saber');
+$exigir(strpos($src, 'name="indicacion"') !== false && strpos($src, 'value="rehacer"') !== false,
+    'el panel tiene el campo y el botón');
+
 // 3 · aprende de las correcciones de JP, con techo
 $exigir(strpos($src, 'function deckeva_wa_aprender(') !== false, 'existe deckeva_wa_aprender()');
 $exigir(substr_count($src, 'deckeva_wa_aprender(') >= 3, 'se aprende por los DOS caminos: el WhatsApp de JP y el textarea de wp-admin');
