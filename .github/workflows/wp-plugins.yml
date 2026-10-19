@@ -1,0 +1,127 @@
+name: WordPress de deckeva.cl · diagnóstico y plugins
+
+# Herramienta de emergencia por FTP (mismas credenciales que el deploy).
+#
+#   diagnosticar  Sólo lee: lista los plugins con su fecha de modificación y
+#                 busca los vendor/composer/platform_check.php que exigen una
+#                 versión de PHP mayor (lo que deja el sitio en error 500 con
+#                 «Composer detected issues in your platform»).
+#   desactivar    Renombra wp-content/plugins/<plugin> a <plugin>.desactivado.
+#                 WordPress deja de cargarlo y el sitio vuelve; sus ajustes en
+#                 la base de datos quedan intactos.
+#   reactivar     Deshace lo anterior.
+#
+# El caso (19-oct-2026): desde el 30-sep deckeva.cl respondía 500 en todo lo que
+# pasa por WordPress (cotizador de la home, /whatsapp-puerta, wp-admin) porque un
+# plugin se actualizó solo a una versión que pide PHP 8.3. El home es estático y
+# se veía bien, así que nadie lo notó: las cotizaciones de la web no llegaban.
+#
+# El repo es público y estos logs también: acá sólo se imprimen nombres de
+# carpetas y versiones de PHP, nunca credenciales ni contenido de archivos.
+
+on:
+  workflow_dispatch:
+    inputs:
+      accion:
+        description: "diagnosticar (sólo lee) · desactivar · reactivar"
+        required: true
+        default: diagnosticar
+        type: choice
+        options: [diagnosticar, desactivar, reactivar]
+      plugin:
+        description: "(desactivar/reactivar) carpeta del plugin en wp-content/plugins"
+        required: false
+        default: ""
+        type: string
+      dominio:
+        description: "Sitio"
+        required: true
+        default: deckeva.cl
+        type: choice
+        options: [deckeva.cl, deckeva.com]
+
+concurrency:
+  group: wp-plugins
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  wp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Ejecutar
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASS }}
+          FTP_BASE: ${{ vars.FTP_BASE }}
+          FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
+          ACCION: ${{ inputs.accion }}
+          PLUGIN: ${{ inputs.plugin }}
+          DOMINIO: ${{ inputs.dominio }}
+        run: |
+          set -euo pipefail
+          source .github/deploy/ftp.sh
+
+          WPC="${FTP_BASE:-}${DOMINIO}/wp-content"
+          PLUGINS="${WPC}/plugins"
+
+          estado_sitio() {
+            for u in "https://${DOMINIO}/wp-login.php" "https://${DOMINIO}/cotizador/"; do
+              codigo=$(curl -s -o /tmp/r.txt -w '%{http_code}' -A 'Mozilla/5.0 Chrome/128' "$u" || true)
+              echo "  ${codigo} ${u} $(grep -o -m1 'Composer detected issues' /tmp/r.txt || true)"
+            done
+          }
+
+          case "${ACCION}" in
+            diagnosticar)
+              echo "── Estado del sitio ──"; estado_sitio
+              echo
+              echo "── Plugins (más recientes primero) ──"
+              ftp_ejecutar "cls -l --sort=date '${PLUGINS}'" | head -60 || true
+              echo
+              echo "── Temas ──"
+              ftp_ejecutar "cls -l --sort=date '${WPC}/themes'" | head -20 || true
+              echo
+              echo "── Librerías Composer que exigen una versión de PHP ──"
+              mkdir -p /tmp/pc
+              for base in plugins themes mu-plugins; do
+                ftp_ejecutar "mirror --no-perms --parallel=8 -I platform_check.php '${WPC}/${base}' '/tmp/pc/${base}'" >/dev/null 2>&1 || true
+              done
+              encontrados=0
+              while IFS= read -r f; do
+                encontrados=$((encontrados + 1))
+                req=$(grep -o -m1 'PHP_VERSION_ID >= [0-9]*' "$f" | grep -o '[0-9]*$' || echo "?")
+                mayor=$((req / 10000)); menor=$(((req / 100) % 100))
+                rel="${f#/tmp/pc/}"
+                marca=""; [ "$req" != "?" ] && [ "$req" -ge 80300 ] && marca="   ⟵ EXIGE PHP ${mayor}.${menor}"
+                echo "  PHP >= ${mayor}.${menor}  ${rel%/vendor/composer/platform_check.php}${marca}"
+              done < <(find /tmp/pc -name platform_check.php | sort)
+              [ "$encontrados" -eq 0 ] && echo "  (ninguna)" || true
+              ;;
+
+            desactivar|reactivar)
+              if ! [[ "${PLUGIN}" =~ ^[A-Za-z0-9._-]+$ ]] || [[ "${PLUGIN}" == *..* ]]; then
+                echo "::error::Nombre de plugin inválido: '${PLUGIN}'"; exit 1
+              fi
+              if [ "${ACCION}" = "desactivar" ]; then
+                desde="${PLUGINS}/${PLUGIN}"; hacia="${PLUGINS}/${PLUGIN}.desactivado"
+              else
+                desde="${PLUGINS}/${PLUGIN}.desactivado"; hacia="${PLUGINS}/${PLUGIN}"
+              fi
+              echo "── Antes ──"; estado_sitio
+              ftp_ejecutar "cls -1 '${desde}'" >/dev/null 2>&1 || { echo "::error::No existe ${desde#${FTP_BASE:-}}"; exit 1; }
+              ftp_ejecutar "mv '${desde}' '${hacia}'"
+              echo "Renombrado: ${desde#${FTP_BASE:-}} → ${hacia#${FTP_BASE:-}}"
+              sleep 5
+              echo "── Después ──"; estado_sitio
+              ;;
+          esac
