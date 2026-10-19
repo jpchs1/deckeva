@@ -1,0 +1,60 @@
+name: Monitor · cotizador y WordPress en línea
+
+# Cada hora comprueba que lo que recibe clientes responde. Si algo falla, el
+# run queda en rojo y GitHub avisa por correo.
+#
+# Por qué existe (19-oct-2026): un plugin (Contact Form 7) se actualizó solo a
+# una versión que exige PHP 8.3 y dejó el WordPress de deckeva.cl en error 500.
+# El home es estático y se veía perfecto, así que nadie lo notó en casi tres
+# semanas: el cotizador de la home y la conexión de WhatsApp no funcionaban.
+#
+# No crea cotizaciones ni manda correos: el cotizador se prueba con la trampa
+# antispam (campo «website» lleno), que responde «Bot detected» sin registrar
+# nada. Esa respuesta prueba que WordPress y el endpoint están vivos.
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Comprobar
+        run: |
+          set -u
+          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/128 Safari/537.36 DeckevaMonitor'
+          fallos=0
+
+          revisar_get() {
+            local url="$1" codigo
+            codigo=$(curl -s -m 30 -A "$UA" -o /tmp/r.txt -w '%{http_code}' "$url" || echo 000)
+            if [ "$codigo" = "200" ]; then
+              echo "✓ ${codigo} ${url}"
+            else
+              echo "::error title=Caído: ${url}::Respondió ${codigo}. $(head -c 200 /tmp/r.txt | tr '\n' ' ')"
+              fallos=$((fallos + 1))
+            fi
+          }
+
+          revisar_get "https://deckeva.cl/wp-login.php"
+          revisar_get "https://deckeva.cl/cotizador/"
+          revisar_get "https://www.deckeva.com/wp-login.php"
+
+          # Cotizador de la home: la trampa antispam responde JSON sin registrar nada.
+          r=$(curl -s -m 30 -A "$UA" -H 'Origin: https://deckeva.cl' -X POST \
+                https://deckeva.cl/cotizador/enviar-international \
+                --data 'mode=email&website=monitor' || true)
+          if echo "$r" | grep -q -E 'Bot detected|Demasiados'; then
+            echo "✓ cotizador de la home responde"
+          else
+            echo "::error title=Cotizador de la home sin respuesta::$(echo "$r" | head -c 200 | tr '\n' ' ')"
+            fallos=$((fallos + 1))
+          fi
+
+          [ "$fallos" -eq 0 ] || exit 1
