@@ -353,6 +353,26 @@ cotización escrita, y correo).
   navy y borde dorado. En modo compacto pierde la línea en inglés (el título ya
   la trae), y medición e instalación incluidas cuentan como dato largo.
 
+## Si WordPress se cae, el home no lo muestra (incidente del 30-sep al 19-oct-2026)
+
+El home es estático: aunque WordPress esté en error 500, se ve perfecto. Lo
+que sí muere es todo lo que pasa por PHP: el cotizador de la home
+(`/cotizador/enviar-international`), la puerta de WhatsApp (`/whatsapp-puerta/*`)
+y wp-admin. Así se perdieron casi tres semanas de cotizaciones sin que nadie
+lo notara.
+
+La causa fue **Contact Form 7, que se actualizó solo** a una versión que exige
+PHP 8.3 («Composer detected issues in your platform … >= 8.3.0»). Se desactivó
+(no lo usa ninguna página pública). Mientras el hosting siga con PHP menor a 8.3,
+cualquier otro plugin puede repetirlo.
+
+- `.github/workflows/monitor-sitio.yml` revisa cada hora wp-admin y el
+  cotizador (con la trampa antispam, sin crear cotizaciones); si falla, el run
+  queda en rojo y GitHub avisa.
+- `.github/workflows/wp-plugins.yml` (manual, por FTP): `diagnosticar` lista
+  los plugins por fecha y las librerías que exigen un PHP mayor;
+  `desactivar`/`reactivar` renombran la carpeta de un plugin. Es reversible.
+
 ## Despliegue
 
 El hosting es **BanaHosting, plan compartido**: no tiene Git Version Control ni
