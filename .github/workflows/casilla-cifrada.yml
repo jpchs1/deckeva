@@ -1,0 +1,62 @@
+name: Casilla del hosting · correo cifrado (FTP)
+
+# Baja por FTP los correos que llegaron a una casilla del hosting en una ventana
+# corta (hasta 6 h) y los deja como artefacto CIFRADO con `age` para la clave
+# pública que se pasa al lanzarlo. Para leer un correo de contacto@deckeva.cl con
+# sus adjuntos (planos, fotos) desde una sesión de Claude: Gmail no baja adjuntos
+# y la casilla vive en el cPanel. Ver .github/deploy/casilla-cifrada.sh.
+#
+# El repo es público y sus artefactos también: sin la clave privada el paquete
+# no se puede abrir, y el log sólo dice cuántos correos son y cuánto pesa.
+# Sólo lee: no mueve ni borra nada de la casilla.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ventana:
+        description: "Hora de llegada, UTC: AAAA-MM-DDTHH:MM:SSZ/AAAA-MM-DDTHH:MM:SSZ (máx. 6 h)"
+        required: true
+        type: string
+      destinatario:
+        description: "Clave pública age (age1…) de quien va a abrir el paquete"
+        required: true
+        type: string
+      casilla:
+        description: "dominio/usuario"
+        required: true
+        default: deckeva.cl/contacto
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  casilla:
+    name: Bajar y cifrar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar lftp y age
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp age > /dev/null
+
+      - name: Bajar los correos de la ventana y cifrarlos
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASS }}
+          FTP_BASE: ${{ vars.FTP_BASE }}
+          FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
+          CASILLA: ${{ inputs.casilla }}
+          VENTANA: ${{ inputs.ventana }}
+          DESTINATARIO: ${{ inputs.destinatario }}
+          SALIDA: correos.tar.gz.age
+        run: bash .github/deploy/casilla-cifrada.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: correos-cifrados
+          path: correos.tar.gz.age
+          retention-days: 1
+          if-no-files-found: error

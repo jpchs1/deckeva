@@ -440,6 +440,17 @@ clientes.
 **El repo es público, y sus logs de Actions también.** Nada de datos de
 clientes en commits, PRs ni en lo que imprima un workflow.
 
+### Leer un correo de contacto@deckeva.cl con sus adjuntos
+
+El conector de Gmail lee el texto de un correo pero no baja sus adjuntos, y
+contacto@ vive en el cPanel. *Actions → Casilla del hosting · correo cifrado*
+(`casilla-cifrada.yml`) baja por FTP sólo los correos que llegaron en una
+ventana de hasta 6 h (`ventana`, UTC) y los deja como artefacto **cifrado con
+`age`** para la clave pública que se le pasa (`destinatario`). La sesión que lo
+lanza genera el par con `age-keygen`, baja el artefacto y lo abre con su clave
+privada. Ventana corta a propósito: que salga el correo que hace falta y no los
+de otros clientes. Caso: 19-oct-2026, 18 planos `.dwg` de un cliente para cotizar.
+
 Precedente (23/09/2026): Elementor se actualizó solo a la 4.3 y tumbó todo
 WordPress porque el Elementor Pro del sitio es la 3.12, de 2023. Lo sostiene
 `deckeva-compat-elementor.php`. Mientras Pro no se actualice, cada actualización
