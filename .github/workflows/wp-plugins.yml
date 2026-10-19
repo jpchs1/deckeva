@@ -9,7 +9,9 @@ name: WordPress de deckeva.cl · diagnóstico y plugins
 #   desactivar    Renombra wp-content/plugins/<plugin> a <plugin>.desactivado.
 #                 WordPress deja de cargarlo y el sitio vuelve; sus ajustes en
 #                 la base de datos quedan intactos.
-#   reactivar     Deshace lo anterior.
+#   reactivar     Devuelve la carpeta. OJO: WordPress no lo vuelve a activar
+#                 solo (al entrar a wp-admin/plugins.php ya lo sacó de los
+#                 activos); hay que activarlo desde wp-admin → Plugins.
 #
 # El caso (19-oct-2026): desde el 30-sep deckeva.cl respondía 500 en todo lo que
 # pasa por WordPress (cotizador de la home, /whatsapp-puerta, wp-admin) porque un
@@ -84,6 +86,8 @@ jobs:
           case "${ACCION}" in
             diagnosticar)
               echo "── Estado del sitio ──"; estado_sitio
+              # Sin acceso, un diagnóstico vacío se confundiría con «todo bien».
+              ftp_comprobar_acceso "${PLUGINS}" || { echo "::error::Sin acceso FTP a ${PLUGINS#${FTP_BASE:-}}: el diagnóstico no es válido."; exit 1; }
               echo
               echo "── Plugins (más recientes primero) ──"
               ftp_ejecutar "cls -l --sort=date '${PLUGINS}'" | head -60 || true
@@ -94,16 +98,25 @@ jobs:
               echo "── Librerías Composer que exigen una versión de PHP ──"
               mkdir -p /tmp/pc
               for base in plugins themes mu-plugins; do
-                ftp_ejecutar "mirror --no-perms --parallel=8 -I platform_check.php '${WPC}/${base}' '/tmp/pc/${base}'" >/dev/null 2>&1 || true
+                # themes o mu-plugins pueden no existir; plugins sí (ya se comprobó).
+                if ! ftp_ejecutar "mirror --no-perms --parallel=8 -I platform_check.php '${WPC}/${base}' '/tmp/pc/${base}'" >/tmp/mirror.log 2>&1; then
+                  if [ "${base}" = "plugins" ]; then
+                    echo "::error::No se pudo revisar ${base}:"; tail -3 /tmp/mirror.log; exit 1
+                  fi
+                  echo "  (no se pudo revisar ${base}; se omite)"
+                fi
               done
               encontrados=0
               while IFS= read -r f; do
                 encontrados=$((encontrados + 1))
-                req=$(grep -o -m1 'PHP_VERSION_ID >= [0-9]*' "$f" | grep -o '[0-9]*$' || echo "?")
+                req=$(grep -o -m1 'PHP_VERSION_ID >= [0-9]*' "$f" | grep -o '[0-9]*$' || true)
+                rel="${f#/tmp/pc/}"; rel="${rel%/vendor/composer/platform_check.php}"
+                if ! [[ "$req" =~ ^[0-9]+$ ]]; then
+                  echo "  (sin mínimo de PHP)  ${rel}"; continue
+                fi
                 mayor=$((req / 10000)); menor=$(((req / 100) % 100))
-                rel="${f#/tmp/pc/}"
-                marca=""; [ "$req" != "?" ] && [ "$req" -ge 80300 ] && marca="   ⟵ EXIGE PHP ${mayor}.${menor}"
-                echo "  PHP >= ${mayor}.${menor}  ${rel%/vendor/composer/platform_check.php}${marca}"
+                marca=""; [ "$req" -ge 80300 ] && marca="   ⟵ EXIGE PHP ${mayor}.${menor}"
+                echo "  PHP >= ${mayor}.${menor}  ${rel}${marca}"
               done < <(find /tmp/pc -name platform_check.php | sort)
               [ "$encontrados" -eq 0 ] && echo "  (ninguna)" || true
               ;;
@@ -123,5 +136,8 @@ jobs:
               echo "Renombrado: ${desde#${FTP_BASE:-}} → ${hacia#${FTP_BASE:-}}"
               sleep 5
               echo "── Después ──"; estado_sitio
+              if [ "${ACCION}" = "reactivar" ]; then
+                echo "::notice title=Falta activarlo en wp-admin::La carpeta volvió, pero WordPress no lo reactiva solo. Actívalo en https://${DOMINIO}/wp-admin/plugins.php"
+              fi
               ;;
           esac
