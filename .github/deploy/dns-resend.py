@@ -53,10 +53,14 @@ def llamar(host, funcion, params, metodo="GET", verificar=True):
     # Con token de API de cPanel (Seguridad → Manage API Tokens) si lo hay: se
     # revoca sin cambiar la clave. Si no, usuario y clave (los del FTP, que el
     # 27-oct-2026 resultaron ser de una subcuenta: cPanel respondió 401).
-    if os.environ.get("CPANEL_TOKEN"):
-        req.add_header("Authorization", f"cpanel {usuario}:{os.environ['CPANEL_TOKEN'].strip()}")
+    # Un token de API de cPanel tiene 32 caracteres; si CPANEL_TOKEN trae otra
+    # cosa (el 27-oct-2026 traía 12: era la clave de cPanel), se usa como clave.
+    token = os.environ.get("CPANEL_TOKEN", "").strip()
+    if len(token) == 32:
+        req.add_header("Authorization", f"cpanel {usuario}:{token}")
     else:
-        basica = base64.b64encode(f"{usuario}:{os.environ.get('CPANEL_PASS', '')}".encode()).decode()
+        clave = token or os.environ.get("CPANEL_PASS", "")
+        basica = base64.b64encode(f"{usuario}:{clave}".encode()).decode()
         req.add_header("Authorization", "Basic " + basica)
     ctx = ssl.create_default_context() if verificar else ssl._create_unverified_context()
     with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
@@ -75,7 +79,7 @@ def conectar():
     # Lo que se dice del usuario sin mostrarlo: el error más común es poner
     # un correo o el dominio en vez del nombre de usuario de cPanel.
     print(f"Usuario: {len(usuario)} caracteres, {'con' if '@' in usuario else 'sin'} @, "
-          f"{'con' if '.' in usuario else 'sin'} punto · token: {len(token.strip())} caracteres"
+          f"{'con' if '.' in usuario else 'sin'} punto · CPANEL_TOKEN: {len(token.strip())} caracteres ({'token' if len(token.strip()) == 32 else 'se usa como clave'})"
           f"{' (traía espacios o saltos de línea, se limpiaron)' if token != token.strip() or usuario != usuario.strip() else ''}")
     for host in dict.fromkeys(candidatos):
         for verificar in (True, False):
