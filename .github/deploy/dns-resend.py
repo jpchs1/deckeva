@@ -41,7 +41,9 @@ QUERIDOS = [
 
 
 def llamar(host, funcion, params, metodo="GET", verificar=True):
-    usuario = os.environ["CPANEL_USER"]
+    # strip(): al pegar un secreto en GitHub se cuela fácil un espacio o un salto
+    # de línea, y cPanel lo rechaza con un «Access denied» sin más pistas.
+    usuario = os.environ["CPANEL_USER"].strip()
     url = f"https://{host}:2083/execute/DNS/{funcion}"
     datos = urllib.parse.urlencode(params, doseq=True)
     if metodo == "GET":
@@ -52,7 +54,7 @@ def llamar(host, funcion, params, metodo="GET", verificar=True):
     # revoca sin cambiar la clave. Si no, usuario y clave (los del FTP, que el
     # 27-oct-2026 resultaron ser de una subcuenta: cPanel respondió 401).
     if os.environ.get("CPANEL_TOKEN"):
-        req.add_header("Authorization", f"cpanel {usuario}:{os.environ['CPANEL_TOKEN']}")
+        req.add_header("Authorization", f"cpanel {usuario}:{os.environ['CPANEL_TOKEN'].strip()}")
     else:
         basica = base64.b64encode(f"{usuario}:{os.environ.get('CPANEL_PASS', '')}".encode()).decode()
         req.add_header("Authorization", "Basic " + basica)
@@ -69,10 +71,12 @@ def conectar():
     """Prueba el host del FTP y el del servidor; devuelve (host, verificar)."""
     candidatos = [h for h in (os.environ.get("CPANEL_HOST", ""), ZONA, "single-4020.banahosting.com") if h]
     usuario = os.environ.get("CPANEL_USER", "")
+    token = os.environ.get("CPANEL_TOKEN", "")
     # Lo que se dice del usuario sin mostrarlo: el error más común es poner
     # un correo o el dominio en vez del nombre de usuario de cPanel.
     print(f"Usuario: {len(usuario)} caracteres, {'con' if '@' in usuario else 'sin'} @, "
-          f"{'con' if '.' in usuario else 'sin'} punto · token: {'sí' if os.environ.get('CPANEL_TOKEN') else 'no'}")
+          f"{'con' if '.' in usuario else 'sin'} punto · token: {len(token.strip())} caracteres"
+          f"{' (traía espacios o saltos de línea, se limpiaron)' if token != token.strip() or usuario != usuario.strip() else ''}")
     for host in dict.fromkeys(candidatos):
         for verificar in (True, False):
             try:
