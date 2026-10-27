@@ -40,15 +40,21 @@ QUERIDOS = [
 
 
 def llamar(host, funcion, params, metodo="GET", verificar=True):
-    usuario, clave = os.environ["CPANEL_USER"], os.environ["CPANEL_PASS"]
+    usuario = os.environ["CPANEL_USER"]
     url = f"https://{host}:2083/execute/DNS/{funcion}"
     datos = urllib.parse.urlencode(params, doseq=True)
     if metodo == "GET":
         req = urllib.request.Request(url + "?" + datos)
     else:
         req = urllib.request.Request(url, data=datos.encode(), method="POST")
-    token = base64.b64encode(f"{usuario}:{clave}".encode()).decode()
-    req.add_header("Authorization", "Basic " + token)
+    # Con token de API de cPanel (Seguridad → Manage API Tokens) si lo hay: se
+    # revoca sin cambiar la clave. Si no, usuario y clave (los del FTP, que el
+    # 27-oct-2026 resultaron ser de una subcuenta: cPanel respondió 401).
+    if os.environ.get("CPANEL_TOKEN"):
+        req.add_header("Authorization", f"cpanel {usuario}:{os.environ['CPANEL_TOKEN']}")
+    else:
+        basica = base64.b64encode(f"{usuario}:{os.environ.get('CPANEL_PASS', '')}".encode()).decode()
+        req.add_header("Authorization", "Basic " + basica)
     ctx = ssl.create_default_context() if verificar else ssl._create_unverified_context()
     with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
         res = json.load(r)
@@ -75,8 +81,9 @@ def conectar():
                     break
             except Exception as e:  # noqa: BLE001 — se prueba el siguiente
                 ultimo = f"{host}: {type(e).__name__}"
-    raise SystemExit(f"No se pudo entrar a la API de cPanel ({ultimo}). "
-                     "¿La cuenta del FTP es una subcuenta y no la principal del hosting?")
+    raise SystemExit(f"No se pudo entrar a la API de cPanel ({ultimo}). Falta el token: crear uno en "
+                     "cPanel → Seguridad → Manage API Tokens y guardarlo en los secretos CPANEL_USER "
+                     "(usuario de cPanel) y CPANEL_TOKEN.")
 
 
 def nombre(registro):
