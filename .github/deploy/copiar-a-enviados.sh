@@ -65,7 +65,9 @@ revisar() {  # carpeta → deja en $encontrado el archivo con ese Message-ID
     rm -f "${f}"
     ftp_ejecutar "get '${remoto}${carpeta}${nombre}' -o '${f}'" </dev/null >/dev/null 2>&1 || continue
     # Dovecot puede guardar el correo comprimido con gzip.
-    if (zcat -f "${f}" 2>/dev/null || cat "${f}") | head -c 200000 | grep -qiF "${mid}"; then
+    # Sólo las cabeceras (hasta la primera línea en blanco); 2>/dev/null porque
+    # grep -q corta la tubería apenas encuentra y zcat avisa «Broken pipe».
+    if zcat -f "${f}" 2>/dev/null | sed '/^\r\?$/q' | grep -qiF "${mid}"; then
       encontrado="${nombre}"
       cp "${f}" "${tmp}/correo"
       return 0
@@ -78,13 +80,22 @@ if revisar ".Sent/cur/"; then
   echo "El correo ya está en Enviados: no se hace nada."
   exit 0
 fi
-for carpeta in new/ cur/; do
-  revisar "${carpeta}" && break
+# La bandeja de entrada primero, y después las otras carpetas: un filtro de la
+# casilla puede haber movido la copia (el 27-oct-2026 no estaba en la entrada).
+carpetas=("new/" "cur/")
+while IFS= read -r c; do
+  case "${c}" in .|..|.Sent|.Trash|cur|new|tmp) continue ;; esac
+  carpetas+=("${c}/new/" "${c}/cur/")
+done < <(ftp_ejecutar "cls -1aF '${remoto}'" 2>/dev/null | grep '/$' | sed 's#/$##; s#.*/##')
+donde=""
+for carpeta in "${carpetas[@]}"; do
+  if revisar "${carpeta}"; then donde="${carpeta}"; break; fi
 done
 if [ -z "${encontrado}" ]; then
-  echo "No se encontró la copia del correo en la bandeja de entrada en esa ventana." >&2
+  echo "No se encontró la copia del correo en ninguna carpeta (${#carpetas[@]} revisadas) en esa ventana." >&2
   exit 1
 fi
+echo "La copia estaba en: ${donde%%/*}"
 
 # Mismo nombre base (con la hora de llegada) y bandera S de leído en Enviados.
 base_nombre="${encontrado%%:*}"
