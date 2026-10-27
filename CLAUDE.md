@@ -447,7 +447,11 @@ puede mandar desde **«Juan Pablo · Deckeva <contacto@deckeva.cl>»** con el
 conector de Resend. **Siempre con copia oculta a jpchs1@gmail.com** (JP,
 27-oct-2026: «con copia oculta a jpchs1@gmail.com siempre»), igual que lo que
 manda la web (`deckeva_copia_oculta_address()`). Los adjuntos van con
-`create-file-upload` y se pasan sólo como `{"fileId": …}`.
+`create-file-upload` y se pasan sólo como `{"fileId": …}`. Lo que sale por
+Resend **no queda en «Enviados»** de contacto@ (no pasa por el servidor de
+correo): `copiar-a-enviados.yml` toma la copia oculta que llegó a la bandeja de
+entrada de contacto@ (por su Message-ID) y la deja también en `.Sent`. Por eso
+el envío lleva copia oculta a contacto@deckeva.cl **y** a jpchs1@gmail.com.
 
 Los registros de Resend en el DNS los publicó `dns-resend.yml`, que entra al
 cPanel de BanaHosting (`single-4020.banahosting.com:2083`) con los secretos

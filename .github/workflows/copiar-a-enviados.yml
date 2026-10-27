@@ -1,0 +1,50 @@
+name: Casilla del hosting · copiar a Enviados (FTP)
+
+# Lo que sale por Resend no queda en «Enviados» de contacto@deckeva.cl porque no
+# pasa por el servidor de correo de BanaHosting. Este workflow toma la copia
+# oculta que sí llegó a la bandeja de entrada (por su Message-ID) y la deja
+# también en Enviados. No borra ni mueve nada. Ver
+# .github/deploy/copiar-a-enviados.sh.
+
+on:
+  workflow_dispatch:
+    inputs:
+      message_id:
+        description: "Message-ID del correo (el que da Resend), con o sin < >"
+        required: true
+        type: string
+      ventana:
+        description: "Hora de llegada de la copia, UTC: AAAA-MM-DDTHH:MM:SSZ/AAAA-MM-DDTHH:MM:SSZ (máx. 6 h)"
+        required: true
+        type: string
+      casilla:
+        description: "dominio/usuario"
+        required: true
+        default: deckeva.cl/contacto
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  copiar:
+    name: Copiar a Enviados
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp > /dev/null
+
+      - name: Copiar
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASS }}
+          FTP_BASE: ${{ vars.FTP_BASE }}
+          FTP_VERIFICAR_CERT: ${{ vars.FTP_VERIFICAR_CERT }}
+          CASILLA: ${{ inputs.casilla }}
+          MESSAGE_ID: ${{ inputs.message_id }}
+          VENTANA: ${{ inputs.ventana }}
+        run: bash .github/deploy/copiar-a-enviados.sh
