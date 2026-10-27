@@ -440,6 +440,25 @@ clientes.
 **El repo es público, y sus logs de Actions también.** Nada de datos de
 clientes en commits, PRs ni en lo que imprima un workflow.
 
+### Mandar un correo a un cliente a mano (Resend) · REGLA DEL DUEÑO
+
+deckeva.cl está verificado en Resend desde el 27-oct-2026: una sesión de Claude
+puede mandar desde **«Juan Pablo · Deckeva <contacto@deckeva.cl>»** con el
+conector de Resend. **Siempre con copia oculta a jpchs1@gmail.com** (JP,
+27-oct-2026: «con copia oculta a jpchs1@gmail.com siempre»), igual que lo que
+manda la web (`deckeva_copia_oculta_address()`). Los adjuntos van con
+`create-file-upload` y se pasan sólo como `{"fileId": …}`. Lo que sale por
+Resend **no queda en «Enviados»** de contacto@ (no pasa por el servidor de
+correo): `copiar-a-enviados.yml` toma la copia oculta que llegó a la bandeja de
+entrada de contacto@ (por su Message-ID) y la deja también en `.Sent`. Por eso
+el envío lleva copia oculta a contacto@deckeva.cl **y** a jpchs1@gmail.com.
+
+Los registros de Resend en el DNS los publicó `dns-resend.yml`, que entra al
+cPanel de BanaHosting (`single-4020.banahosting.com:2083`) con los secretos
+`CPANEL_USER` y `CPANEL_TOKEN`. BanaHosting rechaza la clave por HTTP Basic en
+la API: el script inicia sesión como el navegador. La cuenta del FTP es una
+subcuenta y no sirve para cPanel.
+
 ### Leer un correo de contacto@deckeva.cl con sus adjuntos
 
 El conector de Gmail lee el texto de un correo pero no baja sus adjuntos, y
