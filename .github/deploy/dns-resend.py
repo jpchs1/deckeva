@@ -21,6 +21,7 @@ El repo y sus logs son públicos: sólo se imprimen nombres, tipos y estados.
 import base64
 import json
 import os
+import re
 import ssl
 import sys
 import urllib.error
@@ -67,7 +68,11 @@ def llamar(host, funcion, params, metodo="GET", verificar=True):
 def conectar():
     """Prueba el host del FTP y el del servidor; devuelve (host, verificar)."""
     candidatos = [h for h in (os.environ.get("CPANEL_HOST", ""), ZONA, "single-4020.banahosting.com") if h]
-    ultimo = None
+    usuario = os.environ.get("CPANEL_USER", "")
+    # Lo que se dice del usuario sin mostrarlo: el error más común es poner
+    # un correo o el dominio en vez del nombre de usuario de cPanel.
+    print(f"Usuario: {len(usuario)} caracteres, {'con' if '@' in usuario else 'sin'} @, "
+          f"{'con' if '.' in usuario else 'sin'} punto · token: {'sí' if os.environ.get('CPANEL_TOKEN') else 'no'}")
     for host in dict.fromkeys(candidatos):
         for verificar in (True, False):
             try:
@@ -76,14 +81,26 @@ def conectar():
                     print(f"Aviso: el certificado de {host}:2083 no calza con el nombre; se sigue sin validarlo.")
                 return host, verificar
             except urllib.error.HTTPError as e:
-                ultimo = f"{host}: HTTP {e.code}"
+                print(f"{host}: HTTP {e.code} · {motivo(e)}")
                 if e.code in (401, 403):
                     break
             except Exception as e:  # noqa: BLE001 — se prueba el siguiente
-                ultimo = f"{host}: {type(e).__name__}"
-    raise SystemExit(f"No se pudo entrar a la API de cPanel ({ultimo}). Falta el token: crear uno en "
-                     "cPanel → Seguridad → Manage API Tokens y guardarlo en los secretos CPANEL_USER "
-                     "(usuario de cPanel) y CPANEL_TOKEN.")
+                print(f"{host}: {type(e).__name__} · {str(e)[:160]}")
+    raise SystemExit("No se pudo entrar a la API de cPanel con ningún host (arriba, el motivo de cada uno). "
+                     "Revisar los secretos CPANEL_USER (nombre de usuario de cPanel, no un correo) y "
+                     "CPANEL_TOKEN (cPanel → Seguridad → Manage API Tokens).")
+
+
+def motivo(error):
+    """El texto con que cPanel rechaza, sin el usuario ni el token si los repite."""
+    try:
+        cuerpo = error.read().decode(errors="replace")
+    except Exception:  # noqa: BLE001
+        return "sin detalle"
+    for secreto in (os.environ.get("CPANEL_USER"), os.environ.get("CPANEL_TOKEN"), os.environ.get("CPANEL_PASS")):
+        if secreto:
+            cuerpo = cuerpo.replace(secreto, "<oculto>")
+    return " ".join(re.sub(r"<[^>]+>", " ", cuerpo).split())[:240] or "sin detalle"
 
 
 def nombre(registro):
