@@ -40,30 +40,64 @@ QUERIDOS = [
 ]
 
 
-def llamar(host, funcion, params, metodo="GET", verificar=True):
+SESIONES = {}
+
+
+def sesion(host, verificar):
+    """Entra a cPanel como el navegador (usuario y clave en /login) y devuelve
+    (prefijo cpsess, cookie). Hace falta porque BanaHosting rechaza la clave
+    por HTTP Basic en la API (401 con la página de login, 27-oct-2026) aunque
+    la misma clave entre bien por la pantalla de login."""
+    clave = (host, verificar)
+    if clave not in SESIONES:
+        datos = urllib.parse.urlencode({"user": usuario_cpanel(), "pass": clave_cpanel()}).encode()
+        req = urllib.request.Request(f"https://{host}:2083/login/?login_only=1", data=datos, method="POST")
+        with urllib.request.urlopen(req, context=contexto(verificar), timeout=30) as r:
+            res = json.load(r)
+            cookies = "; ".join(c.split(";", 1)[0] for c in r.headers.get_all("Set-Cookie") or [])
+        if not res.get("status") or not res.get("security_token"):
+            texto = str(res.get("message") or "sin detalle")
+            for secreto in (usuario_cpanel(), clave_cpanel()):
+                texto = texto.replace(secreto, "<oculto>") if secreto else texto
+            raise RuntimeError(f"cPanel no aceptó el usuario y la clave: {texto[:160]}")
+        SESIONES[clave] = (res["security_token"], cookies)
+    return SESIONES[clave]
+
+
+def usuario_cpanel():
     # strip(): al pegar un secreto en GitHub se cuela fácil un espacio o un salto
     # de línea, y cPanel lo rechaza con un «Access denied» sin más pistas.
-    usuario = os.environ["CPANEL_USER"].strip()
-    url = f"https://{host}:2083/execute/DNS/{funcion}"
-    datos = urllib.parse.urlencode(params, doseq=True)
-    if metodo == "GET":
-        req = urllib.request.Request(url + "?" + datos)
-    else:
-        req = urllib.request.Request(url, data=datos.encode(), method="POST")
-    # Con token de API de cPanel (Seguridad → Manage API Tokens) si lo hay: se
-    # revoca sin cambiar la clave. Si no, usuario y clave (los del FTP, que el
-    # 27-oct-2026 resultaron ser de una subcuenta: cPanel respondió 401).
+    return os.environ["CPANEL_USER"].strip()
+
+
+def clave_cpanel():
     # Un token de API de cPanel tiene 32 caracteres; si CPANEL_TOKEN trae otra
-    # cosa (el 27-oct-2026 traía 12: era la clave de cPanel), se usa como clave.
+    # cosa (el 27-oct-2026 traía 12: era la clave de cPanel), es la clave.
+    token = os.environ.get("CPANEL_TOKEN", "").strip()
+    return token if len(token) != 32 and token else os.environ.get("CPANEL_PASS", "")
+
+
+def contexto(verificar):
+    return ssl.create_default_context() if verificar else ssl._create_unverified_context()
+
+
+def llamar(host, funcion, params, metodo="GET", verificar=True):
+    datos = urllib.parse.urlencode(params, doseq=True)
     token = os.environ.get("CPANEL_TOKEN", "").strip()
     if len(token) == 32:
-        req.add_header("Authorization", f"cpanel {usuario}:{token}")
+        # Token de API de cPanel (Seguridad → Manage API Tokens): se revoca sin
+        # cambiar la clave.
+        url = f"https://{host}:2083/execute/DNS/{funcion}"
+        cabeceras = {"Authorization": f"cpanel {usuario_cpanel()}:{token}"}
     else:
-        clave = token or os.environ.get("CPANEL_PASS", "")
-        basica = base64.b64encode(f"{usuario}:{clave}".encode()).decode()
-        req.add_header("Authorization", "Basic " + basica)
-    ctx = ssl.create_default_context() if verificar else ssl._create_unverified_context()
-    with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
+        cpsess, cookies = sesion(host, verificar)
+        url = f"https://{host}:2083{cpsess}/execute/DNS/{funcion}"
+        cabeceras = {"Cookie": cookies}
+    if metodo == "GET":
+        req = urllib.request.Request(url + "?" + datos, headers=cabeceras)
+    else:
+        req = urllib.request.Request(url, data=datos.encode(), method="POST", headers=cabeceras)
+    with urllib.request.urlopen(req, context=contexto(verificar), timeout=30) as r:
         res = json.load(r)
     if not res.get("status"):
         errores = "; ".join(res.get("errors") or ["sin detalle"])[:300]
