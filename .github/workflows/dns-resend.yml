@@ -1,0 +1,40 @@
+name: DNS de deckeva.cl · registros de Resend (cPanel)
+
+# Publica en el DNS de deckeva.cl los tres registros que pide Resend (DKIM
+# resend._domainkey y los CNAME send y rsend) para poder mandar correo desde
+# contacto@deckeva.cl. Usa la API de cPanel con la cuenta del hosting (la del
+# FTP). Sólo toca esos tres nombres. Ver .github/deploy/dns-resend.py.
+#
+#   ver      lista cómo están (no escribe nada)
+#   agregar  agrega los que falten
+#
+# El repo y sus logs son públicos: sólo se imprimen nombres, tipos y estados.
+
+on:
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "ver (sólo lee) · agregar"
+        required: true
+        default: ver
+        type: choice
+        options: [ver, agregar]
+
+permissions:
+  contents: read
+
+jobs:
+  dns:
+    name: Registros de Resend en deckeva.cl
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Revisar y, si se pide, agregar
+        env:
+          CPANEL_HOST: ${{ secrets.FTP_HOST }}
+          CPANEL_USER: ${{ secrets.FTP_USER }}
+          CPANEL_PASS: ${{ secrets.FTP_PASS }}
+          MODO: ${{ inputs.modo }}
+        run: python3 .github/deploy/dns-resend.py
