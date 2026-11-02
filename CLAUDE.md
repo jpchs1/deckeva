@@ -119,6 +119,38 @@ el valor guardado una vez y deja su marca, así que el selector de
 > fuera de la tabla del home, un color que no hay, un muelle flotante, un
 > descuento, un reclamo. No sale igual: espera.
 
+### Y hay un freno, porque el modo saca del medio al que miraba el PDF
+
+`deckeva_wa_cotiza_freno($chat, $listo)` devuelve el motivo por el que una
+cotización **no** puede salir sola, y con un motivo queda en `lista` para JP,
+con el PDF ya armado y a un clic de salir. Las dos razones salieron del review
+del #179 y las dos eran reales:
+
+| | |
+|---|---|
+| **La respuesta de ese chat espera a JP** (`necesita_humano` en `borrador` o `escalado`) | Pasa con un descuento, un reclamo, «que me llamen»: la respuesta quedaba en borrador y **la cotización salía igual**, con el precio de lista, mientras JP todavía estaba decidiendo. `no_cotizar` no lo cubría — `no_cotizar` sólo se pone cuando ADEMÁS no se le escribe nada |
+| **La embarcación está en Curacaví** (`deckeva_ubicacion_con_recargo`) | La toma de medidas y la instalación llevan un recargo por traslado que **el PDF no calcula**: la regla vive en el prompt y en ningún cálculo. Con borrador lo agregaba JP mirando el PDF; en automático no había quién |
+
+> ⚠️ **El monto del recargo no está en el código porque JP nunca lo dio.**
+> Inventarlo sería peor que no tenerlo. Cuando lo diga, entra en
+> `deckeva-tapiceria-valores.php` y en el PDF, y ese lugar sale del freno.
+>
+> Y una marca `necesita_humano` de una respuesta que JP **ya** aprobó, mandó o
+> descartó no frena nada: mirarla sola congelaría la cotización para siempre.
+> Por eso el freno sólo cuenta `borrador` y `escalado`.
+
+**Un pedido que no es un piso ya no se queda en silencio.** Antes,
+`tipo = otro` devolvía «no es un piso EVA · no se cotiza» **sin `jp`**, así que
+un pedido de tapicería con todos los datos no le llegaba a nadie. Ahora
+`deckeva_es_trabajo_a_medida()` —lista cerrada sobre lo que **escribió** el
+cliente— lo reconoce y se lo escala a JP para que lo cotice a medida. Un muelle
+y una carpa siguen por su camino de siempre.
+
+Las tres las cobra `.github/checks/trabajos-tapiceria.php` **corriendo las
+funciones de verdad**, no grepeando sus nombres: un grep dice que el freno está
+escrito, no que con un descuento pendiente la respuesta sea «no sale».
+Verificado al revés con cuatro roturas más.
+
 ## Deckeva no hace SÓLO el piso de goma EVA (REGLA DEL DUEÑO · 26-oct-2026)
 
 > «Si bien lo principal y lo que más hacemos son los pisos de goma eva

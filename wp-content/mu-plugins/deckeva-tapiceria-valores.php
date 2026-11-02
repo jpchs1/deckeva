@@ -138,3 +138,53 @@ function deckeva_trabajos_lista() {
  * (JP, 26-oct-2026). Vale para el piso y para la tapicería.
  */
 const DECKEVA_TAPICERIA_LOGO_INCLUIDO = true;
+
+/**
+ * ¿Lo que pidió el cliente es un trabajo a medida de Deckeva?
+ *
+ * Lista cerrada sobre lo que ESCRIBIÓ el cliente. Acá no hace falta una
+ * palabra de embarcación al lado —a diferencia del enrutador de Tourevo, que
+ * decide de qué negocio es un chat— porque este chat ya es de Deckeva: si
+ * alguien acá dice «pintar» o «restaurar», está hablando de su lancha.
+ *
+ * Sirve para una cosa sola: un pedido de estos NO lo cotiza la tabla de pisos,
+ * y antes se quedaba en silencio («no es un piso EVA · no se cotiza», sin
+ * avisarle a nadie). Desde el 26-oct-2026 estos trabajos SON de Deckeva, así
+ * que el pedido se le escala a JP para que lo cotice a medida. Misma regla que
+ * siempre: puede no reconocer uno, no puede reconocer mal.
+ */
+function deckeva_es_trabajo_a_medida($texto) {
+    $t = mb_strtolower((string) $texto);
+    $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'));
+    $re = '/\b(re)?tapiz\w*\b|\btapicer[ií]a\b|\bsunbrella\b|\btevinil\b|\bpranna\b'
+        . '|\bfibra\s+de\s+vidrio\b|\bgelcoat\b'
+        . '|\bdetailing\b|\bpulid\w*\b'
+        . '|\bpint(ar|ada|ado|arla|arlo|ura)\b'
+        . '|\brestaur\w*\b|\bpack\s+completo\b/u';
+    return (bool) preg_match($re, $t);
+}
+
+/**
+ * Lugares donde la toma de medidas y la instalación llevan un recargo por
+ * traslado que ESTE PDF no calcula (hoy Curacaví, la regla del prompt).
+ *
+ * Mientras el recargo no esté en el cálculo, una cotización de esos lugares no
+ * puede salir sola: le llegaría al cliente con los opcionales al valor
+ * estándar y sin el traslado. Con el modo borrador lo agregaba JP mirando el
+ * PDF; en automático no hay quién. Así que se retiene para él.
+ *
+ * El monto NO está acá a propósito: JP nunca lo dio. Inventarlo sería peor que
+ * no tenerlo — este archivo existe justamente para que un precio no viva en la
+ * cabeza de nadie.
+ */
+const DECKEVA_UBICACION_RECARGO = array('curacavi');
+
+function deckeva_ubicacion_con_recargo($ubicacion) {
+    $t = mb_strtolower((string) $ubicacion);
+    $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'));
+    $t = ' ' . preg_replace('/[^a-z0-9]+/', ' ', $t) . ' ';
+    foreach (DECKEVA_UBICACION_RECARGO as $lugar) {
+        if (strpos($t, ' ' . $lugar . ' ') !== false) return $lugar;
+    }
+    return '';
+}

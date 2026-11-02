@@ -202,7 +202,20 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     // con los tres datos de `deckeva_trabajos_datos()`. Acá no se cotiza, y tampoco
     // se le escala a JP. «No hacemos carpas, solo pisos de goma eva
     // antideslizante» (JP, 30-sep): lo contesta la IA en una frase (Codex, #159).
-    if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · no se cotiza');
+    if ($tipo === 'otro') {
+        // Si es uno de los trabajos que Deckeva SÍ hace, JP se entera: lo
+        // cotiza a medida con los tres datos. Antes esto se quedaba en
+        // silencio, así que un pedido de tapicería con todo entregado no
+        // llegaba a nadie — y es el pedido que JP quiere atender.
+        $aMedida = function_exists('deckeva_es_trabajo_a_medida') && deckeva_es_trabajo_a_medida($escrito);
+        return array(
+            'ok' => false,
+            'falta' => $aMedida
+                ? 'pidió un trabajo a medida (no es un piso de goma EVA) · lo cotiza JP'
+                : 'no es un piso EVA · no se cotiza',
+            'jp' => $aMedida,
+        );
+    }
     if ($tipo === 'moto' || $tipo === 'moto_normal' || $tipo === 'moto_grande') {
         // Con marca y modelo escritos por el cliente y el LOA encontrado, el
         // tamaño lo decide el largo (DECKEVA_MOTO_CORTE_M), aunque el cliente
@@ -277,7 +290,7 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     if ($ubicacion === '' || in_array(mb_strtolower($ubicacion), array('chile', 'no dice', 'no_dice'), true) || !deckeva_wa_cotiza_en_texto($ubicacion, $escrito, true)) {
         return array('ok' => false, 'falta' => 'dónde está la ' . ($clave === 'moto-normal' || $clave === 'moto-grande' ? 'moto de agua' : 'embarcación') . ' (ciudad, lago o marina)');
     }
-    return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave], 'pies' => $pies ?? null, 'fuente_largo' => $fuente ?? 'moto');
+    return array('ok' => true, 'clave' => $clave, 'precio' => $tabla[$clave], 'pies' => $pies ?? null, 'fuente_largo' => $fuente ?? 'moto', 'ubicacion' => $ubicacion);
 }
 
 /**
@@ -391,6 +404,42 @@ function deckeva_wa_cotiza_loa($marca, $modelo, $anio) {
     }
     update_option($clave, $out, false);
     return $out;
+}
+
+/**
+ * ¿Por qué esta cotización NO puede salir sola? Vacío = puede.
+ *
+ * El modo automático (por defecto desde el 26-oct-2026) saca del medio al
+ * único que miraba el PDF antes de que saliera, así que lo que JP corregía a
+ * mano tiene que estar acá. Dos cosas, las dos encontradas por el review del
+ * #179:
+ *
+ * 1. La RESPUESTA de ese chat está esperando a JP (`necesita_humano`). Pasa con
+ *    un descuento, un reclamo, «que me llamen»: la respuesta queda en borrador
+ *    y la cotización salía igual, con el precio de lista, mientras JP todavía
+ *    estaba decidiendo. `no_cotizar` no lo cubría: sólo se pone cuando ADEMÁS
+ *    no se le escribe nada.
+ * 2. La embarcación está en un lugar con recargo por traslado
+ *    (`deckeva_ubicacion_con_recargo`), que este PDF no calcula.
+ *
+ * No manda nada y no decide el modo: devuelve el motivo, y quien cotiza deja la
+ * cotización en «lista» con ese motivo para JP. O sea que el trabajo no se
+ * pierde — el PDF está armado y a un clic de salir.
+ */
+function deckeva_wa_cotiza_freno(array $chat, array $listo) {
+    // Sólo cuenta mientras la respuesta TODAVÍA lo espera. Una que JP ya
+    // aprobó, mandó o descartó sigue marcada `necesita_humano`, y mirar esa
+    // marca sola congelaría la cotización para siempre.
+    $p = $chat['pendiente'] ?? null;
+    if (is_array($p) && !empty($p['necesita_humano']) && in_array($p['estado'] ?? '', array('borrador', 'escalado'), true)) {
+        $m = trim((string) ($p['motivo'] ?? ''));
+        return 'la respuesta de este chat espera a JP' . ($m !== '' ? ' · ' . $m : '');
+    }
+    if (function_exists('deckeva_ubicacion_con_recargo')) {
+        $lugar = deckeva_ubicacion_con_recargo((string) ($listo['ubicacion'] ?? ''));
+        if ($lugar !== '') return 'la embarcación está en ' . ucfirst($lugar) . ' · la toma de medidas y la instalación llevan recargo por traslado y este PDF no lo calcula';
+    }
+    return '';
 }
 
 /** Los datos del PDF, con la misma forma que usa el cotizador de la home. */
@@ -527,10 +576,13 @@ function deckeva_wa_cotiza_pasada() {
                 if (!file_exists($dir . '/.htaccess')) @file_put_contents($dir . '/.htaccess', "Order deny,allow\nDeny from all\n<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n");
                 $archivo = 'DECKEVA-Cotizacion-' . $numero . '.pdf';
                 file_put_contents($dir . '/' . $archivo, $pdfBytes);
-                $auto = deckeva_wa_cotiza_modo() === 'automatico';
+                $freno = deckeva_wa_cotiza_freno($chat, $listo);
+                $auto = deckeva_wa_cotiza_modo() === 'automatico' && $freno === '';
                 $semilla = $num . '|' . $ultIn . '|cotiza';
                 $nueva = array(
                     'estado' => $auto ? 'aprobada' : 'lista', 'numero' => $numero, 'leido_hasta' => $ultIn,
+                    // Con un freno la cotización queda para JP y se dice por qué.
+                    'falta' => $freno, 'jp' => $freno !== '',
                     'pdf' => $dir . '/' . $archivo,
                     'datos' => $datos, 'creada' => time(),
                     'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),

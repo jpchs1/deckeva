@@ -110,6 +110,88 @@ $exigir(strpos($cot, "update_option('deckeva_wa_cotiza_modo', (\$_POST['modo'] ?
 $exigir((bool) preg_match("/'estado' => \\\$auto \? 'aprobada' : 'lista'/", $cot),
     'sólo una cotización completa (listo.ok) pasa a aprobada');
 
+// 9 · automático no manda una cotización que necesita a JP (review del #179)
+//
+// Las tres salieron del mismo sitio: el modo automático saca del medio al
+// único que miraba el PDF antes de que saliera. Se cobran corriendo
+// `deckeva_wa_cotiza_freno()` de verdad, no buscando su nombre en el archivo:
+// un grep dice que la función está escrita, no que con un descuento pendiente
+// la respuesta sea «no sale».
+// Stubs de WordPress: el módulo registra un hook al cargarse y acá no hay WP.
+// Son los mínimos para poder correr la función de verdad en vez de grepearla.
+if (!function_exists('add_action')) { function add_action() { return true; } }
+if (!function_exists('get_option')) { function get_option($k, $d = false) { return $d; } }
+if (!function_exists('update_option')) { function update_option() { return true; } }
+if (!function_exists('remove_accents')) { function remove_accents($t) { return strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n')); } }
+require __DIR__ . '/../../wp-content/mu-plugins/deckeva-whatsapp-cotiza.php';
+$exigir(function_exists('deckeva_wa_cotiza_freno'), 'CANARIO · existe el freno');
+if (function_exists('deckeva_wa_cotiza_freno')) {
+    $listo = array('ok' => true, 'clave' => '20', 'precio' => 1000000, 'ubicacion' => 'Lago Rapel');
+    $sinNada = array('mensajes' => array());
+    $exigir(deckeva_wa_cotiza_freno($sinNada, $listo) === '', 'un chat sin reparos no tiene freno');
+
+    // a) la respuesta espera a JP (un descuento, un reclamo, «que me llamen»)
+    foreach (array('borrador', 'escalado') as $est) {
+        $chat = array('pendiente' => array('estado' => $est, 'necesita_humano' => true, 'motivo' => 'pidió descuento'));
+        $f = deckeva_wa_cotiza_freno($chat, $listo);
+        $exigir($f !== '', "con la respuesta en {$est} esperando a JP, la cotización no sale sola");
+        $exigir(strpos($f, 'descuento') !== false, "…y el motivo lo dice ({$est})");
+    }
+    // …pero una que JP ya resolvió no congela la cotización para siempre
+    foreach (array('aprobado', 'enviado', 'descartado', 'superado', 'vencido') as $est) {
+        $chat = array('pendiente' => array('estado' => $est, 'necesita_humano' => true, 'motivo' => 'pidió descuento'));
+        $exigir(deckeva_wa_cotiza_freno($chat, $listo) === '', "una respuesta ya {$est} NO frena la cotización");
+    }
+    // una respuesta normal en borrador (sin necesita_humano) tampoco frena
+    $exigir(deckeva_wa_cotiza_freno(array('pendiente' => array('estado' => 'borrador', 'necesita_humano' => false)), $listo) === '',
+        'un borrador sin reparos no frena la cotización');
+
+    // b) un lugar con recargo por traslado que el PDF no calcula
+    foreach (array('Curacaví', 'curacavi', 'Lago Rapel, Curacaví') as $u) {
+        $f = deckeva_wa_cotiza_freno($sinNada, array('ok' => true, 'ubicacion' => $u));
+        $exigir($f !== '' && stripos($f, 'recargo') !== false, "una embarcación en «{$u}» no sale sola: falta el recargo");
+    }
+    $exigir(deckeva_wa_cotiza_freno($sinNada, array('ok' => true, 'ubicacion' => 'Algarrobo')) === '',
+        'un lugar sin recargo sí sale solo');
+    $exigir(deckeva_wa_cotiza_freno($sinNada, array('ok' => true, 'ubicacion' => 'Puerto Varas')) === '',
+        'y otro tampoco se marca de más');
+    $exigir(count(DECKEVA_UBICACION_RECARGO) >= 1, 'hay al menos un lugar con recargo declarado');
+
+    // c) la ubicación tiene que llegarle al freno, o no puede mirarla
+    $cot = (string) file_get_contents(__DIR__ . '/../../wp-content/mu-plugins/deckeva-whatsapp-cotiza.php');
+    $exigir(strpos($cot, "'ubicacion' => \$ubicacion") !== false, 'deckeva_wa_cotiza_listo devuelve la ubicación');
+    $exigir((bool) preg_match('/\$freno = deckeva_wa_cotiza_freno\(\$chat, \$listo\);\s*\n\s*\$auto = deckeva_wa_cotiza_modo\(\) === .automatico. && \$freno === ..;/', $cot),
+        'el freno se mide ANTES de aprobar, no después');
+    $exigir(strpos($cot, "'falta' => \$freno, 'jp' => \$freno !== ''") !== false, 'con freno, la cotización queda para JP con el motivo');
+}
+
+// 10 · un trabajo a medida se le escala a JP (review del #179)
+//
+// Antes, un pedido que no era un piso se quedaba «no se cotiza» sin avisarle a
+// nadie. Con la tapicería, la fibra, el detailing, el pintado y las
+// restauraciones adentro del negocio, ese silencio es un cliente perdido.
+$exigir(function_exists('deckeva_es_trabajo_a_medida'), 'CANARIO · existe el reconocedor de trabajos a medida');
+if (function_exists('deckeva_es_trabajo_a_medida')) {
+    foreach (array(
+        'Me gustaría retapizar la lancha',
+        'Quiero tapicería nueva, en Sunbrella',
+        'Hay que reparar la fibra de vidrio',
+        'Me interesa un detailing',
+        'Quiero pintar la lancha',
+        'Necesito restaurarla completa',
+        'Me das el pack completo?',
+    ) as $q) $exigir(deckeva_es_trabajo_a_medida($q), "«{$q}» es un trabajo a medida de Deckeva");
+    foreach (array(
+        'Quiero un piso de goma EVA para mi lancha de 20 pies',
+        'Me interesa un muelle flotante',
+        'Hacen carpas?',
+    ) as $q) $exigir(!deckeva_es_trabajo_a_medida($q), "«{$q}» NO es un trabajo a medida");
+    $exigir((bool) preg_match('/\$aMedida = function_exists\(.deckeva_es_trabajo_a_medida.\) && deckeva_es_trabajo_a_medida\(\$escrito\);/', $cot ?? (string) file_get_contents(__DIR__ . '/../../wp-content/mu-plugins/deckeva-whatsapp-cotiza.php')),
+        'se mira lo que ESCRIBIÓ el cliente, no lo que dedujo Claude');
+    $exigir(strpos((string) file_get_contents(__DIR__ . '/../../wp-content/mu-plugins/deckeva-whatsapp-cotiza.php'), "'jp' => \$aMedida,") !== false,
+        'y con eso el pedido le llega a JP');
+}
+
 if ($mal) {
     echo "::error::{$mal} reparo(s). El contestador puede estar diciéndole a un cliente que no hacemos algo que sí hacemos.\n";
     exit(1);
