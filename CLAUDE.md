@@ -119,6 +119,25 @@ el valor guardado una vez y deja su marca, así que el selector de
 > fuera de la tabla del home, un color que no hay, un muelle flotante, un
 > descuento, un reclamo. No sale igual: espera.
 
+### Cambiar el default no mueve las que ya estaban esperando
+
+`pasada()` manda sólo lo que está `aprobada`, y una cotización `lista` sin un
+mensaje nuevo del cliente cae en `if (!$nuevo) continue`. O sea que el cambio
+de default, solo, dejaba el correo «Revisar y enviar» que lo motivó pidiendo
+el clic para siempre — justo lo contrario de lo que JP pidió. Lo marcó Codex
+en el #179.
+
+El bloque **0b** de `deckeva_wa_cotiza_pasada()` las suelta, con los mismos
+frenos y nada más: tiene que estar `lista`, ser de las reglas vigentes
+(`$vigente`), no haber quedado para JP por un motivo (`jp`), el modo en
+automático, y el freno vacío. Es el mismo gesto que el flujo de las respuestas
+ya hacía con un borrador escrito cuando el modo era borrador.
+
+La ubicación para el freno sale del registro (se guarda al armar la
+cotización); en una vieja que no la guardó, de **lo que escribió el cliente**
+— de más y no de menos: si la palabra aparece en el chat, se retiene. Y la
+promoción va con candado: si alguien la movió mientras tanto, no se pisa.
+
 ### Y hay un freno, porque el modo saca del medio al que miraba el PDF
 
 `deckeva_wa_cotiza_freno($chat, $listo)` devuelve el motivo por el que una

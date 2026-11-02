@@ -522,6 +522,35 @@ function deckeva_wa_cotiza_pasada() {
             continue;
         }
 
+        // 0b · Las que YA estaban esperando el clic de JP se sueltan.
+        //
+        // Cambiar el default no las mueve: `pasada()` manda sólo lo `aprobada`,
+        // y una `lista` sin un mensaje nuevo del cliente cae en el
+        // `if (!$nuevo) continue` de más abajo — así que seguiría pidiendo el
+        // clic para siempre, que es EXACTAMENTE lo que JP pidió que dejara de
+        // pasar («mejor por qué no llega y envía las cotizaciones»). Lo marcó
+        // Codex en el #179, y es el mismo gesto que ya hace el flujo de las
+        // respuestas con un borrador escrito cuando el modo era borrador.
+        //
+        // Con los mismos frenos, y nada más: una armada con las reglas de antes
+        // (`$vigente`) no se suelta, y una que quedó para JP por un motivo
+        // (`jp`) tampoco. La ubicación sale del registro; en una vieja que no la
+        // guardó, de lo que escribió el cliente — de más, no de menos: si la
+        // palabra aparece en el chat, se retiene.
+        if (is_array($c) && ($c['estado'] ?? '') === 'lista' && $vigente && empty($c['jp'])
+            && deckeva_wa_cotiza_modo() === 'automatico'
+            && deckeva_wa_cotiza_freno($chat, array('ubicacion' => (string) ($c['ubicacion'] ?? $escrito))) === '') {
+            deckeva_wa_con_candado(function ($chats) use ($num) {
+                if (($chats[$num]['cotizacion']['estado'] ?? '') !== 'lista') return $chats;
+                $chats[$num]['cotizacion']['estado'] = 'aprobada';
+                $chats[$num]['cotizacion']['aprobada_por'] = 'automático';
+                deckeva_wa_anotar($chats[$num], 'cotización ' . ($chats[$num]['cotizacion']['numero'] ?? '') . ' aprobada · modo automático');
+                return $chats;
+            });
+            $chat = deckeva_wa_chats()[$num] ?? $chat;
+            $c = $chat['cotizacion'] ?? $c;
+        }
+
         // 1 · Mandar lo aprobado, a su hora · sólo si no escribió nada después.
         if (is_array($c) && ($c['estado'] ?? '') === 'aprobada' && !$nuevo) {
             if (time() >= (int) $c['en'] && deckeva_wa_habil(time()) && deckeva_wa_cotiza_cupo()) deckeva_wa_cotiza_enviar($num);
@@ -583,6 +612,9 @@ function deckeva_wa_cotiza_pasada() {
                     'estado' => $auto ? 'aprobada' : 'lista', 'numero' => $numero, 'leido_hasta' => $ultIn,
                     // Con un freno la cotización queda para JP y se dice por qué.
                     'falta' => $freno, 'jp' => $freno !== '',
+                    // Para que el freno la pueda volver a mirar sin otra lectura
+                    // de Claude cuando se promueve una «lista» (bloque 0b).
+                    'ubicacion' => (string) ($listo['ubicacion'] ?? ''),
                     'pdf' => $dir . '/' . $archivo,
                     'datos' => $datos, 'creada' => time(),
                     'en' => deckeva_wa_en_horario($ultIn + deckeva_wa_demora($semilla), $semilla),

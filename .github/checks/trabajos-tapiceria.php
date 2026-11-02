@@ -192,6 +192,28 @@ if (function_exists('deckeva_es_trabajo_a_medida')) {
         'y con eso el pedido le llega a JP');
 }
 
+// 11 · las cotizaciones que YA esperaban el clic de JP se sueltan (Codex, #179)
+//
+// Es el punto del cambio: si una `lista` se queda `lista`, el correo «Revisar
+// y enviar» que lo motivó sigue pidiendo el clic para siempre. Esto sí se
+// cobra por el texto del archivo, y no corriendo nada: la promoción vive
+// dentro del recorrido de los chats y moverla a su propia función para poder
+// llamarla acá sería cambiar el código para que el test exista. La DECISIÓN
+// —el freno— sí se corre, arriba, que es la parte que puede equivocarse.
+$trozos = array(
+    '$c[\'estado\'] ?? \'\') === \'lista\' && $vigente && empty($c[\'jp\'])'
+        => 'una cotización ya en «lista» se promueve, y sólo si es vigente y no quedó para JP',
+    'deckeva_wa_cotiza_freno($chat, array(\'ubicacion\' => (string) ($c[\'ubicacion\'] ?? $escrito))) === \'\''
+        => 'al promoverla se le pasa el MISMO freno, con la ubicación guardada o lo que escribió el cliente',
+    '$chats[$num][\'cotizacion\'][\'aprobada_por\'] = \'automático\';'
+        => 'y queda anotado que la aprobó el modo automático',
+    '\'ubicacion\' => (string) ($listo[\'ubicacion\'] ?? \'\')'
+        => 'la ubicación se guarda en el registro, así que el freno no necesita otra lectura de Claude',
+    'if (($chats[$num][\'cotizacion\'][\'estado\'] ?? \'\') !== \'lista\') return $chats;'
+        => 'la promoción va con candado: si alguien la movió mientras tanto, no se pisa',
+);
+foreach ($trozos as $trozo => $que) $exigir(strpos($cot, $trozo) !== false, $que);
+
 if ($mal) {
     echo "::error::{$mal} reparo(s). El contestador puede estar diciéndole a un cliente que no hacemos algo que sí hacemos.\n";
     exit(1);
