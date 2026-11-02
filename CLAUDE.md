@@ -96,6 +96,145 @@ correo, en dos mensajes: el detalle y aparte sólo «ok D-XXXX».
 - Si la propuesta no parece castellano, a JP le llega sin texto y sin «ok»: se
   ve en wp-admin. «Nada en otros idiomas en mi WhatsApp».
 
+## Las cotizaciones también salen solas (REGLA DEL DUEÑO · 26-oct-2026)
+
+> «¿Por qué me pide estas autorizaciones? Mejor por qué no llega y envía las
+> cotizaciones, porque la verdad no tengo tiempo de revisar de momento. Prefiero
+> que trabajes de manera autónoma e independiente.»
+
+Lo dijo mirando el correo **«Cotización DCK-WA-… lista · Revisar y enviar»** de
+José Miguel. Ese correo no era un error: las **respuestas** estaban en
+automático desde el 6-oct, pero las **cotizaciones** seguían en `borrador`, que
+era su valor por defecto, así que cada una le pedía un clic.
+
+`deckeva_wa_cotiza_modo()` arranca ahora en **automático**, con el mismo patrón
+de una sola vez que las respuestas (`deckeva_wa_cotiza_auto_2026_10_26`): cambia
+el valor guardado una vez y deja su marca, así que el selector de
+**Ajustes → WhatsApp Deckeva → Cotizaciones** vuelve a mandar y si JP elige
+«borrador» queda.
+
+> ⚠️ **Automático no es «sale cualquier cosa».** Una cotización sólo pasa a
+> `aprobada` si `deckeva_wa_cotiza_listo()` tiene **todos** los datos
+> obligatorios y el PDF se generó. Lo que queda para JP sigue quedando: un largo
+> fuera de la tabla del home, un color que no hay, un muelle flotante, un
+> descuento, un reclamo. No sale igual: espera.
+
+### Cambiar el default no mueve las que ya estaban esperando
+
+`pasada()` manda sólo lo que está `aprobada`, y una cotización `lista` sin un
+mensaje nuevo del cliente cae en `if (!$nuevo) continue`. O sea que el cambio
+de default, solo, dejaba el correo «Revisar y enviar» que lo motivó pidiendo
+el clic para siempre — justo lo contrario de lo que JP pidió. Lo marcó Codex
+en el #179.
+
+El bloque **0b** de `deckeva_wa_cotiza_pasada()` las suelta, con los mismos
+frenos y nada más: tiene que estar `lista`, ser de las reglas vigentes
+(`$vigente`), no haber quedado para JP por un motivo (`jp`), el modo en
+automático, y el freno vacío. Es el mismo gesto que el flujo de las respuestas
+ya hacía con un borrador escrito cuando el modo era borrador.
+
+La ubicación para el freno sale del registro (se guarda al armar la
+cotización); en una vieja que no la guardó, de **lo que escribió el cliente**
+— de más y no de menos: si la palabra aparece en el chat, se retiene. Y la
+promoción va con candado: si alguien la movió mientras tanto, no se pisa.
+
+### Y hay un freno, porque el modo saca del medio al que miraba el PDF
+
+`deckeva_wa_cotiza_freno($chat, $listo)` devuelve el motivo por el que una
+cotización **no** puede salir sola, y con un motivo queda en `lista` para JP,
+con el PDF ya armado y a un clic de salir. Las dos razones salieron del review
+del #179 y las dos eran reales:
+
+| | |
+|---|---|
+| **La respuesta de ese chat espera a JP** (`necesita_humano` en `borrador` o `escalado`) | Pasa con un descuento, un reclamo, «que me llamen»: la respuesta quedaba en borrador y **la cotización salía igual**, con el precio de lista, mientras JP todavía estaba decidiendo. `no_cotizar` no lo cubría — `no_cotizar` sólo se pone cuando ADEMÁS no se le escribe nada |
+| **La embarcación está en Curacaví** (`deckeva_ubicacion_con_recargo`) | La toma de medidas y la instalación llevan un recargo por traslado que **el PDF no calcula**: la regla vive en el prompt y en ningún cálculo. Con borrador lo agregaba JP mirando el PDF; en automático no había quién |
+
+> ⚠️ **El monto del recargo no está en el código porque JP nunca lo dio.**
+> Inventarlo sería peor que no tenerlo. Cuando lo diga, entra en
+> `deckeva-tapiceria-valores.php` y en el PDF, y ese lugar sale del freno.
+>
+> Y una marca `necesita_humano` de una respuesta que JP **ya** aprobó, mandó o
+> descartó no frena nada: mirarla sola congelaría la cotización para siempre.
+> Por eso el freno sólo cuenta `borrador` y `escalado`.
+
+**Un pedido que no es un piso ya no se queda en silencio.** Antes,
+`tipo = otro` devolvía «no es un piso EVA · no se cotiza» **sin `jp`**, así que
+un pedido de tapicería con todos los datos no le llegaba a nadie. Ahora
+`deckeva_es_trabajo_a_medida()` —lista cerrada sobre lo que **escribió** el
+cliente— lo reconoce y se lo escala a JP para que lo cotice a medida. Un muelle
+y una carpa siguen por su camino de siempre.
+
+Las tres las cobra `.github/checks/trabajos-tapiceria.php` **corriendo las
+funciones de verdad**, no grepeando sus nombres: un grep dice que el freno está
+escrito, no que con un descuento pendiente la respuesta sea «no sale».
+Verificado al revés con cuatro roturas más.
+
+## Deckeva no hace SÓLO el piso de goma EVA (REGLA DEL DUEÑO · 26-oct-2026)
+
+> «Si bien lo principal y lo que más hacemos son los pisos de goma eva
+> antideslizante, también realizamos todo tipo de trabajos en embarcaciones.
+> Trabajamos en Tapicería, Fibra de Vidrio, Detailing Náutico, Pintado,
+> restauraciones completas para dejar como nuevo y todo de vuelta al 100%. Y en
+> algunos otros casos también revisamos la parte eléctrica y mecánica según el
+> caso.»
+
+**El caso.** El 26-oct a las 9:15 José Miguel escribió «me gustaría retapizar
+esa lancha, cambiarle el piso, y ponerle un toldo alto», con la lancha comprada
+y llegando a Santiago. A las 9:23 el contestador le respondió **«tapiz y toldo
+no los trabajamos»** — y el tapiz sí se trabaja. No lo inventó el modelo: salía
+de una línea del prompt («Deckeva hace SÓLO pisos de goma EVA antideslizante. No
+hace carpas, toldos, lonas, tapicería ni pintura»). Le dijimos que no a un
+cliente que estaba pidiendo dos servicios que Deckeva vende.
+
+Se arregló en **dos** lugares, y hacían falta los dos:
+
+| | |
+|---|---|
+| `deckeva_wa_sistema()` | lo que Deckeva hace, los tres datos obligatorios, y que el logo va incluido también en la tapicería |
+| la nota del equipo cuando el pedido no es un piso (`deckeva-whatsapp.php`, el `falta` «no es un piso EVA») | decía «dile que hace sólo pisos de goma EVA». Ahora dice que sí lo hacemos, que se cotiza a medida, y que le pida los tres datos |
+
+### Los tres datos, siempre
+
+> «Todo se cotiza a medida según la realidad de cada embarcación, siempre para
+> poder cotizar es necesario saber: ubicación de la embarcación; marca, modelo y
+> año; fotos y videos actuales. Con estos datos ya podemos entregar un valor.»
+
+Viven en `deckeva_trabajos_datos()`. Sin los tres no hay valor, y eso vale para
+todo lo que no sea el piso. El cotizador automático **no** cubre esos trabajos:
+lee la tabla de pisos del home y nada más.
+
+### El tarifario de Tapicería Náutica
+
+`wp-content/mu-plugins/deckeva-tapiceria-valores.php`, con los valores de JP:
+tapizado completo de 18 pies en **Sunbrella $1.500.000 · Pranna $1.300.000 ·
+Tevinil Náutico $1.100.000**, **+$90.000 por cada pie que sube** y **−$60.000
+por cada pie que baja**, de 14 a 30 pies. El logo de la marca va incluido, para
+mantener la originalidad del diseño.
+
+> ⚠️ **Los valores son NETOS: el IVA (19%) se suma aparte** (JP, 26-oct-2026).
+> El cotizador del home muestra el piso con el IVA dentro del total, así que un
+> valor de tapicería puesto al lado de uno de piso sin decir que es neto son dos
+> números que no se pueden comparar. Lo que se le dice al cliente es el total
+> con IVA, con el neto y el IVA desglosados.
+>
+> ⚠️ **Y el tarifario NO autoriza al contestador a escribir un monto.**
+> `deckeva_wa_validar()` sigue bloqueando cualquier texto con un importe, y eso
+> no se toca: el tarifario existe para armar la cotización y para que JP
+> conteste. La regla del dueño es explícita — el valor se entrega **con** los
+> tres datos, no antes.
+
+**Los toldos quedan sin decidir.** JP nombró tapicería, fibra de vidrio,
+detailing, pintado, restauraciones, pack completo y la revisión eléctrica y
+mecánica; **no** nombró toldos, y este cliente pidió uno. Un toldo no se promete
+ni se niega: queda `necesita_humano`.
+
+Lo cobra **`.github/checks/trabajos-tapiceria.php`** (en CI): que el prompt no
+vuelva a negar lo que sí hacemos, que pida los tres datos, que la regla del
+importe siga en pie, y que el tarifario calcule lo que dijo JP. Con canario —un
+prompt que no se pudo leer es rojo, porque vacío no significa limpio— y
+verificado al revés con cuatro roturas inyectadas.
+
 ## Automático, y lo que no sabe se lo pregunta a JP (REGLA DEL DUEÑO · 6-oct-2026)
 
 > «Pon a Deckeva en modo automático, y lo que no sepa responder que me lo

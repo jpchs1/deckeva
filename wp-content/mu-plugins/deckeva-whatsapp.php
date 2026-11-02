@@ -773,7 +773,11 @@ function deckeva_wa_sistema() {
         . "- Si la embarcación está en Curacaví, la toma de medidas y la instalación llevan un recargo por traslado que va en la cotización formal. Nunca digas el monto en el chat.\n"
         . "- El logo de la marca de la embarcación (por ejemplo Cobalt o Sea Ray) se puede grabar en el piso sin costo extra: va incluido. Si el cliente lo pide, dile que sí y anótalo para la cotización.\n"
         . "- Muelles flotantes: nunca des precio ni ofrezcas cotizarlos. Dile que lo revisas personalmente y le escribes, y marca necesita_humano.\n"
-        . "- Deckeva hace SÓLO pisos de goma EVA antideslizante. No hace carpas, toldos, lonas, tapicería ni pintura. Si el cliente pide otra cosa, díselo claro y amable en una frase y, si calza, ofrécele el piso para esa misma embarcación. No lo marques necesita_humano por eso.\n"
+        . "- Deckeva NO hace sólo el piso (JP, 26-oct-2026). El piso de goma EVA antideslizante es lo principal y lo que más hacemos, pero también trabajamos tapicería náutica (Sunbrella, Pranna o Tevinil Náutico), fibra de vidrio, detailing náutico, pintado de la embarcación, restauraciones completas para dejarla como nueva y de vuelta al 100%, pack completo, y en algunos casos revisamos la parte eléctrica y la mecánica. NUNCA le contestes a un cliente que fabricamos únicamente el piso, ni que la tapicería, la pintura o el detailing queden fuera: sí los hacemos.\n"
+        . "- Esos trabajos se cotizan A MEDIDA, según la realidad de cada embarcación, y para poder cotizar hacen falta tres datos, siempre: dónde está la embarcación (ciudad, marina o lugar); marca, modelo y año, para saber exactamente qué embarcación es; y fotos y videos actuales, para ver qué es lo que hay que hacer. Si el cliente pide uno de esos trabajos, dile en una frase que sí lo hacemos y pídele los tres juntos. Con esos datos se le entrega el valor.\n"
+        . "- El valor de esos trabajos NO lo escribes tú en el chat, igual que con el piso: va en la cotización. Si pregunta cuánto cuesta, dile que con la ubicación, la marca, el modelo, el año y las fotos se lo pasamos.\n"
+        . "- El logo de la marca de la embarcación va incluido también en la tapicería, para mantener la originalidad del diseño. Si el cliente pregunta, dile que sí, sin costo extra.\n"
+        . "- Lo que NO está en esa lista (carpas, toldos, lonas) no lo prometas y tampoco lo niegues: dile que lo revisas y le confirmas, y marca necesita_humano.\n"
         . "- La cotización formal le llega en PDF por acá mismo, por WhatsApp, y también a su correo. También la puede sacar solo en el cotizador de deckeva.cl.\n"
             . "- Si pregunta dónde conviene tener la embarcación para la toma de medidas y la instalación, o duda entre dos lugares: si tiene la posibilidad de traerla a Santiago, es lo ideal, porque ahí la trabajamos de forma más rápida. Díselo así, sin obligarlo: si no puede, se coordina donde esté.\n"
         . "- El piso: espesor de 6 mm y vida útil de 5 a 7 años. La garantía es de 1 año, al costo: dilo siempre así, con «al costo». Si pregunta qué cubre la garantía o qué significa al costo, dile que lo revisas y le confirmas, y marca necesita_humano.\n"
@@ -879,8 +883,14 @@ function deckeva_wa_nota_cotizacion($chat) {
         case 'enviada': return 'La cotización formal ' . $c['numero'] . ' ya se le mandó (' . deckeva_wa_legible((int) $c['enviada_ts']) . ')' . (!empty($c['wa_ts']) ? ' en PDF por este WhatsApp y a su correo' : ' a su correo') . '. No digas el monto.';
         case 'lista': case 'aprobada': return 'Su cotización formal ya está armada y le llega en breve en PDF por este WhatsApp y a su correo. No digas el monto.';
         case 'incompleta':
-            // Pidió algo que no es un piso EVA: no le falta un dato, no se cotiza.
-            if (strpos((string) ($c['falta'] ?? ''), 'no es un piso EVA') === 0) return 'Lo que pidió no es un piso EVA: no se cotiza. Dile en una frase que Deckeva hace sólo pisos de goma EVA.';
+            // Pidió algo que no es un piso EVA: no le falta un dato, y el
+            // cotizador automático (que lee la tabla de pisos del home) no lo
+            // cubre. Eso NO quiere decir que no lo hagamos: desde el 26-oct-2026
+            // Deckeva también hace tapicería, fibra de vidrio, detailing,
+            // pintado y restauraciones. La nota se lo dice al redactor, porque
+            // antes negaba todo lo demás y así se le contestó a un cliente
+            // que el tapiz no lo trabajábamos.
+            if (strpos((string) ($c['falta'] ?? ''), 'no es un piso EVA') === 0) return 'Lo que pidió no es un piso de goma EVA, así que la cotización automática no lo cubre. Si es un trabajo que Deckeva sí hace (tapicería náutica, fibra de vidrio, detailing, pintado, restauración, pack completo), dile en una frase que sí lo hacemos, que se cotiza a medida, y pídele los tres datos: dónde está la embarcación, la marca, el modelo y el año, y fotos y videos actuales. No le digas que no lo trabajamos y no le des ningún valor.';
             return ($c['falta'] ?? '') !== '' ? 'Para su cotización formal falta: ' . $c['falta'] . '.' : '';
     }
     return '';
