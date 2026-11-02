@@ -19,10 +19,23 @@
  * número entero de pies, «otro», precios fuera de la tabla, descuentos, reclamos.
  *
  * Modo (Ajustes → WhatsApp Deckeva → Cotizaciones):
- * - borrador (por defecto): la cotización se arma y se le manda a JP con el PDF;
- *   sale al cliente cuando JP aprieta «Enviar».
- * - automático: sale sola, 5 a 40 minutos después del último mensaje del cliente,
- *   de 8:00 a 20:00. Lo prende JP, no el código.
+ * - automático (POR DEFECTO desde el 26-oct-2026): sale sola, 5 a 40 minutos
+ *   después del último mensaje del cliente, de 8:00 a 20:00.
+ * - borrador: la cotización se arma y se le manda a JP con el PDF; sale al
+ *   cliente cuando JP aprieta «Enviar».
+ *
+ * Era borrador hasta el 26-oct-2026, y por eso a JP le llegaba un correo
+ * «Revisar y enviar» por cada cotización. Lo cambió él: «mejor por qué no
+ * llega y envía las cotizaciones mejor, porque la verdad no tengo tiempo de
+ * revisar de momento. Prefiero que trabajes de manera autónoma e
+ * independiente». Es el mismo cambio que las respuestas ya habían tenido el
+ * 6-oct, y con los mismos frenos: lo que queda para JP (un largo fuera de la
+ * tabla, un color que no hay, un muelle flotante, un descuento, un reclamo) NO
+ * se cotiza solo — no sale igual, queda esperando. Automático es «lo que ya
+ * sabe cotizar no te espera», no «sale cualquier cosa».
+ *
+ * El selector de wp-admin sigue mandando: si JP vuelve a «borrador», se guarda
+ * y esto lee eso.
  *
  * El repo es público: acá no hay ningún dato de cliente. Todo vive en la opción
  * deckeva_wa_chats, en el servidor.
@@ -34,8 +47,26 @@ if (!defined('ABSPATH')) {
 
 function deckeva_wa_cotiza_modo() {
     if (defined('DECKEVA_WA_COTIZA_MODO')) return DECKEVA_WA_COTIZA_MODO === 'automatico' ? 'automatico' : 'borrador';
-    return get_option('deckeva_wa_cotiza_modo', 'borrador') === 'automatico' ? 'automatico' : 'borrador';
+    return get_option('deckeva_wa_cotiza_modo', 'automatico') === 'borrador' ? 'borrador' : 'automatico';
 }
+
+/**
+ * El cambio a automático, una sola vez (JP, 26-oct-2026).
+ *
+ * Cambiar el default no alcanza: el formulario de wp-admin guarda SIEMPRE la
+ * clave `deckeva_wa_cotiza_modo` al apretar «Guardar» (incluso si nadie tocó
+ * el selector), así que en la base ya puede decir «borrador» y el default no
+ * se mira. Esto lo pone en automático una vez y deja la marca; después el
+ * selector vuelve a mandar y JP puede volver a borrador cuando quiera, sin que
+ * esto se lo pise en la carga siguiente. Es el mismo patrón que
+ * `deckeva_wa_auto_2026_10_06` para las respuestas, y por el mismo motivo.
+ */
+add_action('init', function () {
+    if (defined('DECKEVA_WA_COTIZA_MODO')) return;                // una constante manda sobre todo
+    if (get_option('deckeva_wa_cotiza_auto_2026_10_26') === 'listo') return;
+    update_option('deckeva_wa_cotiza_auto_2026_10_26', 'listo', false);
+    if (get_option('deckeva_wa_cotiza_modo', '') !== 'automatico') update_option('deckeva_wa_cotiza_modo', 'automatico', false);
+});
 
 /**
  * La tabla de precios del home publicado: array('14' => 658337, …, 'moto-normal' => …).
@@ -95,7 +126,7 @@ function deckeva_wa_cotiza_leer($mensajes) {
     $sistema = "Te paso lo que escribió un cliente de Deckeva (pisos de goma EVA para embarcaciones) por WhatsApp. "
         . "Devuelve SOLO lo que el cliente escribió, sin deducir nada. Si un dato no está escrito, déjalo vacío.\n"
         . "- largo: el largo en pies TAL COMO LO ESCRIBIÓ el cliente (\"19\", \"22,4\", \"21 pies\"). Nunca lo deduzcas del modelo (una Sea Ray 185 NO es un dato de largo). Si dio metros, déjalo vacío.\n"
-        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto si es moto de agua; moto_normal o moto_grande sólo si además el cliente dijo el tamaño; otro si pide algo que no es un piso EVA (una carpa, tapiz); no_dice si no se sabe.\n"
+        . "- tipo: lancha si habla de lancha/bote/yate/embarcación/pontón; moto si es moto de agua; moto_normal o moto_grande sólo si además el cliente dijo el tamaño; otro si pide algo que el cotizador de pisos no cubre (un tapizado, fibra de vidrio, detailing, pintado, una restauración, una carpa o un toldo) — varios de ésos SÍ los hace Deckeva, pero se cotizan a medida y no con esta tabla; no_dice si no se sabe.\n"
         . "- email: exacto, como lo escribió.\n"
         . "- color: el que eligió, tal como lo escribió (en stock hay café claro y gris claro, con o sin líneas negras; si pidió otro, escríbelo igual).\n"
         . "- anio: el año de la embarcación tal como lo escribió (\"2019\", \"98\").\n"
@@ -165,7 +196,10 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     if (trim((string) ($d['nombre'] ?? '')) === '') return array('ok' => false, 'falta' => 'el nombre');
     if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
     $tipo = (string) ($d['tipo'] ?? '');
-    // Algo que no es un piso EVA (una carpa, un tapiz): no se cotiza, y tampoco
+    // Algo que no es un piso EVA: esta tabla no lo cotiza. Ojo, eso no es «no
+    // lo hacemos» — la tapicería, la fibra, el detailing, el pintado y las
+    // restauraciones SÍ son de Deckeva (JP, 26-oct-2026) y se cotizan a medida
+    // con los tres datos de `deckeva_trabajos_datos()`. Acá no se cotiza, y tampoco
     // se le escala a JP. «No hacemos carpas, solo pisos de goma eva
     // antideslizante» (JP, 30-sep): lo contesta la IA en una frase (Codex, #159).
     if ($tipo === 'otro') return array('ok' => false, 'falta' => 'no es un piso EVA · no se cotiza');

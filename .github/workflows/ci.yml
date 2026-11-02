@@ -66,3 +66,6 @@ jobs:
 
       - name: El contestador queda en automático y lo que no sabe sigue yendo a JP
         run: php .github/checks/whatsapp-auto.php
+
+      - name: Deckeva no dice «sólo pisos» y el tarifario de tapicería es el de JP
+        run: php .github/checks/trabajos-tapiceria.php
