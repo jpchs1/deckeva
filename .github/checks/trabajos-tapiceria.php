@@ -180,11 +180,17 @@ if (function_exists('deckeva_es_trabajo_a_medida')) {
         'Quiero pintar la lancha',
         'Necesito restaurarla completa',
         'Me das el pack completo?',
+        'Quiero la restauración completa',
+        'La dejan restaurada como nueva?',
     ) as $q) $exigir(deckeva_es_trabajo_a_medida($q), "«{$q}» es un trabajo a medida de Deckeva");
     foreach (array(
         'Quiero un piso de goma EVA para mi lancha de 20 pies',
         'Me interesa un muelle flotante',
         'Hacen carpas?',
+        // «restaur\w*» casaba «restaurante» (bot de review sobre el gemelo
+        // de esta lista en Tourevo): una pregunta no es un pedido de trabajo.
+        'Hay algún restaurante cerca del club?',
+        'Me recomiendas restaurantes en la marina?',
     ) as $q) $exigir(!deckeva_es_trabajo_a_medida($q), "«{$q}» NO es un trabajo a medida");
     $exigir((bool) preg_match('/\$aMedida = function_exists\(.deckeva_es_trabajo_a_medida.\) && deckeva_es_trabajo_a_medida\(\$escrito\);/', $cot ?? (string) file_get_contents(__DIR__ . '/../../wp-content/mu-plugins/deckeva-whatsapp-cotiza.php')),
         'se mira lo que ESCRIBIÓ el cliente, no lo que dedujo Claude');

@@ -160,7 +160,11 @@ function deckeva_es_trabajo_a_medida($texto) {
         . '|\bfibra\s+de\s+vidrio\b|\bgelcoat\b'
         . '|\bdetailing\b|\bpulid\w*\b'
         . '|\bpint(ar|ada|ado|arla|arlo|ura)\b'
-        . '|\brestaur\w*\b|\bpack\s+completo\b/u';
+        // Las formas de restaurar, UNA POR UNA: «restaur\w*» casa «restaurante»,
+        // y un «¿hay un restaurante cerca?» no es un pedido de trabajo. Lo marcó
+        // un bot de review sobre el gemelo de esta lista en Tourevo.
+        . '|\brestaura(?:r|rla|rlo|rlas|rlos|ci[oó]n|ciones|da|do|das|dos)\b'
+        . '|\bpack\s+completo\b/u';
     return (bool) preg_match($re, $t);
 }
 
