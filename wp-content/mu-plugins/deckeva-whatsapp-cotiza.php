@@ -196,6 +196,26 @@ function deckeva_wa_cotiza_listo(array $d, array $mensajes, array $tabla, $loa =
     if (trim((string) ($d['nombre'] ?? '')) === '') return array('ok' => false, 'falta' => 'el nombre');
     if (empty($tabla)) return array('ok' => false, 'falta' => 'la tabla de precios del home (no se pudo leer)', 'jp' => true);
     $tipo = (string) ($d['tipo'] ?? '');
+
+    // SÓLO UNA PARTE (la plataforma de nado, la popa, la zona de los esquís).
+    //
+    // Va ANTES de mirar el tipo, y ahí está toda la gracia: el cliente nombra
+    // su lancha, así que Claude le pone `tipo = lancha` y esta función seguiría
+    // de largo hasta cotizarlo con la tabla del PISO COMPLETO. A los 20 pies
+    // eso son $1.051.823 netos contra los $525.000 de la plataforma, y con las
+    // cotizaciones en automático ese PDF con el valor del doble sale solo. Lo
+    // marcó el review del #180.
+    //
+    // No se cotiza acá y SÍ se le escala a JP, que desde el 3-nov-2026 tiene
+    // el tarifario de la plataforma por pies para ponerle precio.
+    if (function_exists('deckeva_es_parte_suelta') && deckeva_es_parte_suelta($escrito)) {
+        return array(
+            'ok' => false,
+            'falta' => 'pidió sólo una parte (plataforma de nado, popa o zona de esquís) · la cotiza JP con su tarifario',
+            'jp' => true,
+        );
+    }
+
     // Algo que no es un piso EVA: esta tabla no lo cotiza. Ojo, eso no es «no
     // lo hacemos» — la tapicería, la fibra, el detailing, el pintado y las
     // restauraciones SÍ son de Deckeva (JP, 26-oct-2026) y se cotizan a medida

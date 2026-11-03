@@ -69,3 +69,6 @@ jobs:
 
       - name: Deckeva no dice «sólo pisos» y el tarifario de tapicería es el de JP
         run: php .github/checks/trabajos-tapiceria.php
+
+      - name: El tarifario de la plataforma de nado es el de JP
+        run: php .github/checks/plataforma-nado.php

@@ -204,6 +204,101 @@ Viven en `deckeva_trabajos_datos()`. Sin los tres no hay valor, y eso vale para
 todo lo que no sea el piso. El cotizador automático **no** cubre esos trabajos:
 lee la tabla de pisos del home y nada más.
 
+### El tarifario de la plataforma de nado (REGLA DEL DUEÑO · 3-nov-2026)
+
+> «¿Tienes tarifario de las plataformas de nado? Si no lo tienes ármate uno
+> desde $450.000 + IVA hasta $650.000 + IVA según los tamaños que tenemos en
+> el tarifario por pies. Así cuando te pregunten puedas responder los valores
+> de las plataformas de nado.»
+
+El prompt ya ofrecía hacer **sólo una parte** (la plataforma de nado, la popa,
+la zona de los esquís) desde siempre, y ese producto **no tenía ni un número**:
+el valor salía a mano, una vez por cliente, así que dos lanchas del mismo
+largo podían recibir dos precios distintos sin que nadie lo viera.
+
+`wp-content/mu-plugins/deckeva-plataforma-nado-valores.php`: los mismos largos
+que el piso (**14 a 30 pies**, los del `<select id="sizeSelect">` del home),
+repartidos **linealmente** entre los dos extremos de JP — **$450.000 neto a los
+14 pies, $650.000 a los 30, $12.500 por pie**.
+
+| pies | neto | con IVA | | pies | neto | con IVA |
+|---:|---:|---:|---|---:|---:|---:|
+| 14 | 450.000 | 535.500 | | 23 | 562.500 | 669.375 |
+| 15 | 462.500 | 550.375 | | 24 | 575.000 | 684.250 |
+| 16 | 475.000 | 565.250 | | 25 | 587.500 | 699.125 |
+| 17 | 487.500 | 580.125 | | 26 | 600.000 | 714.000 |
+| 18 | 500.000 | 595.000 | | 27 | 612.500 | 728.875 |
+| 19 | 512.500 | 609.875 | | 28 | 625.000 | 743.750 |
+| 20 | 525.000 | 624.750 | | 29 | 637.500 | 758.625 |
+| 21 | 537.500 | 639.625 | | 30 | 650.000 | 773.500 |
+| 22 | 550.000 | 654.500 | | | | |
+
+**Por qué lineal y no siguiendo la curva del piso.** El piso de 14 a 30 se
+multiplica por 3,3 (658.337 → 2.185.378); el rango que dio JP se multiplica por
+1,44. Son dos curvas distintas, y repartir el rango de un producto sobre la
+forma del otro sería inventar algo que él no dijo. Lineal deja los dos extremos
+exactos en sus números y cada celda en un múltiplo redondo de 12.500.
+
+> ⚠️ **Los valores son NETOS: el IVA (19%) se suma aparte**, igual que en
+> tapicería y que en lo que JP escribe por WhatsApp («$460.000 + IVA»). Y el
+> tarifario **no autoriza al contestador a escribir un monto**:
+> `deckeva_wa_validar()` sigue bloqueando cualquier importe. Lo que sí cambió en
+> el prompt es que la plataforma **se cotiza por pies como el piso**: con el
+> largo alcanza, y las fotos de la popa suman pero no la frenan.
+>
+> ⚠️ **Una moto de agua no tiene plataforma de nado**, así que `moto-normal` y
+> `moto-grande` no existen en este tarifario.
+
+Lo cobra `.github/checks/plataforma-nado.php`: los dos extremos exactos, el paso
+sin centavos, el IVA aparte, nada fuera de 14–30, y —lo que lo ata a la fuente
+de verdad— **los mismos largos que el tarifario del piso del home publicado**,
+así que el día que el home agregue un largo esto lo dice en vez de dejar una
+lancha con piso y sin plataforma. Con canario y verificado al revés con cinco
+roturas.
+
+#### Pedir sólo una parte NO se cotiza con la tabla del piso
+
+Lo marcó el review del #180, y era el agujero caro de este cambio. El cliente
+nombra su lancha, así que Claude le pone `tipo = lancha`, y
+`deckeva_wa_cotiza_listo()` cotiza con la tabla del **piso completo** del home.
+A los 20 pies eso son **$1.051.823 netos contra los $525.000** de la
+plataforma: con las cotizaciones en automático, al cliente le llega solo un PDF
+del doble por algo que no pidió.
+
+`deckeva_es_parte_suelta()` lo corta **antes de mirar el tipo** —ahí está la
+gracia— y se lo escala a JP, que tiene el tarifario de arriba para ponerle
+precio. Lista cerrada con la regla de siempre: «plataforma de nado»,
+«plataforma de popa», «zona de los esquís» y «sólo/únicamente la plataforma».
+**«Popa» sola queda afuera**: «el piso de popa a proa» es el piso entero.
+
+Y el prompt dejó de decir que la plataforma «se cotiza igual que el piso» —esa
+línea era la que empujaba el pedido hacia ese PDF—: ahora dice que la prepara
+JP y marca `necesita_humano`.
+
+#### Dos números que NO cuadran, y los decide JP
+
+Salieron de comparar contra el sistema lo que JP cotizó por WhatsApp el
+3-nov-2026 para una lancha de 19½ pies. **No se tocaron**: son precio, o sea
+de JP.
+
+| | Lo que dijo JP | Lo que dice el sistema |
+|---|---|---|
+| La plataforma | **$460.000 + IVA** | 19½ pies redondean a 20, y la escala da **$525.000**. Son 65.000 de diferencia |
+| Toma de medidas e instalación | **$85.000 cada una** | **$155.000 cada una** (`deckeva-00-opcionales.php`), y así están escritas también en el home publicado y en el PDF |
+
+Lo segundo muerde solo: a ese cliente, si le sale la cotización formal, el PDF
+le va a decir 155.000 donde el WhatsApp decía 85.000. Las dos lecturas posibles
+—que un trabajo parcial se mida e instale más barato, o que fuera un valor
+puntual— son comerciales, y hasta que JP diga cuál es, el sistema sigue con
+155.000.
+
+> ⚠️ **Y este archivo se publica: acá no va el nombre, el teléfono, la
+> embarcación ni la comuna de nadie.** La primera versión de esta sección los
+> traía los cuatro, en un repo público, y lo cazó un bot de review — no una
+> persona. Un tarifario se explica con un largo en pies; para eso no hace falta
+> nadie. Lo cobra `.github/checks/plataforma-nado.php`, que busca un teléfono
+> chileno en este archivo y en el del tarifario.
+
 ### El tarifario de Tapicería Náutica
 
 `wp-content/mu-plugins/deckeva-tapiceria-valores.php`, con los valores de JP:
