@@ -56,14 +56,20 @@ fi
 # Ya está en Enviados? (si el script corre dos veces no se duplica)
 encontrado=""
 revisar() {  # carpeta → deja en $encontrado el archivo con ese Message-ID
-  local carpeta="$1" nombre llegada f
+  local carpeta="$1" nombre llegada f total=0 sin_hora=0 en_ventana=0 fallos=0 mas_nuevo=0
   while IFS= read -r nombre; do
+    [ -n "${nombre}" ] || continue
+    total=$((total + 1))
     llegada="${nombre%%.*}"
-    [[ "${llegada}" =~ ^[0-9]+$ ]] || continue
+    if [[ ! "${llegada}" =~ ^[0-9]+$ ]]; then sin_hora=$((sin_hora + 1)); continue; fi
+    (( llegada > mas_nuevo )) && mas_nuevo="${llegada}"
     (( llegada >= desde_s && llegada < hasta_s )) || continue
+    en_ventana=$((en_ventana + 1))
     f="${tmp}/m"
     rm -f "${f}"
-    ftp_ejecutar "get '${remoto}${carpeta}${nombre}' -o '${f}'" </dev/null >/dev/null 2>&1 || continue
+    if ! ftp_ejecutar "get '${remoto}${carpeta}${nombre}' -o '${f}'" </dev/null >/dev/null 2>&1; then
+      fallos=$((fallos + 1)); continue
+    fi
     # Dovecot puede guardar el correo comprimido con gzip.
     # Sólo las cabeceras (hasta la primera línea en blanco); 2>/dev/null porque
     # grep -q corta la tubería apenas encuentra y zcat avisa «Broken pipe».
@@ -73,6 +79,8 @@ revisar() {  # carpeta → deja en $encontrado el archivo con ese Message-ID
       return 0
     fi
   done < <(ftp_ejecutar "cls -1 '${remoto}${carpeta}'" 2>/dev/null | sed 's#.*/##')
+  # Diagnóstico: sólo conteos y una hora, nunca nombres ni contenido de correos.
+  echo "  ${carpeta}: ${total} archivos · ${sin_hora} sin hora en el nombre · ${en_ventana} en la ventana · ${fallos} sin poder leer · el más nuevo llegó ${mas_nuevo} (ventana ${desde_s}-${hasta_s})" >&2
   return 1
 }
 
