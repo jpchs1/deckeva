@@ -53,10 +53,26 @@ if ! ftp_ejecutar "cls -1 '${remoto}.Sent/cur/'" >/dev/null 2>&1; then
   echo "No existe la carpeta Enviados (.Sent/cur) en ${casilla}." >&2; exit 1
 fi
 
+# Dovecot puede guardar el correo comprimido (gzip, bzip2, xz, zstd o lz4): se
+# reconoce por los primeros bytes y se descomprime a la salida estándar. Si no es
+# ninguno, se devuelve tal cual.
+leer_correo() {
+  local arch="$1" magia
+  magia="$(head -c 4 "${arch}" 2>/dev/null | od -An -tx1 | tr -d ' \n')"
+  case "${magia}" in
+    1f8b*)      gzip -dc "${arch}" 2>/dev/null ;;
+    425a68*)    bzip2 -dc "${arch}" 2>/dev/null ;;
+    fd377a58)   xz -dc "${arch}" 2>/dev/null ;;
+    28b52ffd)   zstd -dc "${arch}" 2>/dev/null ;;
+    04224d18)   lz4 -dc "${arch}" 2>/dev/null ;;
+    *)          cat "${arch}" ;;
+  esac
+}
+
 # Ya está en Enviados? (si el script corre dos veces no se duplica)
 encontrado=""
 revisar() {  # carpeta → deja en $encontrado el archivo con ese Message-ID
-  local carpeta="$1" nombre llegada f total=0 sin_hora=0 en_ventana=0 fallos=0 mas_nuevo=0
+  local carpeta="$1" nombre llegada f cabeceras="" formatos="" total=0 sin_hora=0 en_ventana=0 fallos=0 mas_nuevo=0
   while IFS= read -r nombre; do
     [ -n "${nombre}" ] || continue
     total=$((total + 1))
@@ -70,17 +86,22 @@ revisar() {  # carpeta → deja en $encontrado el archivo con ese Message-ID
     if ! ftp_ejecutar "get '${remoto}${carpeta}${nombre}' -o '${f}'" </dev/null >/dev/null 2>&1; then
       fallos=$((fallos + 1)); continue
     fi
-    # Dovecot puede guardar el correo comprimido con gzip.
+    formatos+=" $(head -c 4 "${f}" 2>/dev/null | od -An -tx1 | tr -d ' \n')"
     # Sólo las cabeceras (hasta la primera línea en blanco); 2>/dev/null porque
     # grep -q corta la tubería apenas encuentra y zcat avisa «Broken pipe».
-    if zcat -f "${f}" 2>/dev/null | sed '/^\r\?$/q' | grep -qiF "${mid}"; then
+    # Las cabeceras se guardan en una variable antes de buscar: con `pipefail`, si
+    # grep -q corta la tubería sobre un correo grande (con PDF adjunto), el
+    # SIGPIPE (141) del que lee hace fallar todo el conjunto aunque haya
+    # encontrado el Message-ID. Es lo que hacía que nunca lo encontrara.
+    cabeceras="$(leer_correo "${f}" 2>/dev/null | sed '/^\r\?$/q' || true)"
+    if grep -qiF -- "${mid}" <<<"${cabeceras}"; then
       encontrado="${nombre}"
       cp "${f}" "${tmp}/correo"
       return 0
     fi
   done < <(ftp_ejecutar "cls -1 '${remoto}${carpeta}'" 2>/dev/null | sed 's#.*/##')
   # Diagnóstico: sólo conteos y una hora, nunca nombres ni contenido de correos.
-  echo "  ${carpeta}: ${total} archivos · ${sin_hora} sin hora en el nombre · ${en_ventana} en la ventana · ${fallos} sin poder leer · el más nuevo llegó ${mas_nuevo} (ventana ${desde_s}-${hasta_s})" >&2
+  echo "  ${carpeta}: ${total} archivos · ${sin_hora} sin hora en el nombre · ${en_ventana} en la ventana · ${fallos} sin poder leer · el más nuevo llegó ${mas_nuevo} (ventana ${desde_s}-${hasta_s}) · primeros bytes de los de la ventana:${formatos:- ninguno}" >&2
   return 1
 }
 
