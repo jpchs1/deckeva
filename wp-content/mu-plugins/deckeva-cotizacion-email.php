@@ -1,15 +1,30 @@
 <?php
 /**
  * Plugin Name: Deckeva - Email Automático de Cotización
- * Description: Envía un email de cotización formal al usuario y una notificación al admin cuando se completa el formulario de precio (CF7 ID 1031).
- * Version: 1.4
+ * Description: Envía un email de cotización formal al usuario y una notificación al admin cuando se completa el formulario de precio.
+ * Version: 1.5
  * Author: Deckeva
  */
 
 if (!defined('ABSPATH')) exit;
 
 /**
- * Obtiene el mapa de precios dinámicamente desde el contenido del formulario CF7 (ID 1031).
+ * IDs de formularios de cotización soportados.
+ * deckeva.com usa ID 1031, deckeva.cl usa ID 8905.
+ */
+function deckeva_get_form_ids() {
+    return array(1031, 8905);
+}
+
+/**
+ * Verifica si un form ID es un formulario de cotización Deckeva.
+ */
+function deckeva_is_cotizacion_form($form_id) {
+    return in_array((int)$form_id, deckeva_get_form_ids(), true);
+}
+
+/**
+ * Obtiene el mapa de precios dinámicamente desde el contenido del formulario CF7.
  * Parsea los shortcodes [group] del formulario para extraer los precios de los grupos condicionales.
  * De esta forma, si se actualizan los precios en el formulario, el email siempre refleja los mismos valores.
  */
@@ -22,8 +37,15 @@ function deckeva_get_price_map() {
 
     $price_map = array();
 
-    // Leer el contenido del formulario CF7 ID 1031 desde la base de datos
-    $form_post = get_post(1031);
+    // Buscar el formulario CF7 de cotización en la base de datos
+    $form_post = null;
+    foreach (deckeva_get_form_ids() as $fid) {
+        $candidate = get_post($fid);
+        if ($candidate && $candidate->post_type === 'wpcf7_contact_form') {
+            $form_post = $candidate;
+            break;
+        }
+    }
     if ($form_post && $form_post->post_type === 'wpcf7_contact_form') {
         $form_content = $form_post->post_content;
 
@@ -99,7 +121,7 @@ function deckeva_get_fallback_price_map() {
  */
 add_action('wpcf7_save_contact_form', 'deckeva_clear_price_cache');
 function deckeva_clear_price_cache($contact_form) {
-    if ($contact_form->id() == 1031) {
+    if (deckeva_is_cotizacion_form($contact_form->id())) {
         delete_transient('deckeva_price_map');
     }
 }
@@ -133,8 +155,8 @@ function deckeva_get_field($data, $key) {
 }
 
 function deckeva_send_cotizacion_emails($contact_form) {
-    // Solo actuar en el formulario de cotización (ID 1031)
-    if ($contact_form->id() != 1031) {
+    // Solo actuar en formularios de cotización (ID 1031 en deckeva.com, 8905 en deckeva.cl)
+    if (!deckeva_is_cotizacion_form($contact_form->id())) {
         return;
     }
 
