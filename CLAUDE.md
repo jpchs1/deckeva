@@ -152,7 +152,10 @@ del #179 y las dos eran reales:
 
 > ⚠️ **El monto del recargo no está en el código porque JP nunca lo dio.**
 > Inventarlo sería peor que no tenerlo. Cuando lo diga, entra en
-> `deckeva-tapiceria-valores.php` y en el PDF, y ese lugar sale del freno.
+> `deckeva-00-opcionales.php` y en el PDF, y ese lugar sale del freno.
+>
+> La lista de lugares vivía en `deckeva-tapiceria-valores.php`, que no era su
+> archivo: esto es de medir e instalar, no de tapizar. Se mudó el 19-nov-2026.
 >
 > Y una marca `necesita_humano` de una respuesta que JP **ya** aprobó, mandó o
 > descartó no frena nada: mirarla sola congelaría la cotización para siempre.
@@ -436,6 +439,39 @@ prefieras»).
   cotización.
 - En el PDF no usar `<u>`: con `fontHeightRatio` 0,83 DOMPDF dibuja el
   subrayado a media altura y el texto se lee tachado.
+
+### Y ahí vive TODO lo de medir e instalar (JP · 19-nov-2026)
+
+> «Revisa el tarifario de instalación y toma de medidas, ahí debe estar todo lo
+> respectivo a eso» (JP, 19-nov-2026).
+
+Hasta ese día el archivo tenía sólo los dos montos, y el resto estaba escrito a
+mano dentro del prompt del contestador: cuatro líneas de texto que ningún
+chequeo miraba, en el único lugar donde cambiarlas no deja un diff que se
+entienda. Agregar un segundo lugar con recargo era editar el prompt y rezar.
+
+| Ahora vive en `deckeva-00-opcionales.php` | |
+|---|---|
+| Los dos montos | `DECKEVA_PRECIO_MEDICION` · `DECKEVA_PRECIO_INSTALACION` |
+| El plazo | `DECKEVA_OPCIONALES_DIAS` = 12 días corridos de la medición a la instalación |
+| El recargo por traslado | `DECKEVA_UBICACION_RECARGO` (hoy Curacaví) · **sin monto, porque JP nunca lo dio** |
+| Medir en un lugar e instalar en otro | la regla, en `deckeva_opcionales_reglas()` |
+| «Lo ideal es traerla a Santiago» | idem |
+| Que el valor NO se dice por el chat | idem |
+
+`deckeva_opcionales_reglas()` devuelve esas cinco líneas ya escritas y el
+prompt las pega. Agregar un lugar con recargo o cambiar el plazo es editar ese
+archivo **y nada más**. Lo cobra `.github/checks/opcionales.php`, con canario
+(un archivo que no se pudo leer es rojo: «no encontré el lugar escrito a mano»
+y «no leí nada» se ven igual) y verificado al revés con tres roturas.
+
+> ⚠️ **Hay TRES montos circulando y el sistema sólo conoce uno.** $155.000 + IVA
+> es lo que dicen el código, el home publicado y el PDF. Por WhatsApp JP ha
+> cotizado **$85.000 cada una** (un trabajo de sólo la plataforma, en la zona
+> sur de Santiago) y **$188.500 cada una** («ya sea en Pucón o en Santiago»).
+> Los $188.500 **no son** $155.000 + IVA, que daría $184.450: ÷ 1,19 da
+> $158.403. Cuál manda lo decide JP; mientras tanto el PDF va a seguir diciendo
+> $155.000 donde el WhatsApp dijo otra cosa.
 
 ## Tres reglas más de la cotización (REGLA DEL DUEÑO · 30-sep-2026)
 

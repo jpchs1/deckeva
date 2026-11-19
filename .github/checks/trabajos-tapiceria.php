@@ -23,6 +23,9 @@
  * pasar, y vacío no significa limpio.
  */
 define('ABSPATH', __DIR__ . '/');
+// El recargo por traslado vive en el tarifario de medir e instalar desde el
+// 19-nov-2026; el de tapicería sigue teniendo los valores de las telas.
+require __DIR__ . '/../../wp-content/mu-plugins/deckeva-00-opcionales.php';
 require __DIR__ . '/../../wp-content/mu-plugins/deckeva-tapiceria-valores.php';
 
 $f = __DIR__ . '/../../wp-content/mu-plugins/deckeva-whatsapp.php';
