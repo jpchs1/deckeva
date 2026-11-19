@@ -13,6 +13,15 @@
  * contratar a un técnico por su cuenta, con una referencia de $145.000 en
  * Santiago. Ese texto ya no va en ninguna parte.
  *
+ * JP, 19-nov-2026: «revisa el tarifario de instalación y toma de medidas, ahí
+ * debe estar todo lo respectivo a eso». Antes acá vivían sólo los dos montos y
+ * el resto —el recargo por traslado, el plazo, que se puede medir en un lugar
+ * e instalar en otro— estaba escrito a mano en el prompt del contestador,
+ * donde ningún chequeo lo mira y donde cambiarlo no deja diff que se entienda.
+ * Ahora las reglas salen de acá (`deckeva_opcionales_reglas()`) y el prompt
+ * las pega; `.github/checks/opcionales.php` se pone rojo si vuelven a
+ * escribirse a mano allá.
+ *
  * Dos reglas que no se negocian:
  * - Los opcionales NO se suman al total del piso. Van en su propia sección
  *   («Opcionales»), cada uno con su neto, su IVA y su total con IVA.
@@ -33,6 +42,58 @@ if (!defined('ABSPATH')) {
 
 const DECKEVA_PRECIO_MEDICION    = 155000;
 const DECKEVA_PRECIO_INSTALACION = 155000;
+
+/** Días corridos entre la toma de medidas y la instalación. */
+const DECKEVA_OPCIONALES_DIAS = 12;
+
+/**
+ * Lugares donde la toma de medidas y la instalación llevan un recargo por
+ * traslado que el PDF NO calcula (hoy Curacaví). Clave = como se busca en el
+ * texto, sin acentos; valor = como se escribe.
+ *
+ * Mientras el recargo no esté en el cálculo, una cotización de esos lugares no
+ * puede salir sola: le llegaría al cliente con los opcionales al valor
+ * estándar y sin el traslado. Con el modo borrador lo agregaba JP mirando el
+ * PDF; en automático no hay quién. Así que se retiene para él
+ * (`deckeva_wa_cotiza_freno`).
+ *
+ * El monto NO está acá a propósito: JP nunca lo dio. Inventarlo sería peor que
+ * no tenerlo — este archivo existe justamente para que un precio no viva en la
+ * cabeza de nadie.
+ *
+ * Vivía en deckeva-tapiceria-valores.php, que no es su lugar: esto es de medir
+ * e instalar, no de tapizar.
+ */
+const DECKEVA_UBICACION_RECARGO = array('curacavi' => 'Curacaví');
+
+function deckeva_ubicacion_con_recargo($ubicacion) {
+    $t = mb_strtolower((string) $ubicacion);
+    $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'));
+    $t = ' ' . preg_replace('/[^a-z0-9]+/', ' ', $t) . ' ';
+    foreach (array_keys(DECKEVA_UBICACION_RECARGO) as $lugar) {
+        if (strpos($t, ' ' . $lugar . ' ') !== false) return $lugar;
+    }
+    return '';
+}
+
+/**
+ * Lo que el contestador tiene que saber de la toma de medidas y la
+ * instalación, ya escrito como líneas del prompt.
+ *
+ * Sale de las constantes de arriba, así que agregar un lugar con recargo o
+ * cambiar el plazo es editar ESTE archivo y nada más: el prompt se entera
+ * solo. El valor sigue sin salir por el chat, acá y en el prompt.
+ */
+function deckeva_opcionales_reglas() {
+    $lugares = array_values(DECKEVA_UBICACION_RECARGO);
+    $ultimo  = array_pop($lugares);
+    $texto   = $lugares ? implode(', ', $lugares) . ' o ' . $ultimo : $ultimo;
+    return "- La toma de medidas y la instalación son servicios opcionales de Deckeva, con un valor fijo que va en la cotización formal (PDF), aparte del total del piso. El cliente también las puede hacer él mismo, fácil, con el video explicativo que le mandamos: como prefiera. Nunca digas su valor en el chat: si lo pregunta, dile que va en la cotización.\n"
+        . "- La toma de medidas y la instalación pueden ser en lugares distintos: por ejemplo, medir en Rapel e instalar en Pucón, o medir en Santiago e instalar en la marina. Si el cliente lo plantea, dile que sí se puede y anota los dos lugares.\n"
+        . "- Si la embarcación está en " . $texto . ", la toma de medidas y la instalación llevan un recargo por traslado que va en la cotización formal. Nunca digas el monto en el chat.\n"
+        . "- Si pregunta dónde conviene tener la embarcación para la toma de medidas y la instalación, o duda entre dos lugares: si tiene la posibilidad de traerla a Santiago, es lo ideal, porque ahí la trabajamos de forma más rápida. Díselo así, sin obligarlo: si no puede, se coordina donde esté.\n"
+        . "- Desde la toma de medidas hasta la instalación son " . DECKEVA_OPCIONALES_DIAS . " días corridos.\n";
+}
 
 /**
  * Los dos opcionales, con el IVA ya calculado. El redondeo del IVA es el mismo

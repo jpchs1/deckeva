@@ -168,27 +168,8 @@ function deckeva_es_trabajo_a_medida($texto) {
     return (bool) preg_match($re, $t);
 }
 
-/**
- * Lugares donde la toma de medidas y la instalación llevan un recargo por
- * traslado que ESTE PDF no calcula (hoy Curacaví, la regla del prompt).
- *
- * Mientras el recargo no esté en el cálculo, una cotización de esos lugares no
- * puede salir sola: le llegaría al cliente con los opcionales al valor
- * estándar y sin el traslado. Con el modo borrador lo agregaba JP mirando el
- * PDF; en automático no hay quién. Así que se retiene para él.
- *
- * El monto NO está acá a propósito: JP nunca lo dio. Inventarlo sería peor que
- * no tenerlo — este archivo existe justamente para que un precio no viva en la
- * cabeza de nadie.
- */
-const DECKEVA_UBICACION_RECARGO = array('curacavi');
-
-function deckeva_ubicacion_con_recargo($ubicacion) {
-    $t = mb_strtolower((string) $ubicacion);
-    $t = function_exists('remove_accents') ? remove_accents($t) : strtr($t, array('á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ñ' => 'n'));
-    $t = ' ' . preg_replace('/[^a-z0-9]+/', ' ', $t) . ' ';
-    foreach (DECKEVA_UBICACION_RECARGO as $lugar) {
-        if (strpos($t, ' ' . $lugar . ' ') !== false) return $lugar;
-    }
-    return '';
-}
+/* El recargo por traslado (Curacaví) se mudó a deckeva-00-opcionales.php el
+   19-nov-2026: es una regla de medir e instalar, no de tapizar, y JP pidió que
+   todo lo de ese tarifario viva en un solo archivo. `DECKEVA_UBICACION_RECARGO`
+   y `deckeva_ubicacion_con_recargo()` siguen existiendo con el mismo nombre y
+   el mismo resultado, cargadas antes que esto por el prefijo «00». */

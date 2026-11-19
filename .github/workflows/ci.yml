@@ -72,3 +72,6 @@ jobs:
 
       - name: El tarifario de la plataforma de nado es el de JP
         run: php .github/checks/plataforma-nado.php
+
+      - name: Todo lo de medir e instalar vive en su tarifario, no en el prompt
+        run: php .github/checks/opcionales.php
