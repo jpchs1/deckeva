@@ -465,13 +465,17 @@ archivo **y nada más**. Lo cobra `.github/checks/opcionales.php`, con canario
 (un archivo que no se pudo leer es rojo: «no encontré el lugar escrito a mano»
 y «no leí nada» se ven igual) y verificado al revés con tres roturas.
 
-> ⚠️ **Hay TRES montos circulando y el sistema sólo conoce uno.** $155.000 + IVA
-> es lo que dicen el código, el home publicado y el PDF. Por WhatsApp JP ha
-> cotizado **$85.000 cada una** (un trabajo de sólo la plataforma, en la zona
-> sur de Santiago) y **$188.500 cada una** («ya sea en Pucón o en Santiago»).
-> Los $188.500 **no son** $155.000 + IVA, que daría $184.450: ÷ 1,19 da
-> $158.403. Cuál manda lo decide JP; mientras tanto el PDF va a seguir diciendo
-> $155.000 donde el WhatsApp dijo otra cosa.
+> **El monto es $155.000 + IVA, y ése manda** (JP, 19-nov-2026: «el monto es
+> $155.000 + IVA, mantén ese»). Es lo que ya dicen el código, el home publicado
+> y el PDF, así que no cambia ningún cálculo: lo que se cierra es la duda.
+>
+> Por WhatsApp habían salido otros dos montos —**$85.000 cada una** (un trabajo
+> de sólo la plataforma, en la zona sur de Santiago) y **$188.500 cada una**
+> («ya sea en Pucón o en Santiago»)— y por eso la pregunta estuvo abierta. Los
+> $188.500 **no eran** $155.000 + IVA, que daría $184.450: ÷ 1,19 da $158.403.
+> Los dos quedan como lo que fueron: un precio puntual que dio JP en un chat, no
+> una tarifa. **Un valor distinto del tarifario sale sólo si lo escribe él**, y
+> al cliente que lo recibió se le respeta el que le dijimos.
 
 ## Tres reglas más de la cotización (REGLA DEL DUEÑO · 30-sep-2026)
 
